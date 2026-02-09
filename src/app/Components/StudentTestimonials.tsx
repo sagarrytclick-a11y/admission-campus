@@ -103,7 +103,11 @@ export default function StudentTestimonials() {
       setCurrentSlide(prev => (prev + 1) % totalSlides);
     }, 5000);
 
-    return () => intervalRef.current && clearInterval(intervalRef.current);
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
   }, [totalSlides]);
 
   const visible = testimonials.slice(

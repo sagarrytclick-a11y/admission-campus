@@ -47,7 +47,7 @@ const formatDate = (dateString: string) => {
 
 // Custom hook to fetch blogs
 const useBlogs = () => {
-  return useQuery({
+  return useQuery<BlogItem[]>({
     queryKey: ["latest-blogs"],
     queryFn: async () => {
       const response = await fetch("/api/blogs");

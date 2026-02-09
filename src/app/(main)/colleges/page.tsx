@@ -128,7 +128,7 @@ export default function CollegesPage() {
             {error instanceof Error ? error.message : 'An unexpected error occurred'}
           </p>
           <Button 
-            onClick={() => refetch()}
+            onClick={() => { void refetch(); }}
             className="bg-green-600 hover:bg-green-700 text-white font-medium"
           >
             <RefreshCw className="w-4 h-4 mr-2" />
@@ -229,10 +229,10 @@ export default function CollegesPage() {
             </div>
             <h2 className="text-2xl font-bold text-slate-900 mb-2">Failed to Load Colleges</h2>
             <p className="text-slate-600 mb-6">
-              {error instanceof Error ? error.message : 'An unexpected error occurred'}
+              {(error as Error)?.message || 'An unexpected error occurred'}
             </p>
             <Button 
-              onClick={() => refetch()}
+              onClick={() => { (refetch as () => void)(); }}
               className="bg-blue-600 hover:bg-blue-700 text-white"
             >
               <RefreshCw className="w-4 h-4 mr-2" />

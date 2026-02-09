@@ -85,35 +85,33 @@ export default function ExamsPage() {
     )
   }
 
-if (error) {
-  return (
-    <div className="min-h-screen bg-white flex items-center justify-center">
-      <div className="text-center max-w-md mx-auto px-4">
-        <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
-          <AlertCircle className="w-8 h-8 text-red-600" />
+  if (error) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center max-w-md mx-auto px-4">
+          <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
+            <AlertCircle className="w-8 h-8 text-red-600" />
+          </div>
+
+          <h2 className="text-2xl font-bold text-slate-900 mb-2">
+            Failed to Load Exams
+          </h2>
+
+          <p className="text-slate-600 mb-6">
+            {(error as Error)?.message || "An unexpected error occurred"}
+          </p>
+
+          <Button
+            onClick={() => { (refetch as () => void)(); }}
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            <RefreshCw className="w-4 h-4 mr-2" />
+            Try Again
+          </Button>
         </div>
-
-        <h2 className="text-2xl font-bold text-slate-900 mb-2">
-          Failed to Load Exams
-        </h2>
-
-        <p className="text-slate-600 mb-6">
-          {error instanceof Error
-            ? error.message
-            : "An unexpected error occurred"}
-        </p>
-
-        <Button
-          onClick={() => refetch()}
-          className="bg-blue-600 hover:bg-blue-700 text-white"
-        >
-          <RefreshCw className="w-4 h-4 mr-2" />
-          Try Again
-        </Button>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-slate-50 to-blue-50">
@@ -201,10 +199,10 @@ if (error) {
             </div>
             <h2 className="text-2xl font-bold text-slate-900 mb-2">Failed to Load Exams</h2>
             <p className="text-slate-600 mb-6">
-              {error instanceof Error ? error.message : 'An unexpected error occurred'}
+              {(error as Error)?.message || 'An unexpected error occurred'}
             </p>
             <Button 
-              onClick={() => refetch()}
+              onClick={() => { (refetch as () => void)(); }}
               className="bg-blue-600 hover:bg-blue-700 text-white"
             >
               <RefreshCw className="w-4 h-4 mr-2" />
