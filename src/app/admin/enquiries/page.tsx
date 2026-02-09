@@ -33,10 +33,16 @@ export default function EnquiriesPage() {
 
   // Status update handler
   const handleStatusUpdate = async (enquiryId: string, newStatus: string) => {
+    // Optimistically update local state for real-time UI feedback
+    if (selectedEnquiry && selectedEnquiry._id === enquiryId) {
+      setSelectedEnquiry({ ...selectedEnquiry, status: newStatus as Enquiry['status'] })
+    }
+    
     try {
       await updateEnquiryMutation.mutateAsync({ id: enquiryId, status: newStatus })
     } catch (error) {
       console.error('Failed to update status:', error)
+      // Revert on error - refetch will restore correct data
     }
   }
 
