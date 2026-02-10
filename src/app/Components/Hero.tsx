@@ -8,28 +8,28 @@ import Link from "next/link";
 // Slider data with images and text
 const slides = [
   {
-    image: "hero/hero-1.jpg",
+    image: "/hero/hero-1.jpg",
     badge: "India's #1 Admission Portal",
     title: "Your Gateway to",
     highlight: "Top Indian Universities",
     subtitle: "Discover top Indian colleges, crack entrance exams, and get expert guidance for your academic journey. From JEE to NEET, we've got you covered.",
   },
   {
-    image: "hero/hero-2.jpg",
+    image: "/hero/hero-2.jpg",
     badge: "Crack JEE, NEET & More",
     title: "Master Every",
     highlight: "Entrance Exam",
     subtitle: "Comprehensive preparation guides, mock tests, and expert strategies to help you ace JEE, NEET, AIIMS, and other top competitive exams.",
   },
   {
-    image: "hero/hero-3.jpg",
+    image: "/hero/hero-3.jpg",
     badge: "500+ Partner Colleges",
     title: "Get Into Your",
     highlight: "Dream College",
     subtitle: "From IITs and NITs to AIIMS and IIMs - find detailed information about admissions, fees, cutoffs, and placements.",
   },
   {
-    image: "hero/hero-4.jpg",
+    image: "/hero/hero-4.jpg",
     badge: "Expert Career Guidance",
     title: "Shape Your",
     highlight: "Future Career",
