@@ -10,8 +10,9 @@ import { getCountryName } from "@/lib/normalize"
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Search, MapPin, DollarSign, Clock, GraduationCap, Building, Filter, X, ArrowRight, Loader2, AlertCircle, RefreshCw } from 'lucide-react'
+import { Search, MapPin, DollarSign, Clock, GraduationCap, Building, Filter, X, ArrowRight, Loader2, AlertCircle, RefreshCw, Award, Calendar } from 'lucide-react'
 import { useInfiniteColleges } from '@/hooks/useColleges'
+import BackgroundSlider from '@/components/BackgroundSlider'
 
 interface College {
   _id: string
@@ -109,7 +110,7 @@ export default function CollegesPage() {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-green-100 border-t-green-600 rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="w-16 h-16 border-4 border-blue-100 border-t-[#1E6BFF] rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-slate-500 font-bold uppercase tracking-widest text-xs">Loading Excellence...</p>
         </div>
       </div>
@@ -129,7 +130,7 @@ export default function CollegesPage() {
           </p>
           <Button 
             onClick={() => { void refetch(); }}
-            className="bg-green-600 hover:bg-green-700 text-white font-medium"
+            className="bg-[#1E6BFF] hover:bg-blue-700 text-white font-medium"
           >
             <RefreshCw className="w-4 h-4 mr-2" />
             Try Again
@@ -143,16 +144,18 @@ export default function CollegesPage() {
     <div className="min-h-screen bg-gradient-to-br from-white via-slate-50 to-blue-50">
       
       {/* Header Section */}
-      <div className="bg-white border-b border-slate-200">
+      <BackgroundSlider>
+        <div className="bg-gradient-to-br from-blue-900/90 via-blue-800/80 to-blue-900/90 border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-semibold mb-6">
+            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md border border-white/30 text-white px-4 py-2 rounded-full text-sm font-semibold mb-6">
+              <span className="w-2 h-2 bg-[#FFD700] rounded-full animate-pulse"></span>
               🎓 College Search
             </div>
-            <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-4">
-              Find Your <span className="text-blue-600">Dream College</span>
+            <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">
+              Find Your <span className="text-[#FFD700]">Dream College</span>
             </h1>
-            <p className="text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg text-white/90 max-w-3xl mx-auto leading-relaxed">
               Discover top colleges and universities with detailed information about 
               courses, fees, admissions, and eligibility criteria.
             </p>
@@ -174,7 +177,7 @@ export default function CollegesPage() {
                 </div>
 
                 {/* Filters */}
-                <div className="flex gap-3">
+                <div className="flex items-center gap-3">
                   <Select value={selectedCountry} onValueChange={setSelectedCountry}>
                     <SelectTrigger className="h-14 bg-slate-50 border-2 border-slate-200 rounded-2xl">
                       <SelectValue placeholder="All Countries" />
@@ -211,13 +214,26 @@ export default function CollegesPage() {
             </div>
           </div>
         </div>
-      </div>
+          {/* <div className="text-center mb-12">
+              <div className="inline-flex items-center gap-6 bg-white border-2 border-slate-200 rounded-3xl px-8 py-4 shadow-lg">
+                <div className="text-left">
+                  <div className="font-bold text-slate-900 text-2xl">{totalCount}</div>
+                  <div className="text-sm text-slate-500">Colleges Found</div>
+                </div>
+                <div className="text-left">
+                  <div className="text-sm text-slate-500 mb-1">in {countries.length} countries</div>
+                  <div className="text-sm text-slate-500">accepting {exams.length} exam scores</div>
+                </div>
+              </div>
+            </div> */}
+        </div>
+      </BackgroundSlider>
 
       {/* Results Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {isLoading ? (
           <div className="text-center py-20">
-            <div className="inline-flex items-center gap-3 bg-blue-600 text-white px-6 py-3 rounded-full">
+            <div className="inline-flex items-center gap-3 bg-[#1E6BFF] text-white px-6 py-3 rounded-full">
               <div className="w-6 h-6 border-2 border-white border-t-transparent animate-spin rounded-full" />
               <span className="font-medium">Loading amazing colleges...</span>
             </div>
@@ -233,7 +249,7 @@ export default function CollegesPage() {
             </p>
             <Button 
               onClick={() => { (refetch as () => void)(); }}
-              className="bg-blue-600 hover:bg-blue-700 text-white"
+              className="bg-[#1E6BFF] hover:bg-blue-700 text-white"
             >
               <RefreshCw className="w-4 h-4 mr-2" />
               Try Again
@@ -242,7 +258,7 @@ export default function CollegesPage() {
         ) : (
           <>
             {/* Results Count */}
-            <div className="text-center mb-12">
+            {/* <div className="text-center mb-12">
               <div className="inline-flex items-center gap-6 bg-white border-2 border-slate-200 rounded-3xl px-8 py-4 shadow-lg">
                 <div className="text-left">
                   <div className="font-bold text-slate-900 text-2xl">{totalCount}</div>
@@ -253,7 +269,7 @@ export default function CollegesPage() {
                   <div className="text-sm text-slate-500">accepting {exams.length} exam scores</div>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* No Results */}
             {colleges.length === 0 ? (
@@ -286,7 +302,7 @@ export default function CollegesPage() {
                       
                       {/* Country Badge */}
                       <div className="absolute top-4 left-4">
-                        <div className="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-bold">
+                        <div className="bg-[#1E6BFF] text-white px-3 py-1 rounded-full text-xs font-bold">
                           {getCountryName(college.country_ref)}
                         </div>
                       </div>
@@ -294,7 +310,7 @@ export default function CollegesPage() {
                       {/* Ranking Badge */}
                       {college.ranking && typeof college.ranking === 'string' && (
                         <div className="absolute top-4 right-4">
-                          <div className="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-bold">
+                          <div className="bg-[#1E6BFF] text-white px-3 py-1 rounded-full text-xs font-bold">
                             Rank #{college.ranking}
                           </div>
                         </div>
@@ -303,7 +319,7 @@ export default function CollegesPage() {
 
                     {/* College Content */}
                     <div className="p-6">
-                      <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors line-clamp-2">
+                      <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-[#1E6BFF] transition-colors line-clamp-2">
                         {college.name}
                       </h3>
 
@@ -313,22 +329,22 @@ export default function CollegesPage() {
 
                       {/* Quick Info */}
                       <div className="grid grid-cols-2 gap-4 mb-6">
-                        <div className="bg-slate-50 rounded-xl p-4">
-                          <div className="flex items-center gap-2 text-blue-600 mb-2">
-                            <DollarSign size={16} />
-                            <span className="text-sm font-medium">Annual Fees</span>
+                        <div className="bg-blue-50 rounded-xl p-4">
+                          <div className="flex items-center gap-2 text-[#1E6BFF] mb-2">
+                            <Award size={16} />
+                            <span className="text-sm font-medium">Ranking</span>
                           </div>
                           <div className="text-xl font-bold text-slate-900">
-                            ${college.fees?.toLocaleString() || 'N/A'}
+                            {typeof college.ranking === 'object' && college.ranking?.country_ranking ? `#${college.ranking.country_ranking}` : college.ranking && typeof college.ranking === 'string' ? college.ranking : 'Top Ranked'}
                           </div>
                         </div>
-                        <div className="bg-slate-50 rounded-xl p-4">
-                          <div className="flex items-center gap-2 text-blue-600 mb-2">
-                            <Clock size={16} />
-                            <span className="text-sm font-medium">Duration</span>
+                        <div className="bg-blue-50 rounded-xl p-4">
+                          <div className="flex items-center gap-2 text-[#1E6BFF] mb-2">
+                            <Calendar size={16} />
+                            <span className="text-sm font-medium">Established</span>
                           </div>
                           <div className="text-xl font-bold text-slate-900">
-                            {college.duration} years
+                            {college.establishment_year || 'N/A'}
                           </div>
                         </div>
                       </div>
@@ -336,7 +352,7 @@ export default function CollegesPage() {
                       {/* Exams */}
                       <div className="flex flex-wrap gap-2 mb-6">
                         {college.exams.slice(0, 3).map((exam) => (
-                          <span key={exam} className="text-xs font-bold bg-blue-50 text-blue-700 px-3 py-2 rounded-xl">
+                          <span key={exam} className="text-xs font-bold bg-blue-50 text-[#1E6BFF] px-3 py-2 rounded-xl">
                             {exam}
                           </span>
                         ))}
@@ -348,7 +364,7 @@ export default function CollegesPage() {
                           Est. {college.establishment_year}
                         </div>
                         <Link href={`/colleges/${college.slug}`}>
-                          <Button className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl">
+                          <Button className="bg-[#1E6BFF] hover:bg-blue-700 text-white rounded-xl">
                             View Details
                             <ArrowRight size={16} className="ml-2" />
                           </Button>
@@ -365,7 +381,7 @@ export default function CollegesPage() {
         {/* Loading Indicator */}
         {isFetchingNextPage && (
           <div className="flex justify-center py-8">
-            <div className="inline-flex items-center gap-3 bg-blue-600 text-white px-6 py-3 rounded-full">
+            <div className="inline-flex items-center gap-3 bg-[#1E6BFF] text-white px-6 py-3 rounded-full">
               <div className="w-6 h-6 border-2 border-white border-t-transparent animate-spin rounded-full" />
               <span className="font-medium">Loading more colleges...</span>
             </div>

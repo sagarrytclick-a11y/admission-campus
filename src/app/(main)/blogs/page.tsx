@@ -45,21 +45,22 @@ export default function BlogsPage() {
   return (
     <div className="min-h-screen bg-slate-50/50">
       {/* HERO - Simplified & Clean */}
-      <header className="relative py-16 md:py-24 border-b border-slate-200">
+      <header className="relative py-16 md:py-24 border-b border-slate-200 bg-gradient-to-br from-blue-900/90 via-blue-800/80 to-blue-900/90">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-2 rounded-full text-sm font-semibold mb-6">
+            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md border border-white/30 text-white px-4 py-2 rounded-full text-sm font-semibold mb-6">
+              <span className="w-2 h-2 bg-[#FFD700] rounded-full animate-pulse"></span>
               <FileText size={14} /> Knowledge Hub
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
-              Insights & <span className="text-blue-600">Guides</span>
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              Insights & <span className="text-[#FFD700]">Guides</span>
             </h1>
-            <p className="text-lg text-slate-600 mb-8 max-w-2xl mx-auto">
+            <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
               Expert advice, study tips, and global education insights curated by our counselors.
             </p>
-            <div className="flex items-center justify-center gap-2 bg-white rounded-xl border border-slate-200 px-6 py-3 shadow-sm">
-              <FileText className="text-blue-600" />
-              <span className="font-semibold text-slate-900">
+            <div className="flex items-center justify-center gap-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/20 px-6 py-3 shadow-sm">
+              <FileText className="text-[#FFD700]" />
+              <span className="font-semibold text-white">
                 {filteredBlogs.length} Articles
               </span>
             </div>
@@ -80,7 +81,7 @@ export default function BlogsPage() {
                 placeholder="Search articles..."
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
-                className="pl-10 border-slate-200 focus:border-blue-500 focus:ring-blue-500"
+                className="pl-10 border-slate-200 focus:border-[#1E6BFF] focus:ring-[#1E6BFF]"
               />
             </div>
 
@@ -126,7 +127,7 @@ export default function BlogsPage() {
             {filteredBlogs.map(blog => (
               <article
                 key={blog._id}
-                className="group bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
+                className="group bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:border-[#1E6BFF] hover:shadow-lg transition-all duration-300"
               >
                 <Link
                   href={`/blogs/${blog.slug}`}
@@ -144,7 +145,7 @@ export default function BlogsPage() {
 
                 <div className="p-6 space-y-4">
                   <div className="flex items-center gap-3 text-xs">
-                    <span className="font-semibold text-blue-600 bg-blue-50 px-2 py-1 rounded">
+                    <span className="font-semibold text-[#1E6BFF] bg-blue-50 px-2 py-1 rounded">
                       {blog.category}
                     </span>
                     <span className="text-slate-400">•</span>
@@ -155,7 +156,7 @@ export default function BlogsPage() {
                     </span>
                   </div>
 
-                  <h2 className="text-xl font-bold text-slate-900 leading-snug group-hover:text-blue-600 transition-colors">
+                  <h2 className="text-xl font-bold text-slate-900 leading-snug group-hover:text-[#1E6BFF] transition-colors">
                     {blog.title}
                   </h2>
 
@@ -166,7 +167,7 @@ export default function BlogsPage() {
                   <div className="pt-4 flex items-center justify-between">
                     <div className="flex items-center gap-2 text-sm">
                       <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center">
-                        <User size={16} className="text-blue-600" />
+                        <User size={16} className="text-[#1E6BFF]" />
                       </div>
                       <span className="font-medium text-slate-700">
                         {blog.author || 'Team'}
@@ -175,7 +176,7 @@ export default function BlogsPage() {
 
                     <Link
                       href={`/blogs/${blog.slug}`}
-                      className="text-sm font-semibold text-blue-600 flex items-center gap-1 hover:gap-2 transition-all"
+                      className="text-sm font-semibold text-[#1E6BFF] flex items-center gap-1 hover:gap-2 transition-all"
                     >
                       Read More
                       <ArrowRight size={14} />
@@ -197,7 +198,7 @@ function LoadingState() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50/50">
       <div className="text-center">
-        <RefreshCw className="w-8 h-8 text-blue-600 animate-spin mx-auto mb-4" />
+        <RefreshCw className="w-8 h-8 text-[#1E6BFF] animate-spin mx-auto mb-4" />
         <p className="text-slate-600 font-medium">Loading articles...</p>
       </div>
     </div>
@@ -231,7 +232,7 @@ function ErrorState({
         <p className="text-slate-500 mb-6">{error.message}</p>
         <Button
           onClick={refetch}
-          className="bg-blue-600 hover:bg-blue-700 text-white"
+          className="bg-[#1E6BFF] hover:bg-blue-700 text-white"
         >
           Try Again
         </Button>
