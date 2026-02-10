@@ -47,10 +47,10 @@ const Footer = () => {
               </div>
               <div className="flex flex-col">
                 <span className="text-lg sm:text-xl lg:text-2xl font-bold text-white">
-                  Admission
+                  {SITE_IDENTITY.name}
                 </span>
                 <span className="text-sm sm:text-base text-gray-300">
-                  Campus
+                  {SITE_IDENTITY.tagline}
                 </span>
               </div>
             </div>
@@ -85,10 +85,10 @@ const Footer = () => {
           <div>
             <h4 className="font-bold text-white mb-6 tracking-wide">SERVICES</h4>
             <ul className="flex flex-col gap-4 text-gray-300 text-[15px]">
-              <li><Link href="#" className="hover:text-blue-400 hover:translate-x-1 transition-all duration-200 inline-block">University Admissions</Link></li>
-              <li><Link href="#" className="hover:text-blue-400 hover:translate-x-1 transition-all duration-200 inline-block">Visa Counseling</Link></li>
-              <li><Link href="#" className="hover:text-blue-400 hover:translate-x-1 transition-all duration-200 inline-block">Scholarship Guidance</Link></li>
-              <li><Link href="#" className="hover:text-blue-400 hover:translate-x-1 transition-all duration-200 inline-block">Test Preparation</Link></li>
+              <li><Link href="/colleges" className="hover:text-blue-400 hover:translate-x-1 transition-all duration-200 inline-block">College Admissions</Link></li>
+              <li><Link href="/exams" className="hover:text-blue-400 hover:translate-x-1 transition-all duration-200 inline-block">Entrance Exam Guidance</Link></li>
+              <li><Link href="#" className="hover:text-blue-400 hover:translate-x-1 transition-all duration-200 inline-block">Career Counseling</Link></li>
+              <li><Link href="#" className="hover:text-blue-400 hover:translate-x-1 transition-all duration-200 inline-block">Admission Consulting</Link></li>
             </ul>
           </div>
 
@@ -151,14 +151,14 @@ const Footer = () => {
         <div className="pt-8 sm:pt-12 lg:pt-16 border-t border-slate-700/50">
           <div className="flex flex-col gap-8 sm:gap-12 mb-6 sm:mb-8">
             <div className="text-center lg:text-center">
-              <p className="text-gray-300 text-xs sm:text-sm mb-2 font-medium"> {SITE_IDENTITY.business.established} {SITE_IDENTITY.name}. All rights reserved.</p>
+              <p className="text-gray-300 text-xs sm:text-sm mb-2 font-medium">© {SITE_IDENTITY.business.established} {SITE_IDENTITY.name}. All rights reserved.</p>
               <p className="text-gray-400 text-xs">{SITE_IDENTITY.tagline}</p>
             </div>
 <div className="mt-8 text-center max-w-4xl mx-auto">
   <p className="text-gray-400 text-xs leading-relaxed">
-    Disclaimer: Alpha World Education provides guidance and counseling services
-    based on experience and available information. We do not guarantee admission,
-    visa approval, or outcomes, as final decisions are made by respective
+    Disclaimer: {SITE_IDENTITY.name} provides guidance and counseling services
+    based on experience and available information. We do not guarantee admission
+    or outcomes, as final decisions are made by respective
     institutions and authorities.
   </p>
 </div>

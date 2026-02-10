@@ -1,13 +1,47 @@
 "use client";
 
-import React, { useState } from "react";
-import { Search, GraduationCap, Globe, BookOpen, Trophy } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Search, GraduationCap, Globe, BookOpen, Trophy, ChevronLeft, ChevronRight } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 
+// Slider data with images and text
+const slides = [
+  {
+    image: "hero/hero-1.jpg",
+    badge: "India's #1 Admission Portal",
+    title: "Your Gateway to",
+    highlight: "Top Indian Universities",
+    subtitle: "Discover top Indian colleges, crack entrance exams, and get expert guidance for your academic journey. From JEE to NEET, we've got you covered.",
+  },
+  {
+    image: "hero/hero-2.jpg",
+    badge: "Crack JEE, NEET & More",
+    title: "Master Every",
+    highlight: "Entrance Exam",
+    subtitle: "Comprehensive preparation guides, mock tests, and expert strategies to help you ace JEE, NEET, AIIMS, and other top competitive exams.",
+  },
+  {
+    image: "hero/hero-3.jpg",
+    badge: "500+ Partner Colleges",
+    title: "Get Into Your",
+    highlight: "Dream College",
+    subtitle: "From IITs and NITs to AIIMS and IIMs - find detailed information about admissions, fees, cutoffs, and placements.",
+  },
+  {
+    image: "hero/hero-4.jpg",
+    badge: "Expert Career Guidance",
+    title: "Shape Your",
+    highlight: "Future Career",
+    subtitle: "Get personalized counseling from industry experts. Choose the right course, college, and career path for a successful future.",
+  },
+];
+
 const Hero: React.FC = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
   const [query, setQuery] = useState("");
   const [showResults, setShowResults] = useState(false);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
   // TanStack Query for colleges
   const { data: collegesData, isLoading: isLoadingColleges } = useQuery({
@@ -48,71 +82,140 @@ const Hero: React.FC = () => {
     setShowResults(value.length >= 2);
   };
 
+  // Auto-slide effect
+  useEffect(() => {
+    if (!isAutoPlaying) return;
+    
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [isAutoPlaying]);
+
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index);
+    setIsAutoPlaying(false);
+    // Resume autoplay after 10 seconds
+    setTimeout(() => setIsAutoPlaying(true), 10000);
+  };
+
+  const nextSlide = () => goToSlide((currentSlide + 1) % slides.length);
+  const prevSlide = () => goToSlide((currentSlide - 1 + slides.length) % slides.length);
+
+  const currentSlideData = slides[currentSlide];
+
   return (
-    <section className="relative min-h-[600px] flex items-center justify-center pt-20 pb-12 overflow-hidden">
-      {/* Background Image with Overlay */}
+    <section className="relative min-h-[500px] sm:min-h-[600px] lg:min-h-[700px] flex items-center justify-center pt-16 sm:pt-20 pb-8 sm:pb-12 overflow-hidden">
+      {/* Background Slider with Images */}
       <div className="absolute inset-0 z-0">
-        <img
-          src="https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
-          alt="University Campus"
-          className="w-full h-full object-cover"
-        />
+        {slides.map((slide, index) => (
+          <div
+            key={index}
+            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+              index === currentSlide ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            <img
+              src={slide.image}
+              alt={`Slide ${index + 1}`}
+              className="w-full h-full object-cover"
+            />
+          </div>
+        ))}
         <div className="absolute inset-0 bg-black/50" />
       </div>
 
-      {/* Static Floating Icons (Positioned exactly as per image) */}
-      <div className="absolute inset-0 z-10 pointer-events-none container mx-auto">
-        <div className="absolute top-20 left-10 w-12 h-12 bg-white rounded-lg flex items-center justify-center shadow-lg">
-          <GraduationCap className="w-6 h-6 text-blue-600" />
+      {/* Slide Navigation Arrows */}
+      <button
+        onClick={prevSlide}
+        className="hidden sm:flex absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-12 sm:h-12 bg-white/10 backdrop-blur-md border border-white/20 rounded-full items-center justify-center text-white hover:bg-white/20 transition-all"
+      >
+        <ChevronLeft size={20} className="sm:w-6 sm:h-6" />
+      </button>
+      <button
+        onClick={nextSlide}
+        className="hidden sm:flex absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 sm:w-12 sm:h-12 bg-white/10 backdrop-blur-md border border-white/20 rounded-full items-center justify-center text-white hover:bg-white/20 transition-all"
+      >
+        <ChevronRight size={20} className="sm:w-6 sm:h-6" />
+      </button>
+
+      {/* Slide Indicators */}
+      <div className="absolute bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 z-30 flex gap-2">
+        {slides.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => goToSlide(index)}
+            className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all ${
+              index === currentSlide
+                ? "bg-[#FFD700] w-6 sm:w-8"
+                : "bg-white/50 hover:bg-white/80"
+            }`}
+          />
+        ))}
+      </div>
+
+      {/* Static Floating Icons - Hidden on mobile */}
+      <div className="hidden md:block absolute inset-0 z-10 pointer-events-none container mx-auto">
+        <div className="absolute top-20 left-4 lg:left-10 w-10 h-10 lg:w-12 lg:h-12 bg-white rounded-lg flex items-center justify-center shadow-lg">
+          <GraduationCap className="w-5 h-5 lg:w-6 lg:h-6 text-blue-600" />
         </div>
-        <div className="absolute top-28 right-10 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg">
-          <Globe className="w-6 h-6 text-blue-600" />
+        <div className="absolute top-28 right-4 lg:right-10 w-10 h-10 lg:w-12 lg:h-12 bg-white rounded-full flex items-center justify-center shadow-lg">
+          <Globe className="w-5 h-5 lg:w-6 lg:h-6 text-blue-600" />
         </div>
-        <div className="absolute bottom-40 left-16 w-12 h-12 bg-white rounded-lg flex items-center justify-center shadow-lg">
-          <BookOpen className="w-6 h-6 text-blue-600" />
+        <div className="absolute bottom-40 left-8 lg:left-16 w-10 h-10 lg:w-12 lg:h-12 bg-white rounded-lg flex items-center justify-center shadow-lg">
+          <BookOpen className="w-5 h-5 lg:w-6 lg:h-6 text-blue-600" />
         </div>
-        <div className="absolute bottom-32 right-16 w-12 h-12 bg-white rounded-lg flex items-center justify-center shadow-lg">
-          <Trophy className="w-6 h-6 text-blue-600" />
+        <div className="absolute bottom-32 right-8 lg:right-16 w-10 h-10 lg:w-12 lg:h-12 bg-white rounded-lg flex items-center justify-center shadow-lg">
+          <Trophy className="w-5 h-5 lg:w-6 lg:h-6 text-blue-600" />
         </div>
       </div>
 
-      <div className="container mx-auto px-4 relative z-20 text-center">
-        {/* Badge */}
-        <div className="inline-block bg-white/20 backdrop-blur-md border border-white/30 rounded-full px-4 py-1.5 mb-8">
-          <div className="flex items-center gap-2 text-white text-xs font-medium">
-            <span className="w-1.5 h-1.5 bg-yellow-400 rounded-full" />
-            India's #1 Admission Portal
+      <div className="container mx-auto px-3 sm:px-4 relative z-20 text-center">
+        {/* Badge - Animated */}
+        <div 
+          key={`badge-${currentSlide}`}
+          className="inline-block bg-white/20 backdrop-blur-md border border-white/30 rounded-full px-3 sm:px-4 py-1.5 mb-4 sm:mb-8 animate-fadeIn"
+        >
+          <div className="flex items-center gap-2 text-white text-[10px] sm:text-xs font-medium">
+            <span className="w-1.5 h-1.5 bg-yellow-400 rounded-full animate-pulse" />
+            {currentSlideData.badge}
           </div>
         </div>
 
-        {/* Main Heading */}
-        <h1 className="text-white text-4xl md:text-6xl font-bold mb-4 tracking-tight">
-          Your Gateway to <br />
-          <span className="text-[#FFD700]">Top Indian Universities</span>
+        {/* Main Heading - Animated */}
+        <h1 
+          key={`title-${currentSlide}`}
+          className="text-white text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 sm:mb-4 tracking-tight animate-slideUp"
+        >
+          {currentSlideData.title} <br className="hidden sm:block" />
+          <span className="text-[#FFD700]">{currentSlideData.highlight}</span>
         </h1>
 
-        {/* Subtext */}
-        <p className="text-white/90 max-w-2xl mx-auto mb-10 text-sm md:text-base leading-relaxed">
-          Discover top Indian colleges, crack entrance exams, and get expert guidance for 
-          your academic journey. From JEE to NEET, we've got you covered.
+        {/* Subtext - Animated */}
+        <p 
+          key={`subtitle-${currentSlide}`}
+          className="text-white/90 max-w-2xl mx-auto mb-6 sm:mb-10 text-xs sm:text-sm md:text-base leading-relaxed px-2 sm:px-0 animate-fadeIn"
+        >
+          {currentSlideData.subtitle}
         </p>
 
         {/* Search Bar */}
-        <div className="max-w-3xl mx-auto mb-10 relative">
+        <div className="max-w-3xl mx-auto mb-6 sm:mb-10 relative px-2 sm:px-0">
           <form onSubmit={handleSubmit} className="relative flex items-center">
-            <div className="absolute left-6 text-gray-400">
-              <Search size={20} />
+            <div className="absolute left-4 sm:left-6 text-gray-400">
+              <Search size={18} className="sm:w-5 sm:h-5" />
             </div>
             <input
               type="text"
               value={query}
               onChange={handleInputChange}
-              placeholder="Search IITs, NITs, AIIMS, exams, courses..."
-              className="w-full bg-white rounded-full py-5 pl-14 pr-36 text-gray-800 placeholder-gray-400 focus:outline-none shadow-xl"
+              placeholder="Search IITs, NITs, AIIMS, exams..."
+              className="w-full bg-white rounded-full py-3 sm:py-5 pl-11 sm:pl-14 pr-24 sm:pr-36 text-gray-800 placeholder-gray-400 focus:outline-none shadow-xl text-sm sm:text-base"
             />
             <button
               type="submit"
-              className="absolute right-2 bg-[#1E6BFF] text-white px-8 py-3 rounded-full font-semibold hover:bg-blue-600 transition-all"
+              className="absolute right-1.5 sm:right-2 bg-[#1E6BFF] text-white px-4 sm:px-8 py-2 sm:py-3 rounded-full font-semibold hover:bg-blue-600 transition-all text-sm sm:text-base"
             >
               Search
             </button>
@@ -120,20 +223,20 @@ const Hero: React.FC = () => {
 
           {/* Search Results Dropdown */}
           {showResults && (query.length >= 2) && (
-            <div className="absolute top-full left-0 right-0 mt-3 bg-white text-left rounded-2xl shadow-2xl z-50 max-h-80 overflow-y-auto overflow-hidden">
+            <div className="absolute top-full left-2 right-2 sm:left-0 sm:right-0 mt-2 sm:mt-3 bg-white text-left rounded-xl sm:rounded-2xl shadow-2xl z-50 max-h-60 sm:max-h-80 overflow-y-auto overflow-hidden">
               {isLoading ? (
-                <div className="p-6 text-center text-gray-500">Searching...</div>
+                <div className="p-4 sm:p-6 text-center text-gray-500 text-sm">Searching...</div>
               ) : (
                 <div className="py-2">
                   {colleges.slice(0, 3).map((college: any) => (
-                    <Link key={college._id} href={`/colleges/${college.slug}`} className="block px-6 py-3 hover:bg-gray-50 border-b border-gray-100 last:border-0">
-                      <div className="font-bold text-gray-900">{college.name}</div>
+                    <Link key={college._id} href={`/colleges/${college.slug}`} className="block px-4 sm:px-6 py-2 sm:py-3 hover:bg-gray-50 border-b border-gray-100 last:border-0">
+                      <div className="font-bold text-gray-900 text-sm sm:text-base">{college.name}</div>
                       <div className="text-xs text-gray-500">{college.state}</div>
                     </Link>
                   ))}
                   {exams.slice(0, 2).map((exam: any) => (
-                    <Link key={exam._id} href={`/exams/${exam.slug}`} className="block px-6 py-3 hover:bg-gray-50 border-b border-gray-100 last:border-0">
-                      <div className="font-bold text-blue-600">{exam.short_name || exam.name}</div>
+                    <Link key={exam._id} href={`/exams/${exam.slug}`} className="block px-4 sm:px-6 py-2 sm:py-3 hover:bg-gray-50 border-b border-gray-100 last:border-0">
+                      <div className="font-bold text-blue-600 text-sm sm:text-base">{exam.short_name || exam.name}</div>
                       <div className="text-xs text-gray-500">Entrance Exam</div>
                     </Link>
                   ))}
@@ -144,33 +247,33 @@ const Hero: React.FC = () => {
         </div>
 
         {/* Quick Categories */}
-        <div className="flex flex-wrap justify-center gap-3 mb-12">
+        <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-12 px-2 sm:px-0">
           {[
-            { icon: <Building className="w-4 h-4" />, label: "IITs & NITs" },
-            { icon: "⚕️", label: "Medical Colleges" },
-            { icon: <Briefcase className="w-4 h-4" />, label: "IIMs & MBA" },
-            { icon: <PenLine className="w-4 h-4" />, label: "Entrance Exams" },
-            { icon: <Target className="w-4 h-4" />, label: "Top Universities" }
+            { icon: <Building className="w-3 h-3 sm:w-4 sm:h-4" />, label: "IITs & NITs" },
+            { icon: "⚕️", label: "Medical" },
+            { icon: <Briefcase className="w-3 h-3 sm:w-4 sm:h-4" />, label: "IIMs & MBA" },
+            { icon: <PenLine className="w-3 h-3 sm:w-4 sm:h-4" />, label: "Exams" },
+            { icon: <Target className="w-3 h-3 sm:w-4 sm:h-4" />, label: "Universities" }
           ].map((item, idx) => (
             <button
               key={idx}
-              className="flex items-center gap-2 bg-black/30 backdrop-blur-sm border border-white/20 px-5 py-2.5 rounded-lg hover:bg-black/40 transition-all"
+              className="flex items-center gap-1.5 sm:gap-2 bg-black/30 backdrop-blur-sm border border-white/20 px-3 sm:px-5 py-2 sm:py-2.5 rounded-lg hover:bg-black/40 transition-all"
             >
-              <span className="text-white/90 text-sm font-medium">{item.label}</span>
+              <span className="text-white/90 text-xs sm:text-sm font-medium">{item.label}</span>
             </button>
           ))}
         </div>
 
         {/* Trust Stats */}
-        <div className="flex flex-wrap justify-center items-center gap-8">
-          <div className="flex items-center gap-2 text-white/90 text-sm">
-            <span className="w-2 h-2 bg-yellow-400 rounded-full" /> 10,000+ Students Placed
+        <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-4 sm:gap-8">
+          <div className="flex items-center gap-2 text-white/90 text-xs sm:text-sm">
+            <span className="w-2 h-2 bg-yellow-400 rounded-full" /> 10,000+ Students
           </div>
-          <div className="flex items-center gap-2 text-white/90 text-sm">
-            <span className="w-2 h-2 bg-yellow-400 rounded-full" /> 500+ Indian Colleges
+          <div className="flex items-center gap-2 text-white/90 text-xs sm:text-sm">
+            <span className="w-2 h-2 bg-yellow-400 rounded-full" /> 500+ Colleges
           </div>
-          <div className="flex items-center gap-2 text-white/90 text-sm">
-            <span className="w-2 h-2 bg-yellow-400 rounded-full" /> 95% Success Rate
+          <div className="flex items-center gap-2 text-white/90 text-xs sm:text-sm">
+            <span className="w-2 h-2 bg-yellow-400 rounded-full" /> 95% Success
           </div>
         </div>
       </div>

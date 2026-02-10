@@ -1,10 +1,10 @@
 'use client'
 
-import { useContactInfo } from '@/hooks/useContactInfo'
+import { SITE_IDENTITY } from '@/site-identity'
 import { ShieldCheck, Lock, Eye, FileText, ChevronRight } from 'lucide-react'
 
 export default function PrivacyPolicyPage() {
-  const contactInfo = useContactInfo()
+  const { name, contact } = SITE_IDENTITY
 
   return (
     <section className="w-full relative overflow-hidden">
@@ -27,7 +27,7 @@ export default function PrivacyPolicyPage() {
             Privacy <span className="text-[#1E6BFF]">Policy</span>
           </h1>
           <p className="mt-6 text-slate-300 max-w-2xl mx-auto text-sm md:text-base leading-relaxed">
-            Your trust is our greatest asset. This policy outlines how Alpha World Education 
+            Your trust is our greatest asset. This policy outlines how {name} 
             collects, uses, and safeguards your data with the highest standards of security.
           </p>
         </div>
@@ -39,7 +39,7 @@ export default function PrivacyPolicyPage() {
             <PolicyBlock
               icon={<FileText size={20} />}
               title="1. Introduction"
-              content="Alpha World Education respects your privacy and is committed to protecting the personal information you share with us. This Privacy Policy explains how we collect, use, and safeguard your data when you interact with our website or services."
+              content={`${name} respects your privacy and is committed to protecting the personal information you share with us. This Privacy Policy explains how we collect, use, and safeguard your data when you interact with our website or services.`}
             />
 
             <PolicyBlock
@@ -88,28 +88,28 @@ export default function PrivacyPolicyPage() {
                 <div className="space-y-4">
                   <div>
                     <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">General Inquiries</p>
-                    <a href={`mailto:${contactInfo.emails.general}`} className="text-[#1E6BFF] font-bold text-base hover:underline">
-                      {contactInfo.emails.general}
+                    <a href={`mailto:${contact.email.general}`} className="text-[#1E6BFF] font-bold text-base hover:underline">
+                      {contact.email.general}
                     </a>
                   </div>
                   <div>
                     <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Direct Helpline</p>
-                    <a href={`tel:${contactInfo.phones.primaryRaw}`} className="text-slate-900 font-bold text-base hover:underline">
-                      {contactInfo.phones.primary}
+                    <a href={`tel:${contact.phone.raw}`} className="text-slate-900 font-bold text-base hover:underline">
+                      {contact.phone.display}
                     </a>
                   </div>
                 </div>
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Corporate Address</p>
                   <p className="text-slate-600 leading-relaxed font-medium italic">
-                    {contactInfo.address.full}
+                    {contact.address.office}, {contact.address.city}, {contact.address.country}
                   </p>
                 </div>
               </div>
             </div>
 
             <p className="text-center text-slate-400 text-[10px] font-bold uppercase tracking-[0.2em]">
-              Last Updated: February 2026 • Alpha World Education Compliance Team
+              Last Updated: February 2026 • {name} Compliance Team
             </p>
           </div>
         </div>
