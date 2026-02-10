@@ -2,14 +2,14 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu, X, Phone, Mail, MapPin, ChevronDown, ChevronRight, AlertCircle, RefreshCw } from "lucide-react";
+import { Menu, X, Phone, Mail, MapPin, ChevronDown, ChevronRight, AlertCircle } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion"; // Added for animations
 import { SITE_IDENTITY } from "@/site-identity";
 import { useContactInfo } from "@/hooks/useContactInfo";
 import { useFormModal } from "@/context/FormModalContext";
 import { useDropdownData } from "@/hooks/useDropdownData";
 import { useCountryColleges } from "@/hooks/useCountryColleges";
-import { Button } from "@/components/ui/button";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,31 +17,18 @@ export default function Navbar() {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [hoveredCountry, setHoveredCountry] = useState<string | null>(null);
   const [expandedMobileItem, setExpandedMobileItem] = useState<string | null>(null);
-  const [expandedMobileCountry, setExpandedMobileCountry] = useState<string | null>(null);
-  const [showMobileColleges, setShowMobileColleges] = useState<string | null>(null);
   const { emails, phones, address } = useContactInfo();
   const pathname = usePathname();
   const { openModal } = useFormModal();
   const { colleges, exams, countries, loading, error } = useDropdownData();
   
-  // Use TanStack Query for country-specific colleges
-  const { data: countryColleges = [], isLoading: loadingColleges, error: countryCollegesError } = useCountryColleges(hoveredCountry);
-  const { data: mobileCountryColleges = [], isLoading: mobileLoadingColleges, error: mobileCountryCollegesError } = useCountryColleges(expandedMobileCountry);
+  const { data: countryColleges = [], isLoading: loadingColleges } = useCountryColleges(hoveredCountry);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  useEffect(() => {
-    if (hoveredItem === 'Countries' && !hoveredCountry) {
-      // Set Germany as default country when Countries dropdown opens
-      setHoveredCountry('germany');
-    }
-  }, [hoveredItem]);
-
-  // Remove the old fetchCollegesByCountry function as it's now handled by useCountryColleges hook
 
   const navItems = [
     { name: "Home", href: "/" },
@@ -50,6 +37,7 @@ export default function Navbar() {
     { name: "Blog", href: "/blogs" },
     { name: "Services", href: "/service" },
     { name: "About", href: "/about" },
+    { name: "Contact us", href: "/contact" },
   ];
 
   const dropdownContent = {
@@ -66,288 +54,190 @@ export default function Navbar() {
   const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname?.startsWith(href));
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? "bg-white/98 backdrop-blur-lg shadow-xl" : "bg-white/90 backdrop-blur-sm shadow-sm"}`}>
-
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      isScrolled ? "bg-white/80 backdrop-blur-md shadow-lg" : "bg-white"
+    }`}>
+      
       {/* TOP CONTACT BAR */}
-      <div className="hidden bg-slate-900 text-white lg:block">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-8 py-3 text-sm">
-          <div className="flex items-center gap-8">
-            <a href={`tel:${phones.primaryRaw}`} className="flex items-center gap-2.5 hover:text-[#FFD700] transition-all duration-300"><Phone size={16} /><span className="font-medium">{phones.primary}</span></a>
-            <a href={`mailto:${emails.info}`} className="flex items-center gap-2.5 hover:text-[#FFD700] transition-all duration-300"><Mail size={16} /><span className="font-medium">{emails.info}</span></a>
+      <div className={`hidden lg:block transition-all duration-500 overflow-hidden ${isScrolled ? "max-h-0" : "max-h-12 bg-blue-600"}`}>
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-8 py-2 text-[13px] text-white/90">
+          <div className="flex items-center gap-6">
+            <a href={`tel:${phones.primaryRaw}`} className="flex items-center gap-2 hover:text-white transition-colors">
+              <Phone size={14} className="text-blue-200" /> {phones.primary}
+            </a>
+            <a href={`mailto:${emails.info}`} className="flex items-center gap-2 hover:text-white transition-colors">
+              <Mail size={14} className="text-blue-200" /> {emails.info}
+            </a>
           </div>
-          <div className="flex items-center gap-2.5 text-slate-300"><MapPin size={16} /><span className="font-medium">{address.office}</span></div>
+          <div className="flex items-center gap-2">
+            <MapPin size={14} className="text-blue-200" /> {address.office}
+          </div>
         </div>
       </div>
 
       {/* MAIN NAVIGATION */}
-      <div className="border-b border-slate-100">
-        <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10">
-          <div className="flex h-20 lg:h-24 items-center justify-between">
-            <Link href="/" className="flex-shrink-0"><img src={SITE_IDENTITY.assets.logo.main} alt="Logo" width={80} height={80} className="hover:opacity-80 transition-opacity" /></Link>
+      <div className="border-b border-blue-50/50">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="flex h-20 items-center justify-between">
+            <Link href="/" className="relative z-10 transition-transform hover:scale-105">
+              <img src={SITE_IDENTITY.assets.logo.main} alt="Logo" className="h-12 lg:h-14 w-auto object-contain" />
+            </Link>
 
-            {/* DESKTOP NAVIGATION */}
-            <nav className="hidden lg:flex items-center space-x-2">
+            {/* DESKTOP NAV */}
+            <nav className="hidden lg:flex items-center gap-1">
               {navItems.map((item) => (
                 <div
                   key={item.name}
-                  className="relative py-2"
+                  className="relative group py-2"
                   onMouseEnter={() => setHoveredItem(item.name)}
                   onMouseLeave={() => { setHoveredItem(null); setHoveredCountry(null); }}
                 >
-                  <Link href={item.href} className={`px-4 py-3 text-base font-semibold rounded-xl flex items-center gap-2 transition-all duration-300 ${isActive(item.href) ? "text-white bg-[#1E6BFF] shadow-md transform scale-105" : "text-slate-700 hover:text-white hover:bg-[#1E6BFF] hover:shadow-lg hover:scale-105"}`}>
+                  <Link 
+                    href={item.href} 
+                    className={`relative px-4 py-2 text-[15px] font-bold transition-all duration-300 flex items-center gap-1.5 rounded-lg
+                      ${isActive(item.href) ? "text-blue-600 bg-blue-50" : "text-slate-600 hover:text-blue-600 hover:bg-blue-50/50"}
+                    `}
+                  >
                     {item.name}
-                    {item.hasDropdown && <ChevronDown size={16} className="transition-transform duration-300" />}
+                    {item.hasDropdown && (
+                      <ChevronDown size={14} className={`transition-transform duration-300 ${hoveredItem === item.name ? "rotate-180" : ""}`} />
+                    )}
                   </Link>
 
-                  {/* MAIN DROPDOWN - TWO COLUMN LAYOUT */}
-                  {item.hasDropdown && hoveredItem === item.name && (
-                    <div className={`absolute top-full left-1/2 transform -translate-x-1/2 bg-white rounded-xl shadow-xl border border-slate-100 py-2 z-[60] max-h-[60vh] overflow-x-auto overflow-y-hidden ${item.name === 'Countries' ? 'w-[40rem] max-w-[80vw]' : 'w-64 max-w-[90vw]'}`}>
-                      {loading && (item.name === 'Colleges' || item.name === 'Exams') ? (
-                        <div className="px-6 py-4 text-slate-500 text-center">Loading...</div>
-                      ) : error ? (
-                        <div className="px-6 py-4 text-red-500 text-center flex flex-col items-center gap-2">
-                          <AlertCircle size={16} />
-                          <span className="text-sm">Failed to load data</span>
-                        </div>
-                      ) : item.name === 'Countries' ? (
-                        <div className="flex h-full">
-                          {/* LEFT COLUMN - COUNTRIES */}
-                          <div className="w-1/2 border-r border-slate-100 overflow-y-auto custom-scrollbar max-h-[55vh]">
-                            {dropdownContent[item.name as keyof typeof dropdownContent].map((dropdownItem: any) => (
-                              <div
-                                key={dropdownItem.title}
-                                className="relative group"
+                  {/* DESKTOP DROPDOWN */}
+                  <AnimatePresence>
+                    {item.hasDropdown && hoveredItem === item.name && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 15, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                        transition={{ duration: 0.2 }}
+                        className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-white rounded-2xl shadow-2xl border border-blue-50 overflow-hidden z-[60] 
+                          ${item.name === 'Countries' ? 'w-[750px]' : 'w-64'}`}
+                      >
+                        <div className="flex max-h-[500px]">
+                          {/* Countries Column */}
+                          <div className={`${item.name === 'Countries' ? 'w-1/2 border-r border-blue-50' : 'w-full'} overflow-y-auto p-2 custom-scrollbar`}>
+                            {dropdownContent[item.name as keyof typeof dropdownContent]?.map((subItem: any) => (
+                              <Link
+                                key={subItem.title}
+                                href={subItem.href}
+                                onMouseEnter={() => item.name === 'Countries' && setHoveredCountry(subItem.slug)}
+                                className="flex items-center justify-between px-4 py-3 rounded-xl hover:bg-blue-600 hover:text-white transition-all group/item"
                               >
-                                <button
-                                  onClick={() => {
-                                    if (item.name === 'Countries') {
-                                      setHoveredCountry(hoveredCountry === dropdownItem.slug ? null : dropdownItem.slug);
-                                    }
-                                  }}
-                                  className={`w-full flex items-center justify-between px-4 py-2 text-sm font-bold transition-all duration-300 text-left ${hoveredCountry === dropdownItem.slug ? 'bg-[#1E6BFF]/10 text-[#1E6BFF] border-l-4 border-[#1E6BFF]' : 'text-slate-700 hover:bg-[#1E6BFF]/10 hover:text-[#1E6BFF] hover:border-l-4 hover:border-[#1E6BFF]'}`}
-                                >
-                                  <span className="flex items-center gap-2">
-                                    {dropdownItem.flag && <span className="text-lg">{dropdownItem.flag}</span>}
-                                    <span className="font-bold">{dropdownItem.title}</span>
-                                  </span>
-                                  {item.name === 'Countries' && <ChevronRight size={12} className="text-slate-400" />}
-                                </button>
-
-                                {/* BLUE SCROLL INDICATOR FOR ACTIVE COUNTRY */}
-                                {item.name === 'Countries' && hoveredCountry === dropdownItem.slug && (
-                                  <div className="absolute right-0 top-0 bottom-0 w-0.5 bg-blue-500 rounded-l-full"></div>
-                                )}
-                              </div>
+                                <span className="flex items-center gap-3 font-semibold text-sm">
+                                  {subItem.flag && <span>{subItem.flag}</span>}
+                                  {subItem.title}
+                                </span>
+                                {item.name === 'Countries' && <ChevronRight size={14} className="opacity-50 group-hover/item:opacity-100" />}
+                              </Link>
                             ))}
                           </div>
 
-                          {/* RIGHT COLUMN - UNIVERSITIES */}
-                          {item.name === 'Countries' && hoveredCountry && (
-                            <div className="w-1/2 overflow-y-auto custom-scrollbar max-h-[55vh]">
-                              <div className="px-4 pb-2 mb-2 border-b border-slate-100 sticky top-0 bg-white z-10">
-                                <span className="text-sm font-bold text-slate-600 uppercase tracking-wider">Available Universities</span>
-                              </div>
-
-                              <div className="px-2">
-                                {loadingColleges ? (
-                                  <div className="px-4 py-3 text-sm text-slate-500 flex items-center gap-2 justify-center">
-                                    <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-                                    <span className="font-medium">Searching universities...</span>
-                                  </div>
-                                ) : countryCollegesError ? (
-                                  <div className="px-4 py-8 text-center text-red-500">
-                                    <AlertCircle size={20} className="mx-auto mb-2" />
-                                    <p className="text-sm font-medium">Failed to load universities</p>
-                                    <p className="text-xs mt-1">Please try again</p>
-                                  </div>
-                                ) : countryColleges.length > 0 ? (
-                                  countryColleges.map((college) => (
-                                    <Link key={college._id} href={`/colleges/${college.slug}`} className="block px-3 py-2 rounded-lg hover:bg-[#1E6BFF]/10 group/college transition-all duration-300 mb-1">
-                                      <div className="font-bold text-sm text-slate-800 group-hover/college:text-[#1E6BFF] transition-colors">{college.name}</div>
+                          {/* Dynamic University Preview for Countries */}
+                          {item.name === 'Countries' && (
+                            <div className="w-1/2 bg-slate-50/50 p-4 overflow-y-auto custom-scrollbar">
+                              <h4 className="text-[11px] font-bold text-blue-600 uppercase tracking-widest mb-4">Top Universities</h4>
+                              {loadingColleges ? (
+                                <div className="space-y-3">
+                                  {[1,2,3].map(i => <div key={i} className="h-8 bg-blue-100/50 animate-pulse rounded-lg" />)}
+                                </div>
+                              ) : countryColleges.length > 0 ? (
+                                <div className="space-y-1">
+                                  {countryColleges.slice(0, 6).map((college: any) => (
+                                    <Link key={college._id} href={`/colleges/${college.slug}`} className="block px-3 py-2 text-sm font-medium text-slate-700 hover:text-blue-600 hover:bg-white rounded-lg transition-all shadow-sm border border-transparent hover:border-blue-100">
+                                      {college.name}
                                     </Link>
-                                  ))
-                                ) : (
-                                  <div className="px-4 py-8 text-center text-slate-400">
-                                    <p className="text-sm font-medium">No universities found for this region.</p>
-                                    <p className="text-xs mt-1">Try exploring other countries</p>
-                                  </div>
-                                )}
-                              </div>
-
-                              {countryColleges.length > 0 && (
-                                <div className="px-4 mt-2 pt-2 border-t border-slate-100 sticky bottom-0 bg-white">
-                                  <Link href={`/colleges?country=${hoveredCountry}`} className="block text-center py-2 text-sm font-bold text-white bg-[#1E6BFF] rounded-lg hover:bg-blue-700 transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105">
-                                    Explore All Universities
+                                  ))}
+                                  <Link href={`/colleges?country=${hoveredCountry}`} className="block mt-4 text-center py-2.5 text-xs font-bold bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow-md transition-transform hover:scale-[1.02]">
+                                    View All Universities
                                   </Link>
                                 </div>
+                              ) : (
+                                <div className="text-center py-10 text-slate-400 text-sm">Select a country to view colleges</div>
                               )}
                             </div>
                           )}
                         </div>
-                      ) : (
-                        // SINGLE COLUMN FOR OTHER DROPDOWNS (Colleges, Exams)
-                        <div className="overflow-y-auto custom-scrollbar max-h-[55vh]">
-                          {dropdownContent[item.name as keyof typeof dropdownContent].map((dropdownItem: any) => (
-                            <Link key={dropdownItem.title} href={dropdownItem.href} className="flex items-center justify-between px-4 py-2 text-sm font-bold text-slate-700 hover:bg-[#1E6BFF]/10 hover:text-[#1E6BFF] transition-all duration-300">
-                              <span className="flex items-center gap-2">
-                                {dropdownItem.flag && <span className="text-lg">{dropdownItem.flag}</span>}
-                                <span className="font-bold">{dropdownItem.title}</span>
-                              </span>
-                            </Link>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  )}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               ))}
             </nav>
 
-            <button onClick={openModal} className="hidden lg:block px-8 py-3 text-sm font-bold bg-[#1E6BFF] text-white rounded-[5px] hover:bg-blue-700 transition-all duration-300 shadow-sm hover:shadow-md transform hover:scale-105">
-              Get Admission Help
-            </button>
-
-            <button onClick={() => setIsOpen(!isOpen)} className="lg:hidden p-3 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors">
-              {isOpen ? <X size={32} /> : <Menu size={32} />}
-            </button>
+            <div className="flex items-center gap-4">
+              <button onClick={openModal} className="hidden lg:flex px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white text-[14px] font-bold rounded-full transition-all duration-300 shadow-lg shadow-blue-200 hover:shadow-blue-300 items-center gap-2 group">
+                Apply Now
+                <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+              </button>
+              
+              <button 
+                onClick={() => setIsOpen(!isOpen)} 
+                className="lg:hidden p-2.5 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-100 transition-colors"
+              >
+                {isOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
       {/* MOBILE MENU */}
-      <div className={`lg:hidden bg-white transition-all duration-300 ${isOpen ? "max-h-[calc(100vh-100px)] opacity-100 overflow-y-auto" : "max-h-0 opacity-0 overflow-hidden"}`}>
-        <div className="px-8 py-8 space-y-2">
-          {navItems.map((item) => (
-            <div key={item.name}>
-              {item.hasDropdown ? (
-                <div>
-                  <button
-                    onClick={() => setExpandedMobileItem(expandedMobileItem === item.name ? null : item.name)}
-                    className={`w-full py-4 text-lg font-bold border-b border-slate-50 transition-all duration-300 ${isActive(item.href) ? "text-[#1E6BFF] bg-[#1E6BFF]/10 border-l-4 border-[#1E6BFF]" : "text-slate-800 hover:bg-[#1E6BFF]/10 hover:text-[#1E6BFF] hover:border-l-4 hover:border-[#1E6BFF]"}`}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div 
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="lg:hidden bg-white border-b border-blue-50 overflow-hidden"
+          >
+            <div className="px-6 py-8 space-y-2">
+              {navItems.map((item) => (
+                <div key={item.name} className="border-b border-slate-50 last:border-0">
+                  <div 
+                    className="flex items-center justify-between py-4"
+                    onClick={() => item.hasDropdown && setExpandedMobileItem(expandedMobileItem === item.name ? null : item.name)}
                   >
-                    <span>{item.name}</span>
-                    <ChevronDown 
-                      size={20} 
-                      className={`transition-transform duration-200 ${expandedMobileItem === item.name ? 'rotate-180' : ''}`}
-                    />
-                  </button>
+                    <Link 
+                      href={item.href} 
+                      className={`text-lg font-bold ${isActive(item.href) ? "text-blue-600" : "text-slate-800"}`}
+                      onClick={(e) => item.hasDropdown && e.preventDefault()}
+                    >
+                      {item.name}
+                    </Link>
+                    {item.hasDropdown && (
+                      <ChevronDown size={20} className={`transition-transform duration-300 ${expandedMobileItem === item.name ? "rotate-180" : ""}`} />
+                    )}
+                  </div>
                   
-                  {/* MOBILE DROPDOWN CONTENT */}
-                  {expandedMobileItem === item.name && (
-                    <div className="bg-slate-50 border-b border-slate-100">
-                      {loading && (item.name === 'Colleges' || item.name === 'Exams') ? (
-                        <div className="px-6 py-4 text-slate-500 text-center">Loading...</div>
-                      ) : error ? (
-                        <div className="px-6 py-4 text-red-500 text-center flex flex-col items-center gap-2">
-                          <AlertCircle size={16} />
-                          <span className="text-sm">Failed to load data</span>
-                        </div>
-                      ) : item.name === 'Countries' ? (
-                        <div className="max-h-60 overflow-y-auto">
-                          {dropdownContent[item.name as keyof typeof dropdownContent].map((dropdownItem: any) => (
-                            <div key={dropdownItem.title}>
-                              <button
-                                onClick={() => {
-                                  setExpandedMobileCountry(dropdownItem.slug);
-                                  setShowMobileColleges(showMobileColleges === dropdownItem.slug ? null : dropdownItem.slug);
-                                }}
-                                className={`w-full flex items-center justify-between px-6 py-3 text-sm font-bold transition-all duration-300 border-b border-slate-100 ${expandedMobileCountry === dropdownItem.slug ? 'bg-[#1E6BFF]/10 text-[#1E6BFF] border-l-4 border-[#1E6BFF]' : 'text-slate-700 hover:bg-[#1E6BFF]/10 hover:text-[#1E6BFF] hover:border-l-4 hover:border-[#1E6BFF]'}`}
-                              >
-                                <span className="flex items-center gap-2">
-                                  {dropdownItem.flag && <span className="text-lg">{dropdownItem.flag}</span>}
-                                  <span>{dropdownItem.title}</span>
-                                </span>
-                                <ChevronRight 
-                                  size={16} 
-                                  className={`transition-transform duration-200 ${expandedMobileCountry === dropdownItem.slug ? 'rotate-90' : ''}`}
-                                />
-                              </button>
-                              
-                              {/* MOBILE COUNTRY COLLEGES */}
-                              {expandedMobileCountry === dropdownItem.slug && showMobileColleges === dropdownItem.slug && (
-                                <div className="bg-white border-l-4 border-blue-500">
-                                  <div className="px-6 py-2 bg-blue-50 border-b border-blue-100">
-                                    <span className="text-xs font-bold text-blue-700 uppercase tracking-wider">Universities in {dropdownItem.title.replace('Study in ', '')}</span>
-                                  </div>
-                                  
-                                  {mobileLoadingColleges ? (
-                                    <div className="px-6 py-4 text-sm text-slate-500 flex items-center gap-2 justify-center">
-                                      <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-                                      <span className="font-medium">Loading universities...</span>
-                                    </div>
-                                  ) : mobileCountryCollegesError ? (
-                                    <div className="px-6 py-4 text-center text-red-500">
-                                      <AlertCircle size={16} className="mx-auto mb-1" />
-                                      <p className="text-xs font-medium">Failed to load universities</p>
-                                    </div>
-                                  ) : mobileCountryColleges.length > 0 ? (
-                                    mobileCountryColleges.slice(0, 5).map((college) => (
-                                      <Link
-                                        key={college._id}
-                                        href={`/colleges/${college.slug}`}
-                                        onClick={() => setIsOpen(false)}
-                                        className="block px-6 py-2 text-xs font-bold text-slate-600 hover:bg-[#1E6BFF]/10 hover:text-[#1E6BFF] transition-all duration-300 border-b border-slate-50"
-                                      >
-                                        {college.name}
-                                      </Link>
-                                    ))
-                                  ) : (
-                                    <div className="px-6 py-4 text-center text-slate-400">
-                                      <p className="text-xs font-medium">No universities found</p>
-                                    </div>
-                                  )}
-                                  
-                                  {mobileCountryColleges.length > 0 && (
-                                    <div className="px-6 py-2 bg-slate-50 border-t border-slate-100">
-                                      <Link
-                                        href={`/colleges?country=${expandedMobileCountry}`}
-                                        onClick={() => setIsOpen(false)}
-                                        className="block text-center py-2 text-xs font-bold text-[#1E6BFF] bg-[#1E6BFF]/20 rounded-lg hover:bg-[#1E6BFF]/30 transition-all duration-300 transform hover:scale-105"
-                                      >
-                                        View All Universities
-                                      </Link>
-                                    </div>
-                                  )}
-                                </div>
-                              )}
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="max-h-60 overflow-y-auto">
-                          {dropdownContent[item.name as keyof typeof dropdownContent].map((dropdownItem: any) => (
-                            <Link
-                              key={dropdownItem.title}
-                              href={dropdownItem.href}
-                              onClick={() => setIsOpen(false)}
-                              className="flex items-center gap-3 px-6 py-3 text-sm font-bold text-slate-700 hover:bg-[#1E6BFF]/10 hover:text-[#1E6BFF] transition-all duration-300 border-b border-slate-100"
-                            >
-                              {dropdownItem.flag && <span className="text-lg">{dropdownItem.flag}</span>}
-                              <span>{dropdownItem.title}</span>
-                            </Link>
-                          ))}
-                        </div>
-                      )}
-                    </div>
+                  {item.hasDropdown && expandedMobileItem === item.name && (
+                    <motion.div 
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      className="pb-4 pl-4 grid grid-cols-1 gap-2"
+                    >
+                      {dropdownContent[item.name as keyof typeof dropdownContent]?.slice(0, 8).map((sub: any) => (
+                        <Link 
+                          key={sub.title} 
+                          href={sub.href} 
+                          onClick={() => setIsOpen(false)}
+                          className="text-sm font-semibold text-slate-500 hover:text-blue-600 py-2 flex items-center gap-2"
+                        >
+                          {sub.flag} {sub.title}
+                        </Link>
+                      ))}
+                    </motion.div>
                   )}
                 </div>
-              ) : (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  onClick={() => setIsOpen(false)}
-                  className={`block py-4 text-lg font-bold border-b border-slate-50 transition-colors ${isActive(item.href) ? "text-blue-600 bg-blue-50" : "text-slate-800 hover:bg-slate-50"}`}
-                >
-                  {item.name}
-                </Link>
-              )}
+              ))}
+              <button onClick={() => { openModal(); setIsOpen(false); }} className="w-full mt-6 py-4 bg-blue-600 text-white font-bold rounded-2xl shadow-xl active:scale-95 transition-all">
+                Get Admission Help
+              </button>
             </div>
-          ))}
-          <button onClick={() => { openModal(); setIsOpen(false); }} className="w-full py-4 bg-[#1E6BFF] text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 hover:shadow-xl transition-all duration-300 transform hover:scale-105 mt-4">
-            Get Admission Help
-          </button>
-        </div>
-      </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

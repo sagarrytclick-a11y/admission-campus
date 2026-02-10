@@ -151,7 +151,7 @@ export default function ExamsPage() {
                 </div>
 
                 {/* Filters */}
-                <div className="flex gap-3">
+                <div className="flex items-center gap-3">
                   <Select value={selectedType} onValueChange={setSelectedType}>
                     <SelectTrigger className="h-14 bg-slate-50 border-2 border-slate-200 rounded-2xl">
                       <SelectValue placeholder="All Types" />

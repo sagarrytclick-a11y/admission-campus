@@ -1,10 +1,10 @@
 'use client'
 
-import { useContactInfo } from '@/hooks/useContactInfo'
+import { SITE_IDENTITY } from '@/site-identity'
 import { FileText, Scale, Globe, AlertCircle, ShieldCheck, ChevronRight, Mail, Phone } from 'lucide-react'
 
 export default function TermsAndConditionsPage() {
-  const contactInfo = useContactInfo()
+  const { name, contact } = SITE_IDENTITY
 
   return (
     <section className="w-full relative overflow-hidden bg-white">
@@ -27,7 +27,7 @@ export default function TermsAndConditionsPage() {
             Terms & <span className="text-[#1E6BFF]">Conditions</span>
           </h1>
           <p className="mt-6 text-slate-400 max-w-2xl mx-auto text-sm md:text-base leading-relaxed">
-            Please read these terms carefully before using our services. By accessing Alpha World Education, 
+            Please read these terms carefully before using our services. By accessing {name}, 
             you agree to be bound by the following guidelines and legal framework.
           </p>
         </div>
@@ -39,13 +39,13 @@ export default function TermsAndConditionsPage() {
             <TermsBlock
               icon={<ShieldCheck size={20} />}
               title="1. Acceptance of Terms"
-              content="By accessing or using Alpha World Education’s website or services, you agree to comply with these Terms & Conditions. If you do not agree with any part of these terms, you must discontinue use of our services immediately."
+              content={`By accessing or using ${name}'s website or services, you agree to comply with these Terms & Conditions. If you do not agree with any part of these terms, you must discontinue use of our services immediately.`}
             />
 
             <TermsBlock
               icon={<Globe size={20} />}
               title="2. Scope of Services"
-              content="Alpha World Education provides education counseling and informational services. Please note that final admissions, visa approvals, and academic decisions are made solely by the respective institutions and government authorities."
+              content={`${name} provides education counseling and informational services. Please note that final admissions, decisions, and academic matters are made solely by the respective institutions and authorities.`}
             />
 
             <TermsBlock
@@ -71,7 +71,7 @@ export default function TermsAndConditionsPage() {
             <TermsBlock
               icon={<AlertCircle size={20} />}
               title="4. Accuracy & Liability"
-              content="While we strive for 100% accuracy, Alpha World Education does not guarantee the real-time accuracy of university fees, policies, or immigration laws. We are not liable for losses arising from reliance on the information provided."
+              content={`While we strive for 100% accuracy, ${name} does not guarantee the real-time accuracy of university fees, policies, or admission regulations. We are not liable for losses arising from reliance on the information provided.`}
             />
 
             <div className="h-px bg-slate-100 w-full" />
@@ -93,8 +93,8 @@ export default function TermsAndConditionsPage() {
                     </div>
                     <div>
                         <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Email Us</p>
-                        <a href={`mailto:${contactInfo.emails.general}`} className="text-slate-900 font-bold hover:text-[#1E6BFF] transition-colors">
-                        {contactInfo.emails.general}
+                        <a href={`mailto:${contact.email.general}`} className="text-slate-900 font-bold hover:text-[#1E6BFF] transition-colors">
+                        {contact.email.general}
                         </a>
                     </div>
                   </div>
@@ -105,8 +105,8 @@ export default function TermsAndConditionsPage() {
                     </div>
                     <div>
                         <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Call Support</p>
-                        <a href={`tel:${contactInfo.phones.primaryRaw}`} className="text-slate-900 font-bold hover:text-[#1E6BFF] transition-colors">
-                        {contactInfo.phones.primary}
+                        <a href={`tel:${contact.phone.raw}`} className="text-slate-900 font-bold hover:text-[#1E6BFF] transition-colors">
+                        {contact.phone.display}
                         </a>
                     </div>
                   </div>
@@ -115,7 +115,7 @@ export default function TermsAndConditionsPage() {
                 <div className="md:border-l border-slate-200 md:pl-8">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Office Address</p>
                   <p className="text-slate-600 leading-relaxed font-medium">
-                    {contactInfo.address.full}
+                    {contact.address.office}, {contact.address.city}, {contact.address.country}
                   </p>
                 </div>
               </div>
@@ -123,7 +123,7 @@ export default function TermsAndConditionsPage() {
 
             <div className="text-center">
                 <p className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.2em]">
-                  Effective Date: Feb 2026 • © Alpha World Education
+                  Effective Date: Feb 2026 • {name}
                 </p>
             </div>
           </div>

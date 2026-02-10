@@ -47,8 +47,8 @@ export function AdminSidebar() {
       )}>
         <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="p-6 border-b border-gray-200">
-            <p className="text-lg font-bold text-gray-900">Alpha World Education</p>
+          <div className="p-6 border-b flex items-center flex-col gap-3 border-gray-200">
+            <p className="text-lg font-bold text-gray-900">Admission Campus</p>
             <p className="text-sm text-center text-gray-500">Admin CMS</p>
           </div>
 

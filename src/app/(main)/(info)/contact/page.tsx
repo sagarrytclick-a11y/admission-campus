@@ -26,7 +26,7 @@ export default function ContactPage() {
           <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6 tracking-tight">
             Get in <span className="text-[#FFD700]">Touch</span>
           </h1>
-          <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-white max-w-2xl mx-auto leading-relaxed">
             Have questions about studying abroad? Our expert consultants are available through multiple channels to help you achieve your dreams.
           </p>
           
