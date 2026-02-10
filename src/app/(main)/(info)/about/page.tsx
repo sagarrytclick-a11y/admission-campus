@@ -105,18 +105,19 @@ export default function AboutPage() {
   return (
     <main className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="max-w-6xl mx-auto px-6 py-20">
-        <div className="text-center">
-          <span className="inline-block px-4 py-2 bg-blue-50 text-blue-700 rounded-full text-sm font-medium mb-8">
+      <section className="w-full py-20 bg-gradient-to-br from-blue-900/90 via-blue-800/80 to-blue-900/90">
+        <div className="max-w-6xl mx-auto px-6 text-center">
+          <span className="inline-block px-4 py-2 bg-white/20 backdrop-blur-md border border-white/30 text-white rounded-full text-sm font-medium mb-8">
+            <span className="w-2 h-2 bg-[#FFD700] rounded-full animate-pulse mr-2"></span>
             About Us
           </span>
           
-          <h1 className="text-4xl md:text-6xl font-bold text-slate-900 mb-6">
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
             25 Years of Guiding Students
-            <span className="block text-blue-600">Toward Indian Excellence</span>
+            <span className="block text-[#FFD700]">Toward Indian Excellence</span>
           </h1>
           
-          <p className="text-lg text-slate-600 max-w-3xl mx-auto mb-12">
+          <p className="text-lg text-white/90 max-w-3xl mx-auto mb-12">
             For over two decades, we have helped students and families navigate
             Indian college admissions with clarity, integrity, and confidence.
             Our guidance is built on experience — not trends.
@@ -139,7 +140,7 @@ export default function AboutPage() {
           
           <button
             onClick={openModal}
-            className="px-8 py-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-medium transition-colors"
+            className="px-8 py-3 rounded-full bg-[#1E6BFF] hover:bg-blue-700 text-white font-medium transition-colors"
           >
             Learn About Our Legacy
           </button>
@@ -159,7 +160,7 @@ export default function AboutPage() {
               { label: "Students Placed", value: "10,000+" }
             ].map((stat, i) => (
               <div key={i} className="text-center">
-                <div className="text-3xl font-bold text-blue-600">{stat.value}</div>
+                <div className="text-3xl font-bold text-[#1E6BFF]">{stat.value}</div>
                 <div className="text-xs text-slate-500 uppercase tracking-widest font-medium mt-1">{stat.label}</div>
               </div>
             ))}
@@ -173,7 +174,7 @@ export default function AboutPage() {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">
-                From Vision to <span className="text-blue-600">Reality</span>
+                From Vision to <span className="text-[#1E6BFF]">Reality</span>
               </h2>
               <p className="text-slate-600 text-lg mb-6">
                 Founded in 1998, Admission Campus began with a simple mission: to make quality Indian education accessible to every ambitious student, regardless of their background or location.
@@ -190,8 +191,8 @@ export default function AboutPage() {
                   <span className="text-slate-700 font-medium">95% Admission Success Rate</span>
                 </div>
                 <div className="flex items-center gap-4">
-                  <div className="bg-blue-100 p-2 rounded-lg">
-                    <Award className="w-5 h-5 text-blue-600" />
+                  <div className="bg-blue-50 p-2 rounded-lg">
+                    <Award className="w-5 h-5 text-[#1E6BFF]" />
                   </div>
                   <span className="text-slate-700 font-medium">₹50Cr+ in Scholarships Secured</span>
                 </div>
@@ -206,7 +207,7 @@ export default function AboutPage() {
             
             <div className="bg-blue-50 rounded-2xl p-8">
               <div className="bg-white rounded-xl p-6 text-center">
-                <div className="text-4xl font-bold text-blue-600 mb-2">4.9 / 5</div>
+                <div className="text-4xl font-bold text-[#1E6BFF] mb-2">4.9 / 5</div>
                 <div className="text-sm text-slate-600">Rated by Indian students & families</div>
               </div>
             </div>
@@ -218,7 +219,8 @@ export default function AboutPage() {
       <section className="py-20 bg-slate-50">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-16">
-            <span className="inline-block px-4 py-2 bg-blue-50 text-blue-700 rounded-full text-sm font-medium mb-8">
+            <span className="inline-block px-4 py-2 bg-white/20 backdrop-blur-md border border-white/30 text-white rounded-full text-sm font-medium mb-8">
+              <span className="w-2 h-2 bg-[#FFD700] rounded-full animate-pulse mr-2"></span>
               Our Legacy
             </span>
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
@@ -259,7 +261,7 @@ export default function AboutPage() {
               }
             ].map((item, index) => (
               <div key={index} className="bg-white border border-slate-200 rounded-xl p-6">
-                <div className="text-sm font-semibold text-blue-600 mb-3">{item.year}</div>
+                <div className="text-sm font-semibold text-[#1E6BFF] mb-3">{item.year}</div>
                 <h3 className="text-lg font-semibold text-slate-900 mb-2">{item.title}</h3>
                 <p className="text-slate-600 text-sm">{item.description}</p>
               </div>
@@ -274,7 +276,8 @@ export default function AboutPage() {
       <section className="py-20">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-16">
-            <span className="inline-block px-4 py-2 bg-blue-50 text-blue-700 rounded-full text-sm font-medium mb-8">
+            <span className="inline-block px-4 py-2 bg-white/20 backdrop-blur-md border border-white/30 text-white rounded-full text-sm font-medium mb-8">
+              <span className="w-2 h-2 bg-[#FFD700] rounded-full animate-pulse mr-2"></span>
               Our Values
             </span>
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
@@ -307,7 +310,7 @@ export default function AboutPage() {
             ].map((value, index) => (
               <div key={index} className="bg-white border border-slate-200 rounded-xl p-8">
                 <div className="flex items-start gap-4">
-                  <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-semibold text-sm flex-shrink-0">
+                  <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-[#1E6BFF] font-semibold text-sm flex-shrink-0">
                     {index + 1}
                   </div>
                   <div>
@@ -336,7 +339,7 @@ export default function AboutPage() {
           </p>
           <button
             onClick={openModal}
-            className="inline-flex items-center gap-2 bg-blue-600 text-white px-8 py-3 rounded-full font-medium hover:bg-blue-700 transition-colors"
+            className="inline-flex items-center gap-2 bg-[#1E6BFF] text-white px-8 py-3 rounded-full font-medium hover:bg-blue-700 transition-colors"
           >
             Get Started Today
             <ArrowRight className="w-4 h-4" />

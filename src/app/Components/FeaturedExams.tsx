@@ -8,6 +8,7 @@ import {
   FileText,
   Calendar,
   ArrowUpRight,
+  ArrowRight,
 } from "lucide-react";
 
 /* =======================
@@ -55,66 +56,77 @@ const UniversityCard = (props: UniversityCardProps) => {
     about,
   } = props;
 
+  // Exact brand colors from your photo logic
+  const ADMISSION_BLUE = "#1E6BFF";
+  const ADMISSION_YELLOW = "#FFD700";
+
   return (
     <Link href={`/colleges/${slug}`} className="block h-full">
-      <div className="group bg-white border-2 border-slate-100 rounded-3xl overflow-hidden hover:border-blue-500 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
+      <div className="group bg-white border border-slate-200 rounded-[32px] overflow-hidden hover:border-[#1E6BFF]/30 hover:shadow-[0_20px_50px_rgba(30,107,255,0.15)] transition-all duration-500 flex flex-col h-full">
 
-        <div className="h-52 bg-slate-100 relative overflow-hidden">
+        {/* Image Container */}
+        <div className="h-56 bg-slate-100 relative overflow-hidden">
           <img
             src={image || "/placeholder.jpg"}
             alt={name}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
           />
-          
-          {/* Ranking Badge */}
-          {ranking && typeof ranking === 'string' && (
-            <div className="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-bold">
+
+          {/* Ranking Badge - Using Yellow Accent */}
+          {ranking && (
+            <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md text-slate-900 px-3 py-1.5 rounded-xl text-[10px] font-extrabold uppercase tracking-wider shadow-sm flex items-center gap-1.5 border border-white/50">
+              <span className="w-2 h-2 bg-[#FFD700] rounded-full"></span>
               Rank #{ranking}
+            </div>
+          )}
+
+          {/* Location Overlay Badge */}
+          {country && (
+            <div className="absolute bottom-4 left-4 bg-black/40 backdrop-blur-sm text-white px-3 py-1 rounded-lg text-[10px] font-medium flex items-center gap-1">
+              <MapPin size={10} className="text-[#FFD700]" />
+              {country}
             </div>
           )}
         </div>
 
-        <div className="p-6 space-y-4">
-          <h3 className="text-xl font-bold text-slate-900 leading-tight mb-3 group-hover:text-blue-600 transition-colors line-clamp-2">
+        {/* Content Section */}
+        <div className="p-7 flex flex-col flex-grow">
+          <h3 className="text-lg font-bold text-slate-900 leading-tight mb-3 group-hover:text-[#1E6BFF] transition-colors line-clamp-2">
             {name}
           </h3>
 
           {about && (
-            <p className="text-slate-600 leading-relaxed line-clamp-2">{about}</p>
+            <p className="text-slate-500 text-sm leading-relaxed line-clamp-2 ">
+              {about}
+            </p>
           )}
 
-          {country && (
-            <div className="flex items-center gap-2 text-sm text-slate-600">
-              <div className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
-                <MapPin size={12} />
-              </div>
-              {country}
-            </div>
-          )}
-
-          <div className="grid grid-cols-2 gap-4 text-sm pt-3">
+          {/* Info Grid */}
+          <div className="grid grid-cols-2 gap-3 mb-6">
             {fees && (
-              <div className="bg-slate-50 rounded-xl p-3">
-                <p className="text-xs text-slate-500 font-medium">Annual Fees</p>
-                <p className="font-bold text-slate-900">₹{fees.toLocaleString()}</p>
+              <div className="bg-blue-50/50 border border-blue-100/50 rounded-2xl p-3">
+                <p className="text-[10px] text-blue-600/70 font-bold uppercase tracking-wider mb-1">Annual Fees</p>
+                <p className="font-bold text-slate-900 text-sm">₹{fees.toLocaleString()}</p>
               </div>
             )}
             {duration && (
-              <div className="bg-slate-50 rounded-xl p-3">
-                <p className="text-xs text-slate-500 font-medium">Duration</p>
-                <p className="font-bold text-slate-900">{duration} Years</p>
+              <div className="bg-slate-50 border border-slate-100 rounded-2xl p-3">
+                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mb-1">Duration</p>
+                <p className="font-bold text-slate-900 text-sm">{duration} Years</p>
               </div>
             )}
           </div>
 
-          <div className="pt-4 border-t flex justify-between items-center">
-            <span className="text-xs text-slate-400">
-              Est. {establishment_year}
-            </span>
-            <span className="text-sm font-semibold text-blue-600 flex items-center gap-1 group-hover:text-blue-700">
-              View Details 
-              <span className="group-hover:translate-x-1 transition-transform inline-block">→</span>
-            </span>
+          {/* Footer */}
+          <div className="mt-auto pt-5 border-t border-slate-100 flex justify-between items-center">
+            <div className="flex flex-col">
+              <span className="text-[10px] text-slate-400 font-medium uppercase">Est. Year</span>
+              <span className="text-xs font-bold text-slate-700">{establishment_year}</span>
+            </div>
+
+            <div className="bg-[#1E6BFF] text-white p-2.5 rounded-xl group-hover:bg-slate-900 transition-colors shadow-lg shadow-blue-200 group-hover:shadow-none">
+              <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+            </div>
           </div>
         </div>
       </div>
@@ -192,92 +204,119 @@ const UpcomingExamsSection = ({
   exams,
   loading,
 }: {
-  exams: ExamCardProps[];
+  exams: any[];
   loading: boolean;
-}) => (
-  <section className="py-24 bg-gradient-to-br from-slate-50 to-blue-50 relative overflow-hidden">
-    {/* Background Pattern */}
-    <div className="absolute inset-0 opacity-5">
-      <div className="absolute top-20 right-20 w-72 h-72 bg-blue-200 rounded-full blur-[120px]" />
-      <div className="absolute bottom-20 left-20 w-96 h-96 bg-blue-100 rounded-full blur-[140px]" />
-    </div>
+}) => {
+  // Brand Consistency Colors
+  const ADMISSION_BLUE = "#1E6BFF";
+  const ADMISSION_YELLOW = "#FFD700";
 
-    <div className="max-w-7xl mx-auto px-4 relative z-10">
-      <div className="text-center mb-16">
-        <div className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-semibold mb-6">
-          📝 Entrance Exams
-        </div>
-        <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-4">
-          Upcoming <span className="text-blue-600">Exam Dates</span>
-        </h2>
-        <p className="text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
-          Stay updated with important entrance exam schedules, application deadlines, 
-          and preparation tips for top universities and colleges.
-        </p>
+  return (
+    <section className="py-24 bg-white relative overflow-hidden">
+      {/* Soft Background Accents */}
+      <div className="absolute inset-0 pointer-events-none opacity-40">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-50 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/4" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-50/50 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/4" />
       </div>
 
-      {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-40 bg-white border-2 border-slate-100 rounded-3xl animate-pulse" />
-          ))}
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-          {exams.slice(0, 8).map((exam, idx) => (
-            <Link
-              key={idx}
-              href={`/exams/${exam.slug}`}
-              className="group bg-white border-2 border-slate-100 rounded-3xl p-6 hover:border-blue-500 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <FileText size={20} />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-1">
-                    {exam.name}
-                  </h3>
-                </div>
-              </div>
-              
-              <p className="text-sm text-slate-600 leading-relaxed mb-4 line-clamp-2">
-                {exam.description}
-              </p>
-              
-              <div className="flex items-center justify-between pt-4 border-t">
-                <div className="flex items-center gap-2 text-sm text-blue-600">
-                  <Calendar size={16} />
-                  <span className="font-medium">{exam.next_date || "Date TBA"}</span>
-                </div>
-                <span className="text-sm font-semibold text-blue-600 group-hover:text-blue-700 flex items-center gap-1">
-                  View Details
-                  <span className="group-hover:translate-x-1 transition-transform inline-block">→</span>
-                </span>
-              </div>
-            </Link>
-          ))}
-        </div>
-      )}
-
-      {/* Bottom CTA */}
-      <div className="text-center">
-        <div className="inline-flex items-center gap-6 bg-white border-2 border-slate-200 rounded-3xl px-8 py-4 shadow-lg">
-          <div className="text-left">
-            <div className="font-bold text-slate-900">50+ Exams</div>
-            <div className="text-sm text-slate-500">Engineering, Medical & More</div>
+      <div className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-24 relative z-10">
+        <div className="text-center mb-16">
+          {/* Glass Badge matching the photo design */}
+          <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-md border border-slate-200 text-[#1E6BFF] px-4 py-2 rounded-full text-[10px] font-extrabold uppercase tracking-widest mb-6 shadow-sm">
+            <span className="w-2 h-2 bg-[#FFD700] rounded-full animate-pulse"></span>
+            Entrance Exams
           </div>
-          <Link
-            href="/exams"
-            className="bg-blue-600 text-white px-6 py-2 rounded-xl font-semibold hover:bg-blue-700 transition-colors"
-          >
-            View All Exams
-          </Link>
+
+          <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight">
+            Upcoming <span className="text-[#1E6BFF]">Exam Dates</span>
+          </h2>
+
+          <p className="text-slate-500 max-w-2xl mx-auto leading-relaxed text-sm md:text-base">
+            Stay updated with important entrance exam schedules, application deadlines,
+            and preparation tips for top universities and colleges.
+          </p>
+        </div>
+
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="h-48 bg-slate-50 rounded-[28px] animate-pulse border border-slate-100" />
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+            {exams.slice(0, 8).map((exam, idx) => (
+              <Link
+                key={idx}
+                href={`/exams/${exam.slug}`}
+                className="group bg-white border border-slate-200 rounded-[28px] p-6 hover:border-[#1E6BFF]/30 hover:shadow-[0_20px_40px_rgba(30,107,255,0.12)] transition-all duration-500 hover:-translate-y-2 flex flex-col"
+              >
+                <div className="flex items-center gap-4 mb-5">
+                  <div className="w-12 h-12 rounded-2xl bg-blue-50 text-[#1E6BFF] flex items-center justify-center group-hover:bg-[#1E6BFF] group-hover:text-white transition-all duration-300 shadow-sm">
+                    <FileText size={20} />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-base font-bold text-slate-900 group-hover:text-[#1E6BFF] transition-colors line-clamp-1">
+                      {exam.name}
+                    </h3>
+                    <div className="flex items-center gap-1.5 text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+                      <span className="w-1.5 h-1.5 bg-[#FFD700] rounded-full" />
+                      Admission Open
+                    </div>
+                  </div>
+                </div>
+
+                <p className="text-slate-500 text-xs leading-relaxed mb-6 line-clamp-2">
+                  {exam.description || "Stay ahead with the latest exam notifications and preparation guides."}
+                </p>
+
+                <div className="mt-auto flex items-center justify-between pt-4 border-t border-slate-50">
+                  <div className="flex flex-col">
+                    <span className="text-[9px] text-slate-400 font-bold uppercase">Exam Date</span>
+                    <div className="flex items-center gap-1.5 text-xs font-bold text-slate-800">
+                      <Calendar size={12} className="text-[#1E6BFF]" />
+                      {exam.next_date || "TBA"}
+                    </div>
+                  </div>
+                  <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-[#1E6BFF] group-hover:text-white transition-all">
+                    <ArrowRight size={14} />
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
+
+        {/* Bottom CTA: Styled like a premium floating bar */}
+        <div className="flex justify-center">
+          <div className="inline-flex flex-wrap items-center justify-center gap-6 bg-white border border-slate-100 rounded-[32px] px-10 py-5 shadow-xl shadow-blue-900/5">
+            <div className="flex -space-x-3">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-slate-200 overflow-hidden">
+                  <img src={`https://i.pravatar.cc/100?img=${i + 10}`} alt="student user" />
+                </div>
+              ))}
+              <div className="w-8 h-8 rounded-full border-2 border-white bg-[#FFD700] flex items-center justify-center text-[10px] font-bold">
+                50+
+              </div>
+            </div>
+            <div className="text-left pr-6 border-r border-slate-100 hidden sm:block">
+              <div className="font-extrabold text-slate-900 text-sm">Explore More Exams</div>
+              <div className="text-xs text-slate-500">Medical, Engineering & MBA</div>
+            </div>
+            <Link
+              href="/exams"
+              className="bg-[#1E6BFF] text-white px-8 py-3 rounded-full text-sm font-bold hover:bg-slate-900 transition-all shadow-lg shadow-blue-200 hover:shadow-none flex items-center gap-2"
+            >
+              View All Exams
+              <ArrowRight size={16} />
+            </Link>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 /* =======================
    DATA FETCH
@@ -310,36 +349,46 @@ export default function FeaturedSection() {
 
   return (
     <div className="space-y-32 py-32 bg-gradient-to-br from-white via-slate-50 to-blue-50">
-      
+
       {/* Universities */}
-      <section className="max-w-7xl mx-auto px-4">
+      <section className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-24">
+        {/* Header Section */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-semibold mb-6">
-            🎓 Featured Indian Colleges
+          {/* Badge: Updated to glass style with Yellow pulse */}
+          <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-md border border-slate-200 text-[#1E6BFF] px-4 py-2 rounded-full text-[10px] font-extrabold uppercase tracking-widest mb-6 shadow-sm">
+            <span className="w-2 h-2 bg-[#FFD700] rounded-full animate-pulse"></span>
+            Featured Indian Colleges
           </div>
-          <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-4">
-            Top <span className="text-blue-600">Indian Colleges</span>
+
+          {/* Heading: Using Admission Blue */}
+          <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight">
+            Top <span className="text-[#1E6BFF]">Indian Colleges</span>
           </h2>
-          <p className="text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
-            Explore premier Indian institutions with comprehensive admission details, 
+
+          {/* Subtext: Softer slate for better readability */}
+          <p className="text-slate-500 max-w-2xl mx-auto leading-relaxed text-sm md:text-base">
+            Explore premier Indian institutions with comprehensive admission details,
             scholarship opportunities, and success stories from our alumni.
           </p>
         </div>
 
+        {/* Grid Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           {universities.slice(0, 6).map((u: any, i: number) => (
-            <UniversityCard
-              key={i}
-              name={u.name}
-              image={u.banner_url}
-              slug={u.slug}
-              country={u.country_ref?.name}
-              about={u.about_content}
-              fees={u.fees}
-              duration={u.duration}
-              establishment_year={u.establishment_year}
-              ranking={typeof u.ranking === 'string' ? u.ranking : u.ranking?.country_ranking}
-            />
+            /* Wrapper to add a premium hover lift effect */
+            <div key={i} className="hover:-translate-y-2 transition-transform duration-300">
+              <UniversityCard
+                name={u.name}
+                image={u.banner_url}
+                slug={u.slug}
+                country={u.country_ref?.name}
+                about={u.about_content}
+                fees={u.fees}
+                duration={u.duration}
+                establishment_year={u.establishment_year}
+                ranking={typeof u.ranking === 'string' ? u.ranking : u.ranking?.country_ranking}
+              />
+            </div>
           ))}
         </div>
       </section>

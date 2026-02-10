@@ -1,147 +1,161 @@
 'use client'
 
 import { useContactInfo } from '@/hooks/useContactInfo'
+import { FileText, Scale, Globe, AlertCircle, ShieldCheck, ChevronRight, Mail, Phone } from 'lucide-react'
 
 export default function TermsAndConditionsPage() {
   const contactInfo = useContactInfo()
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 py-20 sm:py-28 bg-white">
-      
-      {/* HERO */}
-      <div className="max-w-4xl mx-auto text-center mb-20">
-        <span className="text-sm font-semibold tracking-widest text-emerald-700 uppercase">
-          Alpha World Education
-        </span>
-
-        <h1 className="mt-5 text-3xl sm:text-4xl md:text-5xl font-bold text-emerald-700 leading-tight">
-          Terms & Conditions
-        </h1>
-
-    
-
+    <section className="w-full relative overflow-hidden bg-white">
+      {/* PREMIUM HEADER BACKGROUND */}
+      <div className="absolute top-0 left-0 w-full h-[450px] bg-slate-900 pointer-events-none">
+        <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
+        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-white to-transparent" />
       </div>
 
-      {/* CONTENT */}
-      <div className="max-w-4xl mx-auto space-y-14 text-slate-700 leading-relaxed">
+      <div className="relative z-10 pt-24 sm:pt-32 pb-24">
+        
+        {/* HERO SECTION */}
+        <div className="max-w-4xl mx-auto px-6 text-center mb-16">
+          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 text-[#FFD700] px-4 py-2 rounded-full text-[10px] font-extrabold uppercase tracking-widest mb-6 shadow-2xl">
+            <Scale size={14} />
+            User Agreement
+          </div>
 
-        <TermsBlock
-          title="1. Acceptance of Terms"
-          content="By accessing or using Alpha World Education’s website or services, you agree to comply with these Terms & Conditions. If you do not agree, you should discontinue use of our services."
-        />
+          <h1 className="text-4xl sm:text-6xl font-black text-white leading-tight tracking-tighter">
+            Terms & <span className="text-[#1E6BFF]">Conditions</span>
+          </h1>
+          <p className="mt-6 text-slate-400 max-w-2xl mx-auto text-sm md:text-base leading-relaxed">
+            Please read these terms carefully before using our services. By accessing Alpha World Education, 
+            you agree to be bound by the following guidelines and legal framework.
+          </p>
+        </div>
 
-        <TermsBlock
-          title="2. Scope of Services"
-          content="Alpha World Education provides education counseling and informational services related to colleges, universities, exams, and study destinations. Final admissions, visas, and academic decisions are made by the respective institutions and authorities."
-        />
+        {/* MAIN CONTENT CARD */}
+        <div className="max-w-4xl mx-auto px-6">
+          <div className="bg-white border border-slate-200 rounded-[40px] shadow-2xl shadow-blue-900/5 p-8 md:p-16 space-y-16">
 
-        <TermsBlock
-          title="3. Use of Website"
-          content={
-            <ul className="list-disc pl-6 space-y-2">
-              <li>You agree to use the website only for lawful purposes</li>
-              <li>You must not attempt to misuse, copy, or disrupt the website</li>
-              <li>Content may not be reused without written permission</li>
-            </ul>
-          }
-        />
+            <TermsBlock
+              icon={<ShieldCheck size={20} />}
+              title="1. Acceptance of Terms"
+              content="By accessing or using Alpha World Education’s website or services, you agree to comply with these Terms & Conditions. If you do not agree with any part of these terms, you must discontinue use of our services immediately."
+            />
 
-        <TermsBlock
-          title="4. Accuracy of Information"
-          content="While we strive to maintain accurate and updated information, Alpha World Education does not guarantee completeness or real-time accuracy of details related to institutions, fees, policies, or immigration requirements."
-        />
+            <TermsBlock
+              icon={<Globe size={20} />}
+              title="2. Scope of Services"
+              content="Alpha World Education provides education counseling and informational services. Please note that final admissions, visa approvals, and academic decisions are made solely by the respective institutions and government authorities."
+            />
 
-        <TermsBlock
-          title="5. Counseling Disclaimer"
-          content="All guidance provided is based on experience, student inputs, and available information. Outcomes such as admissions and visas are subject to third-party decisions beyond our control."
-        />
+            <TermsBlock
+              icon={<FileText size={20} />}
+              title="3. Use of Website"
+              content={
+                <ul className="space-y-4">
+                  {[
+                    "Use the website only for lawful educational purposes",
+                    "Do not attempt to misuse, scrape, or disrupt website services",
+                    "Intellectual property and content cannot be reused without permission",
+                    "Providing false information in enquiry forms is strictly prohibited"
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-3 text-slate-600 text-sm md:text-base">
+                      <ChevronRight size={16} className="text-[#1E6BFF] mt-1 shrink-0" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              }
+            />
 
-        <TermsBlock
-          title="6. Intellectual Property"
-          content="All website content, branding, text, and design elements are the intellectual property of Alpha World Education and may not be copied or distributed without permission."
-        />
+            <TermsBlock
+              icon={<AlertCircle size={20} />}
+              title="4. Accuracy & Liability"
+              content="While we strive for 100% accuracy, Alpha World Education does not guarantee the real-time accuracy of university fees, policies, or immigration laws. We are not liable for losses arising from reliance on the information provided."
+            />
 
-        <TermsBlock
-          title="7. Limitation of Liability"
-          content="Alpha World Education shall not be liable for any direct or indirect losses arising from the use of this website or reliance on the information provided."
-        />
+            <div className="h-px bg-slate-100 w-full" />
 
-        <TermsBlock
-          title="8. Privacy & Data Protection"
-          content="Your use of our services is governed by our Privacy Policy, which outlines how we collect, store, and protect personal information."
-        />
+            {/* DYNAMIC CONTACT CARD */}
+            <div className="bg-slate-50 rounded-[32px] p-8 md:p-10 border border-slate-100 relative overflow-hidden">
+               <div className="absolute top-0 right-0 w-32 h-32 bg-blue-100/50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+               
+              <h2 className="text-2xl font-black text-slate-900 mb-6 flex items-center gap-3">
+                <span className="w-1.5 h-6 bg-[#FFD700] rounded-full" />
+                Legal Help Desk
+              </h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm relative z-10">
+                <div className="space-y-5">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-sm text-[#1E6BFF]">
+                        <Mail size={16} />
+                    </div>
+                    <div>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Email Us</p>
+                        <a href={`mailto:${contactInfo.emails.general}`} className="text-slate-900 font-bold hover:text-[#1E6BFF] transition-colors">
+                        {contactInfo.emails.general}
+                        </a>
+                    </div>
+                  </div>
 
-        <TermsBlock
-          title="9. Updates to Terms"
-          content="We reserve the right to update these Terms & Conditions at any time. Continued use of the website constitutes acceptance of the revised terms."
-        />
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-sm text-[#1E6BFF]">
+                        <Phone size={16} />
+                    </div>
+                    <div>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Call Support</p>
+                        <a href={`tel:${contactInfo.phones.primaryRaw}`} className="text-slate-900 font-bold hover:text-[#1E6BFF] transition-colors">
+                        {contactInfo.phones.primary}
+                        </a>
+                    </div>
+                  </div>
+                </div>
 
-        {/* DYNAMIC CONTACT INFO */}
-        <TermsBlock
-          title="10. Contact Information"
-          content={
-            <div className="space-y-2">
-              <p>
-                For any questions regarding these Terms & Conditions, you may
-                contact us through the details below:
-              </p>
-
-              <p>
-                <strong>Email:</strong>{' '}
-                <a
-                  href={`mailto:${contactInfo.emails.general}`}
-                  className="text-emerald-700 font-medium hover:underline"
-                >
-                  {contactInfo.emails.general}
-                </a>
-              </p>
-
-              <p>
-                <strong>Phone:</strong>{' '}
-                <a
-                  href={`tel:${contactInfo.phones.primaryRaw}`}
-                  className="text-emerald-700 font-medium hover:underline"
-                >
-                  {contactInfo.phones.primary}
-                </a>
-              </p>
-
-              <p>
-                <strong>Address:</strong> {contactInfo.address.full}
-              </p>
+                <div className="md:border-l border-slate-200 md:pl-8">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Office Address</p>
+                  <p className="text-slate-600 leading-relaxed font-medium">
+                    {contactInfo.address.full}
+                  </p>
+                </div>
+              </div>
             </div>
-          }
-        />
 
+            <div className="text-center">
+                <p className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.2em]">
+                  Effective Date: Feb 2026 • © Alpha World Education
+                </p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   )
 }
 
-/* TRUST ITEM */
-function TrustItem({ value, label }: { value: string; label: string }) {
-  return (
-    <div>
-      <p className="text-2xl sm:text-3xl font-bold text-slate-900">{value}</p>
-      <p className="text-sm text-slate-500">{label}</p>
-    </div>
-  )
-}
-
-/* TERMS BLOCK */
+/* COMPONENT: TERMS BLOCK */
 function TermsBlock({
   title,
-  content
+  content,
+  icon
 }: {
   title: string
   content: React.ReactNode
+  icon: React.ReactNode
 }) {
   return (
-    <div className="border border-slate-200 rounded-2xl p-8 sm:p-10">
-      <h2 className="text-xl sm:text-2xl font-bold text-emerald-700 mb-4">
-        {title}
-      </h2>
-      <div className="text-slate-600 leading-relaxed">{content}</div>
+    <div className="group">
+      <div className="flex items-center gap-4 mb-6">
+        <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#1E6BFF] flex items-center justify-center group-hover:bg-[#1E6BFF] group-hover:text-white transition-all duration-300 shadow-sm">
+          {icon}
+        </div>
+        <h2 className="text-xl sm:text-2xl font-black text-slate-900 group-hover:text-[#1E6BFF] transition-colors">
+          {title}
+        </h2>
+      </div>
+      <div className="text-slate-500 leading-relaxed text-sm md:text-base pl-0 md:pl-14 font-medium">
+        {content}
+      </div>
     </div>
   )
 }

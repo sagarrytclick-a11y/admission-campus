@@ -72,8 +72,8 @@ export default function Navbar() {
       <div className="hidden bg-slate-900 text-white lg:block">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-8 py-3 text-sm">
           <div className="flex items-center gap-8">
-            <a href={`tel:${phones.primaryRaw}`} className="flex items-center gap-2.5 hover:text-blue-400 transition-colors"><Phone size={16} /><span className="font-medium">{phones.primary}</span></a>
-            <a href={`mailto:${emails.info}`} className="flex items-center gap-2.5 hover:text-blue-400 transition-colors"><Mail size={16} /><span className="font-medium">{emails.info}</span></a>
+            <a href={`tel:${phones.primaryRaw}`} className="flex items-center gap-2.5 hover:text-[#FFD700] transition-all duration-300"><Phone size={16} /><span className="font-medium">{phones.primary}</span></a>
+            <a href={`mailto:${emails.info}`} className="flex items-center gap-2.5 hover:text-[#FFD700] transition-all duration-300"><Mail size={16} /><span className="font-medium">{emails.info}</span></a>
           </div>
           <div className="flex items-center gap-2.5 text-slate-300"><MapPin size={16} /><span className="font-medium">{address.office}</span></div>
         </div>
@@ -94,9 +94,9 @@ export default function Navbar() {
                   onMouseEnter={() => setHoveredItem(item.name)}
                   onMouseLeave={() => { setHoveredItem(null); setHoveredCountry(null); }}
                 >
-                  <Link href={item.href} className={`px-4 py-3 text-base font-semibold rounded-xl flex items-center gap-2 transition-all duration-200 ${isActive(item.href) ? "text-blue-600 bg-blue-50 shadow-sm" : "text-slate-700 hover:text-blue-600 hover:bg-slate-50"}`}>
+                  <Link href={item.href} className={`px-4 py-3 text-base font-semibold rounded-xl flex items-center gap-2 transition-all duration-300 ${isActive(item.href) ? "text-white bg-[#1E6BFF] shadow-md transform scale-105" : "text-slate-700 hover:text-white hover:bg-[#1E6BFF] hover:shadow-lg hover:scale-105"}`}>
                     {item.name}
-                    {item.hasDropdown && <ChevronDown size={16} className="transition-transform duration-200" />}
+                    {item.hasDropdown && <ChevronDown size={16} className="transition-transform duration-300" />}
                   </Link>
 
                   {/* MAIN DROPDOWN - TWO COLUMN LAYOUT */}
@@ -124,7 +124,7 @@ export default function Navbar() {
                                       setHoveredCountry(hoveredCountry === dropdownItem.slug ? null : dropdownItem.slug);
                                     }
                                   }}
-                                  className={`w-full flex items-center justify-between px-4 py-2 text-sm font-bold transition-colors text-left ${hoveredCountry === dropdownItem.slug ? 'bg-blue-50 text-blue-600' : 'text-slate-700 hover:bg-blue-50 hover:text-blue-600'}`}
+                                  className={`w-full flex items-center justify-between px-4 py-2 text-sm font-bold transition-all duration-300 text-left ${hoveredCountry === dropdownItem.slug ? 'bg-[#1E6BFF]/10 text-[#1E6BFF] border-l-4 border-[#1E6BFF]' : 'text-slate-700 hover:bg-[#1E6BFF]/10 hover:text-[#1E6BFF] hover:border-l-4 hover:border-[#1E6BFF]'}`}
                                 >
                                   <span className="flex items-center gap-2">
                                     {dropdownItem.flag && <span className="text-lg">{dropdownItem.flag}</span>}
@@ -162,8 +162,8 @@ export default function Navbar() {
                                   </div>
                                 ) : countryColleges.length > 0 ? (
                                   countryColleges.map((college) => (
-                                    <Link key={college._id} href={`/colleges/${college.slug}`} className="block px-3 py-2 rounded-lg hover:bg-blue-50/50 group/college transition-all duration-200 mb-1">
-                                      <div className="font-bold text-sm text-slate-800 group-hover/college:text-blue-700 transition-colors">{college.name}</div>
+                                    <Link key={college._id} href={`/colleges/${college.slug}`} className="block px-3 py-2 rounded-lg hover:bg-[#1E6BFF]/10 group/college transition-all duration-300 mb-1">
+                                      <div className="font-bold text-sm text-slate-800 group-hover/college:text-[#1E6BFF] transition-colors">{college.name}</div>
                                     </Link>
                                   ))
                                 ) : (
@@ -176,7 +176,7 @@ export default function Navbar() {
 
                               {countryColleges.length > 0 && (
                                 <div className="px-4 mt-2 pt-2 border-t border-slate-100 sticky bottom-0 bg-white">
-                                  <Link href={`/colleges?country=${hoveredCountry}`} className="block text-center py-2 text-sm font-bold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-all shadow-md shadow-blue-100">
+                                  <Link href={`/colleges?country=${hoveredCountry}`} className="block text-center py-2 text-sm font-bold text-white bg-[#1E6BFF] rounded-lg hover:bg-blue-700 transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105">
                                     Explore All Universities
                                   </Link>
                                 </div>
@@ -188,7 +188,7 @@ export default function Navbar() {
                         // SINGLE COLUMN FOR OTHER DROPDOWNS (Colleges, Exams)
                         <div className="overflow-y-auto custom-scrollbar max-h-[55vh]">
                           {dropdownContent[item.name as keyof typeof dropdownContent].map((dropdownItem: any) => (
-                            <Link key={dropdownItem.title} href={dropdownItem.href} className="flex items-center justify-between px-4 py-2 text-sm font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                            <Link key={dropdownItem.title} href={dropdownItem.href} className="flex items-center justify-between px-4 py-2 text-sm font-bold text-slate-700 hover:bg-[#1E6BFF]/10 hover:text-[#1E6BFF] transition-all duration-300">
                               <span className="flex items-center gap-2">
                                 {dropdownItem.flag && <span className="text-lg">{dropdownItem.flag}</span>}
                                 <span className="font-bold">{dropdownItem.title}</span>
@@ -203,7 +203,7 @@ export default function Navbar() {
               ))}
             </nav>
 
-            <button onClick={openModal} className="hidden lg:block px-8 py-3 text-sm font-bold bg-blue-600 text-white rounded-[5px] hover:bg-blue-700 transition-all duration-200 shadow-sm hover:shadow-md">
+            <button onClick={openModal} className="hidden lg:block px-8 py-3 text-sm font-bold bg-[#1E6BFF] text-white rounded-[5px] hover:bg-blue-700 transition-all duration-300 shadow-sm hover:shadow-md transform hover:scale-105">
               Get Admission Help
             </button>
 
@@ -223,7 +223,7 @@ export default function Navbar() {
                 <div>
                   <button
                     onClick={() => setExpandedMobileItem(expandedMobileItem === item.name ? null : item.name)}
-                    className={`w-full py-4 text-lg font-bold border-b border-slate-50 transition-colors flex items-center justify-between ${isActive(item.href) ? "text-blue-600 bg-blue-50" : "text-slate-800 hover:bg-slate-50"}`}
+                    className={`w-full py-4 text-lg font-bold border-b border-slate-50 transition-all duration-300 ${isActive(item.href) ? "text-[#1E6BFF] bg-[#1E6BFF]/10 border-l-4 border-[#1E6BFF]" : "text-slate-800 hover:bg-[#1E6BFF]/10 hover:text-[#1E6BFF] hover:border-l-4 hover:border-[#1E6BFF]"}`}
                   >
                     <span>{item.name}</span>
                     <ChevronDown 
@@ -251,7 +251,7 @@ export default function Navbar() {
                                   setExpandedMobileCountry(dropdownItem.slug);
                                   setShowMobileColleges(showMobileColleges === dropdownItem.slug ? null : dropdownItem.slug);
                                 }}
-                                className={`w-full flex items-center justify-between px-6 py-3 text-sm font-bold transition-colors border-b border-slate-100 ${expandedMobileCountry === dropdownItem.slug ? 'bg-blue-50 text-blue-600' : 'text-slate-700 hover:bg-blue-50 hover:text-blue-600'}`}
+                                className={`w-full flex items-center justify-between px-6 py-3 text-sm font-bold transition-all duration-300 border-b border-slate-100 ${expandedMobileCountry === dropdownItem.slug ? 'bg-[#1E6BFF]/10 text-[#1E6BFF] border-l-4 border-[#1E6BFF]' : 'text-slate-700 hover:bg-[#1E6BFF]/10 hover:text-[#1E6BFF] hover:border-l-4 hover:border-[#1E6BFF]'}`}
                               >
                                 <span className="flex items-center gap-2">
                                   {dropdownItem.flag && <span className="text-lg">{dropdownItem.flag}</span>}
@@ -286,7 +286,7 @@ export default function Navbar() {
                                         key={college._id}
                                         href={`/colleges/${college.slug}`}
                                         onClick={() => setIsOpen(false)}
-                                        className="block px-6 py-2 text-xs font-bold text-slate-600 hover:bg-blue-50 hover:text-blue-600 transition-colors border-b border-slate-50"
+                                        className="block px-6 py-2 text-xs font-bold text-slate-600 hover:bg-[#1E6BFF]/10 hover:text-[#1E6BFF] transition-all duration-300 border-b border-slate-50"
                                       >
                                         {college.name}
                                       </Link>
@@ -302,7 +302,7 @@ export default function Navbar() {
                                       <Link
                                         href={`/colleges?country=${expandedMobileCountry}`}
                                         onClick={() => setIsOpen(false)}
-                                        className="block text-center py-2 text-xs font-bold text-blue-600 bg-blue-100 rounded-lg hover:bg-blue-200 transition-all"
+                                        className="block text-center py-2 text-xs font-bold text-[#1E6BFF] bg-[#1E6BFF]/20 rounded-lg hover:bg-[#1E6BFF]/30 transition-all duration-300 transform hover:scale-105"
                                       >
                                         View All Universities
                                       </Link>
@@ -320,7 +320,7 @@ export default function Navbar() {
                               key={dropdownItem.title}
                               href={dropdownItem.href}
                               onClick={() => setIsOpen(false)}
-                              className="flex items-center gap-3 px-6 py-3 text-sm font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-600 transition-colors border-b border-slate-100"
+                              className="flex items-center gap-3 px-6 py-3 text-sm font-bold text-slate-700 hover:bg-[#1E6BFF]/10 hover:text-[#1E6BFF] transition-all duration-300 border-b border-slate-100"
                             >
                               {dropdownItem.flag && <span className="text-lg">{dropdownItem.flag}</span>}
                               <span>{dropdownItem.title}</span>
@@ -343,7 +343,7 @@ export default function Navbar() {
               )}
             </div>
           ))}
-          <button onClick={() => { openModal(); setIsOpen(false); }} className="w-full py-4 bg-blue-600 text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition-all duration-200 mt-4">
+          <button onClick={() => { openModal(); setIsOpen(false); }} className="w-full py-4 bg-[#1E6BFF] text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 hover:shadow-xl transition-all duration-300 transform hover:scale-105 mt-4">
             Get Admission Help
           </button>
         </div>

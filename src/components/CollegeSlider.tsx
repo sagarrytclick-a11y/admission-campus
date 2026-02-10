@@ -96,7 +96,7 @@ const fetchColleges = async (countrySlug?: string): Promise<College[]> => {
       <div className="py-16">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
-            <div className="w-16 h-16 border-4 border-green-100 border-t-green-600 rounded-full animate-spin mx-auto mb-4"></div>
+            <div className="w-16 h-16 border-4 border-admission-yellow/20 border-t-admission-yellow rounded-full animate-spin mx-auto mb-4"></div>
             <p className="text-slate-500 font-bold uppercase tracking-widest text-xs">Loading Colleges...</p>
           </div>
         </div>
@@ -143,14 +143,14 @@ const fetchColleges = async (countrySlug?: string): Promise<College[]> => {
                 className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 bg-white rounded-full p-3 shadow-lg border border-slate-200 hover:bg-slate-50 transition-all duration-200 group"
                 aria-label="Previous colleges"
               >
-                <ChevronLeft size={20} className="text-slate-600 group-hover:text-green-600 transition-colors" />
+                <ChevronLeft size={20} className="text-slate-600 group-hover:text-admission-yellow transition-colors" />
               </button>
               <button
                 onClick={nextSlide}
                 className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 bg-white rounded-full p-3 shadow-lg border border-slate-200 hover:bg-slate-50 transition-all duration-200 group"
                 aria-label="Next colleges"
               >
-                <ChevronRight size={20} className="text-slate-600 group-hover:text-green-600 transition-colors" />
+                <ChevronRight size={20} className="text-slate-600 group-hover:text-admission-yellow transition-colors" />
               </button>
             </>
           )}
@@ -198,7 +198,7 @@ const fetchColleges = async (countrySlug?: string): Promise<College[]> => {
                 onClick={() => setCurrentIndex(index)}
                 className={`w-2 h-2 rounded-full transition-all duration-300 ${
                   index === currentIndex 
-                    ? 'bg-green-600 w-8' 
+                    ? 'bg-admission-yellow w-8' 
                     : 'bg-slate-300 hover:bg-slate-400'
                 }`}
                 aria-label={`Go to slide ${index + 1}`}
@@ -209,7 +209,7 @@ const fetchColleges = async (countrySlug?: string): Promise<College[]> => {
 
         {/* View All Button */}
         <div className="text-center mt-12">
-          <button className="inline-flex items-center gap-2 bg-slate-900 hover:bg-green-600 text-white font-black rounded-2xl transition-all duration-300 px-8 py-4 text-lg group">
+          <button className="inline-flex items-center gap-2 bg-slate-900 hover:bg-admission-yellow text-white font-black rounded-2xl transition-all duration-300 px-8 py-4 text-lg group">
             View All Colleges
             <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
           </button>

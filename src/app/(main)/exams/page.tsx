@@ -36,11 +36,13 @@ export default function ExamsPage() {
   const [selectedMode, setSelectedMode] = useState<string>('all')
 
   const { 
-    data: exams = [], 
+    data: examsData = [], 
     isLoading, 
     error,
     refetch 
   } = useExams()
+
+  const exams = Array.isArray(examsData) ? examsData : []
 
   const filteredExams = useMemo(() => {
     let filtered = exams
@@ -65,8 +67,8 @@ export default function ExamsPage() {
     return filtered
   }, [exams, searchTerm, selectedType, selectedMode])
 
-  const examTypes = useMemo(() => [...new Set(exams.map(exam => exam.exam_type))], [exams])
-  const examModes = useMemo(() => [...new Set(exams.map(exam => exam.exam_mode))], [exams])
+  const examTypes = useMemo(() => [...new Set(exams.map(exam => exam.exam_type).filter(Boolean))], [exams])
+  const examModes = useMemo(() => [...new Set(exams.map(exam => exam.exam_mode).filter(Boolean))], [exams])
 
   const resetFilters = useCallback(() => {
     setSearchTerm('')
@@ -78,7 +80,7 @@ export default function ExamsPage() {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-green-100 border-t-green-600 rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="w-16 h-16 border-4 border-blue-100 border-t-[#1E6BFF] rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-slate-500 font-bold uppercase tracking-widest text-xs">Loading Exams...</p>
         </div>
       </div>
@@ -103,7 +105,7 @@ export default function ExamsPage() {
 
           <Button
             onClick={() => { (refetch as () => void)(); }}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
+            className="bg-[#1E6BFF] hover:bg-blue-700 text-white"
           >
             <RefreshCw className="w-4 h-4 mr-2" />
             Try Again
@@ -117,16 +119,17 @@ export default function ExamsPage() {
     <div className="min-h-screen bg-gradient-to-br from-white via-slate-50 to-blue-50">
       
       {/* Header Section */}
-      <div className="bg-white border-b border-slate-200">
+      <div className="bg-gradient-to-br from-blue-900/90 via-blue-800/80 to-blue-900/90 border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-semibold mb-6">
+            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md border border-white/30 text-white px-4 py-2 rounded-full text-sm font-semibold mb-6">
+              <span className="w-2 h-2 bg-[#FFD700] rounded-full animate-pulse"></span>
               📝 Entrance Exams
             </div>
-            <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-4">
-              Ace Your <span className="text-blue-600">Entrance Exams</span>
+            <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">
+              Ace Your <span className="text-[#FFD700]">Entrance Exams</span>
             </h1>
-            <p className="text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg text-white/90 max-w-3xl mx-auto leading-relaxed">
               Comprehensive preparation guides, syllabus, and important dates for all major 
               entrance examinations across different streams and countries.
             </p>
@@ -187,7 +190,7 @@ export default function ExamsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {isLoading ? (
           <div className="text-center py-20">
-            <div className="inline-flex items-center gap-3 bg-blue-600 text-white px-6 py-3 rounded-full">
+            <div className="inline-flex items-center gap-3 bg-[#1E6BFF] text-white px-6 py-3 rounded-full">
               <div className="w-6 h-6 border-2 border-white border-t-transparent animate-spin rounded-full" />
               <span className="font-medium">Loading exams...</span>
             </div>
@@ -203,7 +206,7 @@ export default function ExamsPage() {
             </p>
             <Button 
               onClick={() => { (refetch as () => void)(); }}
-              className="bg-blue-600 hover:bg-blue-700 text-white"
+              className="bg-[#1E6BFF] hover:bg-blue-700 text-white"
             >
               <RefreshCw className="w-4 h-4 mr-2" />
               Try Again
@@ -242,7 +245,7 @@ export default function ExamsPage() {
                 {filteredExams.map((exam) => (
                   <div
                     key={exam._id}
-                    className="group bg-white border-2 border-slate-100 rounded-3xl overflow-hidden hover:border-blue-500 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+                    className="group bg-white border-2 border-slate-100 rounded-3xl overflow-hidden hover:border-[#1E6BFF] hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
                   >
                     {/* Hero Image */}
                     {exam.hero_section?.image && (
@@ -260,20 +263,20 @@ export default function ExamsPage() {
                     {/* Exam Content */}
                     <div className="p-6">
                       <div className="flex justify-between items-start mb-4">
-                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 text-[#1E6BFF] flex items-center justify-center group-hover:scale-110 transition-transform">
                           <FileText size={24} />
                         </div>
-                        <div className="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-bold">
+                        <div className="bg-[#1E6BFF] text-white px-3 py-1 rounded-full text-xs font-bold">
                           {exam.short_name}
                         </div>
                       </div>
                       
-                      <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors line-clamp-2">
+                      <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-[#1E6BFF] transition-colors line-clamp-2">
                         {exam.name}
                       </h3>
 
                       <div className="flex items-center gap-2 mb-4">
-                        <span className="text-xs font-bold bg-blue-50 text-blue-700 px-3 py-2 rounded-xl">
+                        <span className="text-xs font-bold bg-blue-50 text-[#1E6BFF] px-3 py-2 rounded-xl">
                           {exam.exam_type}
                         </span>
                       </div>
@@ -284,8 +287,8 @@ export default function ExamsPage() {
 
                       {/* Quick Info */}
                       <div className="grid grid-cols-2 gap-4 mb-6">
-                        <div className="bg-slate-50 rounded-xl p-4">
-                          <div className="flex items-center gap-2 text-blue-600 mb-2">
+                        <div className="bg-blue-50 rounded-xl p-4">
+                          <div className="flex items-center gap-2 text-[#1E6BFF] mb-2">
                             <Building size={16} />
                             <span className="text-sm font-medium">Conducting Body</span>
                           </div>
@@ -293,8 +296,8 @@ export default function ExamsPage() {
                             {exam.conducting_body}
                           </div>
                         </div>
-                        <div className="bg-slate-50 rounded-xl p-4">
-                          <div className="flex items-center gap-2 text-blue-600 mb-2">
+                        <div className="bg-blue-50 rounded-xl p-4">
+                          <div className="flex items-center gap-2 text-[#1E6BFF] mb-2">
                             <Calendar size={16} />
                             <span className="text-sm font-medium">Frequency</span>
                           </div>
@@ -310,7 +313,7 @@ export default function ExamsPage() {
                           Mode: {exam.exam_mode}
                         </div>
                         <Link href={`/exams/${exam.slug}`}>
-                          <Button className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl">
+                          <Button className="bg-[#1E6BFF] hover:bg-blue-700 text-white rounded-xl">
                             View Details
                             <ArrowRight size={16} className="ml-2" />
                           </Button>
