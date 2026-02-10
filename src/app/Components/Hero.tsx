@@ -4,32 +4,33 @@ import React, { useState, useEffect } from "react";
 import { Search, GraduationCap, Globe, BookOpen, Trophy, ChevronLeft, ChevronRight } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
+import Image from "next/image";
 
 // Slider data with images and text
 const slides = [
   {
-    image: "/hero/hero-1.jpg",
+    image: "https://i.pinimg.com/1200x/2f/da/76/2fda761c286bc155e5b36db39218a6c3.jpg",
     badge: "India's #1 Admission Portal",
     title: "Your Gateway to",
     highlight: "Top Indian Universities",
     subtitle: "Discover top Indian colleges, crack entrance exams, and get expert guidance for your academic journey. From JEE to NEET, we've got you covered.",
   },
   {
-    image: "/hero/hero-2.jpg",
+    image: "https://i.pinimg.com/1200x/60/66/7e/60667eb0809709e74a0271d8cd667799.jpg",
     badge: "Crack JEE, NEET & More",
     title: "Master Every",
     highlight: "Entrance Exam",
     subtitle: "Comprehensive preparation guides, mock tests, and expert strategies to help you ace JEE, NEET, AIIMS, and other top competitive exams.",
   },
   {
-    image: "/hero/hero-3.jpg",
+    image:"https://i.pinimg.com/1200x/54/d5/7d/54d57d87f7fd99d604ab0fb6fb5485d1.jpg",
     badge: "500+ Partner Colleges",
     title: "Get Into Your",
     highlight: "Dream College",
     subtitle: "From IITs and NITs to AIIMS and IIMs - find detailed information about admissions, fees, cutoffs, and placements.",
   },
   {
-    image: "/hero/hero-4.jpg",
+    image:"https://i.pinimg.com/1200x/20/b0/e7/20b0e7c5b902bc6a8591943766cee8d9.jpg",
     badge: "Expert Career Guidance",
     title: "Shape Your",
     highlight: "Future Career",
@@ -120,6 +121,7 @@ const Hero: React.FC = () => {
               src={slide.image}
               alt={`Slide ${index + 1}`}
               className="w-full h-full object-cover"
+           
             />
           </div>
         ))}
