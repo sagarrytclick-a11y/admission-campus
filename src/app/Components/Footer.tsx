@@ -47,10 +47,10 @@ const Footer = () => {
               </div>
               <div className="flex flex-col">
                 <span className="text-lg sm:text-xl lg:text-2xl font-bold text-white">
-                  AlphaWorld
+                  Admission
                 </span>
                 <span className="text-sm sm:text-base text-gray-300">
-                  Education
+                  Campus
                 </span>
               </div>
             </div>
