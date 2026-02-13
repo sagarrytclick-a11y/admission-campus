@@ -57,7 +57,7 @@ export const FormModal: React.FC = () => {
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-6">
       {/* Backdrop - Darker for better contrast with the white modal */}
       <div 
         className="absolute inset-0 bg-slate-900/40 backdrop-blur-md"
@@ -65,12 +65,12 @@ export const FormModal: React.FC = () => {
       />
       
       {/* Modal */}
-      <div className="relative bg-white rounded-[10px] sm:rounded-[10px] shadow-[0_25px_60px_rgba(0,0,0,0.15)] border border-slate-200 w-full max-w-md overflow-hidden transform transition-all">
+      <div className="relative bg-white rounded-[8px] sm:rounded-[10px] shadow-[0_25px_60px_rgba(0,0,0,0.15)] border border-slate-200 w-[90%] sm:w-full max-w-md overflow-hidden transform transition-all">
         
         {/* Header - Blue Theme */}
         <div className="flex items-center justify-between p-6 sm:p-8 bg-gradient-to-r from-blue-50 to-blue-100/50 border-b border-blue-100">
           <div>
-            <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Get in Touch</h2>
+            <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-slate-900 tracking-tight">Get in Touch</h2>
             <p className="text-xs sm:text-sm font-medium text-slate-600">We&apos;ll get back to you shortly.</p>
           </div>
           <button
@@ -82,7 +82,7 @@ export const FormModal: React.FC = () => {
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="p-6 sm:p-8 space-y-4 sm:space-y-5">
+        <form onSubmit={handleSubmit} className="p-4 sm:p-6 sm:px-4 space-y-3 sm:space-y-4">
           {[
             { id: 'name', label: 'Full Name', type: 'text', placeholder: 'Name', value: formData.name },
             { id: 'email', label: 'Email Address', type: 'email', placeholder: 'example@gmail.com', value: formData.email },
@@ -99,7 +99,7 @@ export const FormModal: React.FC = () => {
                 required
                 value={field.value}
                 onChange={(e) => updateFormData({ [field.id]: e.target.value })}
-                className="w-full px-4 sm:px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl sm:rounded-2xl text-slate-900 placeholder:text-slate-400 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 focus:bg-white outline-none transition-all font-medium text-sm sm:text-base"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-slate-50 border border-slate-200 rounded-xl sm:rounded-2xl text-slate-900 placeholder:text-slate-400 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 focus:bg-white outline-none transition-all font-medium text-sm sm:text-base"
                 placeholder={field.placeholder}
               />
             </div>
@@ -131,7 +131,7 @@ export const FormModal: React.FC = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex-1 px-6 py-4 text-white bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-600/20 rounded-[10px] transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="flex-1 px-6 py-4 text-white bg-[#1A4AB2]  shadow-lg shadow-blue-600/20 rounded-[10px] transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {isSubmitting ? (
                 <>

@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu, X, Phone, Mail, MapPin, ChevronDown, ChevronRight, AlertCircle } from "lucide-react";
+import { Menu, X, Phone, Mail, MapPin, ChevronDown, ChevronRight, ArrowRight } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion"; // Added for animations
+import { motion, AnimatePresence } from "framer-motion";
 import { SITE_IDENTITY } from "@/site-identity";
 import { useContactInfo } from "@/hooks/useContactInfo";
 import { useFormModal } from "@/context/FormModalContext";
@@ -17,18 +17,25 @@ export default function Navbar() {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [hoveredCountry, setHoveredCountry] = useState<string | null>(null);
   const [expandedMobileItem, setExpandedMobileItem] = useState<string | null>(null);
+  
   const { emails, phones, address } = useContactInfo();
   const pathname = usePathname();
   const { openModal } = useFormModal();
-  const { colleges, exams, countries, loading, error } = useDropdownData();
-  
+  const { colleges, exams, countries } = useDropdownData();
   const { data: countryColleges = [], isLoading: loadingColleges } = useCountryColleges(hoveredCountry);
 
+  // Scroll detection
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 10);
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Block body scroll when mobile menu is open
+  useEffect(() => {
+    if (isOpen) document.body.style.overflow = "hidden";
+    else document.body.style.overflow = "unset";
+  }, [isOpen]);
 
   const navItems = [
     { name: "Home", href: "/" },
@@ -54,188 +61,210 @@ export default function Navbar() {
   const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname?.startsWith(href));
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-      isScrolled ? "bg-white/80 backdrop-blur-md shadow-lg" : "bg-white"
+    <header className={`fixed top-0 left-0 right-0 z-[40] transition-all duration-300 ${
+      isScrolled ? "bg-white shadow-lg" : "bg-white"
     }`}>
       
-      {/* TOP CONTACT BAR */}
-      <div className={`hidden lg:block transition-all duration-500 overflow-hidden ${isScrolled ? "max-h-0" : "max-h-12 bg-blue-600"}`}>
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-8 py-2 text-[13px] text-white/90">
+      {/* TOP BAR - Hidden on mobile */}
+      <div className={`hidden lg:block bg-slate-900 overflow-hidden transition-all duration-300 ${isScrolled ? "h-0" : "h-10"}`}>
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-8 h-full text-[11px] font-bold text-white/90 uppercase tracking-widest">
           <div className="flex items-center gap-6">
-            <a href={`tel:${phones.primaryRaw}`} className="flex items-center gap-2 hover:text-white transition-colors">
-              <Phone size={14} className="text-blue-200" /> {phones.primary}
+            <a href={`tel:${phones.primaryRaw}`} className="flex items-center gap-2 hover:text-[#FACC15]">
+              <Phone size={12} className="text-[#FACC15]" /> {phones.primary}
             </a>
-            <a href={`mailto:${emails.info}`} className="flex items-center gap-2 hover:text-white transition-colors">
-              <Mail size={14} className="text-blue-200" /> {emails.info}
+            <a href={`mailto:${emails.info}`} className="flex items-center gap-2 hover:text-[#FACC15]">
+              <Mail size={12} className="text-[#FACC15]" /> {emails.info}
             </a>
           </div>
           <div className="flex items-center gap-2">
-            <MapPin size={14} className="text-blue-200" /> {address.office}
+            <MapPin size={12} className="text-[#FACC15]" /> {address.office}
           </div>
         </div>
       </div>
 
-      {/* MAIN NAVIGATION */}
-      <div className="border-b border-blue-50/50">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="flex h-20 items-center justify-between">
-            <Link href="/" className="relative z-10 transition-transform hover:scale-105">
-              <img src={SITE_IDENTITY.assets.logo.main} alt="Logo" className="h-12 lg:h-14 w-auto object-contain" />
-            </Link>
+      {/* NAVIGATION BAR */}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-20 items-center justify-between">
+          
+          {/* LOGO */}
+          <Link href="/" className="relative z-[50] flex-shrink-0">
+            <img 
+              src={SITE_IDENTITY.assets.logo.main} 
+              alt="Logo" 
+              className="h-12 sm:h-16 lg:h-20 w-auto transition-all"
+            />
+          </Link>
 
-            {/* DESKTOP NAV */}
-            <nav className="hidden lg:flex items-center gap-1">
-              {navItems.map((item) => (
-                <div
-                  key={item.name}
-                  className="relative group py-2"
-                  onMouseEnter={() => setHoveredItem(item.name)}
-                  onMouseLeave={() => { setHoveredItem(null); setHoveredCountry(null); }}
+          {/* DESKTOP MENU */}
+          <nav className="hidden lg:flex items-center gap-1">
+            {navItems.map((item) => (
+              <div
+                key={item.name}
+                className="relative group py-6"
+                onMouseEnter={() => setHoveredItem(item.name)}
+                onMouseLeave={() => { setHoveredItem(null); setHoveredCountry(null); }}
+              >
+                <Link 
+                  href={item.href} 
+                  className={`px-2 sm:px-4 py-2 text-[11px] sm:text-[12px] font-black uppercase tracking-tight transition-all flex items-center gap-1.5 rounded-full
+                    ${isActive(item.href) ? "text-[#1A4AB2] bg-blue-50" : "text-slate-700 hover:text-[#1A4AB2]"}
+                  `}
                 >
-                  <Link 
-                    href={item.href} 
-                    className={`relative px-4 py-2 text-[15px] font-bold transition-all duration-300 flex items-center gap-1.5 rounded-lg
-                      ${isActive(item.href) ? "text-blue-600 bg-blue-50" : "text-slate-600 hover:text-blue-600 hover:bg-blue-50/50"}
-                    `}
-                  >
-                    {item.name}
-                    {item.hasDropdown && (
-                      <ChevronDown size={14} className={`transition-transform duration-300 ${hoveredItem === item.name ? "rotate-180" : ""}`} />
-                    )}
-                  </Link>
+                  {item.name}
+                  {item.hasDropdown && <ChevronDown size={14} className="opacity-50" />}
+                </Link>
 
-                  {/* DESKTOP DROPDOWN */}
-                  <AnimatePresence>
-                    {item.hasDropdown && hoveredItem === item.name && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 15, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                        transition={{ duration: 0.2 }}
-                        className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-white rounded-2xl shadow-2xl border border-blue-50 overflow-hidden z-[60] 
-                          ${item.name === 'Countries' ? 'w-[750px]' : 'w-64'}`}
+                {/* MEGA DROPDOWN (Desktop) */}
+                <AnimatePresence>
+                  {item.hasDropdown && hoveredItem === item.name && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className={`absolute top-[90%] left-1/2 -translate-x-1/2 bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden z-[50] ${item.name === 'Countries' ? 'w-[600px] sm:w-[700px]' : 'w-48 sm:w-64'}`}
+                    >
+                      <div className="flex max-h-[450px]">
+                        <div className="flex-1 overflow-y-auto p-3">
+                          {dropdownContent[item.name as keyof typeof dropdownContent]?.map((sub: any) => (
+                            <Link
+                              key={sub.title}
+                              href={sub.href}
+                              onMouseEnter={() => item.name === 'Countries' && setHoveredCountry(sub.slug)}
+                              className="flex items-center justify-between px-4 py-3 rounded-xl hover:bg-[#1A4AB2] hover:text-white transition-all group"
+                            >
+                              <span className="text-[12px] font-bold uppercase tracking-wide">
+                                {sub.flag} {sub.title}
+                              </span>
+                              <ChevronRight size={14} className="opacity-0 group-hover:opacity-100" />
+                            </Link>
+                          ))}
+                        </div>
+                        {item.name === 'Countries' && (
+                          <div className="w-1/2 bg-slate-50 p-6 border-l">
+                            <h4 className="text-[10px] font-black text-[#1A4AB2] uppercase tracking-widest mb-4">Top Colleges</h4>
+                            <div className="space-y-2">
+                              {countryColleges.slice(0, 5).map((col: any) => (
+                                <Link key={col._id} href={`/colleges/${col.slug}`} className="block p-3 bg-white rounded-xl text-[11px] font-bold hover:border-[#1A4AB2] border border-transparent transition-all shadow-sm">
+                                  {col.name}
+                                </Link>
+                              ))}
+                              <Link href="/colleges" className="flex items-center justify-center gap-2 p-3 bg-slate-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest mt-4">
+                                View All <ArrowRight size={14} />
+                              </Link>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ))}
+          </nav>
+
+          {/* ACTION BUTTONS */}
+          <div className="flex items-center gap-2 sm:gap-4 relative z-[50]">
+            <button 
+              onClick={openModal} 
+              className="hidden sm:flex px-6 py-3 bg-[#1A4AB2] text-white text-[11px] font-black uppercase tracking-widest rounded-full hover:bg-slate-900 transition-all shadow-lg shadow-blue-100"
+            >
+              Apply Now
+            </button>
+            
+            <button 
+              onClick={() => setIsOpen(!isOpen)} 
+              className="p-2 text-slate-900 hover:bg-slate-100 rounded-xl transition-colors lg:hidden"
+            >
+              {isOpen ? <X size={28} /> : <Menu size={28} />}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* MOBILE MENU PANEL */}
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-slate-950/20 backdrop-blur-sm lg:hidden z-[45]"
+              onClick={() => setIsOpen(false)}
+            />
+            
+            {/* Menu Content */}
+            <motion.div 
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed right-0 top-0 bottom-0 w-[85%] max-w-sm bg-white z-[50] shadow-2xl flex flex-col lg:hidden"
+            >
+              <div className="flex items-center justify-between p-6 border-b">
+                <span className="text-xs font-black uppercase tracking-widest text-[#1A4AB2]">Navigation</span>
+                <button onClick={() => setIsOpen(false)} className="p-2 bg-slate-50 rounded-xl"><X size={20} /></button>
+              </div>
+
+              <div className="flex-grow overflow-y-auto px-6 py-4">
+                {navItems.map((item) => (
+                  <div key={item.name} className="mb-2">
+                    <div className="flex items-center justify-between py-4">
+                      <Link 
+                        href={item.href} 
+                        className={`text-base font-black uppercase tracking-tight ${isActive(item.href) ? 'text-[#1A4AB2]' : 'text-slate-800'}`}
+                        onClick={() => !item.hasDropdown && setIsOpen(false)}
                       >
-                        <div className="flex max-h-[500px]">
-                          {/* Countries Column */}
-                          <div className={`${item.name === 'Countries' ? 'w-1/2 border-r border-blue-50' : 'w-full'} overflow-y-auto p-2 custom-scrollbar`}>
-                            {dropdownContent[item.name as keyof typeof dropdownContent]?.map((subItem: any) => (
-                              <Link
-                                key={subItem.title}
-                                href={subItem.href}
-                                onMouseEnter={() => item.name === 'Countries' && setHoveredCountry(subItem.slug)}
-                                className="flex items-center justify-between px-4 py-3 rounded-xl hover:bg-blue-600 hover:text-white transition-all group/item"
+                        {item.name}
+                      </Link>
+                      {item.hasDropdown && (
+                        <button 
+                          onClick={() => setExpandedMobileItem(expandedMobileItem === item.name ? null : item.name)}
+                          className="p-2 bg-slate-50 rounded-lg"
+                        >
+                          <ChevronDown size={18} className={`transition-transform ${expandedMobileItem === item.name ? "rotate-180" : ""}`} />
+                        </button>
+                      )}
+                    </div>
+                    
+                    {/* Mobile Dropdown Items */}
+                    <AnimatePresence>
+                      {item.hasDropdown && expandedMobileItem === item.name && (
+                        <motion.div 
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          className="overflow-hidden bg-slate-50 rounded-2xl px-4"
+                        >
+                          <div className="py-4 space-y-4">
+                            {dropdownContent[item.name as keyof typeof dropdownContent]?.slice(0, 10).map((sub: any) => (
+                              <Link 
+                                key={sub.title} 
+                                href={sub.href} 
+                                onClick={() => setIsOpen(false)}
+                                className="block text-[12px] font-bold text-slate-600 uppercase tracking-wide hover:text-[#1A4AB2]"
                               >
-                                <span className="flex items-center gap-3 font-semibold text-sm">
-                                  {subItem.flag && <span>{subItem.flag}</span>}
-                                  {subItem.title}
-                                </span>
-                                {item.name === 'Countries' && <ChevronRight size={14} className="opacity-50 group-hover/item:opacity-100" />}
+                                {sub.flag} {sub.title}
                               </Link>
                             ))}
                           </div>
-
-                          {/* Dynamic University Preview for Countries */}
-                          {item.name === 'Countries' && (
-                            <div className="w-1/2 bg-slate-50/50 p-4 overflow-y-auto custom-scrollbar">
-                              <h4 className="text-[11px] font-bold text-blue-600 uppercase tracking-widest mb-4">Top Universities</h4>
-                              {loadingColleges ? (
-                                <div className="space-y-3">
-                                  {[1,2,3].map(i => <div key={i} className="h-8 bg-blue-100/50 animate-pulse rounded-lg" />)}
-                                </div>
-                              ) : countryColleges.length > 0 ? (
-                                <div className="space-y-1">
-                                  {countryColleges.slice(0, 6).map((college: any) => (
-                                    <Link key={college._id} href={`/colleges/${college.slug}`} className="block px-3 py-2 text-sm font-medium text-slate-700 hover:text-blue-600 hover:bg-white rounded-lg transition-all shadow-sm border border-transparent hover:border-blue-100">
-                                      {college.name}
-                                    </Link>
-                                  ))}
-                                  <Link href={`/colleges?country=${hoveredCountry}`} className="block mt-4 text-center py-2.5 text-xs font-bold bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow-md transition-transform hover:scale-[1.02]">
-                                    View All Universities
-                                  </Link>
-                                </div>
-                              ) : (
-                                <div className="text-center py-10 text-slate-400 text-sm">Select a country to view colleges</div>
-                              )}
-                            </div>
-                          )}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              ))}
-            </nav>
-
-            <div className="flex items-center gap-4">
-              <button onClick={openModal} className="hidden lg:flex px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white text-[14px] font-bold rounded-full transition-all duration-300 shadow-lg shadow-blue-200 hover:shadow-blue-300 items-center gap-2 group">
-                Apply Now
-                <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
-              </button>
-              
-              <button 
-                onClick={() => setIsOpen(!isOpen)} 
-                className="lg:hidden p-2.5 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-100 transition-colors"
-              >
-                {isOpen ? <X size={24} /> : <Menu size={24} />}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* MOBILE MENU */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div 
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="lg:hidden bg-white border-b border-blue-50 overflow-hidden"
-          >
-            <div className="px-6 py-8 space-y-2">
-              {navItems.map((item) => (
-                <div key={item.name} className="border-b border-slate-50 last:border-0">
-                  <div 
-                    className="flex items-center justify-between py-4"
-                    onClick={() => item.hasDropdown && setExpandedMobileItem(expandedMobileItem === item.name ? null : item.name)}
-                  >
-                    <Link 
-                      href={item.href} 
-                      className={`text-lg font-bold ${isActive(item.href) ? "text-blue-600" : "text-slate-800"}`}
-                      onClick={(e) => item.hasDropdown && e.preventDefault()}
-                    >
-                      {item.name}
-                    </Link>
-                    {item.hasDropdown && (
-                      <ChevronDown size={20} className={`transition-transform duration-300 ${expandedMobileItem === item.name ? "rotate-180" : ""}`} />
-                    )}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
-                  
-                  {item.hasDropdown && expandedMobileItem === item.name && (
-                    <motion.div 
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      className="pb-4 pl-4 grid grid-cols-1 gap-2"
-                    >
-                      {dropdownContent[item.name as keyof typeof dropdownContent]?.slice(0, 8).map((sub: any) => (
-                        <Link 
-                          key={sub.title} 
-                          href={sub.href} 
-                          onClick={() => setIsOpen(false)}
-                          className="text-sm font-semibold text-slate-500 hover:text-blue-600 py-2 flex items-center gap-2"
-                        >
-                          {sub.flag} {sub.title}
-                        </Link>
-                      ))}
-                    </motion.div>
-                  )}
-                </div>
-              ))}
-              <button onClick={() => { openModal(); setIsOpen(false); }} className="w-full mt-6 py-4 bg-blue-600 text-white font-bold rounded-2xl shadow-xl active:scale-95 transition-all">
-                Get Admission Help
-              </button>
-            </div>
-          </motion.div>
+                ))}
+              </div>
+
+              <div className="p-6 border-t bg-slate-50">
+                <button 
+                  onClick={() => { openModal(); setIsOpen(false); }}
+                  className="w-full py-4 bg-[#1A4AB2] text-white text-xs font-black uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-blue-200"
+                >
+                  Quick Apply Now
+                </button>
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </header>
