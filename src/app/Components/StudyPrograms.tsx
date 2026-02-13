@@ -1,12 +1,13 @@
 "use client";
 import React from "react";
+import Link from "next/link";
 import { BookOpen, Target, BrainCircuit, Globe, ArrowRight, MessageCircle } from "lucide-react";
 
-export default function StudyPrograms() {
-  // Brand Colors
-  const ADMISSION_BLUE = "#1E6BFF";
-  const ADMISSION_YELLOW = "#FFD700";
+// Strict Brand Theme
+const PRIMARY_BLUE = "#1A4AB2"; 
+const ACCENT_GOLD = "#FACC15";  
 
+export default function StudyPrograms() {
   const programs = [
     {
       icon: Target,
@@ -51,73 +52,75 @@ export default function StudyPrograms() {
   ];
 
   return (
-    <section className="py-24 bg-white relative overflow-hidden">
-      {/* Soft Background Accents */}
-      <div className="absolute inset-0 pointer-events-none opacity-40">
-        <div className="absolute top-1/4 left-0 w-[400px] h-[400px] bg-blue-50 rounded-full blur-[100px] -translate-x-1/2" />
-        <div className="absolute bottom-1/4 right-0 w-[400px] h-[400px] bg-blue-50/60 rounded-full blur-[100px] translate-x-1/2" />
+    <section className="py-24 bg-[#F8FAFC] relative overflow-hidden">
+      {/* Background Decor */}
+      <div className="absolute inset-0 pointer-events-none opacity-30">
+        <div className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-[#1A4AB2]/5 rounded-full blur-[120px] -translate-x-1/2" />
+        <div className="absolute bottom-1/4 right-0 w-[500px] h-[500px] bg-[#FACC15]/5 rounded-full blur-[120px] translate-x-1/2" />
       </div>
 
       <div className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-24 relative z-10">
         
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-md border border-slate-200 text-[#1E6BFF] px-4 py-2 rounded-full text-[10px] font-extrabold uppercase tracking-widest mb-6 shadow-sm">
-            <span className="w-2 h-2 bg-[#FFD700] rounded-full animate-pulse"></span>
+        <div className="text-center mb-20">
+          <div className="inline-flex items-center gap-2 bg-white border border-slate-200 text-[#1A4AB2] px-5 py-2.5 rounded-full text-[11px] font-black uppercase tracking-widest mb-6 shadow-sm">
+            <span className="w-2.5 h-2.5 bg-[#FACC15] rounded-full animate-pulse"></span>
             Explore Programs
           </div>
-          <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight">
-            Find Your Perfect <span className="text-[#1E6BFF]">Career Path</span>
+          <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight">
+            Find Your Perfect <span className="text-[#1A4AB2]">Career Path</span>
           </h2>
-          <p className="text-slate-500 max-w-2xl mx-auto leading-relaxed text-sm md:text-base">
-            Choose from diverse programs designed to match your interests and career goals. 
-            Get expert guidance for admissions and college selection.
+          <p className="text-slate-600 max-w-2xl mx-auto leading-relaxed text-base">
+            Choose from diverse programs designed to match your interests. 
+            Get expert guidance for admissions and campus selection.
           </p>
         </div>
 
         {/* Programs Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {programs.map((program, index) => (
             <div
               key={index}
-              className="group bg-white border border-slate-200 rounded-[28px] p-7 hover:border-[#1E6BFF]/30 hover:shadow-[0_20px_40px_rgba(30,107,255,0.12)] transition-all duration-500 hover:-translate-y-1.5 flex flex-col h-full"
+              className="group bg-white border border-slate-200 rounded-[40px] p-8 hover:border-[#1A4AB2]/30 hover:shadow-[0_30px_60px_rgba(26,74,178,0.1)] transition-all duration-500 hover:-translate-y-2 flex flex-col h-full"
             >
-              <div className="w-12 h-12 rounded-2xl bg-blue-50 text-[#1E6BFF] flex items-center justify-center mb-6 group-hover:bg-[#1E6BFF] group-hover:text-white transition-all duration-300 shadow-sm">
-                <program.icon size={22} />
+              {/* Icon Container */}
+              <div className="w-14 h-14 rounded-2xl bg-[#1A4AB2]/5 text-[#1A4AB2] flex items-center justify-center mb-8 group-hover:bg-[#1A4AB2] group-hover:text-white transition-all duration-500 shadow-sm">
+                <program.icon size={26} />
               </div>
 
-              <h3 className="text-base font-bold text-slate-900 mb-3 group-hover:text-[#1E6BFF] transition-colors">
+              <h3 className="text-base font-extrabold text-slate-900 mb-4 group-hover:text-[#1A4AB2] transition-colors">
                 {program.title}
               </h3>
 
-              <p className="text-slate-500 text-xs leading-relaxed mb-6 flex-grow">
+              <p className="text-slate-600 text-sm leading-relaxed mb-8 flex-grow">
                 {program.description}
               </p>
 
-              <div className="flex items-center justify-between pt-4 border-t border-slate-50">
-                <span className="text-[11px] font-extrabold text-[#1E6BFF] uppercase tracking-wider flex items-center gap-1 group-hover:gap-2 transition-all cursor-pointer">
+              {/* Action Footer */}
+              <div className="flex items-center justify-between pt-6 border-t border-slate-100">
+                <span className="text-[11px] font-black text-[#1A4AB2] uppercase tracking-widest flex items-center gap-2 group-hover:gap-3 transition-all cursor-pointer">
                   Learn More
                   <ArrowRight size={14} />
                 </span>
-                <div className="w-2 h-2 rounded-full bg-slate-100 group-hover:bg-[#FFD700] transition-colors" />
+                <div className="w-2.5 h-2.5 rounded-full bg-slate-100 group-hover:bg-[#FACC15] transition-colors" />
               </div>
             </div>
           ))}
         </div>
 
-        {/* Bottom CTA - Matching the premium floating style */}
+        {/* Bottom CTA */}
         <div className="flex justify-center mt-16">
-          <div className="inline-flex flex-wrap items-center justify-center gap-6 bg-slate-900 border border-slate-800 rounded-[32px] px-10 py-5 shadow-2xl">
-            <div className="flex items-center gap-4 pr-6 border-r border-slate-700">
-              <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-[#FFD700]">
+          <div className="inline-flex flex-wrap items-center justify-center gap-6 bg-slate-900 border border-slate-800 rounded-[32px] px-8 py-4 shadow-2xl">
+            <div className="flex items-center gap-4 pr-6 border-r border-slate-700 hidden sm:flex">
+              <div className="w-10 h-10 rounded-full bg-[#1A4AB2]/20 flex items-center justify-center text-[#FACC15]">
                 <MessageCircle size={20} />
               </div>
               <div className="text-left">
-                <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Need Help Choosing?</div>
-                <div className="font-bold text-white text-sm">Talk to Our Career Experts</div>
+                <div className="text-[10px] text-slate-400 font-black uppercase tracking-widest">Need Expert Advice?</div>
+                <div className="font-bold text-white text-sm">Talk to Our Career Mentors</div>
               </div>
             </div>
-            <button className="bg-[#1E6BFF] text-white px-8 py-3 rounded-full text-sm font-bold hover:bg-white hover:text-slate-900 transition-all shadow-lg shadow-blue-500/20">
+            <button className="bg-[#1A4AB2] text-white px-8 py-3 rounded-full text-xs font-black uppercase tracking-widest hover:bg-white hover:text-slate-900 transition-all shadow-lg">
               Free Consultation
             </button>
           </div>

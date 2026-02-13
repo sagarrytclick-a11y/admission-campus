@@ -12,7 +12,7 @@ import {
 interface UniversityCardProps {
   name: string;
   image: string;
-  location: string;
+  location?: string;
   ranking?: string;
   fees?: number;
   duration?: string;
@@ -21,6 +21,11 @@ interface UniversityCardProps {
   country?: string;
   about?: string;
   exams?: string[];
+  overview?: string;
+  key_highlights?: string;
+  country_ranking?: string;
+  world_ranking?: string;
+  annual_tuition_fee?: string;
 }
 
 interface ExamCardProps {
@@ -58,7 +63,7 @@ interface CountryCardProps {
 
 // --- University Card Component ---
 
-const UniversityCard = ({ name, image, location, ranking, fees, duration, establishment_year, slug, country, about }: UniversityCardProps) => (
+const UniversityCard = ({ name, image, location, ranking, fees, duration, establishment_year, slug, country, about, overview, exams, annual_tuition_fee }: UniversityCardProps) => (
   <Link href={`/colleges/${slug}`} className="group block h-full">
     <div className="relative h-full bg-white rounded-xl border-2 border-slate-200 shadow-[0_4px_20px_rgb(0,0,0,0.04)] hover:shadow-[0_12px_30px_rgba(22,163,74,0.12)] hover:border-green-400 transition-all duration-500 overflow-hidden flex flex-col hover:-translate-y-1">
       <div className="relative h-40 w-full overflow-hidden">
@@ -76,18 +81,31 @@ const UniversityCard = ({ name, image, location, ranking, fees, duration, establ
           <h3 className="text-lg font-black text-slate-900 mb-1 leading-tight group-hover:text-green-600 transition-colors uppercase">{name}</h3>
           <div className="flex items-center gap-1.5 text-slate-500 text-xs font-bold">
             <MapPin size={12} className="text-green-500" />
-            <span>{location}, {country}</span>
+            <span>{location || 'India'}</span>
           </div>
         </div>
 
-        {about && <p className="text-slate-500 text-xs leading-relaxed line-clamp-2 mb-3 border-l-2 border-green-100 pl-2 italic">{about}</p>}
+        {(overview || about) && <p className="text-slate-500 text-xs leading-relaxed line-clamp-2 mb-3 border-l-2 border-green-100 pl-2 italic">{overview || about}</p>}
+
+        {exams && exams.length > 0 && (
+          <div className="mb-3">
+            <p className="text-[9px] text-slate-400 uppercase font-black mb-1">Entrance Exams</p>
+            <div className="flex flex-wrap gap-1">
+              {exams.slice(0, 3).map((exam, index) => (
+                <span key={index} className="bg-blue-50 text-blue-600 text-[9px] px-2 py-1 rounded-lg font-medium">
+                  {exam}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="grid grid-cols-2 gap-2 mb-4">
           <div className="bg-slate-50 p-2 rounded-lg border border-slate-100/50">
             <p className="text-[9px] text-slate-400 uppercase font-black mb-1">Annual Fee</p>
             <div className="flex items-center gap-1 text-slate-900 font-bold text-xs">
               <DollarSign size={12} className="text-green-600" />
-              <span>${fees?.toLocaleString()}</span>
+              <span>{annual_tuition_fee || fees?.toLocaleString()}</span>
             </div>
           </div>
           <div className="bg-slate-50 p-2 rounded-lg border border-slate-100/50">

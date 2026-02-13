@@ -187,7 +187,7 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-blue-100 border-t-blue-600 rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="w-16 h-16 border-4 border-[#1A4AB2] border-t-[#1A4AB2] rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-slate-500 font-medium text-sm">Loading College...</p>
         </div>
       </div>
@@ -210,12 +210,12 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button
               onClick={() => refetch()}
-              className="bg-blue-600 hover:bg-blue-700 text-white"
+              className="bg-[#1A4AB2] hover:bg-[#1A4AB2]/90 text-white"
             >
               Try Again
             </Button>
             <Link href="/colleges">
-              <Button variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-50">
+              <Button variant="outline" className="border-[#1A4AB2] text-[#1A4AB2] hover:bg-[#1A4AB2]/10">
                 Browse All Colleges
               </Button>
             </Link>
@@ -228,33 +228,33 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <div className="bg-white py-12">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div className="bg-gradient-to-br from-slate-50 to-white py-12">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-center">
 
             {/* LEFT SIDE: CONTENT */}
             <div>
-              <div className="flex flex-wrap items-center gap-3 mb-6">
-                <Badge className="bg-blue-50 text-blue-700 border-none px-3 py-1 rounded-full text-sm font-medium">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+                <Badge className="bg-[#1A4AB2]/10 text-[#1A4AB2] border-none px-3 py-1 rounded-full text-sm font-medium">
                   <Flag className="w-3 h-3 mr-2" />
                   {college.country_ref?.name || 'International'}
                 </Badge>
 
                 {college.ranking && (
-                  <Badge className="bg-yellow-50 text-yellow-700 border-none px-3 py-1 rounded-full text-sm font-medium">
+                  <Badge className="bg-[#FFD700]/20 text-[#FFD700]/90 border-none px-3 py-1 rounded-full text-sm font-medium">
                     <Trophy className="w-3 h-3 mr-2" />
                     Ranked #{typeof college.ranking === 'object' ? college.ranking.country_ranking : college.ranking}
                   </Badge>
                 )}
               </div>
 
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-4 sm:mb-6">
                 {college.name}
-                <span className="text-blue-600">.</span>
+                <span className="text-[#1A4AB2]">.</span>
               </h1>
 
               {/* Hero Description */}
-              <div className="mb-8">
+              <div className="mb-6 sm:mb-8">
                 <p className="text-slate-600 max-w-xl leading-relaxed">
                   {college.overview?.description || college.about_content}
                 </p>
@@ -262,8 +262,8 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
 
               <div className="flex flex-wrap gap-6 py-6 border-y border-slate-200">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
-                    <MapPin className="w-5 h-5 text-blue-600" />
+                  <div className="w-10 h-10 bg-[#1A4AB2]/10 rounded-lg flex items-center justify-center">
+                    <MapPin className="w-5 h-5 text-[#1A4AB2]" />
                   </div>
                   <div>
                     <p className="text-xs text-slate-500 uppercase font-medium">Location</p>
@@ -273,8 +273,8 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
 
                 {college.establishment_year && (
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
-                      <Calendar className="w-5 h-5 text-blue-600" />
+                    <div className="w-10 h-10 bg-[#1A4AB2]/10 rounded-lg flex items-center justify-center">
+                      <Calendar className="w-5 h-5 text-[#1A4AB2]" />
                     </div>
                     <div>
                       <p className="text-xs text-slate-500 uppercase font-medium">Founded</p>
@@ -284,8 +284,8 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
                 )}
 
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
-                    <Users className="w-5 h-5 text-blue-600" />
+                  <div className="w-10 h-10 bg-[#1A4AB2]/10 rounded-lg flex items-center justify-center">
+                    <Users className="w-5 h-5 text-[#1A4AB2]" />
                   </div>
                   <div>
                     <p className="text-xs text-slate-500 uppercase font-medium">Community</p>
@@ -310,7 +310,7 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
       </div>
 
       {/* Navigation Tab Bar */}
-      <div className="sticky top-0 z-50 bg-white border-b border-slate-200">
+      <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex items-center gap-6 py-4 overflow-x-auto">
             {[
@@ -334,8 +334,8 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
                 }}
                 className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap ${
                   activeTab === tab.id
-                    ? 'bg-blue-600 text-white'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-[#1A4AB2] text-white'
+                    : 'text-slate-600 hover:text-[#1A4AB2]'
                 }`}
               >
                 {tab.name}
@@ -354,7 +354,7 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
             <div id="overview">
               <div className="bg-white border border-slate-200 rounded-xl p-8">
                 <div className="mb-6">
-                  <Badge className="bg-blue-50 text-blue-700 border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
+                  <Badge className="bg-[#1A4AB2]/10 text-[#1A4AB2] border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
                     Institution
                   </Badge>
                   <h2 className="text-2xl font-bold text-slate-900 mb-4">
@@ -368,7 +368,7 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
 
                 <button
                   onClick={() => setIsExpanded(!isExpanded)}
-                  className="text-blue-600 font-medium text-sm flex items-center gap-2 hover:text-blue-700"
+                  className="text-[#1A4AB2] font-medium text-sm flex items-center gap-2 hover:text-[#1A4AB2]/80"
                 >
                   {isExpanded ? 'Show Less' : 'Show More'}
                   <ArrowRight className={`w-4 h-4 transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
@@ -380,7 +380,7 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
             <div id="key-highlights">
               <div className="bg-white border border-slate-200 rounded-xl p-8">
                 <div className="mb-6">
-                  <Badge className="bg-blue-50 text-blue-700 border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
+                  <Badge className="bg-[#1A4AB2]/10 text-[#1A4AB2] border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
                     Essentials
                   </Badge>
                   <h2 className="text-2xl font-bold text-slate-900">Key Information</h2>
@@ -419,7 +419,7 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
                   ].map((item, i) => item.show && (
                     <div key={i} className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg">
                       <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center">
-                        <item.icon className="w-6 h-6 text-blue-600" />
+                        <item.icon className="w-6 h-6 text-[#1A4AB2]" />
                       </div>
                       <div>
                         <div className="text-xs text-slate-500 uppercase font-medium mb-1">{item.label}</div>
@@ -437,7 +437,7 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
               {college.exams && college.exams.length > 0 && (
                 <div className="bg-white border border-slate-200 rounded-xl p-8">
                   <div className="mb-6">
-                    <Badge className="bg-blue-50 text-blue-700 border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
+                    <Badge className="bg-[#1A4AB2]/10 text-[#1A4AB2] border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
                       Eligibility
                     </Badge>
                     <h2 className="text-2xl font-bold text-slate-900">Accepted Entrance Exams</h2>
@@ -451,7 +451,7 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
                     {college.exams.map((exam, index) => (
                       <div key={exam} className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg">
                         <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center">
-                          <FileText className="w-6 h-6 text-blue-600" />
+                          <FileText className="w-6 h-6 text-[#1A4AB2]" />
                         </div>
                         <div>
                           <div className="font-semibold text-slate-900">{exam}</div>
@@ -469,7 +469,7 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
               {college.key_highlights?.features && college.key_highlights.features.length > 0 && (
                 <div className="bg-white border border-slate-200 rounded-xl p-8">
                   <div className="mb-6">
-                    <Badge className="bg-blue-50 text-blue-700 border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
+                    <Badge className="bg-[#1A4AB2]/10 text-[#1A4AB2] border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
                       At a Glance
                     </Badge>
                     <h2 className="text-2xl font-bold text-slate-900">
@@ -486,8 +486,8 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {college.key_highlights.features.map((feature, index) => (
                       <div key={index} className="flex items-start gap-3 p-4 bg-slate-50 rounded-lg">
-                        <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
-                          <Star className="w-4 h-4 text-blue-600" />
+                        <div className="w-8 h-8 bg-[#1A4AB2]/10 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                          <Star className="w-4 h-4 text-[#1A4AB2]" />
                         </div>
                         <div className="text-slate-700">{feature}</div>
                       </div>
@@ -502,7 +502,7 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
               {college.why_choose_us?.features && college.why_choose_us.features.length > 0 && (
                 <div className="bg-white border border-slate-200 rounded-xl p-8">
                   <div className="mb-6">
-                    <Badge className="bg-blue-50 text-blue-700 border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
+                    <Badge className="bg-[#1A4AB2]/10 text-[#1A4AB2] border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
                       Benefits
                     </Badge>
                     <h2 className="text-2xl font-bold text-slate-900">
@@ -519,8 +519,8 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
                   <div className="space-y-4">
                     {college.why_choose_us.features.map((feature, index) => (
                       <div key={index} className="flex items-start gap-4 p-4 bg-slate-50 rounded-lg">
-                        <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
-                          <Lightbulb className="w-4 h-4 text-blue-600" />
+                        <div className="w-8 h-8 bg-[#1A4AB2]/10 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                          <Lightbulb className="w-4 h-4 text-[#1A4AB2]" />
                         </div>
                         <div>
                           <h4 className="font-semibold text-slate-900 mb-2">{feature.title}</h4>
@@ -538,7 +538,7 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
               {college.ranking && typeof college.ranking === 'object' && (
                 <div className="bg-white border border-slate-200 rounded-xl p-8">
                   <div className="mb-6">
-                    <Badge className="bg-blue-50 text-blue-700 border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
+                    <Badge className="bg-[#1A4AB2]/10 text-[#1A4AB2] border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
                       Recognition
                     </Badge>
                     <h2 className="text-2xl font-bold text-slate-900">
@@ -568,9 +568,9 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
                       <div key={i} className="p-6 bg-slate-50 rounded-lg">
                         <div className="flex items-center justify-between mb-4">
                           <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center">
-                            <item.icon className="w-6 h-6 text-blue-600" />
+                            <item.icon className="w-6 h-6 text-[#1A4AB2]" />
                           </div>
-                          <div className="text-3xl font-bold text-blue-600">#{item.val}</div>
+                          <div className="text-3xl font-bold text-[#1A4AB2]">#{item.val}</div>
                         </div>
                         <h4 className="text-lg font-semibold text-slate-900">#{item.val}</h4>
                         <p className="text-sm text-slate-500">{item.label}</p>
@@ -579,15 +579,15 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
                   </div>
 
                   {college.ranking.accreditation && college.ranking.accreditation.length > 0 && (
-                    <div className="bg-slate-900 rounded-xl p-6 text-white">
+                    <div className="bg-slate-900/95 backdrop-blur-md rounded-xl p-6 text-white border border-white/10">
                       <h4 className="font-semibold mb-4 flex items-center gap-2">
-                        <Award className="w-5 h-5 text-blue-400" />
+                        <Award className="w-5 h-5 text-[#FFD700]" />
                         Official Accreditations
                       </h4>
                       <div className="flex flex-wrap gap-2">
                         {college.ranking.accreditation.map((acc, index) => (
                           <div key={index} className="bg-white/10 px-3 py-2 rounded-lg flex items-center gap-2">
-                            <CheckCircle className="w-4 h-4 text-blue-400" />
+                            <CheckCircle className="w-4 h-4 text-[#FFD700]" />
                             <span className="text-sm">{acc}</span>
                           </div>
                         ))}
@@ -603,7 +603,7 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
               {college.admission_process?.steps && college.admission_process.steps.length > 0 && (
                 <div className="bg-white border border-slate-200 rounded-xl p-8">
                   <div className="mb-6">
-                    <Badge className="bg-blue-50 text-blue-700 border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
+                    <Badge className="bg-[#1A4AB2]/10 text-[#1A4AB2] border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
                       Step-by-Step
                     </Badge>
                     <h2 className="text-2xl font-bold text-slate-900">
@@ -620,7 +620,7 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
                   <div className="space-y-4">
                     {college.admission_process.steps.map((step, index) => (
                       <div key={index} className="flex items-start gap-4 p-4 bg-slate-50 rounded-lg">
-                        <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-semibold flex-shrink-0">
+                        <div className="w-8 h-8 bg-[#1A4AB2] rounded-lg flex items-center justify-center text-white font-semibold flex-shrink-0">
                           {String(index + 1).padStart(2, '0')}
                         </div>
                         <div className="flex-1">
@@ -630,7 +630,7 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
                     ))}
                   </div>
 
-                  <div className="mt-8 p-6 bg-blue-600 rounded-xl text-white">
+                  <div className="mt-8 p-6 bg-gradient-to-r from-[#1A4AB2] to-[#1A4AB2]/90 rounded-xl text-white shadow-xl shadow-[#1A4AB2]/20">
                     <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                       <div className="flex items-center gap-4">
                         <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
@@ -643,7 +643,7 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
                       </div>
                       <button
                         onClick={openModal}
-                        className="bg-white text-blue-600 font-semibold px-6 py-3 rounded-lg hover:bg-blue-50 transition-colors"
+                        className="bg-white text-[#1A4AB2] font-semibold px-6 py-3 rounded-lg hover:bg-[#1A4AB2]/10 transition-colors"
                       >
                         Get Free Assistance
                       </button>
@@ -658,7 +658,7 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
               {college.documents_required?.documents && college.documents_required.documents.length > 0 && (
                 <div className="bg-white border border-slate-200 rounded-xl p-8">
                   <div className="mb-6">
-                    <Badge className="bg-blue-50 text-blue-700 border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
+                    <Badge className="bg-[#1A4AB2]/10 text-[#1A4AB2] border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
                       Checklist
                     </Badge>
                     <h2 className="text-2xl font-bold text-slate-900">
@@ -676,7 +676,7 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
                     {college.documents_required.documents.map((doc, index) => (
                       <div key={index} className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg">
                         <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center">
-                          <Shield className="w-6 h-6 text-blue-600" />
+                          <Shield className="w-6 h-6 text-[#1A4AB2]" />
                         </div>
                         <div className="font-medium text-slate-900">{doc}</div>
                       </div>
@@ -691,7 +691,7 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
               {college.fees_structure?.courses && college.fees_structure.courses.length > 0 && (
                 <div className="bg-white border border-slate-200 rounded-xl p-8">
                   <div className="mb-6">
-                    <Badge className="bg-blue-50 text-blue-700 border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
+                    <Badge className="bg-[#1A4AB2]/10 text-[#1A4AB2] border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
                       Investment
                     </Badge>
                     <h2 className="text-2xl font-bold text-slate-900">
@@ -711,7 +711,7 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                           <div className="flex items-center gap-4">
                             <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center">
-                              <GraduationCap className="w-6 h-6 text-blue-600" />
+                              <GraduationCap className="w-6 h-6 text-[#1A4AB2]" />
                             </div>
                             <div>
                               <h4 className="font-semibold text-slate-900">{course.course_name}</h4>
@@ -719,7 +719,7 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
                             </div>
                           </div>
                           <div className="text-right">
-                            <div className="text-xl font-bold text-blue-600">{course.annual_tuition_fee}</div>
+                            <div className="text-xl font-bold text-[#1A4AB2]">{course.annual_tuition_fee}</div>
                             <div className="text-xs text-slate-500">Tuition / Year</div>
                           </div>
                         </div>
@@ -735,7 +735,7 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
               {college.campus_highlights?.highlights && college.campus_highlights.highlights.length > 0 && (
                 <div className="bg-white border border-slate-200 rounded-xl p-8">
                   <div className="mb-6">
-                    <Badge className="bg-blue-50 text-blue-700 border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
+                    <Badge className="bg-[#1A4AB2]/10 text-[#1A4AB2] border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
                       Lifestyle & Facilities
                     </Badge>
                     <h2 className="text-2xl font-bold text-slate-900">
@@ -764,7 +764,7 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
                       return (
                         <div key={index} className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg">
                           <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center">
-                            <div className="text-blue-600">
+                            <div className="text-[#1A4AB2]">
                               {getIcon(highlight)}
                             </div>
                           </div>
@@ -776,7 +776,7 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
 
                   <button
                     onClick={openModal}
-                    className="mt-6 w-full bg-blue-600 text-white rounded-lg py-3 px-6 font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+                    className="mt-6 w-full bg-[#1A4AB2] text-white rounded-lg py-3 px-6 font-medium hover:bg-[#1A4AB2]/90 transition-colors flex items-center justify-center gap-2"
                   >
                     <Globe className="w-5 h-5" />
                     Request a Virtual Campus Tour
@@ -789,7 +789,7 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
           {/* Right Column - CTA and Related */}
           <div className="space-y-8 lg:sticky lg:top-8 lg:h-fit">
             {/* CTA Card */}
-            <div className="bg-blue-600 text-white rounded-xl p-8">
+            <div className="bg-gradient-to-br from-[#1A4AB2] to-[#1A4AB2]/90 text-white rounded-xl p-8 shadow-xl shadow-[#1A4AB2]/20">
               <div className="text-center">
                 <div className="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center mx-auto mb-4">
                   <GraduationCap className="w-8 h-8 text-white" />
@@ -799,14 +799,14 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
                 <div className="space-y-3">
                   <button
                     onClick={openModal}
-                    className="w-full bg-white text-blue-600 font-semibold rounded-lg hover:bg-blue-50 transition-colors py-3 px-6 flex items-center justify-center gap-2"
+                    className="w-full bg-white text-[#1A4AB2] font-semibold rounded-lg  transition-colors py-3 px-6 flex items-center justify-center gap-2"
                   >
                     <Bookmark className="w-4 h-4" />
                     Start Application
                   </button>
                   <button
                     onClick={openModal}
-                    className="w-full bg-white/20 backdrop-blur-sm text-white font-semibold rounded-lg hover:bg-white/30 transition-colors py-3 px-6 border border-white/30 flex items-center justify-center gap-2"
+                    className="w-full bg-white/20 backdrop-blur-sm text-white font-semibold rounded-lg hover:bg-[#1A4AB2]/10 transition-colors py-3 px-6 border border-white/30 flex items-center justify-center gap-2"
                   >
                     <Phone className="w-4 h-4" />
                     Get Free Consultation
@@ -819,15 +819,15 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
             <div className="bg-white border border-slate-200 rounded-xl p-6">
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
-                  <Phone className="w-5 h-5 text-blue-600" />
+                  <Phone className="w-5 h-5 text-[#1A4AB2]" />
                   <span className="text-slate-700 font-medium">{phones.primary}</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Mail className="w-5 h-5 text-blue-600" />
+                  <Mail className="w-5 h-5 text-[#1A4AB2]" />
                   <span className="text-slate-700 font-medium">{emails.info}</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Globe className="w-5 h-5 text-blue-600" />
+                  <Globe className="w-5 h-5 text-[#1A4AB2]" />
                   <span className="text-slate-700 font-medium">Global Opportunities</span>
                 </div>
               </div>
