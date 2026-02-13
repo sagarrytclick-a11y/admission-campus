@@ -98,22 +98,19 @@ export default function CollegesPage() {
             </div>
 
             {/* Filter Bar */}
-            <div className="max-w-5xl mx-auto px-4 w-full flex justify-center items-center">
-              <div className="bg-white w-full rounded-[32px] p-3 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.2)]">
-                <div className="flex flex-col md:flex-row items-center justify-center gap-3">
-
-                  {/* Search Input Container - MD par zyada space lega */}
-                  <div className="relative w-full md:flex-[2.5]">
-                    <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-[#1A4AB2] h-5 w-5" />
+            <div className="max-w-2xl mx-auto px-4 w-full flex justify-center items-center">
+              <div className="bg-white w-full rounded-2xl p-2 shadow-xl">
+                <div className="flex items-center gap-2">
+                  {/* Search Input Container */}
+                  <div className="relative flex-1">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#1A4AB2] h-4 w-4" />
                     <Input
-                      placeholder="SEARCH BY INSTITUTION NAME..."
+                      placeholder="Search colleges..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-14 h-16 w-full bg-slate-50 border-none rounded-[24px] text-[12px] font-bold uppercase tracking-wider placeholder:text-slate-400 focus-visible:ring-2 focus-visible:ring-[#1A4AB2]/20"
+                      className="pl-10 h-12 w-full bg-transparent border-none rounded-xl text-sm font-medium placeholder:text-slate-400 focus-visible:ring-0"
                     />
                   </div>
-
-              
                 </div>
               </div>
             </div>

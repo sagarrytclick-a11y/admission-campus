@@ -14,7 +14,6 @@ import {
   AlertCircle,
   RefreshCw,
   BookOpen,
-  ChevronRight
 } from 'lucide-react'
 import { useBlogs } from '@/hooks/useBlogs'
 
@@ -51,144 +50,169 @@ export default function BlogsPage() {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* HERO SECTION - Slate 950 Academic Theme */}
-      <header className="relative pt-32 pb-20 bg-slate-950 overflow-hidden">
-        <div className="absolute inset-0 opacity-10 pointer-events-none">
-          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(#1A4AB2_1px,transparent_1px)] [background-size:30px_30px]"></div>
-        </div>
-        
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-2 bg-[#1A4AB2] text-white px-5 py-2 rounded-full text-[11px] font-black uppercase tracking-widest mb-8 shadow-xl shadow-blue-900/20">
-              <BookOpen size={14} className="text-[#FACC15]" /> Knowledge Hub
-            </div>
-            <h1 className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tighter uppercase">
-              INSIGHTS & <span className="text-[#FACC15]">GUIDES</span>
-            </h1>
-            <p className="text-slate-400 text-sm md:text-base max-w-2xl mx-auto font-medium uppercase tracking-wider leading-relaxed mb-12">
-              Expert advice and global education trends curated by our senior consultants.
-            </p>
-            
-            {/* Filter/Search Bar Glassmorphism */}
-         <div className="max-w-5xl mx-auto px-4">
-  <div className="bg-white rounded-[32px] p-3 shadow-2xl border border-slate-100">
-    <div className="flex flex-col md:flex-row items-center justify-center gap-3">
-      
-      {/* 1. SEARCH INPUT - MD par zyada space lega */}
-      <div className="relative w-full md:flex-[2.5] flex items-center">
-        <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-[#1A4AB2] h-5 w-5 z-10" />
-        <Input
-          placeholder="SEARCH FOR TOPICS, GUIDES, NEWS..."
-          value={searchTerm}
-          onChange={e => setSearchTerm(e.target.value)}
-          className="pl-14 h-16 w-full bg-slate-50 border-none rounded-[24px] text-[12px] font-bold uppercase tracking-wider placeholder:text-slate-400 focus-visible:ring-2 focus-visible:ring-[#1A4AB2]/20"
-        />
-      </div>
 
-      {/* 2. SELECT & 3. RESET BUTTON - MD par grouped aur centered rahenge */}
-      <div className="flex items-center justify-center w-full md:flex-[1.5] gap-2">
-        <div className="flex-1">
-          <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-            <SelectTrigger className="h-16 w-full bg-slate-50 border-none rounded-[24px] text-[11px] font-black uppercase tracking-widest px-6 focus:ring-0">
-              <SelectValue placeholder="CATEGORY" />
-            </SelectTrigger>
-            <SelectContent className="rounded-2xl border-slate-100 shadow-2xl">
-              <SelectItem value="all" className="text-[11px] font-bold">ALL TOPICS</SelectItem>
-              {categories.map(cat => (
-                <SelectItem key={cat} value={cat} className="text-[11px] font-bold uppercase">{cat}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+      {/* HERO SECTION - Slate 950 Academic Theme */}
+   {/* HERO SECTION - Updated for Perfect Centering */}
+<header className="relative min-h-[520px] md:min-h-[650px] flex flex-col items-center justify-center bg-slate-950 overflow-hidden px-4 sm:px-6">
+
+  {/* Background Grid */}
+  <div className="absolute inset-0 opacity-10 pointer-events-none">
+    <div className="absolute inset-0 bg-[radial-gradient(#1A4AB2_1px,transparent_1px)] [background-size:28px_28px] md:[background-size:30px_30px]"></div>
+  </div>
+
+  <div className="relative z-10 w-full max-w-4xl mx-auto text-center">
+
+    {/* Badge */}
+    <div className="inline-flex items-center gap-2 bg-[#1A4AB2] text-white px-4 sm:px-5 py-2 rounded-full text-[10px] sm:text-[11px] font-black uppercase tracking-widest mb-6 sm:mb-8 shadow-xl shadow-blue-900/20">
+      <BookOpen size={14} className="text-[#FACC15]" />
+      Knowledge Hub
+    </div>
+
+    {/* Title */}
+    <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-black text-white mb-4 sm:mb-6 tracking-tight uppercase leading-tight">
+      INSIGHTS & <span className="text-[#FACC15]">GUIDES</span>
+    </h1>
+
+    {/* Subtitle */}
+    <p className="text-slate-400 text-xs sm:text-sm md:text-base max-w-xl md:max-w-2xl mx-auto font-medium uppercase tracking-wide leading-relaxed mb-8 sm:mb-12">
+      Expert advice and global education trends curated by our senior consultants.
+    </p>
+
+    {/* SEARCH + FILTER */}
+    <div className="w-full max-w-3xl mx-auto">
+      <div className="bg-white rounded-2xl p-3 shadow-2xl border border-slate-100 flex flex-col md:flex-row gap-3 items-stretch">
+
+        {/* SEARCH */}
+        <div className="relative flex-1 flex items-center">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#1A4AB2] h-4 w-4" />
+          <Input
+            placeholder="Search articles..."
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+            className="pl-10 h-12 sm:h-14 w-full bg-transparent border-none rounded-xl text-sm placeholder:text-slate-400 focus-visible:ring-0"
+          />
         </div>
 
+        {/* SELECT */}
+        <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+          <SelectTrigger className="h-12 sm:h-14 w-full md:w-48 bg-slate-50 border-none rounded-xl text-[10px] sm:text-[11px] font-black uppercase tracking-widest px-4 sm:px-6 focus:ring-0">
+            <SelectValue placeholder="Category" />
+          </SelectTrigger>
+          <SelectContent className="rounded-2xl border-slate-100 shadow-2xl">
+            <SelectItem value="all" className="text-[11px] font-bold">
+              ALL TOPICS
+            </SelectItem>
+            {categories.map(cat => (
+              <SelectItem
+                key={cat}
+                value={cat}
+                className="text-[11px] font-bold uppercase"
+              >
+                {cat}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        {/* RESET */}
         <Button
           variant="ghost"
-          onClick={() => { setSearchTerm(''); setSelectedCategory('all') }}
-          className="h-16 w-16 flex-shrink-0 bg-slate-100 hover:bg-[#1A4AB2] hover:text-white rounded-[24px] transition-all flex items-center justify-center"
+          onClick={() => {
+            setSearchTerm('')
+            setSelectedCategory('all')
+          }}
+          className="h-12 sm:h-14 w-full md:w-14 bg-slate-100 hover:bg-[#1A4AB2] hover:text-white rounded-xl transition-all flex items-center justify-center shrink-0"
         >
-          <X size={20} />
+          <X size={18} />
         </Button>
-      </div>
 
+      </div>
     </div>
+
   </div>
-</div>
-          </div>
-        </div>
-      </header>
+</header>
+
 
       {/* BLOG GRID */}
-      <main className="max-w-7xl mx-auto px-6 py-20">
-        {filteredBlogs.length === 0 ? (
-          <div className="text-center py-32 bg-white rounded-[40px] border-2 border-dashed border-slate-200">
-             <FileText size={48} className="text-slate-200 mx-auto mb-6" />
-             <h3 className="text-xl font-black text-slate-900 uppercase">No articles found</h3>
-             <p className="text-slate-500 text-[11px] font-black uppercase tracking-widest mt-2">Try adjusting your filters</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredBlogs.map(blog => (
-              <article
-                key={blog._id}
-                className="group bg-white rounded-[40px] border border-slate-100 overflow-hidden hover:shadow-[0_40px_80px_-20px_rgba(26,74,178,0.15)] transition-all duration-500 hover:-translate-y-2 flex flex-col"
-              >
-                {/* Image Container */}
-                <Link
-                  href={`/blogs/${blog.slug}`}
-                  className="relative aspect-[16/10] overflow-hidden bg-slate-100"
-                >
-                  <img
-                    src={blog.image || `https://picsum.photos/seed/${blog.slug}/600/400`}
-                    alt={blog.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  />
-                  <div className="absolute top-5 left-5">
-                    <span className="bg-[#1A4AB2] text-white text-[9px] font-black uppercase tracking-[0.15em] px-4 py-1.5 rounded-full shadow-lg">
-                      {blog.category}
-                    </span>
-                  </div>
-                </Link>
+     <main className="max-w-7xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
 
-                <div className="p-8 flex-1 flex flex-col">
-                  {/* Date & Meta */}
-                  <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4">
-                    <span>{new Date(blog.published_at || blog.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
-                  </div>
-
-                  {/* Title */}
-                  <h2 className="text-xl font-black text-slate-950 leading-tight group-hover:text-[#1A4AB2] transition-colors mb-4 uppercase tracking-tight line-clamp-2">
-                    {blog.title}
-                  </h2>
-
-                  {/* Excerpt */}
-                  <p className="text-slate-500 text-sm font-medium line-clamp-3 mb-8">
-                    {blog.content}
-                  </p>
-
-                  {/* Footer */}
-                  <div className="mt-auto pt-6 border-t border-slate-50 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100">
-                        <User size={18} className="text-[#1A4AB2]" />
-                      </div>
-                      <span className="text-[11px] font-black text-slate-900 uppercase tracking-tighter">
-                        {blog.author || 'ACADEMIC TEAM'}
-                      </span>
-                    </div>
-
-                    <Link
-                      href={`/blogs/${blog.slug}`}
-                      className="bg-[#FACC15] p-3 rounded-xl text-slate-950 hover:bg-[#1A4AB2] hover:text-white transition-all shadow-md active:scale-95"
-                    >
-                      <ArrowRight size={18} />
-                    </Link>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        )}
-      </main>
+  {filteredBlogs.length === 0 ? (
+    <div className="text-center py-20 sm:py-32 bg-white rounded-3xl sm:rounded-[40px] border-2 border-dashed border-slate-200">
+      <FileText size={40} className="text-slate-200 mx-auto mb-6" />
+      <h3 className="text-lg sm:text-xl font-black text-slate-900 uppercase">
+        No articles found
+      </h3>
+      <p className="text-slate-500 text-[10px] sm:text-[11px] font-black uppercase tracking-widest mt-2">
+        Try adjusting your filters
+      </p>
     </div>
+  ) : (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+      {filteredBlogs.map(blog => (
+        <article
+          key={blog._id}
+          className="group bg-white rounded-3xl sm:rounded-[40px] border border-slate-100 overflow-hidden hover:shadow-[0_30px_60px_-20px_rgba(26,74,178,0.15)] transition-all duration-500 hover:-translate-y-2 flex flex-col"
+        >
+
+          <Link
+            href={`/blogs/${blog.slug}`}
+            className="relative aspect-[16/10] overflow-hidden bg-slate-100"
+          >
+            <img
+              src={blog.image || `https://picsum.photos/seed/${blog.slug}/600/400`}
+              alt={blog.title}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+            />
+            <div className="absolute top-4 left-4">
+              <span className="bg-[#1A4AB2] text-white text-[9px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full shadow-lg">
+                {blog.category}
+              </span>
+            </div>
+          </Link>
+
+          <div className="p-6 sm:p-8 flex-1 flex flex-col">
+
+            <div className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3">
+              {new Date(blog.published_at || blog.createdAt).toLocaleDateString()}
+            </div>
+
+            <h2 className="text-lg sm:text-xl font-black text-slate-950 leading-tight group-hover:text-[#1A4AB2] transition-colors mb-4 uppercase line-clamp-2">
+              {blog.title}
+            </h2>
+
+            <p className="text-slate-500 text-sm line-clamp-3 mb-6">
+              {blog.content}
+            </p>
+
+            <div className="mt-auto pt-5 border-t border-slate-100 flex items-center justify-between">
+
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full bg-slate-50 flex items-center justify-center border">
+                  <User size={16} className="text-[#1A4AB2]" />
+                </div>
+                <span className="text-[10px] sm:text-[11px] font-black uppercase">
+                  {blog.author || 'ACADEMIC TEAM'}
+                </span>
+              </div>
+
+              <Link
+                href={`/blogs/${blog.slug}`}
+                className="bg-[#FACC15] p-2.5 sm:p-3 rounded-xl text-slate-950 hover:bg-[#1A4AB2] hover:text-white transition-all shadow-md active:scale-95"
+              >
+                <ArrowRight size={16} />
+              </Link>
+
+            </div>
+
+          </div>
+        </article>
+      ))}
+    </div>
+  )}
+
+</main>
+
+    </div >
   )
 }
 

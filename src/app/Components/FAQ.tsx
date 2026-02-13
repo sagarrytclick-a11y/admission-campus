@@ -12,8 +12,8 @@ import {
 import { useFormModal } from "@/context/FormModalContext";
 
 // Strict Brand Theme
-const PRIMARY_BLUE = "#1A4AB2"; 
-const ACCENT_GOLD = "#FACC15";  
+const PRIMARY_BLUE = "#1A4AB2";
+const ACCENT_GOLD = "#FACC15";
 
 const FAQ = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -30,13 +30,13 @@ const FAQ = () => {
 
   const faqs = [
     {
-      question: "What services does Alpha World Education provide?",
-      answer: "We provide end-to-end study abroad support including university admissions, visa assistance, scholarships, documentation, pre-departure guidance, and post-arrival support.",
+      question: "What services does Admission Campus provide?",
+      answer: "We provide comprehensive admission support including university applications, visa assistance, scholarship guidance, documentation help, pre-departure orientation, and post-admission support for students.",
       category: "benefits"
     },
     {
-      question: "How do I apply through Alpha World Education?",
-      answer: "The process includes profile evaluation, course & country selection, document preparation, university applications, offer acceptance, visa filing, and departure support.",
+      question: "How do I apply through Admission Campus?",
+      answer: "Our streamlined process includes profile assessment, course selection, document preparation, application submission, offer management, visa processing, and enrollment support.",
       category: "process"
     },
     {
@@ -78,8 +78,8 @@ const FAQ = () => {
             Frequently Asked <span className="text-[#1A4AB2]">Questions</span>
           </h2>
           <p className="text-slate-600 max-w-2xl mx-auto text-lg leading-relaxed">
-            Clear answers to common questions about studying abroad. 
-            We're here to simplify your path to international education.
+            Clear answers to common questions about college admissions and applications.
+            We're here to simplify your path to higher education success.
           </p>
         </div>
 
@@ -92,11 +92,10 @@ const FAQ = () => {
                 setActiveCategory(cat.id);
                 setOpenIndex(null);
               }}
-              className={`px-8 py-3 rounded-full text-[11px] font-black uppercase tracking-widest transition-all duration-300 border ${
-                activeCategory === cat.id
+              className={`px-8 py-3 rounded-full text-[11px] font-black uppercase tracking-widest transition-all duration-300 border ${activeCategory === cat.id
                   ? "bg-[#1A4AB2] text-white border-[#1A4AB2] shadow-xl shadow-blue-900/20"
                   : "bg-white text-slate-500 border-slate-200 hover:border-[#1A4AB2] hover:text-[#1A4AB2]"
-              }`}
+                }`}
             >
               {cat.name}
             </button>
@@ -108,42 +107,36 @@ const FAQ = () => {
           {filteredFaqs.map((faq, index) => (
             <div
               key={index}
-              className={`group transition-all duration-500 rounded-[40px] border ${
-                openIndex === index 
-                ? "bg-white border-[#1A4AB2]/20 shadow-[0_30px_60px_rgba(26,74,178,0.08)]" 
-                : "bg-white border-slate-200 hover:border-[#1A4AB2]/30"
-              }`}
+              className={`group transition-all duration-500 rounded-[40px] border ${openIndex === index
+                  ? "bg-white border-[#1A4AB2]/20 shadow-[0_30px_60px_rgba(26,74,178,0.08)]"
+                  : "bg-white border-slate-200 hover:border-[#1A4AB2]/30"
+                }`}
             >
               <button
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
                 className="w-full px-10 py-8 flex justify-between items-center text-left"
               >
                 <div className="flex items-center gap-6">
-                  <div className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all duration-500 ${
-                    openIndex === index ? "bg-[#1A4AB2] text-white rotate-6" : "bg-[#1A4AB2]/5 text-[#1A4AB2]"
-                  }`}>
+                  <div className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all duration-500 ${openIndex === index ? "bg-[#1A4AB2] text-white rotate-6" : "bg-[#1A4AB2]/5 text-[#1A4AB2]"
+                    }`}>
                     <HelpCircle size={20} />
                   </div>
-                  <span className={`font-extrabold text-base transition-colors ${
-                    openIndex === index ? "text-slate-900" : "text-slate-700 group-hover:text-[#1A4AB2]"
-                  }`}>
+                  <span className={`font-extrabold text-base transition-colors ${openIndex === index ? "text-slate-900" : "text-slate-700 group-hover:text-[#1A4AB2]"
+                    }`}>
                     {faq.question}
                   </span>
                 </div>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center border transition-all ${
-                  openIndex === index ? "border-[#1A4AB2] bg-[#1A4AB2]/5 rotate-180" : "border-slate-200"
-                }`}>
-                   <ChevronDown
-                    className={`w-5 h-5 transition-transform duration-300 ${
-                      openIndex === index ? "text-[#1A4AB2]" : "text-slate-400"
-                    }`}
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center border transition-all ${openIndex === index ? "border-[#1A4AB2] bg-[#1A4AB2]/5 rotate-180" : "border-slate-200"
+                  }`}>
+                  <ChevronDown
+                    className={`w-5 h-5 transition-transform duration-300 ${openIndex === index ? "text-[#1A4AB2]" : "text-slate-400"
+                      }`}
                   />
                 </div>
               </button>
 
-              <div className={`overflow-hidden transition-all duration-500 ${
-                openIndex === index ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-              }`}>
+              <div className={`overflow-hidden transition-all duration-500 ${openIndex === index ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+                }`}>
                 <div className={`px-20 pb-8 text-slate-600 text-sm leading-relaxed`}>
                   {faq.answer}
                 </div>
@@ -155,7 +148,7 @@ const FAQ = () => {
         {/* CTA Footer Section */}
         <div className="mt-24 bg-slate-900 rounded-[50px] p-12 md:p-20 text-center relative overflow-hidden shadow-2xl">
           <div className="absolute top-0 right-0 w-80 h-80 bg-[#1A4AB2] opacity-10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
-          
+
           <div className="relative z-10">
             <div className="w-16 h-16 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl flex items-center justify-center text-[#FACC15] mx-auto mb-8 shadow-inner">
               <MessageSquare size={30} />
@@ -164,7 +157,7 @@ const FAQ = () => {
               Still have questions?
             </h3>
             <p className="text-slate-400 max-w-2xl mx-auto mb-10 text-base leading-relaxed">
-              Speak with our certified education consultants and get a personalised roadmap for your international career.
+              Speak with our expert admission counselors and get a personalized roadmap for your academic journey.
             </p>
 
             <div className="flex flex-col sm:flex-row justify-center gap-6">

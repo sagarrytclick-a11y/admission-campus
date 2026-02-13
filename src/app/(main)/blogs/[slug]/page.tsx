@@ -54,10 +54,10 @@ const BlogDetailPage = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-white flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <RefreshCw className="w-8 h-8 text-[#1A4AB2] animate-spin mx-auto mb-4" />
-          <p className="text-slate-600 font-medium">Loading article...</p>
+          <div className="w-8 h-8 border-3 border-slate-200 border-t-[#1A4AB2] rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-slate-600">Loading article...</p>
         </div>
       </div>
     )
@@ -65,40 +65,32 @@ const BlogDetailPage = () => {
 
   if (error || !blog) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-white flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center max-w-md mx-auto px-4">
           <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
             <FileText size={24} className="text-red-500" />
           </div>
           <h2 className="text-2xl font-bold text-slate-900 mb-2">
-            {error instanceof Error && error.message === 'Blog not found' ? 'Article not found' : 'Failed to Load Article'}
+            Article not found
           </h2>
           <p className="text-slate-500 mb-6">
-            {error instanceof Error ? error.message : 'The article you are looking for does not exist.'}
+            The article you are looking for does not exist.
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button 
-              onClick={() => refetch()}
-              className="bg-[#1A4AB2] hover:bg-[#1A4AB2]/90 text-white"
-            >
-              Try Again
+          <Link href="/blogs">
+            <Button className="bg-[#1A4AB2] hover:bg-[#1A4AB2]/90 text-white">
+              Back to Articles
             </Button>
-            <Link href="/blogs">
-              <Button variant="outline" className="border-[#1A4AB2] text-[#1A4AB2] hover:bg-[#1A4AB2]/10">
-                Back to Articles
-              </Button>
-            </Link>
-          </div>
+          </Link>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-white">
-      {/* Header - Simplified */}
-      <div className="bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm sticky top-0 z-50">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6">
+    <div className="min-h-screen bg-white">
+      {/* Simple Header */}
+      <div className="border-b border-slate-100">
+        <div className="max-w-4xl mx-auto px-6 py-8">
           <Link href="/blogs">
             <Button variant="ghost" className="mb-4 text-slate-500 hover:text-[#1A4AB2] font-medium flex gap-2">
               <ArrowLeft size={16} />
@@ -106,48 +98,46 @@ const BlogDetailPage = () => {
             </Button>
           </Link>
           
-          <div className="flex flex-wrap gap-2 sm:gap-3 mb-3 sm:mb-4">
-            <Badge className="bg-[#1A4AB2]/10 text-[#1A4AB2] border-none px-3 sm:px-4 py-1 rounded-full text-xs sm:text-sm font-semibold">
+          <div className="flex flex-wrap gap-2 mb-4">
+            <span className="bg-[#1A4AB2]/10 text-[#1A4AB2] px-3 py-1 rounded-full text-sm font-medium">
               {blog.category}
-            </Badge>
+            </span>
             {blog.tags.map((tag) => (
-              <span key={tag} className="text-xs font-medium bg-[#FACC15]/10 text-[#FACC15]/80 px-2 sm:px-3 py-1 rounded-lg border border-[#FACC15]/20">
+              <span key={tag} className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-sm">
                 #{tag}
               </span>
             ))}
           </div>
           
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 mb-4 sm:mb-6 leading-tight">
+          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
             {blog.title}
           </h1>
           
-          {/* Meta Info - Simplified */}
+          {/* Meta Info */}
           <div className="flex flex-wrap items-center gap-6 text-sm text-slate-500">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-[#1A4AB2]/10 flex items-center justify-center">
-                <User size={16} className="text-[#1A4AB2]" />
-              </div>
-              <span className="font-medium">{blog.author || 'Alpha World Team'}</span>
+              <User size={16} />
+              <span>{blog.author || 'Academic Team'}</span>
             </div>
             <div className="flex items-center gap-2">
-              <Calendar size={16} className="text-slate-400" />
-              <span className="font-medium">
+              <Calendar size={16} />
+              <span>
                 {blog.published_at ? new Date(blog.published_at).toLocaleDateString() : new Date(blog.createdAt).toLocaleDateString()}
               </span>
             </div>
             {blog.read_time && (
               <div className="flex items-center gap-2">
-                <Clock size={16} className="text-slate-400" />
-                <span className="font-medium">{blog.read_time} min read</span>
+                <Clock size={16} />
+                <span>{blog.read_time} min read</span>
               </div>
             )}
           </div>
         </div>
       </div>
 
-      {/* Featured Image - Simplified */}
+      {/* Featured Image */}
       {blog.image && (
-        <div className="relative h-80 w-full overflow-hidden bg-gradient-to-br from-[#1A4AB2]/5 to-[#FACC15]/5">
+        <div className="relative h-96 w-full overflow-hidden bg-slate-100">
           <img
             src={blog.image.startsWith('http') ? blog.image : `/images/${blog.image}`}
             alt={blog.title}
@@ -160,35 +150,35 @@ const BlogDetailPage = () => {
         </div>
       )}
 
-      {/* Content - Simplified */}
+      {/* Content */}
       <div className="max-w-4xl mx-auto px-6 py-12">
-        <div className="bg-white rounded-2xl border border-slate-200 p-8 md:p-12 shadow-lg">
+        <div className="prose prose-lg max-w-none">
           <div 
-            className="text-slate-700 leading-relaxed text-lg"
+            className="text-slate-700 leading-relaxed"
             dangerouslySetInnerHTML={{ 
               __html: blog.content.replace(/\n/g, '<br />') 
             }}
           />
-
-          {/* Related Exams - Simplified */}
-          {blog.related_exams.length > 0 && (
-            <div className="mt-12 p-6 bg-gradient-to-br from-[#1A4AB2]/10 to-[#FACC15]/10 rounded-xl border border-[#1A4AB2]/20">
-              <h3 className="font-semibold text-[#1A4AB2] mb-4">Related Exams</h3>
-              <div className="flex flex-wrap gap-3">
-                {blog.related_exams.map((exam) => (
-                  <span key={exam} className="text-sm font-medium bg-white text-[#1A4AB2] px-4 py-2 rounded-lg border border-[#1A4AB2]/20 hover:bg-[#1A4AB2]/5 transition-colors">
-                    {exam}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
 
-        {/* Back to Blogs - Simplified */}
+        {/* Related Exams */}
+        {blog.related_exams.length > 0 && (
+          <div className="mt-12 p-6 bg-slate-50 rounded-xl">
+            <h3 className="font-semibold text-slate-900 mb-4">Related Exams</h3>
+            <div className="flex flex-wrap gap-3">
+              {blog.related_exams.map((exam) => (
+                <span key={exam} className="bg-white text-[#1A4AB2] px-4 py-2 rounded-lg border border-slate-200 text-sm font-medium">
+                  {exam}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Back to Blogs */}
         <div className="mt-12 text-center">
           <Link href="/blogs">
-            <Button className="bg-gradient-to-r from-[#1A4AB2] to-[#1A4AB2]/90 hover:from-[#1A4AB2]/90 hover:to-[#1A4AB2] text-white font-semibold rounded-xl px-8 py-3 shadow-lg shadow-[#1A4AB2]/20">
+            <Button className="bg-[#1A4AB2] hover:bg-[#1A4AB2]/90 text-white px-8 py-3">
               Read More Articles
             </Button>
           </Link>

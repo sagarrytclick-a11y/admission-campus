@@ -182,17 +182,31 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
     error,
     refetch
   } = useCollege(slug);
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-[#1A4AB2] border-t-[#1A4AB2] rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-slate-500 font-medium text-sm">Loading College...</p>
+if (isLoading) {
+  return (
+    <div className="min-h-screen bg-slate-50 p-8 space-y-6">
+      {/* Header Skeleton */}
+      <div className="flex items-center space-x-4 animate-pulse">
+        <div className="w-20 h-20 bg-slate-200 rounded-lg"></div>
+        <div className="flex-1 space-y-3">
+          <div className="h-6 bg-slate-200 rounded w-1/3"></div>
+          <div className="h-4 bg-slate-200 rounded w-1/2"></div>
         </div>
       </div>
-    )
-  }
+      
+      {/* Content Skeleton */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="h-40 bg-white border border-slate-100 rounded-xl p-4 animate-pulse">
+            <div className="h-4 bg-slate-200 rounded w-3/4 mb-4"></div>
+            <div className="h-3 bg-slate-100 rounded w-full mb-2"></div>
+            <div className="h-3 bg-slate-100 rounded w-5/6"></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
 
   if (error || !college) {
     return (
@@ -643,7 +657,7 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
                       </div>
                       <button
                         onClick={openModal}
-                        className="bg-white text-[#1A4AB2] font-semibold px-6 py-3 rounded-lg hover:bg-[#1A4AB2]/10 transition-colors"
+                        className="bg-white text-[#1A4AB2] font-semibold px-6 py-3 rounded-lg hover:bg-black hover:text-white transition-colors"
                       >
                         Get Free Assistance
                       </button>
