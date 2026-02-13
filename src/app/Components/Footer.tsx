@@ -125,8 +125,8 @@ const Footer = () => {
           </div>
           
           <div className="flex gap-8 text-[10px] font-bold uppercase tracking-widest">
-            <Link href="/privacy-policy" className="hover:text-white transition-colors">Privacy</Link>
-            <Link href="/terms-conditions" className="hover:text-white transition-colors">Terms</Link>
+            <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>
+            <Link href="/term" className="hover:text-white transition-colors">Terms</Link>
             <Link href="/contact" className="hover:text-white transition-colors">Support</Link>
           </div>
         </div>
