@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Plus, GraduationCap, Search, Filter } from 'lucide-react'
+import { Plus, GraduationCap, Search, Filter, ChevronLeft, ChevronRight } from 'lucide-react'
 import { dummyCountries } from '@/data/dummyData'
 import { generateSlug } from '@/lib/slug'
 import { useAdminColleges, useAdminCountries, useSaveCollege, useDeleteCollege } from '@/hooks/useAdminColleges'
@@ -101,6 +101,8 @@ export default function CollegesPage() {
   const [collegeToDelete, setCollegeToDelete] = useState<College | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCountry, setSelectedCountry] = useState<string>('all')
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 10
   
   // TanStack Query hooks
   const { data: colleges = [], isLoading: dataLoading, error: collegesError } = useAdminColleges()
@@ -188,6 +190,20 @@ export default function CollegesPage() {
 
     return filtered
   }, [colleges, searchTerm, selectedCountry])
+
+  // Pagination logic
+  const paginatedColleges = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage
+    const endIndex = startIndex + itemsPerPage
+    return filteredColleges.slice(startIndex, endIndex)
+  }, [filteredColleges, currentPage])
+
+  const totalPages = Math.ceil(filteredColleges.length / itemsPerPage)
+
+  // Reset to page 1 when filters change
+  useMemo(() => {
+    setCurrentPage(1)
+  }, [searchTerm, selectedCountry])
 
   const columns = [
     {
@@ -812,12 +828,71 @@ export default function CollegesPage() {
 
         {/* Colleges Table */}
         <AdminTable
-          data={filteredColleges}
+          data={paginatedColleges}
           columns={columns}
           actions={actions}
           loading={dataLoading}
           emptyMessage="No colleges found. Add your first college to get started."
         />
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-between">
+            <div className="text-sm text-gray-500">
+              Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, filteredColleges.length)} of {filteredColleges.length} colleges
+            </div>
+            <div className="flex items-center space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="flex items-center space-x-1"
+              >
+                <ChevronLeft className="h-4 w-4" />
+                <span>Previous</span>
+              </Button>
+              
+              <div className="flex items-center space-x-1">
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  let pageNum
+                  if (totalPages <= 5) {
+                    pageNum = i + 1
+                  } else if (currentPage <= 3) {
+                    pageNum = i + 1
+                  } else if (currentPage >= totalPages - 2) {
+                    pageNum = totalPages - 4 + i
+                  } else {
+                    pageNum = currentPage - 2 + i
+                  }
+                  
+                  return (
+                    <Button
+                      key={pageNum}
+                      variant={currentPage === pageNum ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setCurrentPage(pageNum)}
+                      className="w-8 h-8 p-0"
+                    >
+                      {pageNum}
+                    </Button>
+                  )
+                })}
+              </div>
+              
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className="flex items-center space-x-1"
+              >
+                <span>Next</span>
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        )}
 
         {/* Add/Edit Modal */}
         <AdminModal
