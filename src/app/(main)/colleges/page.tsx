@@ -1,13 +1,13 @@
 'use client'
 
-import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 import { getCountrySlug, getCountryName } from "@/lib/normalize"
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Search, X, ArrowRight, AlertCircle, RefreshCw, Award, Calendar, GraduationCap } from 'lucide-react'
-import { useInfiniteColleges } from '@/hooks/useColleges'
+import { Search, X, ArrowRight, AlertCircle, RefreshCw, Award, Calendar, GraduationCap, ChevronLeft, ChevronRight } from 'lucide-react'
+import { useAllColleges } from '@/hooks/useColleges'
 import BackgroundSlider from '@/components/BackgroundSlider'
 
 // Theme Constants
@@ -18,50 +18,38 @@ export default function CollegesPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCountry, setSelectedCountry] = useState<string>('all')
   const [selectedExam, setSelectedExam] = useState<string>('all')
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
-
-  const observer = useRef<IntersectionObserver | null>(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 10
 
   const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
+    data: collegesResponse = { colleges: [], total: 0, page: 1, totalPages: 1, hasMore: false },
     isLoading,
     isError,
     error,
     refetch
-  } = useInfiniteColleges(debouncedSearchTerm, selectedCountry, selectedExam)
+  } = useAllColleges(searchTerm, selectedCountry, selectedExam)
 
-  const colleges = useMemo(() =>
-    data?.pages.flatMap(page => page.colleges) || [], [data]
-  )
+  const colleges = collegesResponse.colleges
 
+  // Reset to page 1 when filters change
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearchTerm(searchTerm)
-    }, 500)
-    return () => clearTimeout(timer)
-  }, [searchTerm])
+    setCurrentPage(1)
+  }, [searchTerm, selectedCountry, selectedExam])
 
-  const lastCollegeRef = useCallback((node: HTMLDivElement | null) => {
-    if (isFetchingNextPage) return
-    if (observer.current) observer.current.disconnect()
-
-    observer.current = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting && hasNextPage) {
-        fetchNextPage()
-      }
-    }, { rootMargin: '100px', threshold: 0.1 })
-
-    if (node) observer.current.observe(node)
-  }, [isFetchingNextPage, hasNextPage, fetchNextPage])
+  // Pagination logic
+  const { paginatedColleges, totalPages } = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage
+    const endIndex = startIndex + itemsPerPage
+    const paginated = colleges.slice(startIndex, endIndex)
+    const pages = Math.ceil(colleges.length / itemsPerPage)
+    return { paginatedColleges: paginated, totalPages: pages }
+  }, [colleges, currentPage])
 
   const { countries, exams } = useMemo(() => {
     const countrySet = new Set(
-      colleges.map(c => typeof c.country_ref === "object" ? c.country_ref.name : c.country_ref).filter(Boolean)
+      colleges.map((c: any) => typeof c.country_ref === "object" ? c.country_ref.name : c.country_ref).filter(Boolean)
     )
-    const examSet = new Set(colleges.flatMap(college => college.exams))
+    const examSet = new Set(colleges.flatMap((college: any) => college.exams))
     return {
       countries: Array.from(countrySet) as string[],
       exams: Array.from(examSet) as string[]
@@ -129,13 +117,13 @@ export default function CollegesPage() {
             <p className="text-slate-500 text-xs font-bold uppercase mt-2">Try adjusting your filters or search term</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {colleges.map((college, index) => (
-              <div
-                key={college._id}
-                ref={index === colleges.length - 1 ? lastCollegeRef : null}
-                className="group bg-white rounded-[40px] border border-slate-100 overflow-hidden hover:shadow-[0_40px_80px_-20px_rgba(26,74,178,0.15)] transition-all duration-500 hover:-translate-y-2"
-              >
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {paginatedColleges.map((college: any) => (
+                <div
+                  key={college._id}
+                  className="group bg-white rounded-[40px] border border-slate-100 overflow-hidden hover:shadow-[0_40px_80px_-20px_rgba(26,74,178,0.15)] transition-all duration-500 hover:-translate-y-2"
+                >
                 {/* Banner */}
                 <div className="relative h-60 overflow-hidden">
                   <img
@@ -158,7 +146,7 @@ export default function CollegesPage() {
                   </h3>
 
                   <div className="flex flex-wrap gap-2 mb-6">
-                    {college.exams.slice(0, 2).map((exam) => (
+                    {college.exams.slice(0, 2).map((exam: any) => (
                       <span key={exam} className="text-[9px] font-black bg-slate-50 text-slate-600 px-3 py-1.5 rounded-lg border border-slate-100 uppercase tracking-tighter">
                         {exam}
                       </span>
@@ -194,26 +182,70 @@ export default function CollegesPage() {
                   </Link>
                 </div>
               </div>
-            ))}
-          </div>
+              ))}
+            </div>
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-between mt-12">
+                <div className="text-sm text-slate-500">
+                  Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, colleges.length)} of {colleges.length} colleges
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
+                    className="flex items-center space-x-1"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                    <span>Previous</span>
+                  </Button>
+                  
+                  <div className="flex items-center space-x-1">
+                    {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                      let pageNum
+                      if (totalPages <= 5) {
+                        pageNum = i + 1
+                      } else if (currentPage <= 3) {
+                        pageNum = i + 1
+                      } else if (currentPage >= totalPages - 2) {
+                        pageNum = totalPages - 4 + i
+                      } else {
+                        pageNum = currentPage - 2 + i
+                      }
+                      
+                      return (
+                        <Button
+                          key={pageNum}
+                          variant={currentPage === pageNum ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setCurrentPage(pageNum)}
+                          className="w-8 h-8 p-0"
+                        >
+                          {pageNum}
+                        </Button>
+                      )
+                    })}
+                  </div>
+                  
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                    disabled={currentPage === totalPages}
+                    className="flex items-center space-x-1"
+                  >
+                    <span>Next</span>
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            )}
+          </>
         )}
 
-        {/* Loading Footer */}
-        {(isFetchingNextPage || hasNextPage) && (
-          <div className="flex justify-center mt-20">
-            <Button
-              onClick={() => fetchNextPage()}
-              disabled={isFetchingNextPage}
-              className="bg-white text-[#1A4AB2] border-2 border-[#1A4AB2]/10 hover:bg-[#1A4AB2] hover:text-white px-10 h-16 rounded-[24px] text-[11px] font-black uppercase tracking-widest transition-all"
-            >
-              {isFetchingNextPage ? (
-                <RefreshCw className="w-5 h-5 animate-spin" />
-              ) : (
-                'Load More Institutions'
-              )}
-            </Button>
-          </div>
-        )}
       </div>
     </div>
   )

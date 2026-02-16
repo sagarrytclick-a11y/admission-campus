@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useMemo } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -14,6 +14,8 @@ import {
   AlertCircle,
   RefreshCw,
   BookOpen,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react'
 import { useBlogs } from '@/hooks/useBlogs'
 
@@ -24,7 +26,14 @@ const ACCENT_GOLD = "#FACC15";
 export default function BlogsPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 10
   const { data: blogs = [], isLoading, error, refetch } = useBlogs()
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [searchTerm, selectedCategory])
 
   const filteredBlogs = useMemo(() => {
     return blogs.filter(blog => {
@@ -38,6 +47,15 @@ export default function BlogsPage() {
       return matchesCategory && matchesSearch
     })
   }, [blogs, searchTerm, selectedCategory])
+
+  // Pagination logic
+  const { paginatedBlogs, totalPages } = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage
+    const endIndex = startIndex + itemsPerPage
+    const paginated = filteredBlogs.slice(startIndex, endIndex)
+    const pages = Math.ceil(filteredBlogs.length / itemsPerPage)
+    return { paginatedBlogs: paginated, totalPages: pages }
+  }, [filteredBlogs, currentPage])
 
   const categories = useMemo(
     () => [...new Set(blogs.map(blog => blog.category))],
@@ -147,8 +165,9 @@ export default function BlogsPage() {
       </p>
     </div>
   ) : (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-      {filteredBlogs.map(blog => (
+    <>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        {paginatedBlogs.map(blog => (
         <article
           key={blog._id}
           className="group bg-white rounded-3xl sm:rounded-[40px] border border-slate-100 overflow-hidden hover:shadow-[0_30px_60px_-20px_rgba(26,74,178,0.15)] transition-all duration-500 hover:-translate-y-2 flex flex-col"
@@ -208,6 +227,66 @@ export default function BlogsPage() {
         </article>
       ))}
     </div>
+
+    {/* Pagination */}
+    {totalPages > 1 && (
+      <div className="flex items-center justify-between mt-12">
+        <div className="text-sm text-slate-500">
+          Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, filteredBlogs.length)} of {filteredBlogs.length} articles
+        </div>
+        <div className="flex items-center space-x-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            className="flex items-center space-x-1"
+          >
+            <ChevronLeft className="h-4 w-4" />
+            <span>Previous</span>
+          </Button>
+          
+          <div className="flex items-center space-x-1">
+            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+              let pageNum
+              if (totalPages <= 5) {
+                pageNum = i + 1
+              } else if (currentPage <= 3) {
+                pageNum = i + 1
+              } else if (currentPage >= totalPages - 2) {
+                pageNum = totalPages - 4 + i
+              } else {
+                pageNum = currentPage - 2 + i
+              }
+              
+              return (
+                <Button
+                  key={pageNum}
+                  variant={currentPage === pageNum ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setCurrentPage(pageNum)}
+                  className="w-8 h-8 p-0"
+                >
+                  {pageNum}
+                </Button>
+              )
+            })}
+          </div>
+          
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+            className="flex items-center space-x-1"
+          >
+            <span>Next</span>
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+    )}
+  </>
   )}
 
 </main>
