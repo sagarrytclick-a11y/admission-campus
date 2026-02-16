@@ -119,6 +119,49 @@ const fetchCollegeBySlug = async (slug: string): Promise<College> => {
   return result.data
 }
 
+// Hook for paginated colleges list
+export function useColleges(search: string, country: string, exam: string) {
+  return useQuery({
+    queryKey: ['colleges', 'paginated', search, country, exam],
+    queryFn: () => fetchColleges({ pageParam: 1, search, country, exam }),
+    staleTime: 2 * 60 * 1000, // 2 minutes
+    gcTime: 5 * 60 * 1000, // 5 minutes
+    retry: 2,
+    refetchOnWindowFocus: false,
+  })
+}
+
+// Hook for fetching all colleges (no limit) for client-side pagination
+export function useAllColleges(search: string, country: string, exam: string) {
+  return useQuery({
+    queryKey: ['colleges', 'all', search, country, exam],
+    queryFn: async () => {
+      const params = new URLSearchParams({
+        ...(search && { search }),
+        ...(country && country !== 'all' && { country }),
+        ...(exam && exam !== 'all' && { exam }),
+        limit: '1000' // Set a high limit to get all colleges
+      })
+
+      const response = await fetch(`/api/colleges?${params}`)
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      
+      const result = await response.json()
+      if (!result.success) {
+        throw new Error(result.message || 'Failed to fetch colleges')
+      }
+      
+      return result.data
+    },
+    staleTime: 2 * 60 * 1000, // 2 minutes
+    gcTime: 5 * 60 * 1000, // 5 minutes
+    retry: 2,
+    refetchOnWindowFocus: false,
+  })
+}
+
 // Hook for infinite scroll colleges list
 export function useInfiniteColleges(search: string, country: string, exam: string) {
   return useInfiniteQuery({
