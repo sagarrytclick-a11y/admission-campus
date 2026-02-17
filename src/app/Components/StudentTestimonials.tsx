@@ -9,31 +9,40 @@ const ACCENT_GOLD = "#FACC15";
 
 const studentTestimonials = [
   {
-    name: "Priya Sharma",
-    university: "University of Toronto",
-    country: "Canada",
+    name: "Aditi Iyer",
+    university: "IIT Madras",
+    department: "Computer Science",
+    year: "2024",
+    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=400&auto=format&fit=crop",
+    testimonial: "The research culture and competitive environment at IITM pushed me beyond my limits. The career cell was instrumental in helping me navigate the high-pressure placement season.",
+    achievement: "Secured ₹45 LPA package at Microsoft India"
+  },
+  {
+    name: "Ishaan Malhotra",
+    university: "BITS Pilani",
+    department: "Mechanical Engineering",
     year: "2023",
-    image: "https://media.licdn.com/dms/image/v2/D5603AQG0ZLPi9ae_Hw/profile-displayphoto-scale_200_200/B56ZuNvWPuGsAY-/0/1767609562726?e=2147483647&v=beta&t=Xe_YMbiNknI6J0SwLTIcRqZpEqMXSf-1ktVtRHmBaRg",
-    testimonial: "Alpha World Education made my dream of studying in Canada come true! Their guidance throughout the application process was exceptional.",
-    achievement: "Secured 100% scholarship worth ₹15 lakhs"
+    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=400&auto=format&fit=crop",
+    testimonial: "BITS' 'Zero Attendance' policy and the Practice School (PS) program gave me the freedom to work on my startup while gaining industry experience at top firms.",
+    achievement: "Founded a Deep-Tech startup, raised ₹2 Cr in seed funding"
   },
   {
-    name: "Rahul Patel",
-    university: "Technical University of Munich",
-    country: "Germany",
-    year: "2022",
+    name: "Sneha Kapoor",
+    university: "SRM Institute of Science & Technology",
+    department: "Electronics & Comm.",
+    year: "2024",
+    image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=400&auto=format&fit=crop",
+    testimonial: "Coming from a small town, the exposure at SRM was life-changing. I had the chance to work on the student satellite project which was a dream come true.",
+    achievement: "All India Rank (AIR) 15 in GATE 2024"
+  },
+  {
+    name: "Vikram Mehra",
+    university: "Delhi Technological University (DTU)",
+    department: "Information Technology",
+    year: "2023",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop",
-    testimonial: "The team helped me secure admission to TU Munich with minimal tuition fees. Expertise in German education system is unmatched.",
-    achievement: "Job offer from BMW within 6 months"
-  },
-  {
-    name: "Arjun Reddy",
-    university: "University of Texas at Dallas",
-    country: "USA",
-    year: "2022",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=400&auto=format&fit=crop",
-    testimonial: "Got admitted to 5 top US universities with their help! Their SOP review and interview preparation were game-changers.",
-    achievement: "Multiple admits, now at Google USA"
+    testimonial: "The alumni network at DTU is incredibly strong. I received mentorship from seniors already in the industry, which helped me crack the toughest technical interviews.",
+    achievement: "Selected for Google Summer of Code (GSoC)"
   }
 ];
 

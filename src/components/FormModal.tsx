@@ -12,8 +12,8 @@ export const FormModal: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsSubmitting(true)
-    setSubmitStatus('idle')
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
 
     console.log('=== FORM SUBMISSION START ===');
     console.log('Form data being submitted:', formData);
@@ -59,14 +59,14 @@ export const FormModal: React.FC = () => {
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-6">
       {/* Backdrop - Darker for better contrast with the white modal */}
-      <div 
+      <div
         className="absolute inset-0 bg-slate-900/40 backdrop-blur-md"
         onClick={handleClose}
       />
-      
+
       {/* Modal */}
       <div className="relative bg-white rounded-[8px] sm:rounded-[10px] shadow-[0_25px_60px_rgba(0,0,0,0.15)] border border-slate-200 w-[90%] sm:w-full max-w-md overflow-hidden transform transition-all">
-        
+
         {/* Header - Blue Theme */}
         <div className="flex items-center justify-between p-6 sm:p-8 bg-gradient-to-r from-blue-50 to-blue-100/50 border-b border-blue-100">
           <div>
@@ -111,7 +111,7 @@ export const FormModal: React.FC = () => {
               <p className="text-blue-800 font-medium text-center">✓ Message sent successfully!</p>
             </div>
           )}
-          
+
           {submitStatus === 'error' && (
             <div className="p-4 bg-red-50 border border-red-200 rounded-2xl">
               <p className="text-red-800 font-medium text-center">✗ Failed to send message. Please try again.</p>

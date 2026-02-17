@@ -10,6 +10,7 @@ import {
   ArrowRight,
   Headphones
 } from "lucide-react";
+import { useFormModal } from "@/context/FormModalContext";
 
 // Strict Brand Theme
 const PRIMARY_BLUE = "#1A4AB2"; 
@@ -49,6 +50,7 @@ const services = [
 ];
 
 export default function ComprehensiveServices() {
+  const { openModal } = useFormModal();
   return (
     <section id="services" className="py-24 bg-[#F8FAFC] relative overflow-hidden">
       {/* Background Decor */}
@@ -131,7 +133,7 @@ export default function ComprehensiveServices() {
                 All Services
                 <ArrowRight size={18} />
               </Link>
-              <button className="bg-white/5 backdrop-blur-md border border-white/10 text-white px-10 py-4 rounded-full font-black text-xs uppercase tracking-widest hover:bg-white hover:text-slate-900 transition-all flex items-center justify-center shadow-lg">
+              <button onClick={() => openModal()} className="bg-white/5 backdrop-blur-md border border-white/10 text-white px-10 py-4 rounded-full font-black text-xs uppercase tracking-widest hover:bg-white hover:text-slate-900 transition-all flex items-center justify-center shadow-lg">
                 Book Free Consultation
               </button>
             </div>
