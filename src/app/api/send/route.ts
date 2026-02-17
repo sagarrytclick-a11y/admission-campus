@@ -51,13 +51,13 @@ export async function POST(req: Request) {
     // Send email notification
     try {
       console.log('=== ATTEMPTING TO SEND EMAIL ===');
-      console.log('From:', 'Admission Campus <info@sagar.rytclick>');
-      console.log('To:', [process.env.ADMIN_EMAIL || 'info@admissioncampus.in']);
+      console.log('From:', 'Admission Campus <onboarding@resend.dev>');
+      console.log('To:', [process.env.ADMIN_EMAIL || 'sagar.rytclick@gmail.com']);
       console.log('Subject:', `New Enquiry from ${name}`);
 
       const data = await resend.emails.send({
-        from: 'info@sagar.rytclick', // Use your verified domain
-        to: [process.env.ADMIN_EMAIL || 'info@admissioncampus.in'], // Use environment variable or fallback
+        from: 'onboarding@resend.dev', // Use Resend's verified domain for testing
+        to: [process.env.ADMIN_EMAIL || 'sagar.rytclick@gmail.com'], // Use account owner's email for testing
         subject: `New Enquiry from ${name}`,
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">

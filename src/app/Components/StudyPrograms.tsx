@@ -2,12 +2,14 @@
 import React from "react";
 import Link from "next/link";
 import { BookOpen, Target, BrainCircuit, Globe, ArrowRight, MessageCircle } from "lucide-react";
+import { useFormModal } from "@/context/FormModalContext";
 
 // Strict Brand Theme
 const PRIMARY_BLUE = "#1A4AB2"; 
 const ACCENT_GOLD = "#FACC15";  
 
 export default function StudyPrograms() {
+  const { openModal } = useFormModal();
   const programs = [
     {
       icon: Target,
@@ -120,7 +122,7 @@ export default function StudyPrograms() {
                 <div className="font-bold text-white text-sm">Talk to Our Career Mentors</div>
               </div>
             </div>
-            <button className="bg-[#1A4AB2] text-white px-8 py-3 rounded-full text-xs font-black uppercase tracking-widest hover:bg-white hover:text-slate-900 transition-all shadow-lg">
+            <button onClick={() => openModal()} className="bg-[#1A4AB2] text-white px-8 py-3 rounded-full text-xs font-black uppercase tracking-widest hover:bg-white hover:text-slate-900 transition-all shadow-lg">
               Free Consultation
             </button>
           </div>

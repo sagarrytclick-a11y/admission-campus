@@ -161,8 +161,8 @@ const fetchRelatedColleges = async (slug: string): Promise<College[]> => {
           const countryFlag = typeof country === 'object' ? country.flag : ''
 
           return (
-            <div key={college._id} className="bg-white border border-slate-200 rounded-xl overflow-hidden">
-              <div className="relative h-48">
+            <div key={college._id} className="bg-white border border-slate-200 rounded-xl overflow-hidden flex flex-col h-full">
+              <div className="relative h-48 flex-shrink-0">
                 <img
                   src={college.banner_url || `https://picsum.photos/seed/${college.slug}/400/300`}
                   alt={college.name}
@@ -187,8 +187,8 @@ const fetchRelatedColleges = async (slug: string): Promise<College[]> => {
                 </div>
               </div>
 
-              <div className="p-6">
-                <h3 className="font-semibold text-lg text-slate-900 mb-4 line-clamp-2">
+              <div className="p-6 flex-1 flex flex-col">
+                <h3 className="font-semibold text-lg text-slate-900 mb-4 line-clamp-2 min-h-[3.5rem]">
                   {college.name}
                 </h3>
                 
@@ -196,7 +196,7 @@ const fetchRelatedColleges = async (slug: string): Promise<College[]> => {
                   <div>
                     <div className="text-xs text-slate-500 uppercase font-medium mb-1">Yearly Fees</div>
                     <div className="flex items-center text-blue-600 font-semibold">
-                      <DollarSign size={16} />
+                      {/* <DollarSign size={16} /> */}
                       <span>
                         {college.fees 
                           ? `$${college.fees.toLocaleString()}`
@@ -216,12 +216,14 @@ const fetchRelatedColleges = async (slug: string): Promise<College[]> => {
                   </div>
                 </div>
 
-                <Link href={`/colleges/${college.slug}`}>
-                  <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg transition-colors flex items-center justify-center gap-2">
-                    View Details
-                    <ArrowRight size={16} />
-                  </Button>
-                </Link>
+                <div className="mt-auto">
+                  <Link href={`/colleges/${college.slug}`}>
+                    <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg transition-colors flex items-center justify-center gap-2">
+                      View Details
+                      <ArrowRight size={16} />
+                    </Button>
+                  </Link>
+                </div>
               </div>
             </div>
           )

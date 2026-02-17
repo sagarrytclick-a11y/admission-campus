@@ -1,33 +1,35 @@
 "use client"
 import { GraduationCap, ShieldCheck, Globe, CheckCircle2, ArrowRight } from "lucide-react";
+import { useFormModal } from "@/context/FormModalContext";
 
 // Strict Brand Theme
 const PRIMARY_BLUE = "#1A4AB2"; 
 const ACCENT_GOLD = "#FACC15";  
 
 export default function AlphaWorldAdvantage() {
+  const { openModal } = useFormModal();
   const stats = [
-    { label: "Students Guided", value: "15,000+" },
-    { label: "Visa Success", value: "99%" },
-    { label: "Scholarships", value: "₹2 Cr+" },
-    { label: "Partner Unis", value: "200+" },
+    { label: "IITs Guided", value: "500+" },
+    { label: "NEET Success", value: "95%" },
+    { label: "Scholarships", value: "₹5 Cr+" },
+    { label: "Partner Colleges", value: "150+" },
   ];
 
   const points = [
     {
       icon: GraduationCap,
-      title: "Experienced Counselors",
-      desc: "Certified experts with years of experience in international admissions and career mapping."
+      title: "IIT/JEE Experts",
+      desc: "Specialized counseling for IITs, NITs, and top engineering colleges with proven admission strategies."
     },
     {
       icon: Globe,
-      title: "Global University Network",
-      desc: "Direct partnerships with top-tier universities in USA, UK, Canada, Australia & Europe."
+      title: "Medical College Network",
+      desc: "Direct partnerships with top medical colleges including AIIMS, JIPMER, and state medical universities."
     },
     {
       icon: ShieldCheck,
-      title: "High Visa Approval",
-      desc: "Accurate documentation and expert guidance to ensure maximum approval chances."
+      title: "Counseling Excellence",
+      desc: "Expert guidance for JoSAA, NEET counseling, and state-level admission processes with high success rates."
     },
   ];
 
@@ -48,12 +50,12 @@ export default function AlphaWorldAdvantage() {
             </div>
             
             <h2 className="text-3xl md:text-6xl font-extrabold text-slate-900 mb-6 tracking-tight leading-[1.1]">
-              Trusted <span className="text-[#1A4AB2]">Study Abroad</span> Consultants
+              Trusted <span className="text-[#1A4AB2]">Indian College</span> Consultants
             </h2>
             
             <p className="text-slate-600 text-lg leading-relaxed mb-10 max-w-xl">
-              We help students achieve their international education goals through expert guidance, 
-              transparent processes, and strong global partnerships.
+              We help students secure admissions in top Indian engineering and medical colleges 
+              through expert guidance, transparent processes, and strong institutional partnerships.
             </p>
 
             {/* Stats Grid - Enhanced with Brand Tints */}
@@ -70,7 +72,7 @@ export default function AlphaWorldAdvantage() {
               ))}
             </div>
 
-            <button className="bg-[#1A4AB2] text-white px-8 py-4 rounded-full font-black text-xs uppercase tracking-widest flex items-center gap-2 hover:bg-slate-900 transition-all shadow-lg shadow-blue-900/20">
+            <button onClick={() => openModal()} className="bg-[#1A4AB2] text-white px-8 py-4 rounded-full font-black text-xs uppercase tracking-widest flex items-center gap-2 hover:bg-slate-900 transition-all shadow-lg shadow-blue-900/20">
               Get Started Now
               <ArrowRight size={18} />
             </button>
@@ -102,7 +104,7 @@ export default function AlphaWorldAdvantage() {
 
         {/* Bottom Verification Strip */}
         <div className="mt-24 pt-12 border-t border-slate-100 flex flex-wrap justify-center gap-10 md:gap-20">
-          {['Certified Counselors', 'No Hidden Costs', 'Direct University Tie-ups'].map((text, i) => (
+          {['IIT/JEE Specialized', 'NEET Counseling', 'Direct College Tie-ups'].map((text, i) => (
             <div key={i} className="flex items-center gap-3 text-slate-400 text-[10px] font-black uppercase tracking-widest">
               <CheckCircle2 size={18} className="text-[#FACC15]" />
               {text}
