@@ -11,6 +11,7 @@ import {
   FileCheck,
   MessageSquare,
   Menu,
+  ShieldCheck,
   X
 } from 'lucide-react'
 import { useState } from 'react'
@@ -22,6 +23,7 @@ const navigation = [
   { name: 'Exams', href: '/admin/exams', icon: FileCheck },
   { name: 'Blogs', href: '/admin/blogs', icon: FileText },
   { name: 'Enquiries', href: '/admin/enquiries', icon: MessageSquare },
+  { name: 'RBAC', href: '/admin/rbac', icon: ShieldCheck },
 ]
 
 export function AdminSidebar() {

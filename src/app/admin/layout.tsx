@@ -26,6 +26,9 @@ export default function AdminLayout({
     if (pathname === '/admin/exams') {
       return { title: 'Exams Management', subtitle: 'Manage standardized tests and examinations' }
     }
+if (pathname === '/admin/rbac') {
+      return { title: 'RBAC Management', subtitle: 'Role-Based Access Control & User Permission Management' }
+    }
     return { title: 'Admin', subtitle: 'Alpha World Education Admin Panel' }
   }
 
