@@ -69,10 +69,10 @@ export default function Navbar() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-8 h-full text-[11px] font-bold text-white/90 uppercase tracking-widest">
           <div className="flex items-center gap-6">
             <a href={`tel:${phones.primaryRaw}`} className="flex items-center gap-2 hover:text-[#FACC15]">
-              <Phone size={12} className="text-[#FACC15]" /> {phones.primary}
+              <Phone size={12} className="text-[#FACC15]" /> +91-930477744
             </a>
             <a href={`mailto:${emails.info}`} className="flex items-center gap-2 hover:text-[#FACC15]">
-              <Mail size={12} className="text-[#FACC15]" /> +91-9304777744
+              <Mail size={12} className="text-[#FACC15]" /> {emails.info}
             </a>
           </div>
           <div className="flex items-center gap-2">
