@@ -85,9 +85,9 @@ export const SITE_IDENTITY: SiteIdentity = {
       general: "Info@admissioncampus.in",
     },
     address: {
-      office: "Admission campus 2nd floor opposite Hussainganj metro station gate no 3, Hussainganj,lucknow 226001",
-      city: "Lucknow",
-      country: "Uttar Pradesh 226001",
+      office: "Wave One, Silver Wing, Floor 24th, Office No. 20 & 21, Noida Sector 18, Noida - 201301",
+      city: "Noida",
+      country: "Uttar Pradesh",
       mapLink: "https://goo.gl/maps/example",
     },
     socials: {

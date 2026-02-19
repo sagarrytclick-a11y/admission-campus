@@ -43,8 +43,7 @@ export default function Navbar() {
     { name: "Exams", href: "/exams", hasDropdown: true },
     { name: "Blog", href: "/blogs" },
     { name: "Services", href: "/service" },
-    { name: "About", href: "/about" },
-    { name: "Contact us", href: "/contact" },
+
   ];
 
   const dropdownContent = {
