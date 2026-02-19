@@ -9,9 +9,9 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname()
-  
+
   const getPageInfo = () => {
-    if (pathname === '/admin/dashboard' ) {
+    if (pathname === '/admin/dashboard') {
       return { title: 'Dashboard', subtitle: 'Welcome to Alpha World Education Admin Panel' }
     }
     if (pathname === '/admin/countries') {
@@ -26,7 +26,7 @@ export default function AdminLayout({
     if (pathname === '/admin/exams') {
       return { title: 'Exams Management', subtitle: 'Manage standardized tests and examinations' }
     }
-if (pathname === '/admin/rbac') {
+    if (pathname === '/admin/rbac') {
       return { title: 'RBAC Management', subtitle: 'Role-Based Access Control & User Permission Management' }
     }
     return { title: 'Admin', subtitle: 'Alpha World Education Admin Panel' }
