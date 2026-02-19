@@ -72,7 +72,7 @@ export default function Navbar() {
               <Phone size={12} className="text-[#FACC15]" /> {phones.primary}
             </a>
             <a href={`mailto:${emails.info}`} className="flex items-center gap-2 hover:text-[#FACC15]">
-              <Mail size={12} className="text-[#FACC15]" /> {emails.info}
+              <Mail size={12} className="text-[#FACC15]" /> +91-9304777744
             </a>
           </div>
           <div className="flex items-center gap-2">
