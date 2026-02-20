@@ -17,7 +17,7 @@ import {
 import { Plus, GraduationCap, Search, Filter, ChevronLeft, ChevronRight } from 'lucide-react'
 import { dummyCountries } from '@/data/dummyData'
 import { generateSlug } from '@/lib/slug'
-import { useAdminColleges, useAdminCountries, useSaveCollege, useDeleteCollege } from '@/hooks/useAdminColleges'
+import { useAdminColleges, useAdminCountries, useSaveCollege, useDeleteCollege, AdminCollege } from '@/hooks/useAdminColleges'
 import { toast } from 'sonner'
 
 interface AdminCountry {
@@ -27,78 +27,11 @@ interface AdminCountry {
   flag: string
 }
 
-export interface College {
-  _id: string
-  name: string
-  slug: string
-  country_ref: AdminCountry | string
-  exams: string[]
-  fees?: number
-  duration?: string
-  establishment_year?: string
-  ranking?: string | {
-    title: string
-    description: string
-    country_ranking: string
-    world_ranking: string
-    accreditation: string[]
-  }
-  banner_url?: string
-  about_content?: string
-  is_active: boolean
-  display_order: number
-  createdAt: string
-  updatedAt: string
-  
-  // Comprehensive structure fields
-  overview?: {
-    title: string
-    description: string
-  }
-  key_highlights?: {
-    title: string
-    description: string
-    features: string[]
-  }
-  why_choose_us?: {
-    title: string
-    description: string
-    features: { title: string; description: string }[]
-  }
-  ranking_section?: {
-    title: string
-    description: string
-    country_ranking: string
-    world_ranking: string
-    accreditation: string[]
-  }
-  admission_process?: {
-    title: string
-    description: string
-    steps: string[]
-  }
-  documents_required?: {
-    title: string
-    description: string
-    documents: string[]
-  }
-  fees_structure?: {
-    title: string
-    description: string
-    courses: { course_name: string; duration: string; annual_tuition_fee: string }[]
-  }
-  campus_highlights?: {
-    title: string
-    description: string
-    highlights: string[]
-  }
-}
-
-export default function CollegesPage() {
+export default function AdminCollegesPage() {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [editingCollege, setEditingCollege] = useState<College | null>(null)
+  const [editingAdminCollege, setEditingAdminCollege] = useState<AdminCollege | null>(null)
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
-  const [collegeToDelete, setCollegeToDelete] = useState<College | null>(null)
+  const [collegeToDelete, setAdminCollegeToDelete] = useState<AdminCollege | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCountry, setSelectedCountry] = useState<string>('all')
   const [currentPage, setCurrentPage] = useState(1)
@@ -112,10 +45,11 @@ export default function CollegesPage() {
   
   const [formData, setFormData] = useState({
     // Basic Info
-    name: 'Default College Name',
+    name: 'Default AdminCollege Name',
     slug: 'default-college-name',
     country_ref: '',
     exams: [] as string[],
+    categories: [] as string[],
     banner_url: '',
     is_active: true,
     establishment_year: '2024',
@@ -169,7 +103,7 @@ export default function CollegesPage() {
   })
 
   // Filter colleges based on search and country using useMemo
-  const filteredColleges = useMemo(() => {
+  const filteredAdminColleges = useMemo(() => {
     let filtered = colleges
 
     if (selectedCountry !== 'all') {
@@ -192,13 +126,13 @@ export default function CollegesPage() {
   }, [colleges, searchTerm, selectedCountry])
 
   // Pagination logic
-  const paginatedColleges = useMemo(() => {
+  const paginatedAdminColleges = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage
     const endIndex = startIndex + itemsPerPage
-    return filteredColleges.slice(startIndex, endIndex)
-  }, [filteredColleges, currentPage])
+    return filteredAdminColleges.slice(startIndex, endIndex)
+  }, [filteredAdminColleges, currentPage])
 
-  const totalPages = Math.ceil(filteredColleges.length / itemsPerPage)
+  const totalPages = Math.ceil(filteredAdminColleges.length / itemsPerPage)
 
   // Reset to page 1 when filters change
   useMemo(() => {
@@ -208,8 +142,8 @@ export default function CollegesPage() {
   const columns = [
     {
       key: 'name',
-      title: 'College Name',
-      render: (value: string, record: College) => {
+      title: 'AdminCollege Name',
+      render: (value: string, record: AdminCollege) => {
         const countryName = !record.country_ref 
           ? 'No country'
           : typeof record.country_ref === 'string' 
@@ -245,7 +179,7 @@ export default function CollegesPage() {
     {
       key: 'fees',
       title: 'Fees',
-      render: (value: number, record: College) => {
+      render: (value: number, record: AdminCollege) => {
         if (record.fees_structure && record.fees_structure.courses.length > 0) {
           return record.fees_structure.courses[0].annual_tuition_fee || 'N/A'
         }
@@ -255,7 +189,7 @@ export default function CollegesPage() {
     {
       key: 'duration',
       title: 'Duration',
-      render: (value: string, record: College) => {
+      render: (value: string, record: AdminCollege) => {
         if (record.fees_structure && record.fees_structure.courses.length > 0) {
           return record.fees_structure.courses[0].duration || 'N/A'
         }
@@ -343,12 +277,12 @@ export default function CollegesPage() {
   ]
 
   const actions = [
-    createEditAction((college: College) => {
+    createEditAction((college: AdminCollege) => {
       console.log('🔍 DEBUG: Loading college for edit:', college)
       console.log('🔍 DEBUG: college.ranking type:', typeof college.ranking)
       console.log('🔍 DEBUG: college.ranking value:', college.ranking)
       
-      setEditingCollege(college)
+      setEditingAdminCollege(college)
       
       // Properly extract all existing data when editing
       const extractedRanking = typeof college.ranking === 'object' && college.ranking !== null 
@@ -378,6 +312,7 @@ export default function CollegesPage() {
         slug: college.slug || '',
         country_ref: typeof college.country_ref === 'string' ? college.country_ref : college.country_ref?.slug || '',
         exams: college.exams || [],
+        categories: college.categories || [],
         banner_url: college.banner_url || '',
         is_active: college.is_active !== undefined ? college.is_active : true,
         establishment_year: college.establishment_year || '',
@@ -425,20 +360,21 @@ export default function CollegesPage() {
       })
       setIsModalOpen(true)
     }),
-    createDeleteAction((college: College) => {
-      setCollegeToDelete(college)
+    createDeleteAction((college: AdminCollege) => {
+      setAdminCollegeToDelete(college)
       setDeleteModalOpen(true)
     })
   ]
 
-  const handleAddCollege = () => {
-    setEditingCollege(null)
+  const handleAdminCollege = () => {
+    setEditingAdminCollege(null)
     setFormData({
       // Basic Info
       name: '',
       slug: '',
       country_ref: '',
       exams: [] as string[],
+      categories: [] as string[],
       banner_url: '',
       is_active: true,
       establishment_year: '',
@@ -487,10 +423,10 @@ export default function CollegesPage() {
     setIsModalOpen(true)
   }
 
-  const handleSaveCollege = async () => {
+  const handleSaveAdminCollege = async () => {
     console.log('🔥 Save button clicked! Starting validation...')
     console.log('📝 Current formData:', formData)
-    console.log('📝 Is editing college:', editingCollege ? 'YES' : 'NO')
+    console.log('📝 Is editing college:', editingAdminCollege ? 'YES' : 'NO')
     
     // Collect all missing fields
     const missingFields = []
@@ -500,13 +436,13 @@ export default function CollegesPage() {
     
     // Basic Info validation
     if (!formData.name || formData.name.trim() === '') {
-      missingFields.push('College Name')
-      console.log('❌ College Name is missing or empty')
+      missingFields.push('AdminCollege Name')
+      console.log('❌ AdminCollege Name is missing or empty')
     }
     
     if (!formData.slug || formData.slug.trim() === '') {
-      missingFields.push('College Slug')
-      console.log('❌ College Slug is missing or empty')
+      missingFields.push('AdminCollege Slug')
+      console.log('❌ AdminCollege Slug is missing or empty')
     }
     
     if (!formData.country_ref || formData.country_ref === '') {
@@ -527,6 +463,11 @@ export default function CollegesPage() {
     if (!formData.exams || formData.exams.length === 0) {
       missingFields.push('Exams')
       console.log('❌ Exams is missing or empty')
+    }
+    
+    if (!formData.categories || formData.categories.length === 0) {
+      missingFields.push('Categories')
+      console.log('❌ Categories is missing or empty')
     }
     
     // Image URL validation (optional but if provided, should be valid)
@@ -685,14 +626,12 @@ export default function CollegesPage() {
 
     console.log('✅ All validation passed! Proceeding to save...')
     try {
-      console.log('🚀 Starting college save process...')
-      console.log('📝 Form data:', formData)
-      
       const payload = {
         name: formData.name,
         slug: formData.slug,
         country_ref: formData.country_ref,
         exams: formData.exams,
+        categories: formData.categories,
         banner_url: formData.banner_url,
         is_active: formData.is_active,
 
@@ -744,7 +683,7 @@ export default function CollegesPage() {
         establishment_year: formData.establishment_year,
         
         // Include ID for editing
-        ...(editingCollege && { _id: editingCollege._id })
+        ...(editingAdminCollege && { _id: editingAdminCollege._id })
       }
       
       console.log('📦 Request payload:', payload)
@@ -752,10 +691,10 @@ export default function CollegesPage() {
       
       await saveCollegeMutation.mutateAsync(payload)
       
-      console.log('✅ College saved successfully!')
-      toast.success(editingCollege ? 'College updated successfully!' : 'College created successfully!')
+      console.log('✅ AdminCollege saved successfully!')
+      toast.success(editingAdminCollege ? 'AdminCollege updated successfully!' : 'AdminCollege created successfully!')
       setIsModalOpen(false)
-      setEditingCollege(null)
+      setEditingAdminCollege(null)
       
     } catch (error) {
       console.error('❌ Error saving college:', error)
@@ -764,14 +703,14 @@ export default function CollegesPage() {
     }
   }
 
-  const handleDeleteCollege = async () => {
+  const handleDeleteAdminCollege = async () => {
     if (!collegeToDelete) return
     
     try {
       await deleteCollegeMutation.mutateAsync(collegeToDelete._id)
-      toast.success('College deleted successfully!')
+      toast.success('AdminCollege deleted successfully!')
       setDeleteModalOpen(false)
-      setCollegeToDelete(null)
+      setAdminCollegeToDelete(null)
     } catch (error) {
       console.error('Error deleting college:', error)
       toast.error('Error deleting college')
@@ -784,14 +723,14 @@ export default function CollegesPage() {
       {/* Filters and Add button */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900">All Colleges</h2>
+            <h2 className="text-lg font-semibold text-gray-900">All AdminColleges</h2>
             <p className="text-sm text-gray-500">
-              {filteredColleges.length} of {colleges.length} colleges
+              {filteredAdminColleges.length} of {colleges.length} colleges
             </p>
           </div>
-          <Button onClick={handleAddCollege} className="flex items-center space-x-2">
+          <Button onClick={handleAdminCollege} className="flex items-center space-x-2">
             <Plus className="h-4 w-4" />
-            <span>Add College</span>
+            <span>Add AdminCollege</span>
           </Button>
         </div>
 
@@ -826,9 +765,9 @@ export default function CollegesPage() {
           </div>
         </div>
 
-        {/* Colleges Table */}
+        {/* AdminColleges Table */}
         <AdminTable
-          data={paginatedColleges}
+          data={paginatedAdminColleges}
           columns={columns}
           actions={actions}
           loading={dataLoading}
@@ -839,7 +778,7 @@ export default function CollegesPage() {
         {totalPages > 1 && (
           <div className="flex items-center justify-between">
             <div className="text-sm text-gray-500">
-              Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, filteredColleges.length)} of {filteredColleges.length} colleges
+              Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, filteredAdminColleges.length)} of {filteredAdminColleges.length} colleges
             </div>
             <div className="flex items-center space-x-2">
               <Button
@@ -898,9 +837,9 @@ export default function CollegesPage() {
         <AdminModal
           open={isModalOpen}
           onOpenChange={setIsModalOpen}
-          title={editingCollege ? 'Edit College' : 'Add New College'}
-          description={editingCollege ? 'Update college information' : 'Add a new college to the system'}
-          onConfirm={handleSaveCollege}
+          title={editingAdminCollege ? 'Edit AdminCollege' : 'Add New AdminCollege'}
+          description={editingAdminCollege ? 'Update college information' : 'Add a new college to the system'}
+          onConfirm={handleSaveAdminCollege}
           loading={saveCollegeMutation.isPending}
           size="xl"
         >
@@ -920,7 +859,7 @@ export default function CollegesPage() {
                 } : {})
               }))
             }}
-            onSubmit={handleSaveCollege}
+            onSubmit={handleSaveAdminCollege}
             loading={saveCollegeMutation.isPending}
           />
         </AdminModal>
@@ -929,11 +868,11 @@ export default function CollegesPage() {
         <AdminModal
           open={deleteModalOpen}
           onOpenChange={setDeleteModalOpen}
-          title="Delete College"
+          title="Delete AdminCollege"
           description={`Are you sure you want to delete "${collegeToDelete?.name}"? This action cannot be undone.`}
           confirmText="Delete"
           cancelText="Cancel"
-          onConfirm={handleDeleteCollege}
+          onConfirm={handleDeleteAdminCollege}
           loading={deleteCollegeMutation.isPending}
           size="sm"
         >

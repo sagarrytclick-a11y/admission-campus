@@ -53,6 +53,7 @@ export async function PUT(
       slug, 
       country_ref, 
       exams,
+      categories,
       // New comprehensive sections
       overview,
       key_highlights,
@@ -115,11 +116,14 @@ export async function PUT(
 
     const updateData: Record<string, unknown> = {};
     
+    console.log('📋 [API] Categories received for update:', categories);
+    
     // Basic fields
     if (name !== undefined) updateData.name = name;
     if (slug !== undefined) updateData.slug = slug;
     if (countryObjectId !== undefined) updateData.country_ref = countryObjectId;
     if (exams !== undefined) updateData.exams = exams;
+    if (categories !== undefined) updateData.categories = categories;
     
     // New comprehensive structure
     if (overview !== undefined) updateData.overview = overview;

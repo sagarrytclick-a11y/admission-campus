@@ -23,6 +23,12 @@ const CollegeSchema = new mongoose.Schema(
       type: String,
     }],
     
+    // College Categories
+    categories: [{
+      type: String,
+      enum: ['management', 'engineering', 'medical']
+    }],
+    
     // Overview Section
     overview: {
       title: {
