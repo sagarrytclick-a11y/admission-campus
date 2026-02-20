@@ -8,6 +8,7 @@ export interface AdminCollege {
   slug: string
   country_ref: any
   exams: string[]
+  categories: string[]
   fees?: number
   duration?: string
   establishment_year?: string

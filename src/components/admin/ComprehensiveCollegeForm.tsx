@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
+import { Checkbox } from '@/components/ui/checkbox'
 import { Plus, X, GraduationCap, Globe, Award, FileText, Users, Building, DollarSign, Calendar, CheckCircle } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
@@ -24,6 +25,7 @@ interface ComprehensiveCollegeFormData {
   slug: string
   country_ref: string
   exams: string[]
+  categories: string[]
   banner_url?: string
   is_active: boolean
   establishment_year?: string
@@ -292,6 +294,42 @@ export function ComprehensiveCollegeForm({ data, countries, onChange, onSubmit, 
                 </div>
                 {(!data.exams || data.exams.length === 0) && (
                   <p className="text-sm text-red-500">At least one exam is required</p>
+                )}
+              </div>
+
+              <div>
+                <Label className="mb-3 block">College Categories *</Label>
+                <div className="space-y-3">
+                  {[
+                    { id: 'management', label: 'Management', description: 'MBA, BBA, and other management programs' },
+                    { id: 'engineering', label: 'Engineering', description: 'B.Tech, M.Tech, and other engineering programs' },
+                    { id: 'medical', label: 'Medical', description: 'MBBS, BDS, and other medical programs' }
+                  ].map((category) => (
+                    <div key={category.id} className="flex items-start space-x-3 p-3 border rounded-lg hover:bg-gray-50">
+                      <Checkbox
+                        id={category.id}
+                        checked={(data.categories || []).includes(category.id)}
+                        onCheckedChange={(checked) => {
+                          const currentCategories = data.categories || [];
+                          if (checked) {
+                            onChange('categories', [...currentCategories, category.id]);
+                          } else {
+                            onChange('categories', currentCategories.filter((cat: string) => cat !== category.id));
+                          }
+                        }}
+                        disabled={loading}
+                      />
+                      <div className="flex-1">
+                        <Label htmlFor={category.id} className="font-medium cursor-pointer">
+                          {category.label}
+                        </Label>
+                        <p className="text-sm text-gray-500">{category.description}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                {(!data.categories || data.categories.length === 0) && (
+                  <p className="text-sm text-red-500">At least one category is required</p>
                 )}
               </div>
             </CardContent>

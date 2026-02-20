@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import College from "@/models/College";
 import Country from "@/models/Country";
+import { generateSlug } from "@/lib/slug";
 
 export async function GET(request: Request) {
   try {
@@ -13,6 +14,7 @@ export async function GET(request: Request) {
     const search = searchParams.get('search');
     const countrySlug = searchParams.get('country');
     const exam = searchParams.get('exam');
+    const category = searchParams.get('category');
     
     const skip = (page - 1) * limit;
     
@@ -44,6 +46,11 @@ export async function GET(request: Request) {
     // Filter by exam
     if (exam && exam !== 'all') {
       query.exams = { $in: [exam] };
+    }
+    
+    // Filter by category
+    if (category && category !== 'all') {
+      query.categories = { $in: [category] };
     }
     
     // Get total count for pagination
@@ -85,6 +92,145 @@ export async function GET(request: Request) {
       {
         success: false,
         message: "Failed to fetch colleges",
+        error: error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    await connectDB();
+    const body = await request.json();
+    
+    const {
+      name,
+      country_ref,
+      exams = [],
+      categories = [],
+      overview,
+      key_highlights,
+      why_choose_us,
+      ranking_section,
+      admission_process,
+      documents_required,
+      fees_structure,
+      campus_highlights,
+      banner_url,
+      is_active = true,
+      establishment_year
+    } = body;
+
+    // Generate slug from name
+    const slug = generateSlug(name);
+
+    // Check if college with same slug already exists
+    const existingCollege = await College.findOne({ slug });
+    if (existingCollege) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "College with this name already exists",
+        },
+        { status: 400 }
+      );
+    }
+
+    // Create new college
+    const newCollege = new College({
+      name,
+      slug,
+      country_ref,
+      exams,
+      categories,
+      overview,
+      key_highlights,
+      why_choose_us,
+      ranking: ranking_section,
+      admission_process,
+      documents_required,
+      fees_structure,
+      campus_highlights,
+      banner_url,
+      is_active,
+      establishment_year
+    });
+
+    await newCollege.save();
+
+    return NextResponse.json(
+      {
+        success: true,
+        message: "College created successfully",
+        data: newCollege,
+      },
+      { status: 201 }
+    );
+  } catch (error) {
+    console.error("Error creating college:", error);
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Failed to create college",
+        error: error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(request: Request) {
+  try {
+    await connectDB();
+    const body = await request.json();
+    const { id, ...updateData } = body;
+    
+    if (!id) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "College ID is required",
+        },
+        { status: 400 }
+      );
+    }
+
+    // Generate new slug if name is being updated
+    if (updateData.name) {
+      updateData.slug = generateSlug(updateData.name);
+    }
+
+    const updatedCollege = await College.findByIdAndUpdate(
+      id,
+      updateData,
+      { new: true, runValidators: true }
+    ).populate('country_ref', 'name slug flag');
+
+    if (!updatedCollege) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "College not found",
+        },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(
+      {
+        success: true,
+        message: "College updated successfully",
+        data: updatedCollege,
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error updating college:", error);
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Failed to update college",
         error: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }

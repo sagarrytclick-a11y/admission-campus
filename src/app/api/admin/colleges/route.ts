@@ -55,6 +55,7 @@ export async function POST(request: NextRequest) {
       slug, 
       country_ref, 
       exams,
+      categories,
       // New comprehensive sections
       overview,
       key_highlights,
@@ -78,6 +79,7 @@ export async function POST(request: NextRequest) {
       name,
       slug,
       country_ref,
+      categories,
       overview,
       key_highlights,
       why_choose_us,
@@ -133,11 +135,13 @@ export async function POST(request: NextRequest) {
     console.log('✅ [API] No existing college found with slug');
 
     console.log('🏗️ [API] Creating new college document...');
+    console.log('📋 [API] Categories being saved:', categories);
     const college = new College({
       name,
       slug,
       country_ref: country._id, // Use the ObjectId from the found country
       exams: exams || [],
+      categories: categories || [],
       
       // New comprehensive structure
       overview: overview || {
