@@ -204,6 +204,7 @@ export default function MedicalCollegesPage() {
               </div>
             </div>
           </div>
+          </div>
         </BackgroundSlider>
       </div>
 

@@ -206,55 +206,6 @@ export default function ManagementCollegesPage() {
             </div>
           </div>
         </BackgroundSlider>
-            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6">
-              Top <span className="text-[#FACC15]">Management</span> Institutions
-            </h1>
-            <p className="text-xl text-white/90 max-w-3xl mx-auto leading-relaxed mb-8">
-              Discover leading business schools offering MBA, PGDM programs with strong industry connections, 
-              leadership development, and excellent placement records.
-            </p>
-            
-            {/* Quick Stats */}
-            <div className="flex flex-wrap justify-center gap-8 text-center">
-              <div>
-                <div className="text-3xl font-bold text-[#FACC15]">{colleges.length}+</div>
-                <div className="text-sm text-white/70 uppercase tracking-wider">Management Colleges</div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-[#FACC15]">IIMs</div>
-                <div className="text-sm text-white/70 uppercase tracking-wider">Premier B-Schools</div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-[#FACC15]">CAT</div>
-                <div className="text-sm text-white/70 uppercase tracking-wider">Primary Entrance</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Search Bar */}
-          <div className="max-w-2xl mx-auto px-4 sm:px-6 w-full">
-            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-2">
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/70 w-5 h-5" />
-                <Input
-                  type="text"
-                  placeholder="Search management colleges by name, location, or specialization..."
-                  value={searchTerm}
-                  onChange={(e) => handleSearchChange(e.target.value)}
-                  className="w-full pl-12 pr-12 bg-white/90 text-slate-900 placeholder-slate-500 border-0 rounded-xl focus:ring-2 focus:ring-[#FACC15] transition-all"
-                />
-                {searchTerm && (
-                  <button
-                    onClick={() => setSearchTerm('')}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* Filters Section */}

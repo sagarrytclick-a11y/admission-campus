@@ -203,6 +203,7 @@ export default function EngineeringCollegesPage() {
               </div>
             </div>
           </div>
+          </div>
         </BackgroundSlider>
       </div>
 
