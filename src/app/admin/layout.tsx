@@ -12,7 +12,7 @@ export default function AdminLayout({
 
   const getPageInfo = () => {
     if (pathname === '/admin/dashboard') {
-      return { title: 'Dashboard', subtitle: 'Welcome to Alpha World Education Admin Panel' }
+      return { title: 'Dashboard', subtitle: 'Welcome to Admission Campus Admin Panel' }
     }
     if (pathname === '/admin/countries') {
       return { title: 'Countries Management', subtitle: 'Manage countries for education destinations' }
@@ -29,7 +29,7 @@ export default function AdminLayout({
     if (pathname === '/admin/rbac') {
       return { title: 'RBAC Management', subtitle: 'Role-Based Access Control & User Permission Management' }
     }
-    return { title: 'Admin', subtitle: 'Alpha World Education Admin Panel' }
+    return { title: 'Admin', subtitle: 'Admission Campus Admin Panel' }
   }
 
   const { title, subtitle } = getPageInfo()

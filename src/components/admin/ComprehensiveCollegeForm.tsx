@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Plus, X, GraduationCap, Globe, Award, FileText, Users, Building, DollarSign, Calendar, CheckCircle } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { CITY_OPTIONS } from '@/lib/cities'
 
 interface Country {
   _id: string
@@ -24,6 +25,7 @@ interface ComprehensiveCollegeFormData {
   name: string
   slug: string
   country_ref: string
+  city?: string
   exams: string[]
   categories: string[]
   banner_url?: string
@@ -96,6 +98,8 @@ export function ComprehensiveCollegeForm({ data, countries, onChange, onSubmit, 
       data.name?.trim(),
       data.slug?.trim(),
       data.country_ref,
+      // Only require city if country is India
+      data.country_ref === 'india' ? data.city?.trim() : true,
       data.overview_description?.trim(),
       data.key_highlights_description?.trim(),
       data.key_highlights_features?.length,
@@ -241,6 +245,28 @@ export function ComprehensiveCollegeForm({ data, countries, onChange, onSubmit, 
                   </SelectContent>
                 </Select>
               </div>
+
+              {/* Conditional City Field - Only show for India */}
+              {data.country_ref === 'india' && (
+                <div>
+                  <Label htmlFor="city" className="mb-3 block">City *</Label>
+                  <Select value={data.city || ''} onValueChange={(value) => onChange('city', value)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a metro city" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {CITY_OPTIONS.map((city: { value: string; label: string }) => (
+                        <SelectItem key={city.value} value={city.value}>
+                          {city.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {(!data.city || data.city.trim() === '') && (
+                    <p className="text-sm text-red-500 mt-1">City is required for Indian colleges</p>
+                  )}
+                </div>
+              )}
 
               <div>
                 <Label htmlFor="banner_url" className="mb-3 block">Banner URL</Label>

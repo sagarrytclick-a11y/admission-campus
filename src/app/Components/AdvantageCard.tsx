@@ -6,7 +6,7 @@ import { useFormModal } from "@/context/FormModalContext";
 const PRIMARY_BLUE = "#1A4AB2"; 
 const ACCENT_GOLD = "#FACC15";  
 
-export default function AlphaWorldAdvantage() {
+export default function AdmissionCampusAdvantage() {
   const { openModal } = useFormModal();
   const stats = [
     { label: "IITs Guided", value: "500+" },

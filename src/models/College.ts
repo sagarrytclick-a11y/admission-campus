@@ -19,6 +19,13 @@ const CollegeSchema = new mongoose.Schema(
       ref: "Country",
       required: true,
     },
+    city: {
+      type: String,
+      required: function(this: any) {
+        // This will be validated in the pre-save hook after populating country_ref
+        return false; // Will be handled in pre-save middleware
+      }
+    },
     exams: [{
       type: String,
     }],

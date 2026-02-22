@@ -5,6 +5,7 @@ interface College {
   name: string
   slug: string
   country_ref: any
+  city?: string
   exams: string[]
   fees?: number
   duration?: string

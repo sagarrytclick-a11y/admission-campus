@@ -53,7 +53,8 @@ export async function POST(request: NextRequest) {
     const { 
       name, 
       slug, 
-      country_ref, 
+      country_ref,
+      city,
       exams,
       categories,
       // New comprehensive sections
@@ -78,6 +79,7 @@ export async function POST(request: NextRequest) {
     console.log('🔍 [API] Extracted fields:', {
       name,
       slug,
+      city,
       country_ref,
       categories,
       overview,
@@ -122,6 +124,19 @@ export async function POST(request: NextRequest) {
     }
     console.log('✅ [API] Country found:', country.name);
 
+    // Validate city requirement for India
+    if (country.name.toLowerCase() === 'india' && !city) {
+      console.log('❌ [API] City is required for Indian colleges');
+      throw new ValidationError(
+        "City is required for Indian colleges",
+        { 
+          country: country.name,
+          requiredField: 'city',
+          message: 'Please select a city for Indian colleges'
+        }
+      );
+    }
+
     // Check if college with same slug already exists
     console.log('🔍 [API] Checking for existing college with slug:', slug);
     const existingCollege = await College.findOne({ slug });
@@ -140,6 +155,7 @@ export async function POST(request: NextRequest) {
       name,
       slug,
       country_ref: country._id, // Use the ObjectId from the found country
+      city: city || undefined,
       exams: exams || [],
       categories: categories || [],
       

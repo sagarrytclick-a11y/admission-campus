@@ -80,7 +80,7 @@ export function AdminSidebar() {
           {/* Footer */}
           <div className="p-4 border-t border-gray-200">
             <div className="text-xs text-gray-500 text-center">
-              © 2024 Alpha World Education
+              © 2024 Admission Campus
             </div>
           </div>
         </div>
