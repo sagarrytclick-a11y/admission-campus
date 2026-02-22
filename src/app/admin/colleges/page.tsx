@@ -48,6 +48,7 @@ export default function AdminCollegesPage() {
     name: 'Default AdminCollege Name',
     slug: 'default-college-name',
     country_ref: '',
+    city: '',
     exams: [] as string[],
     categories: [] as string[],
     banner_url: '',
@@ -154,6 +155,9 @@ export default function AdminCollegesPage() {
           <div>
             <div className="font-medium">{value}</div>
             <div className="text-sm text-gray-500">{countryName}</div>
+            {record.city && (
+              <div className="text-xs text-blue-600">{record.city}</div>
+            )}
           </div>
         )
       }
@@ -311,6 +315,7 @@ export default function AdminCollegesPage() {
         name: college.name || '',
         slug: college.slug || '',
         country_ref: typeof college.country_ref === 'string' ? college.country_ref : college.country_ref?.slug || '',
+        city: college.city || '',
         exams: college.exams || [],
         categories: college.categories || [],
         banner_url: college.banner_url || '',
@@ -373,6 +378,7 @@ export default function AdminCollegesPage() {
       name: '',
       slug: '',
       country_ref: '',
+      city: '',
       exams: [] as string[],
       categories: [] as string[],
       banner_url: '',
@@ -448,6 +454,12 @@ export default function AdminCollegesPage() {
     if (!formData.country_ref || formData.country_ref === '') {
       missingFields.push('Country')
       console.log('❌ Country is missing or empty')
+    }
+    
+    // City validation for India
+    if (formData.country_ref === 'india' && (!formData.city || formData.city.trim() === '')) {
+      missingFields.push('City (required for Indian colleges)')
+      console.log('❌ City is missing for Indian college')
     }
     
     if (!formData.establishment_year || formData.establishment_year.trim() === '') {
@@ -630,6 +642,7 @@ export default function AdminCollegesPage() {
         name: formData.name,
         slug: formData.slug,
         country_ref: formData.country_ref,
+        city: formData.city || undefined,
         exams: formData.exams,
         categories: formData.categories,
         banner_url: formData.banner_url,

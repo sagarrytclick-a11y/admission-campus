@@ -107,6 +107,7 @@ export async function POST(request: Request) {
     const {
       name,
       country_ref,
+      city,
       exams = [],
       categories = [],
       overview,
@@ -137,11 +138,26 @@ export async function POST(request: Request) {
       );
     }
 
+    // Validate city requirement for India
+    if (country_ref) {
+      const country = await Country.findById(country_ref);
+      if (country && country.name.toLowerCase() === 'india' && !city) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: "City is required for Indian colleges",
+          },
+          { status: 400 }
+        );
+      }
+    }
+
     // Create new college
     const newCollege = new College({
       name,
       slug,
       country_ref,
+      city,
       exams,
       categories,
       overview,
@@ -199,6 +215,25 @@ export async function PUT(request: Request) {
     // Generate new slug if name is being updated
     if (updateData.name) {
       updateData.slug = generateSlug(updateData.name);
+    }
+
+    // Validate city requirement for India if country is being updated
+    if (updateData.country_ref || updateData.city !== undefined) {
+      const countryId = updateData.country_ref || id;
+      const country = await Country.findById(countryId);
+      if (country && country.name.toLowerCase() === 'india' && !updateData.city) {
+        // Check if existing college has city
+        const existingCollege = await College.findById(id);
+        if (!existingCollege?.city) {
+          return NextResponse.json(
+            {
+              success: false,
+              message: "City is required for Indian colleges",
+            },
+            { status: 400 }
+          );
+        }
+      }
     }
 
     const updatedCollege = await College.findByIdAndUpdate(

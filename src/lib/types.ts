@@ -1,4 +1,4 @@
-// Types for the AlphaWorld Education App
+// Types for the Admission Campus App
 
 export interface College {
   id: number;

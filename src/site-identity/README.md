@@ -1,6 +1,6 @@
 # Site Identity Configuration
 
-This folder contains the centralized site identity configuration for the AlphaWorld Education website. All site branding, contact information, and asset references should be managed through this system.
+This folder contains the centralized site identity configuration for the Admission Campus website. All site branding, contact information, and asset references should be managed through this system.
 
 ## Structure
 

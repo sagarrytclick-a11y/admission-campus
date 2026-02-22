@@ -51,7 +51,8 @@ export async function PUT(
     const { 
       name, 
       slug, 
-      country_ref, 
+      country_ref,
+      city,
       exams,
       categories,
       // New comprehensive sections
@@ -86,6 +87,7 @@ export async function PUT(
 
     // Find country by slug to get ObjectId if country_ref is provided
     let countryObjectId = undefined;
+    let countryName = undefined;
     if (country_ref !== undefined) {
       const country = await Country.findOne({ slug: country_ref });
       if (!country) {
@@ -99,6 +101,22 @@ export async function PUT(
         );
       }
       countryObjectId = country._id;
+      countryName = country.name;
+    }
+
+    // Validate city requirement for India
+    const finalCountryName = countryName || (college.country_ref ? await Country.findById(college.country_ref).then(c => c?.name) : undefined);
+    if (finalCountryName && finalCountryName.toLowerCase() === 'india') {
+      const finalCity = city !== undefined ? city : college.city;
+      if (!finalCity) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: "City is required for Indian colleges",
+          },
+          { status: 400 }
+        );
+      }
     }
 
     if (slug && slug !== college.slug) {
@@ -122,6 +140,7 @@ export async function PUT(
     if (name !== undefined) updateData.name = name;
     if (slug !== undefined) updateData.slug = slug;
     if (countryObjectId !== undefined) updateData.country_ref = countryObjectId;
+    if (city !== undefined) updateData.city = city;
     if (exams !== undefined) updateData.exams = exams;
     if (categories !== undefined) updateData.categories = categories;
     

@@ -67,7 +67,7 @@ export function AdminHeader({ title, subtitle }: AdminHeaderProps) {
                   <div className="flex flex-col space-y-1">
                     <p className="text-sm font-medium leading-none">Admin User</p>
                     <p className="text-xs leading-none text-muted-foreground">
-                      admin@alphaworld.com
+                      admin@admissioncampus.com
                     </p>
                   </div>
                 </DropdownMenuLabel>

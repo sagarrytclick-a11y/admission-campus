@@ -7,6 +7,7 @@ export interface AdminCollege {
   name: string
   slug: string
   country_ref: any
+  city?: string
   exams: string[]
   categories: string[]
   fees?: number

@@ -10,7 +10,7 @@ export default function SuccessStories() {
       university: "MIT",
       program: "Computer Science",
       image: "/api/placeholder/80/80",
-      story: "From a small town in India to MIT - Alpha World made my dream come true with personalized guidance and scholarship support.",
+      story: "From a small town in India to MIT - Admission Campus made my dream come true with personalized guidance and scholarship support.",
       achievement: "Full Scholarship $80K",
       year: "2024"
     },
@@ -30,7 +30,7 @@ export default function SuccessStories() {
       university: "University of Toronto",
       program: "Data Science",
       image: "/api/placeholder/80/80", 
-      story: "Alpha World helped me choose the right program and secured a 75% scholarship. Now working at top tech company.",
+      story: "Admission Campus helped me choose the right program and secured a 75% scholarship. Now working at top tech company.",
       achievement: "75% Scholarship",
       year: "2024"
     }
@@ -76,7 +76,7 @@ export default function SuccessStories() {
             STUDENT <span className="text-green-600">ACHIEVEMENTS</span>
           </h2>
           <p className="text-slate-500 font-semibold text-lg max-w-3xl mx-auto">
-            Real stories from real students who transformed their dreams into reality with Alpha World.
+            Real stories from real students who transformed their dreams into reality with Admission Campus.
           </p>
         </div>
 
