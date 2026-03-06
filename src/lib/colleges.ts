@@ -26,12 +26,12 @@ export async function getCollegeBySlug(slug: string): Promise<any | null> {
       createdAt: college.createdAt?.toISOString?.(),
       updatedAt: college.updatedAt?.toISOString?.(),
 
-      country_ref: college.country_ref
+      country_ref: college.country_ref && typeof college.country_ref === 'object'
         ? {
-            ...college.country_ref,
-            _id: college.country_ref._id.toString(),
-            createdAt: college.country_ref.createdAt?.toISOString?.(),
-            updatedAt: college.country_ref.updatedAt?.toISOString?.(),
+            ...(college.country_ref as any),
+            _id: (college.country_ref as any)._id.toString(),
+            createdAt: (college.country_ref as any).createdAt?.toISOString?.(),
+            updatedAt: (college.country_ref as any).updatedAt?.toISOString?.(),
           }
         : null,
     };

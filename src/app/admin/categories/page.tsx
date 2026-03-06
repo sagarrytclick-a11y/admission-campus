@@ -92,7 +92,7 @@ export default function CategoriesPage() {
       key: 'description',
       title: 'Description',
       render: (value: string, record: AdminCategory, index: number) => (
-        <span className="text-sm text-gray-600 max-w-xs truncate block">
+        <span className="text-sm text-white max-w-xs truncate block">
           {value}
         </span>
       )
@@ -110,7 +110,7 @@ export default function CategoriesPage() {
       key: 'createdAt',
       title: 'Created',
       render: (value: string, record: AdminCategory, index: number) => (
-        <span className="text-sm text-gray-500">
+        <span className="text-sm text-white">
           {new Date(value).toLocaleDateString()}
         </span>
       )

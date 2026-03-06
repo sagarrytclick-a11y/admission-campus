@@ -7,9 +7,7 @@ import { useState } from 'react';
 
 const COLLEGES_PER_PAGE = 6;
 
-/* =======================
-   UNIVERSITY CARD (SIMPLE)
-======================= */
+
 const UniversityCard = ({ name, image, slug, country = "India", ranking, fees, duration, establishment_year, about, overview, courses }: any) => {
   return (
     <Link href={`/colleges/${slug}`} className="group block h-full">
@@ -156,7 +154,7 @@ export default function FeaturedSection() {
           <p className="text-[#64748B] text-[10px] font-bold uppercase tracking-widest mb-6">
             Showing {displayedColleges} of {universities.length} institutions
           </p>
-          
+
           <div className="flex flex-col sm:flex-row items-center gap-4">
             {hasMoreColleges && (
               <button
@@ -168,7 +166,7 @@ export default function FeaturedSection() {
                 {!isLoadingMore && <ArrowRight size={14} />}
               </button>
             )}
-            
+
             <Link href="/colleges">
               <button className="px-8 py-3 bg-[#1E293B] text-white text-sm font-bold rounded-md hover:bg-[#007BFF] transition-colors shadow-sm active:scale-95">
                 View All Colleges

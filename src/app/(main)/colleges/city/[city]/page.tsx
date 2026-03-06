@@ -3,9 +3,9 @@
 import React, { useState, useMemo, useCallback } from 'react'
 import { useParams } from 'next/navigation'
 import { useAllColleges } from '@/hooks/useColleges'
+import { useCityBySlug } from '@/hooks/useAdminCities'
 import CollegeMapping from '@/components/colleges/CollegeMapping'
 import BackgroundSlider from '@/components/BackgroundSlider'
-import { getCityBySlug, INDIAN_CITIES } from '@/lib/cities'
 import { MapPin } from 'lucide-react'
 
 // Theme Constants
@@ -15,19 +15,44 @@ const PRIMARY_BLUE = "#1A4AB2"
 export default function CityCollegesPage() {
   const params = useParams()
   const citySlug = params.city as string
-  const cityInfo = getCityBySlug(citySlug) || {
-    name: citySlug.charAt(0).toUpperCase() + citySlug.slice(1),
-    color: PRIMARY_BLUE,
-    gradient: "from-[#1A4AB2] via-[#1A4AB2]/90 to-slate-900",
-    description: "Explore educational institutions in this city",
-    features: ["Top Colleges", "Research Centers", "Educational Hub"],
-    stats: { colleges: "100+", students: "50K+", avgFees: "₹1-10L" },
-    examName: "JEE",
-    examColor: "text-[#1A4AB2]",
-    borderColor: "border-[#1A4AB2]",
-    hoverBg: "hover:bg-[#1A4AB2]/5",
-    href: `/colleges/city/${citySlug}`
-  }
+
+  // Fetch dynamic city data
+  const { data: cityData, isLoading: cityLoading } = useCityBySlug(citySlug)
+
+  // Create dynamic city info from API data
+  const cityInfo = useMemo(() => {
+    if (cityData) {
+      return {
+        name: cityData.name,
+        color: PRIMARY_BLUE,
+        gradient: "from-[#1A4AB2] via-[#1A4AB2]/90 to-slate-900",
+        description: cityData.description || "Explore educational institutions in this city",
+        features: cityData.features || ["Top Colleges", "Research Centers", "Educational Hub"],
+        stats: { colleges: "100+", students: "50K+", avgFees: "₹1-10L" },
+        examName: "JEE",
+        examColor: "text-[#1A4AB2]",
+        borderColor: "border-[#1A4AB2]",
+        hoverBg: "hover:bg-[#1A4AB2]/5",
+        href: `/colleges/city/${citySlug}`,
+        cityImage: cityData.cityImage
+      }
+    } else {
+      // Fallback for when city data is not found
+      return {
+        name: citySlug.charAt(0).toUpperCase() + citySlug.slice(1),
+        color: PRIMARY_BLUE,
+        gradient: "from-[#1A4AB2] via-[#1A4AB2]/90 to-slate-900",
+        description: "Explore educational institutions in this city",
+        features: ["Top Colleges", "Research Centers", "Educational Hub"],
+        stats: { colleges: "100+", students: "50K+", avgFees: "₹1-10L" },
+        examName: "JEE",
+        examColor: "text-[#1A4AB2]",
+        borderColor: "border-[#1A4AB2]",
+        hoverBg: "hover:bg-[#1A4AB2]/5",
+        href: `/colleges/city/${citySlug}`
+      }
+    }
+  }, [cityData, citySlug])
 
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCountry, setSelectedCountry] = useState<string>('all')
@@ -109,7 +134,7 @@ export default function CityCollegesPage() {
   return (
     <div className="min-h-screen py-16 bg-slate-50">
       {/* Hero Header */}
-      <div className={`relative bg-gradient-to-br ${cityInfo.gradient} text-white`}>
+      <div className={`relative bg-linear-to-br ${cityInfo.gradient} text-white`}>
         <BackgroundSlider>
           <div />
         </BackgroundSlider>

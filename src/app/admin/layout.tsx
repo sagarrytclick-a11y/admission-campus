@@ -17,6 +17,9 @@ export default function AdminLayout({
     if (pathname === '/admin/countries') {
       return { title: 'Countries Management', subtitle: 'Manage countries for education destinations' }
     }
+    if (pathname === '/admin/cities') {
+      return { title: 'Cities Management', subtitle: 'Manage cities and their configurations' }
+    }
     if (pathname === '/admin/colleges') {
       return { title: 'Colleges Management', subtitle: 'Manage educational institutions' }
     }
