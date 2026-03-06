@@ -68,7 +68,6 @@ export async function PUT(
       fees, 
       duration, 
       establishment_year,
-      ranking: legacyRanking,
       banner_url, 
       about_content, 
       is_active 

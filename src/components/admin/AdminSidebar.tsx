@@ -13,19 +13,22 @@ import {
   Menu,
   ShieldCheck,
   Tags,
+  MapPin,
   X
 } from 'lucide-react'
 import { useState } from 'react'
+import Image from 'next/image'
 
 const navigation = [
   { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
   { name: 'Countries', href: '/admin/countries', icon: Globe },
+  { name: 'Cities', href: '/admin/cities', icon: MapPin },
   { name: 'Categories', href: '/admin/categories', icon: Tags },
   { name: 'Colleges', href: '/admin/colleges', icon: GraduationCap },
   { name: 'Exams', href: '/admin/exams', icon: FileCheck },
   { name: 'Blogs', href: '/admin/blogs', icon: FileText },
   { name: 'Enquiries', href: '/admin/enquiries', icon: MessageSquare },
-  { name: 'RBAC', href: '/admin/rbac', icon: ShieldCheck },
+  // { name: 'RBAC', href: '/admin/rbac', icon: ShieldCheck },
 ]
 
 export function AdminSidebar() {
@@ -51,9 +54,11 @@ export function AdminSidebar() {
       )}>
         <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="p-6 border-b flex items-center flex-col gap-3 border-gray-700">
-            <p className="text-lg font-bold text-white">Admission Campus</p>
-            <p className="text-sm text-center text-gray-400">Admin CMS</p>
+          <div className="p-6 border-b flex items-center  gap-3 border-gray-700">
+            {/* <p className="text-lg font-bold text-white">Admission Campus</p>
+            <p className="text-sm text-center text-gray-400">Admin CMS</p> */}
+            <Image src="/logo.jpg" className='bg-white rounded-full p-1' alt="Admission Campus" width={70} height={70} />
+            <p className='text-white text-[12px] whitespace-nowrap font-bold'>Admission Campus</p>
           </div>
 
           {/* Navigation */}
@@ -82,7 +87,7 @@ export function AdminSidebar() {
           {/* Footer */}
           <div className="p-4 border-t border-gray-700">
             <div className="text-xs text-gray-400 text-center">
-              © 2024 Admission Campus 
+              © 2026 Admission Campus 
             </div>
           </div>
         </div>

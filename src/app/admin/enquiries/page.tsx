@@ -93,8 +93,8 @@ export default function EnquiriesPage() {
       render: (value: string, record: Enquiry) => (
         <div className="max-w-md">
           <div className="font-medium text-white">{value}</div>
-          <div className="text-sm text-gray-500">{record.email}</div>
-          <div className="text-sm text-gray-500">{record.phone}</div>
+          <div className="text-sm text-white">{record.email}</div>
+          <div className="text-sm text-white">{record.phone}</div>
         </div>
       )
     },
@@ -184,8 +184,8 @@ export default function EnquiriesPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-400">Enquiries</h1>
-          <p className="text-gray-600">Manage student enquiries and support requests</p>
+          <h1 className="text-2xl font-bold text-white">Enquiries</h1>
+          <p className="text-white">Manage student enquiries and support requests</p>
         </div>
       </div>
 
@@ -241,7 +241,7 @@ export default function EnquiriesPage() {
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center justify-between mt-12">
-          <div className="text-sm text-gray-500">
+          <div className="text-sm text-white">
             Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, filteredEnquiries.length)} of {filteredEnquiries.length} enquiries
           </div>
           <div className="flex items-center space-x-2">
@@ -356,7 +356,7 @@ export default function EnquiriesPage() {
             {/* Status and Priority */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Status</label>
+                <label className="text-sm font-medium text-white">Status</label>
                 <Select 
                   value={selectedEnquiry.status} 
                   onValueChange={(value) => handleStatusUpdate(selectedEnquiry._id, value)}
@@ -373,7 +373,7 @@ export default function EnquiriesPage() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Priority</label>
+                <label className="text-sm font-medium text-white">Priority</label>
                 <Badge className={
                   selectedEnquiry.priority === 'urgent' ? 'bg-red-100 text-red-800 border-red-200' :
                   selectedEnquiry.priority === 'high' ? 'bg-orange-100 text-orange-800 border-orange-200' :
@@ -384,13 +384,13 @@ export default function EnquiriesPage() {
                 </Badge>
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Assigned To</label>
+                <label className="text-sm font-medium text-white">Assigned To</label>
                 <div>{selectedEnquiry.assignedTo || 'Unassigned'}</div>
               </div>
             </div>
 
             {/* Timestamps */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-500">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-white">
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
                 <span>Created: {new Date(selectedEnquiry.createdAt).toLocaleString()}</span>
@@ -413,13 +413,13 @@ export default function EnquiriesPage() {
         showFooter={false}
       >
         <div className="space-y-4">
-          <p className="text-gray-600">
+          <p className="text-white">
             Are you sure you want to delete this enquiry? This action cannot be undone.
           </p>
           {enquiryToDelete && (
             <div className="p-3 bg-gray-50 rounded-lg">
               <div className="font-medium">{enquiryToDelete.name}</div>
-              <div className="text-sm text-gray-600">{enquiryToDelete.subject}</div>
+              <div className="text-sm text-white">{enquiryToDelete.subject}</div>
             </div>
           )}
           <div className="flex gap-3 justify-end">

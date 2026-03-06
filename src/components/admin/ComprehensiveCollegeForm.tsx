@@ -11,9 +11,10 @@ import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Plus, X, GraduationCap, Globe, Award, FileText, Users, Building, DollarSign, Calendar, CheckCircle } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { CITY_OPTIONS } from '@/lib/cities'
 import { FORM_DEFAULTS, FORM_PLACEHOLDERS } from "@/lib/constants/formDefaults";
 import { useAdminCategories } from '@/hooks/useAdminCategories'
+import { useAdminCities } from '@/hooks/useAdminCities'
+import { generateSlug } from '@/lib/slug'
 
 interface Country {
   _id: string
@@ -96,6 +97,15 @@ export function ComprehensiveCollegeForm({ data, countries, onChange, onSubmit, 
 
   // Fetch dynamic categories
   const { data: categories = [], isLoading: categoriesLoading } = useAdminCategories()
+
+  // Fetch cities with pagination
+  const { data: citiesData, isLoading: citiesLoading } = useAdminCities({
+    page: 1,
+    limit: 1000 // Fetch all cities for the dropdown
+  })
+
+  // Extract cities array from paginated response
+  const cities = citiesData?.cities || []
 
   // Calculate form completion percentage
   const calculateCompletion = () => {
@@ -216,7 +226,11 @@ export function ComprehensiveCollegeForm({ data, countries, onChange, onSubmit, 
                   <Input
                     id="name"
                     value={data.name || ''}
-                    onChange={(e) => onChange('name', e.target.value)}
+                    onChange={(e) => {
+                      const nameValue = e.target.value
+                      onChange('name', nameValue)
+                      onChange('slug', generateSlug(nameValue))
+                    }}
                     placeholder={FORM_PLACEHOLDERS.college_name}
                     disabled={loading}
                     required
@@ -257,18 +271,27 @@ export function ComprehensiveCollegeForm({ data, countries, onChange, onSubmit, 
               {data.country_ref === 'india' && (
                 <div>
                   <Label htmlFor="city" className="mb-3 block text-gray-200">City *</Label>
-                  <Select value={data.city || ''} onValueChange={(value) => onChange('city', value)}>
-                    <SelectTrigger className="bg-gray-700 border-gray-600 text-white">
-                      <SelectValue placeholder="Select a metro city" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-gray-700 border-gray-600">
-                      {CITY_OPTIONS.map((city: { value: string; label: string }) => (
-                        <SelectItem key={city.value} value={city.value} className="text-white hover:bg-gray-600">
-                          {city.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  {citiesLoading ? (
+                    <div className="flex items-center justify-center p-4">
+                      <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+                      <span className="ml-2 text-gray-400">Loading cities...</span>
+                    </div>
+                  ) : (
+                    <Select value={data.city || ''} onValueChange={(value) => onChange('city', value)}>
+                      <SelectTrigger className="bg-gray-700 border-gray-600 text-white">
+                        <SelectValue placeholder="Select a metro city" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-gray-700 border-gray-600">
+                        {cities
+                          .filter(city => city.country_ref.slug === 'india')
+                          .map((city) => (
+                            <SelectItem key={city._id} value={city.slug} className="text-white hover:bg-gray-600">
+                              {city.name}
+                            </SelectItem>
+                          ))}
+                      </SelectContent>
+                    </Select>
+                  )}
                   {(!data.city || data.city.trim() === '') && (
                     <p className="text-sm text-red-400 mt-1">City is required for Indian colleges</p>
                   )}
@@ -353,6 +376,7 @@ export function ComprehensiveCollegeForm({ data, countries, onChange, onSubmit, 
                           checked={(data.categories || []).includes(category.slug)}
                           onCheckedChange={(checked) => {
                             const currentCategories = data.categories || [];
+                            
                             if (checked) {
                               onChange('categories', [...currentCategories, category.slug]);
                             } else {

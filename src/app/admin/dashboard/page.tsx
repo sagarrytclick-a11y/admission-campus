@@ -6,10 +6,13 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Globe, GraduationCap, FileText, MoreHorizontal, ChevronRight, Activity, FileCheck, Loader2 } from 'lucide-react'
+import { Globe, GraduationCap, FileText, MoreHorizontal, ChevronRight, Activity, FileCheck, Loader2, MapPin, Tag, MessageSquare } from 'lucide-react'
 import { useAdminDashboardStats } from '@/hooks/useAdminDashboard'
 import { useAdminCountries, useAdminColleges } from '@/hooks/useAdminColleges'
 import { useAdminBlogs } from '@/hooks/useAdminBlogs'
+import { useAdminCities } from '@/hooks/useAdminCities'
+import { useAdminCategories } from '@/hooks/useAdminCategories'
+import { useAdminEnquiries } from '@/hooks/useAdminEnquiries'
 import { dummyCountries, dummyColleges, dummyBlogs } from '@/data/dummyData'
 
 export default function DashboardPage() {
@@ -18,14 +21,24 @@ export default function DashboardPage() {
   const { data: countries = [], isLoading: countriesLoading } = useAdminCountries()
   const { data: colleges = [], isLoading: collegesLoading } = useAdminColleges()
   const { data: blogs = [], isLoading: blogsLoading } = useAdminBlogs()
+  const { data: citiesData, isLoading: citiesLoading } = useAdminCities({ page: 1, limit: 1000 })
+  const { data: categories = [], isLoading: categoriesLoading } = useAdminCategories()
+  const { data: enquiries = [], isLoading: enquiriesLoading } = useAdminEnquiries()
   
   // Overall loading state
-  const loading = statsLoading || countriesLoading || collegesLoading || blogsLoading
+  const loading = statsLoading || countriesLoading || collegesLoading || blogsLoading || citiesLoading || categoriesLoading || enquiriesLoading
   
   // Fallback to dummy data if there are errors
   const displayCountries = countries.length > 0 ? countries : dummyCountries
   const displayColleges = colleges.length > 0 ? colleges : dummyColleges
   const displayBlogs = blogs.length > 0 ? blogs : dummyBlogs
+  const displayCities = citiesData?.cities || []
+  const displayCategories = categories.length > 0 ? categories : []
+  const displayEnquiries = enquiries.length > 0 ? enquiries : []
+  
+  // Calculate pending enquiries
+  const pendingEnquiries = displayEnquiries.filter((enquiry: any) => enquiry.status === 'pending' || enquiry.status === 'new').length
+  
   const displayStats = dbStats.countries > 0 || dbStats.colleges > 0 || dbStats.blogs > 0 || dbStats.exams > 0 
     ? dbStats 
     : {
@@ -33,6 +46,9 @@ export default function DashboardPage() {
         colleges: dummyColleges.length,
         blogs: dummyBlogs.length,
         exams: 12,
+        cities: displayCities.length,
+        categories: displayCategories.length,
+        pendingEnquiries: pendingEnquiries
       }
 
   const stats = [
@@ -67,6 +83,30 @@ export default function DashboardPage() {
       icon: FileText,
       color: 'text-purple-400',
       bgColor: 'bg-purple-900/50'
+    },
+    {
+      title: 'Total Cities',
+      value: displayCities.length,
+      description: 'Study locations',
+      icon: MapPin,
+      color: 'text-cyan-400',
+      bgColor: 'bg-cyan-900/50'
+    },
+    {
+      title: 'Categories',
+      value: displayCategories.length,
+      description: 'Content categories',
+      icon: Tag,
+      color: 'text-indigo-400',
+      bgColor: 'bg-indigo-900/50'
+    },
+    {
+      title: 'Pending Enquiries',
+      value: pendingEnquiries,
+      description: 'Awaiting response',
+      icon: MessageSquare,
+      color: 'text-red-400',
+      bgColor: 'bg-red-900/50'
     }
   ]
 
@@ -96,7 +136,7 @@ export default function DashboardPage() {
   return (
     <div className="space-y-4 sm:space-y-6">
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-7 gap-4 sm:gap-6">
           {stats.map((stat, index) => (
             <Card key={index} className="hover:shadow-lg transition-all duration-200 border-0 shadow-sm bg-gray-800">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

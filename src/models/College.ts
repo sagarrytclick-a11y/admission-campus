@@ -33,7 +33,6 @@ const CollegeSchema = new mongoose.Schema(
     // College Categories
     categories: [{
       type: String,
-      enum: ['management', 'engineering', 'medical']
     }],
     
     // Overview Section
@@ -188,5 +187,7 @@ const CollegeSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.models.College ||
-  mongoose.model("College", CollegeSchema);
+// Force reload the model by clearing it from cache
+delete mongoose.models.College;
+
+export default mongoose.model("College", CollegeSchema);
