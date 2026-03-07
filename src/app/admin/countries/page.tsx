@@ -269,7 +269,7 @@ export default function CountriesPage() {
       {/* Header with Add button */}
       <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900">All Countries</h2>
+            <h2 className="text-lg font-semibold text-white">All Countries</h2>
             <p className="text-sm text-gray-500">
               {countries.length} countries total
             </p>

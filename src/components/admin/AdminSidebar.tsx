@@ -57,8 +57,8 @@ export function AdminSidebar() {
           <div className="p-6 border-b flex items-center  gap-3 border-gray-700">
             {/* <p className="text-lg font-bold text-white">Admission Campus</p>
             <p className="text-sm text-center text-gray-400">Admin CMS</p> */}
-            <Image src="/logo.jpg" className='bg-white rounded-full p-1' alt="Admission Campus" width={70} height={70} />
-            <p className='text-white text-[12px] whitespace-nowrap font-bold'>Admission Campus</p>
+            <Image src="/logo.jpg" className='bg-white rounded-full p-1' alt="Admission Campus" width={60} height={60} />
+            <p className='text-white text-[14px] whitespace-nowrap font-bold'>Admission Campus</p>
           </div>
 
           {/* Navigation */}

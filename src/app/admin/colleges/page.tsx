@@ -736,14 +736,14 @@ export default function AdminCollegesPage() {
       {/* Filters and Add button */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900">All AdminColleges</h2>
+            <h2 className="text-lg font-semibold text-white">All Colleges</h2>
             <p className="text-sm text-gray-500">
               {filteredAdminColleges.length} of {colleges.length} colleges
             </p>
           </div>
-          <Button onClick={handleAdminCollege} className="flex items-center space-x-2">
+          <Button onClick={handleAdminCollege} className="flex items-center space-x-1">
             <Plus className="h-4 w-4" />
-            <span>Add AdminCollege</span>
+            <span>Add College</span>
           </Button>
         </div>
 
