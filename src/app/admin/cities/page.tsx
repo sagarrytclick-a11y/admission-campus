@@ -50,14 +50,23 @@ export default function CitiesPage() {
   // Search state
   const [searchTerm, setSearchTerm] = useState('')
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    id: string
+    name: string
+    slug: string
+    country_ref: string
+    description: string
+    cityImage: string
+    features: string[]
+    is_active: boolean
+  }>({
     id: '',
     name: '',
     slug: '',
     country_ref: '',
     description: '',
     cityImage: '',
-    features: [''],
+    features: [],
     is_active: true
   })
 
@@ -220,7 +229,7 @@ export default function CitiesPage() {
       country_ref: '',
       description: '',
       cityImage: '',
-      features: [''],
+      features: [],
       is_active: true
     })
   }

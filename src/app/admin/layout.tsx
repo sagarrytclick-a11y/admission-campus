@@ -32,6 +32,9 @@ export default function AdminLayout({
     if (pathname === '/admin/rbac') {
       return { title: 'RBAC Management', subtitle: 'Role-Based Access Control & User Permission Management' }
     }
+    if (pathname === '/admin/categories') {
+      return { title: 'Categories Management', subtitle: 'Manage categories for content organization' }
+    }
     return { title: 'Admin', subtitle: 'Admission Campus Admin Panel' }
   }
 
