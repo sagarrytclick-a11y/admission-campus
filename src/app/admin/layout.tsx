@@ -35,6 +35,10 @@ export default function AdminLayout({
     if (pathname === '/admin/categories') {
       return { title: 'Categories Management', subtitle: 'Manage categories for content organization' }
     }
+    if (pathname === '/admin/enquiries') {
+      return { title: 'Enquiries Management', subtitle: 'Manage Enquiry for Management' }
+    }
+    
     return { title: 'Admin', subtitle: 'Admission Campus Admin Panel' }
   }
 
