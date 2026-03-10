@@ -1,21 +1,24 @@
 'use client'
 
-import React, { useMemo, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { AdminTable, createEditAction, createDeleteAction } from '@/components/admin/AdminTable'
 import { AdminModal } from '@/components/admin/AdminModal'
 import { AdminForm } from '@/components/admin/AdminForm'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Plus, MapPin, Search, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Plus, MapPin, Search } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Textarea } from '@/components/ui/textarea'
+import { Label } from '@/components/ui/label'
+import { Checkbox } from '@/components/ui/checkbox'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { generateSlug } from '@/lib/slug'
 import { useAdminCities, useSaveCity, useDeleteCity } from '@/hooks/useAdminCities'
 import { useAdminCountries } from '@/hooks/useAdminCountries'
-import { useCitiesAdminContext, useCitiesAdminActions, CitiesAdminProvider } from '@/context/CitiesAdminContext'
 import { toast } from 'sonner'
 
-// City interface
 export interface City {
   _id: string
   id: string
@@ -34,45 +37,53 @@ export interface City {
   updatedAt: string
 }
 
-// Main CitiesPage component wrapped with provider
-function CitiesPageContent() {
-  const { state, dispatch } = useCitiesAdminContext()
-  const actions = useCitiesAdminActions()
+export default function CitiesPage() {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [editingCity, setEditingCity] = useState<City | null>(null)
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+  const [cityToDelete, setCityToDelete] = useState<City | null>(null)
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
+
+  // Search state
+  const [searchTerm, setSearchTerm] = useState('')
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
+  const [formData, setFormData] = useState({
+    id: '',
+    name: '',
+    slug: '',
+    country_ref: '',
+    description: '',
+    cityImage: '',
+    features: [''],
+    is_active: true
+  })
+
+  // Debounce search term
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm)
+      setCurrentPage(1) // Reset to first page when searching
+    }, 300)
+
+    return () => clearTimeout(timer)
+  }, [searchTerm])
 
   // TanStack Query hooks
   const { data: citiesData, isLoading: citiesLoading } = useAdminCities({
-    page: state.currentPage,
-    limit: state.itemsPerPage,
-    search: state.searchTerm
+    page: currentPage,
+    limit: pageSize,
+    search: debouncedSearchTerm
   })
-  const { data: countries = [], isLoading: countriesLoading } = useAdminCountries()
-  const saveCityMutation = useSaveCity()
-  const deleteCityMutation = useDeleteCity()
-
-  // Extract state from context
-  const {
-    isModalOpen,
-    editingItem: editingCity,
-    deleteModalOpen,
-    itemToDelete: cityToDelete,
-    searchTerm,
-    selectedFilters,
-    currentPage,
-    itemsPerPage,
-    formData
-  } = state
 
   // Extract cities and pagination data
   const cities = citiesData?.cities || []
   const pagination = citiesData?.pagination
-
-  // Auto-generate slug when name changes
-  useEffect(() => {
-    if (formData.name && !editingCity) {
-      actions.updateFormField('slug', generateSlug(formData.name))
-      actions.updateFormField('id', generateSlug(formData.name))
-    }
-  }, [formData.name, editingCity, actions])
+  const { data: countries = [], isLoading: countriesLoading } = useAdminCountries()
+  const saveCityMutation = useSaveCity()
+  const deleteCityMutation = useDeleteCity()
 
   const columns = [
     {
@@ -89,25 +100,7 @@ function CitiesPageContent() {
       key: 'country_ref' as keyof City,
       title: 'Country',
       render: (value: any) => (
-        <Badge variant="secondary">{value?.name || 'Unknown'}</Badge>
-      )
-    },
-    {
-      key: 'features' as keyof City,
-      title: 'Features',
-      render: (value: string[]) => (
-        <div className="flex flex-wrap gap-1">
-          {value?.slice(0, 2).map((feature, index) => (
-            <Badge key={index} variant="outline" className="text-xs">
-              {feature}
-            </Badge>
-          ))}
-          {value && value.length > 2 && (
-            <Badge variant="outline" className="text-xs">
-              +{value.length - 2} more
-            </Badge>
-          )}
-        </div>
+        <span className="text-sm text-white">{value?.name || 'N/A'}</span>
       )
     },
     {
@@ -115,7 +108,7 @@ function CitiesPageContent() {
       title: 'Status',
       render: (value: boolean) => (
         <Badge variant={value ? 'default' : 'secondary'}>
-          {value ? 'Active' : 'Inactive'}
+          {value ? 'active' : 'inactive'}
         </Badge>
       )
     },
@@ -129,48 +122,78 @@ function CitiesPageContent() {
     }
   ]
 
-  const tableActions = [
+  const actions = [
     createEditAction((city: City) => {
-      actions.setEditingItem(city)
-      actions.setFormData({
+      setEditingCity(city)
+      setFormData({
         id: city.id,
         name: city.name,
         slug: city.slug,
         country_ref: city.country_ref._id,
         description: city.description,
-        cityImage: city.cityImage,
-        features: city.features,
+        cityImage: (city as any).cityImage || '',
+        features: city.features.length > 0 ? city.features : [''],
         is_active: city.is_active
       })
-      actions.openCreateModal()
+      setIsModalOpen(true)
     }),
     createDeleteAction((city: City) => {
-      actions.openDeleteModal(city)
+      setCityToDelete(city)
+      setDeleteModalOpen(true)
     })
   ]
 
   const handleSave = async () => {
+    // Validate required fields
+    if (!formData.name.trim()) {
+      toast.error('City name is required')
+      return
+    }
+    if (!formData.country_ref) {
+      toast.error('Country selection is required')
+      return
+    }
+    if (!formData.description.trim()) {
+      toast.error('Description is required')
+      return
+    }
+    if (!formData.cityImage.trim()) {
+      toast.error('City image URL is required')
+      return
+    }
+    if (!formData.features || formData.features.length === 0 || formData.features.every(f => !f.trim())) {
+      toast.error('At least one feature is required')
+      return
+    }
+
     try {
-      const isEditing = !!editingCity
-      const dataToSave = {
-        ...formData,
-        _id: isEditing ? editingCity._id : undefined
+      // Find the selected country object
+      const selectedCountry = countries.find(country => country._id === formData.country_ref)
+
+      if (!selectedCountry) {
+        toast.error('Selected country not found')
+        return
       }
 
-      await saveCityMutation.mutateAsync(dataToSave)
-      toast.success(`City ${isEditing ? 'updated' : 'created'} successfully`)
-
-      actions.closeModal()
-      actions.resetState({
-        id: '',
-        name: '',
-        slug: '',
-        country_ref: '',
-        description: '',
-        cityImage: '',
-        features: [],
-        is_active: true
+      await saveCityMutation.mutateAsync({
+        _id: editingCity?._id,
+        id: formData.id,
+        name: formData.name.trim(),
+        slug: formData.slug,
+        country_ref: {
+          _id: selectedCountry._id,
+          name: selectedCountry.name,
+          slug: selectedCountry.slug
+        },
+        description: formData.description.trim(),
+        cityImage: formData.cityImage.trim(),
+        features: formData.features.filter(f => f.trim() !== ''),
+        is_active: formData.is_active
       })
+      toast.success(editingCity ? 'City updated successfully' : 'City created successfully')
+      setIsModalOpen(false)
+      setEditingCity(null)
+      resetForm()
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Failed to save city')
     }
@@ -182,10 +205,56 @@ function CitiesPageContent() {
     try {
       await deleteCityMutation.mutateAsync(cityToDelete._id)
       toast.success('City deleted successfully')
-      actions.closeDeleteModal()
+      setDeleteModalOpen(false)
+      setCityToDelete(null)
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Failed to delete city')
     }
+  }
+
+  const resetForm = () => {
+    setFormData({
+      id: '',
+      name: '',
+      slug: '',
+      country_ref: '',
+      description: '',
+      cityImage: '',
+      features: [''],
+      is_active: true
+    })
+  }
+
+  const handleFormChange = (field: string, value: unknown) => {
+    setFormData(prev => {
+      if (field.includes('.')) {
+        // Handle nested fields like stats.colleges
+        const [parent, child] = field.split('.')
+        return {
+          ...prev,
+          [parent]: {
+            ...prev[parent as keyof typeof prev] as any,
+            [child]: value
+          }
+        }
+      }
+
+      // Special handling for name field - auto-generate slug and id
+      if (field === 'name') {
+        const nameValue = value as string
+        return {
+          ...prev,
+          name: nameValue,
+          slug: generateSlug(nameValue),
+          id: generateSlug(nameValue)
+        }
+      }
+
+      return {
+        ...prev,
+        [field]: value
+      }
+    })
   }
 
   const formFields = [
@@ -234,7 +303,7 @@ function CitiesPageContent() {
       label: 'Features',
       type: 'tags' as const,
       required: true,
-      placeholder: 'Add a feature'
+      placeholder: 'Enter feature'
     },
     {
       name: 'is_active',
@@ -251,7 +320,7 @@ function CitiesPageContent() {
           <h1 className="text-2xl font-bold">Cities Management</h1>
           <p className="text-gray-600">Manage cities and their configurations</p>
         </div>
-        <Button onClick={actions.openCreateModal} className="flex items-center gap-2">
+        <Button onClick={() => setIsModalOpen(true)} className="flex items-center gap-2">
           <Plus size={16} />
           Add City
         </Button>
@@ -265,7 +334,7 @@ function CitiesPageContent() {
             type="text"
             placeholder="Search cities by name or slug..."
             value={searchTerm}
-            onChange={(e) => actions.setSearchTerm(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
             className="pl-10 bg-gray-700 border-gray-600 text-white placeholder-gray-400"
           />
         </div>
@@ -275,11 +344,12 @@ function CitiesPageContent() {
           </div>
         )}
       </div>
+  
 
       <AdminTable
         columns={columns}
         data={cities}
-        actions={tableActions}
+        actions={actions}
         loading={citiesLoading}
         emptyMessage="No cities found"
       />
@@ -298,10 +368,10 @@ function CitiesPageContent() {
             <div className="flex items-center space-x-2">
               <span className="text-sm text-gray-600">Items per page:</span>
               <Select
-                value={itemsPerPage.toString()}
+                value={pageSize.toString()}
                 onValueChange={(value: string) => {
-                  actions.setItemsPerPage(parseInt(value))
-                  actions.setCurrentPage(1)
+                  setPageSize(parseInt(value))
+                  setCurrentPage(1) // Reset to first page when changing page size
                 }}
               >
                 <SelectTrigger className="w-20 bg-gray-700 border-gray-600 text-white">
@@ -321,21 +391,21 @@ function CitiesPageContent() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => actions.setCurrentPage(currentPage - 1)}
+                onClick={() => setCurrentPage(currentPage - 1)}
                 disabled={!pagination.hasPrevPage || citiesLoading}
                 className="bg-gray-700 border-gray-600 text-white hover:bg-gray-600 disabled:opacity-50"
               >
                 Previous
               </Button>
 
-              <span className="text-sm text-white">
-                Page {currentPage} of {pagination.totalPages}
+              <span className="text-sm text-gray-600">
+                Page {pagination.currentPage} of {pagination.totalPages}
               </span>
 
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => actions.setCurrentPage(currentPage + 1)}
+                onClick={() => setCurrentPage(currentPage + 1)}
                 disabled={!pagination.hasNextPage || citiesLoading}
                 className="bg-gray-700 border-gray-600 text-white hover:bg-gray-600 disabled:opacity-50"
               >
@@ -343,58 +413,47 @@ function CitiesPageContent() {
               </Button>
             </div>
           </div>
-        </div>
+      </div>
       )}
 
-      {/* Create/Edit Modal */}
       <AdminModal
-        title={editingCity ? 'Edit City' : 'Add City'}
         open={isModalOpen}
-        onOpenChange={actions.closeModal}
-        size="xl"
+        onOpenChange={(open) => {
+          setIsModalOpen(open)
+          if (!open) {
+            setEditingCity(null)
+            resetForm()
+          }
+        }}
+        title={editingCity ? 'Edit City' : 'Add City'}
+        onConfirm={handleSave}
+        confirmText={editingCity ? 'Update' : 'Create'}
+        loading={saveCityMutation.isPending}
       >
         <AdminForm
           fields={formFields}
           data={formData}
-          onChange={(field, value) => actions.updateFormField(field, value)}
-          onSubmit={handleSave}
-          loading={saveCityMutation.isPending}
-          submitLabel={editingCity ? 'Update City' : 'Create City'}
+          onChange={handleFormChange}
         />
       </AdminModal>
 
-      {/* Delete Confirmation Modal */}
       <AdminModal
-        title="Delete City"
         open={deleteModalOpen}
-        onOpenChange={actions.closeDeleteModal}
+        onOpenChange={(open) => {
+          setDeleteModalOpen(open)
+          if (!open) {
+            setCityToDelete(null)
+          }
+        }}
+        title="Delete City"
+        onConfirm={handleDelete}
+        confirmText="Delete"
+        loading={deleteCityMutation.isPending}
       >
-        <div className="space-y-4">
-          <p>Are you sure you want to delete the city "{cityToDelete?.name}"?</p>
-          <p className="text-sm text-gray-600">This action cannot be undone.</p>
-          <div className="flex justify-end space-x-2">
-            <Button variant="outline" onClick={actions.closeDeleteModal}>
-              Cancel
-            </Button>
-            <Button
-              variant="destructive"
-              onClick={handleDelete}
-              disabled={deleteCityMutation.isPending}
-            >
-              {deleteCityMutation.isPending ? 'Deleting...' : 'Delete'}
-            </Button>
-          </div>
-        </div>
+        <p>Are you sure you want to delete "{cityToDelete?.name}"? This action cannot be undone.</p>
       </AdminModal>
     </div>
-  )
-}
 
-// Wrapped component with provider
-export default function CitiesPage() {
-  return (
-    <CitiesAdminProvider>
-      <CitiesPageContent />
-    </CitiesAdminProvider>
+   
   )
 }

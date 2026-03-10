@@ -6,11 +6,11 @@ import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
-function Select({
+const Select = React.memo(function Select({
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Root>) {
   return <SelectPrimitive.Root data-slot="select" {...props} />
-}
+})
 
 function SelectGroup({
   ...props
@@ -24,7 +24,7 @@ function SelectValue({
   return <SelectPrimitive.Value data-slot="select-value" {...props} />
 }
 
-function SelectTrigger({
+const SelectTrigger = React.memo(function SelectTrigger({
   className,
   size = "default",
   children,
@@ -48,9 +48,9 @@ function SelectTrigger({
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   )
-}
+})
 
-function SelectContent({
+const SelectContent = React.memo(function SelectContent({
   className,
   children,
   position = "item-aligned",
@@ -85,7 +85,7 @@ function SelectContent({
       </SelectPrimitive.Content>
     </SelectPrimitive.Portal>
   )
-}
+})
 
 function SelectLabel({
   className,
@@ -100,7 +100,7 @@ function SelectLabel({
   )
 }
 
-function SelectItem({
+const SelectItem = React.memo(function SelectItem({
   className,
   children,
   ...props
@@ -125,7 +125,7 @@ function SelectItem({
       <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
     </SelectPrimitive.Item>
   )
-}
+})
 
 function SelectSeparator({
   className,
