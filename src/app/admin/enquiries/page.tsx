@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useMemo } from 'react'
+import React, { useMemo, useEffect } from 'react'
 import { AdminTable, createViewAction, createDeleteAction } from '@/components/admin/AdminTable'
 import { AdminModal } from '@/components/admin/AdminModal'
 import { Button } from '@/components/ui/button'
@@ -15,19 +15,36 @@ import {
 } from '@/components/ui/select'
 import { MessageSquare, Search, Eye, Mail, Phone, Calendar, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useAdminEnquiries, useDeleteEnquiry, useUpdateEnquiry } from '@/hooks/useAdminEnquiries'
-import { Enquiry } from '@/hooks/useAdminEnquiries'
+import { useEnquiriesAdminContext, useEnquiriesAdminActions, EnquiriesAdminProvider } from '@/context/EnquiriesAdminContext'
+import { Enquiry } from '@/context/EnquiriesAdminContext'
 
-export default function EnquiriesPage() {
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [selectedEnquiry, setSelectedEnquiry] = useState<Enquiry | null>(null)
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
-  const [enquiryToDelete, setEnquiryToDelete] = useState<Enquiry | null>(null)
-  const [searchTerm, setSearchTerm] = useState('')
-  const [selectedStatus, setSelectedStatus] = useState<string>('all')
-  const [selectedPriority, setSelectedPriority] = useState<string>('all')
-  const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 10
+function EnquiriesPageContent() {
+  const { state, dispatch } = useEnquiriesAdminContext()
+  const {
+    openCreateModal,
+    closeModal,
+    setEditingItem,
+    openDeleteModal,
+    closeDeleteModal,
+    setSearchTerm,
+    setFilter,
+    setCurrentPage
+  } = useEnquiriesAdminActions()
   
+  const {
+    isModalOpen,
+    editingItem: selectedEnquiry,
+    deleteModalOpen,
+    itemToDelete: enquiryToDelete,
+    searchTerm,
+    selectedFilters,
+    currentPage,
+    itemsPerPage
+  } = state
+  
+  const selectedStatus = selectedFilters.status || 'all'
+  const selectedPriority = selectedFilters.priority || 'all'
+
   // API hooks
   const { data: enquiries = [], isLoading: dataLoading } = useAdminEnquiries()
   const deleteEnquiryMutation = useDeleteEnquiry()
@@ -37,9 +54,9 @@ export default function EnquiriesPage() {
   const handleStatusUpdate = async (enquiryId: string, newStatus: string) => {
     // Optimistically update local state for real-time UI feedback
     if (selectedEnquiry && selectedEnquiry._id === enquiryId) {
-      setSelectedEnquiry({ ...selectedEnquiry, status: newStatus as Enquiry['status'] })
+      setEditingItem({ ...selectedEnquiry, status: newStatus as Enquiry['status'] })
     }
-    
+
     try {
       await updateEnquiryMutation.mutateAsync({ id: enquiryId, status: newStatus })
     } catch (error) {
@@ -61,7 +78,7 @@ export default function EnquiriesPage() {
     }
 
     if (searchTerm) {
-      filtered = filtered.filter((enquiry: Enquiry) => 
+      filtered = filtered.filter((enquiry: Enquiry) =>
         enquiry.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         enquiry.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
         enquiry.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -82,9 +99,9 @@ export default function EnquiriesPage() {
   }, [filteredEnquiries, currentPage])
 
   // Reset to page 1 when filters change
-  useMemo(() => {
-    setCurrentPage(1)
-  }, [searchTerm, selectedStatus, selectedPriority])
+  useEffect(() => {
+    dispatch({ type: 'SET_CURRENT_PAGE', payload: 1 })
+  }, [searchTerm, selectedStatus, selectedPriority, dispatch])
 
   const columns = [
     {
@@ -158,22 +175,20 @@ export default function EnquiriesPage() {
 
   const actions = [
     createViewAction((enquiry: Enquiry) => {
-      setSelectedEnquiry(enquiry)
-      setIsModalOpen(true)
+      setEditingItem(enquiry)
+      openCreateModal()
     }),
     createDeleteAction((enquiry: Enquiry) => {
-      setEnquiryToDelete(enquiry)
-      setDeleteModalOpen(true)
+      openDeleteModal(enquiry)
     })
   ]
 
   const handleDeleteEnquiry = async () => {
     if (!enquiryToDelete) return
-    
+
     try {
       await deleteEnquiryMutation.mutateAsync(enquiryToDelete._id)
-      setDeleteModalOpen(false)
-      setEnquiryToDelete(null)
+      closeDeleteModal()
     } catch (error) {
       console.error('Delete error:', error)
     }
@@ -202,8 +217,8 @@ export default function EnquiriesPage() {
             />
           </div>
         </div>
-        
-        <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+
+        <Select value={selectedStatus} onValueChange={(value) => setFilter('status', value)}>
           <SelectTrigger className="w-full sm:w-48">
             <SelectValue placeholder="Filter by status" />
           </SelectTrigger>
@@ -216,7 +231,7 @@ export default function EnquiriesPage() {
           </SelectContent>
         </Select>
 
-        <Select value={selectedPriority} onValueChange={setSelectedPriority}>
+        <Select value={selectedPriority} onValueChange={(value) => setFilter('priority', value)}>
           <SelectTrigger className="w-full sm:w-48">
             <SelectValue placeholder="Filter by priority" />
           </SelectTrigger>
@@ -248,14 +263,14 @@ export default function EnquiriesPage() {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+              onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))}
               disabled={currentPage === 1}
               className="flex items-center space-x-1"
             >
               <ChevronLeft className="h-4 w-4" />
               <span>Previous</span>
             </Button>
-            
+
             <div className="flex items-center space-x-1">
               {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                 let pageNum
@@ -268,7 +283,7 @@ export default function EnquiriesPage() {
                 } else {
                   pageNum = currentPage - 2 + i
                 }
-                
+
                 return (
                   <Button
                     key={pageNum}
@@ -282,11 +297,11 @@ export default function EnquiriesPage() {
                 )
               })}
             </div>
-            
+
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+              onClick={() => setCurrentPage(Math.min(currentPage + 1, totalPages))}
               disabled={currentPage === totalPages}
               className="flex items-center space-x-1"
             >
@@ -300,7 +315,7 @@ export default function EnquiriesPage() {
       {/* View Enquiry Modal */}
       <AdminModal
         open={isModalOpen}
-        onOpenChange={(open) => !open && setIsModalOpen(false)}
+        onOpenChange={(open) => !open && closeModal()}
         title="Enquiry Details"
         size="lg"
         showFooter={false}
@@ -344,7 +359,7 @@ export default function EnquiriesPage() {
                   {selectedEnquiry.subject}
                 </div>
               </div>
-              
+
               <div>
                 <label className="text-sm font-medium text-white">Message</label>
                 <div className="mt-1 p-3  rounded-lg whitespace-pre-wrap">
@@ -357,8 +372,8 @@ export default function EnquiriesPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-white">Status</label>
-                <Select 
-                  value={selectedEnquiry.status} 
+                <Select
+                  value={selectedEnquiry.status}
                   onValueChange={(value) => handleStatusUpdate(selectedEnquiry._id, value)}
                 >
                   <SelectTrigger className="w-full">
@@ -376,9 +391,9 @@ export default function EnquiriesPage() {
                 <label className="text-sm font-medium text-white">Priority</label>
                 <Badge className={
                   selectedEnquiry.priority === 'urgent' ? 'bg-red-100 text-red-800 border-red-200' :
-                  selectedEnquiry.priority === 'high' ? 'bg-orange-100 text-orange-800 border-orange-200' :
-                  selectedEnquiry.priority === 'medium' ? 'bg-yellow-100 text-yellow-800 border-yellow-200' :
-                  'bg-green-100 text-green-800 border-green-200'
+                    selectedEnquiry.priority === 'high' ? 'bg-orange-100 text-orange-800 border-orange-200' :
+                      selectedEnquiry.priority === 'medium' ? 'bg-yellow-100 text-yellow-800 border-yellow-200' :
+                        'bg-green-100 text-green-800 border-green-200'
                 }>
                   {selectedEnquiry.priority}
                 </Badge>
@@ -407,7 +422,7 @@ export default function EnquiriesPage() {
       {/* Delete Confirmation Modal */}
       <AdminModal
         open={deleteModalOpen}
-        onOpenChange={(open) => !open && setDeleteModalOpen(false)}
+        onOpenChange={(open) => !open && closeDeleteModal()}
         title="Delete Enquiry"
         size="sm"
         showFooter={false}
@@ -425,7 +440,7 @@ export default function EnquiriesPage() {
           <div className="flex gap-3 justify-end">
             <Button
               variant="outline"
-              onClick={() => setDeleteModalOpen(false)}
+              onClick={() => closeDeleteModal()}
             >
               Cancel
             </Button>
@@ -439,5 +454,13 @@ export default function EnquiriesPage() {
         </div>
       </AdminModal>
     </div>
+  )
+}
+
+export default function EnquiriesPage() {
+  return (
+    <EnquiriesAdminProvider>
+      <EnquiriesPageContent />
+    </EnquiriesAdminProvider>
   )
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useMemo } from 'react'
+import React, { useMemo, useEffect } from 'react'
 import { AdminTable, createEditAction, createDeleteAction, createViewAction } from '@/components/admin/AdminTable'
 import { AdminModal } from '@/components/admin/AdminModal'
 import { AdminForm } from '@/components/admin/AdminForm'
@@ -17,8 +17,10 @@ import {
 import { Plus, FileText, Search, Eye, ChevronLeft, ChevronRight } from 'lucide-react'
 import { generateSlug } from '@/lib/slug'
 import { useAdminBlogs, useSaveBlog, useDeleteBlog } from '@/hooks/useAdminBlogs'
+import { useBlogsAdminContext, useBlogsAdminActions, BlogsAdminProvider } from '@/context/BlogsAdminContext'
 import { toast } from 'sonner'
 
+// Blog interface
 export interface Blog {
   _id: string
   title: string
@@ -33,55 +35,58 @@ export interface Blog {
   updatedAt: string
 }
 
-export default function BlogsPage() {
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [editingBlog, setEditingBlog] = useState<Blog | null>(null)
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
-  const [blogToDelete, setBlogToDelete] = useState<Blog | null>(null)
-  const [searchTerm, setSearchTerm] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState<string>('all')
-  const [selectedStatus, setSelectedStatus] = useState<string>('all')
-  const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 10
-  
+// Main BlogsPage component wrapped with provider
+function BlogsPageContent() {
+  const { state, dispatch } = useBlogsAdminContext()
+  const actions = useBlogsAdminActions()
+
   // TanStack Query hooks
   const { data: blogs = [], isLoading: dataLoading } = useAdminBlogs()
   const saveBlogMutation = useSaveBlog()
   const deleteBlogMutation = useDeleteBlog()
-  
-  const [formData, setFormData] = useState({
-    title: '',
-    slug: '',
-    category: '',
-    tags: [] as string[],
-    content: '',
-    image: '',
-    related_exams: [] as string[],
-    is_active: true
-  })
 
+  // Extract state from context
+  const {
+    isModalOpen,
+    editingItem: editingBlog,
+    deleteModalOpen,
+    itemToDelete: blogToDelete,
+    searchTerm,
+    selectedFilters,
+    currentPage,
+    itemsPerPage,
+    formData,
+    selectedItems
+  } = state
+
+  // Auto-generate slug when title changes
+  useEffect(() => {
+    if (formData.title && !editingBlog) {
+      actions.updateFormField('slug', generateSlug(formData.title))
+    }
+  }, [formData.title, editingBlog, actions])
 
   // Filter blogs based on search, category, and status using useMemo
   const filteredBlogs = useMemo(() => {
     let filtered = blogs
 
-    if (selectedCategory !== 'all') {
-      filtered = filtered.filter(blog => blog.category === selectedCategory)
+    if (selectedFilters.category && selectedFilters.category !== 'all') {
+      filtered = filtered.filter(blog => blog.category === selectedFilters.category)
     }
 
-    if (selectedStatus !== 'all') {
-      filtered = filtered.filter(blog => blog.is_active === (selectedStatus === 'published'))
+    if (selectedFilters.status && selectedFilters.status !== 'all') {
+      filtered = filtered.filter(blog => blog.is_active === (selectedFilters.status === 'published'))
     }
 
     if (searchTerm) {
-      filtered = filtered.filter(blog => 
+      filtered = filtered.filter(blog =>
         blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         blog.content.toLowerCase().includes(searchTerm.toLowerCase())
       )
     }
 
     return filtered
-  }, [blogs, searchTerm, selectedCategory, selectedStatus])
+  }, [blogs, searchTerm, selectedFilters])
 
   // Pagination logic
   const { paginatedBlogs, totalPages } = useMemo(() => {
@@ -90,7 +95,7 @@ export default function BlogsPage() {
     const paginated = filteredBlogs.slice(startIndex, endIndex)
     const pages = Math.ceil(filteredBlogs.length / itemsPerPage)
     return { paginatedBlogs: paginated, totalPages: pages }
-  }, [filteredBlogs, currentPage])
+  }, [filteredBlogs, currentPage, itemsPerPage])
 
   const columns = [
     {
@@ -98,9 +103,18 @@ export default function BlogsPage() {
       title: 'Title',
       render: (value: string, record: Blog) => (
         <div className="max-w-md">
-          <div className="font-medium text-white line-clamp-1">{value}</div>
-          <div className="text-sm text-gray-300">{record.category}</div>
+          <div className="font-medium truncate">{value}</div>
+          <div className="text-sm text-gray-500 truncate">
+            {record.content.substring(0, 100)}...
+          </div>
         </div>
+      )
+    },
+    {
+      key: 'category' as keyof Blog,
+      title: 'Category',
+      render: (value: string) => (
+        <Badge variant="secondary">{value || 'Uncategorized'}</Badge>
       )
     },
     {
@@ -108,14 +122,14 @@ export default function BlogsPage() {
       title: 'Tags',
       render: (value: string[]) => (
         <div className="flex flex-wrap gap-1">
-          {value.slice(0, 3).map((tag, index) => (
+          {value?.slice(0, 2).map((tag, index) => (
             <Badge key={index} variant="outline" className="text-xs">
               {tag}
             </Badge>
           ))}
-          {value.length > 3 && (
+          {value && value.length > 2 && (
             <Badge variant="outline" className="text-xs">
-              +{value.length - 3}
+              +{value.length - 2} more
             </Badge>
           )}
         </div>
@@ -126,7 +140,7 @@ export default function BlogsPage() {
       title: 'Status',
       render: (value: boolean) => (
         <Badge variant={value ? 'default' : 'secondary'}>
-          {value ? 'published' : 'draft'}
+          {value ? 'Published' : 'Draft'}
         </Badge>
       )
     },
@@ -140,37 +154,14 @@ export default function BlogsPage() {
     }
   ]
 
-  const actions = [
+  const tableActions = [
     createViewAction((blog: Blog) => {
-      // In a real app, this would open a view modal or navigate to view page
-      alert(`View blog: ${blog.title}`)
+      // Handle view action - could open in new tab or modal
+      console.log('View blog:', blog)
     }),
     createEditAction((blog: Blog) => {
-      console.log('🔍 DEBUG: Loading blog for edit:', blog)
-      console.log('🔍 DEBUG: Blog data being loaded:', blog)
-      console.log('🔍 DEBUG: Blog title:', blog.title)
-      console.log('🔍 DEBUG: Blog category:', blog.category)
-      console.log('🔍 DEBUG: Blog tags:', blog.tags)
-      console.log('🔍 DEBUG: Blog content:', blog.content)
-      console.log('🔍 DEBUG: Blog image:', blog.image)
-      console.log('🔍 DEBUG: Blog related_exams:', blog.related_exams)
-      console.log('🔍 DEBUG: Blog is_active:', blog.is_active)
-      
-      setEditingBlog(blog)
-      
-      // Properly extract and set all existing blog data when editing
-      setFormData({
-        title: blog.title || '',
-        slug: blog.slug || '',
-        category: blog.category || '',
-        tags: blog.tags || [],
-        content: blog.content || '',
-        image: blog.image || '',
-        related_exams: blog.related_exams || [],
-        is_active: blog.is_active !== undefined ? blog.is_active : true,
-      })
-      
-      console.log('📝 Form data after setting:', {
+      actions.setEditingItem(blog)
+      actions.setFormData({
         title: blog.title,
         slug: blog.slug,
         category: blog.category,
@@ -180,378 +171,267 @@ export default function BlogsPage() {
         related_exams: blog.related_exams,
         is_active: blog.is_active
       })
-      
-      setIsModalOpen(true)
+      actions.openCreateModal()
     }),
     createDeleteAction((blog: Blog) => {
-      setBlogToDelete(blog)
-      setDeleteModalOpen(true)
+      actions.openDeleteModal(blog)
     })
   ]
 
-  // Hardcoded educational categories for college and education-related blogs
-  const educationalCategories = [
-    'College Admissions',
-    'Study Abroad', 
-    'Exam Preparation',
-    'Scholarships & Financial Aid',
-    'Career Guidance',
-    'University Reviews',
-    'Course Selection',
-    'Student Life',
-    'Education News',
-    'Application Tips'
-  ]
+  const handleSave = async () => {
+    try {
+      const isEditing = !!editingBlog
+      const dataToSave = {
+        ...formData,
+        _id: isEditing ? editingBlog._id : undefined
+      }
+
+      await saveBlogMutation.mutateAsync(dataToSave)
+      toast.success(`Blog ${isEditing ? 'updated' : 'created'} successfully`)
+
+      actions.closeModal()
+      actions.resetState({
+        title: '',
+        slug: '',
+        category: '',
+        tags: [],
+        content: '',
+        image: '',
+        related_exams: [],
+        is_active: true
+      })
+    } catch (error) {
+      console.error('💥 Error saving blog:', error)
+      toast.error(error instanceof Error ? error.message : 'Failed to save blog')
+    }
+  }
+
+  const handleDelete = async () => {
+    if (!blogToDelete) return
+
+    try {
+      await deleteBlogMutation.mutateAsync(blogToDelete._id)
+      toast.success('Blog deleted successfully')
+      actions.closeDeleteModal()
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Failed to delete blog')
+    }
+  }
 
   const formFields = [
     {
       name: 'title',
-      label: 'Blog Title',
+      label: 'Title',
       type: 'text' as const,
-      placeholder: 'Enter blog title',
-      required: true
+      required: true,
+      placeholder: 'Enter blog title'
     },
     {
       name: 'slug',
       label: 'Slug',
       type: 'text' as const,
-      placeholder: 'blog-slug',
-      required: true
+      required: true,
+      placeholder: 'blog-slug'
     },
     {
       name: 'category',
       label: 'Category',
       type: 'select' as const,
+      required: true,
       options: [
-        { value: 'select-category', label: 'Select a category' },
-        ...educationalCategories.map(cat => ({ value: cat, label: cat }))
+        { value: 'education', label: 'Education' },
+        { value: 'career', label: 'Career' },
+        { value: 'study-abroad', label: 'Study Abroad' },
+        { value: 'exams', label: 'Exams' },
+        { value: 'tips', label: 'Tips & Tricks' }
       ],
-      required: true
-    },
-    {
-      name: 'tags',
-      label: 'Tags',
-      type: 'tags' as const,
-      placeholder: 'Add tags',
-      description: 'Add relevant tags for better categorization'
-    },
-    {
-      name: 'related_exams',
-      label: 'Related Exams',
-      type: 'tags' as const,
-      placeholder: 'Add related exams',
-      description: 'Add exams related to this blog post'
+      placeholder: 'Select category'
     },
     {
       name: 'content',
       label: 'Content',
       type: 'textarea' as const,
-      placeholder: 'Write your blog content here...',
       required: true,
-      description: 'Supports rich text formatting (in production)'
+      placeholder: 'Enter blog content'
     },
     {
       name: 'image',
       label: 'Image URL',
       type: 'text' as const,
-      placeholder: 'Enter image URL',
-      description: 'Add an image URL for your blog post'
+      required: true,
+      placeholder: 'Enter image URL'
     },
+    {
+      name: 'tags',
+      label: 'Tags',
+      type: 'tags' as const,
+      required: true,
+      placeholder: 'Add tags'
+    },
+    {
+      name: 'related_exams',
+      label: 'Related Exams',
+      type: 'tags' as const,
+      placeholder: 'Add related exams'
+    },
+    {
+      name: 'is_active',
+      label: 'Published',
+      type: 'checkbox' as const,
+      required: true
+    }
   ]
 
-  const handleAddBlog = () => {
-    setEditingBlog(null)
-    setFormData({
-      title: '',
-      slug: '',
-      category: '',
-      tags: [],
-      content: '',
-      image: '',
-      related_exams: [],
-      is_active: true
-    })
-    setIsModalOpen(true)
-  }
-
-  const handleSaveBlog = async () => {
-    console.log('🔥 BLOG SAVE BUTTON CLICKED! Starting validation...')
-    console.log('📝 Current blog formData:', formData)
-    console.log('📝 Is editing blog:', editingBlog ? 'YES' : 'NO')
-    
-    // Collect all missing fields
-    const validationErrors = []
-    
-    console.log('🔍 Checking each blog field for validation...')
-    
-    // Basic Info Validation
-    if (!formData.title?.trim()) {
-      validationErrors.push('Blog Title is required')
-      console.log('❌ Blog Title validation failed')
-    }
-    if (!formData.slug?.trim()) {
-      validationErrors.push('Blog Slug is required')
-      console.log('❌ Blog Slug validation failed')
-    }
-    if (!formData.category?.trim() || formData.category === 'select-category') {
-      validationErrors.push('Blog Category is required')
-      console.log('❌ Blog Category validation failed')
-    }
-    if (!formData.content?.trim()) {
-      validationErrors.push('Blog Content is required')
-      console.log('❌ Blog Content validation failed')
-    }
-    if (!formData.tags?.length) {
-      validationErrors.push('At least one Blog Tag is required')
-      console.log('❌ Blog Tags validation failed')
-    }
-    
-    // Image URL Validation (optional but if provided, should be valid)
-    if (formData.image?.trim()) {
-      try {
-        new URL(formData.image)
-        console.log('✅ Blog Image URL is valid')
-      } catch {
-        validationErrors.push('Blog Image URL must be a valid URL')
-        console.log('❌ Blog Image URL is invalid')
-      }
-    }
-    
-    // Image URL Validation (optional but if provided, should be valid)
-    if (formData.image?.trim()) {
-      try {
-        new URL(formData.image)
-        console.log('✅ Blog Image URL is valid')
-      } catch {
-        validationErrors.push('Blog Image URL must be a valid URL')
-        console.log('❌ Blog Image URL is invalid')
-      }
-    }
-    
-    console.log('📋 Final validationErrors array:', validationErrors)
-    
-    // Show alert for missing fields (works for both ADD and EDIT)
-    if (validationErrors.length > 0) {
-      const alertMessage = `Please fill in the following required fields:\n\n${validationErrors.map((error, index) => `${index + 1}. ${error}`).join('\n')}`
-      console.log('🚨 Showing alert for missing blog fields:', alertMessage)
-      alert(alertMessage)
-      return
-    }
-
-    console.log('✅ All blog validation passed! Proceeding to save...')
-    try {
-      console.log('🚀 Starting blog save process...')
-      console.log('📝 Blog form data:', formData)
-      
-      const payload = {
-        ...formData,
-        ...(editingBlog && { _id: editingBlog._id })
-      }
-      
-      console.log('📦 Blog request payload:', payload)
-      console.log('🔥 About to call saveBlogMutation.mutateAsync...')
-      
-      await saveBlogMutation.mutateAsync(payload)
-      
-      console.log('✅ Blog saved successfully!')
-      toast.success(editingBlog ? 'Blog post updated successfully!' : 'Blog post created successfully!')
-      setIsModalOpen(false)
-      setEditingBlog(null)
-      
-    } catch (error) {
-      console.error('❌ Error saving blog:', error)
-      console.error('💥 Error stack:', error instanceof Error ? error.stack : 'No stack available')
-      toast.error('Error saving blog: ' + (error instanceof Error ? error.message : 'Unknown error'))
-    }
-  }
-
-  const handleDeleteBlog = async () => {
-    if (!blogToDelete) return
-    
-    try {
-      await deleteBlogMutation.mutateAsync(blogToDelete._id)
-      toast.success('Blog post deleted successfully!')
-      setDeleteModalOpen(false)
-      setBlogToDelete(null)
-    } catch (error) {
-      console.error('Error deleting blog:', error)
-      toast.error('Error deleting blog')
-    }
-  }
-
   return (
-    <div>
     <div className="space-y-6">
-      {/* Filters and Add button */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h2 className="text-lg font-semibold text-white">All Blog Posts</h2>
-            <p className="text-sm text-gray-300">
-              {filteredBlogs.length} of {blogs.length} posts
-            </p>
-          </div>
-          <Button onClick={handleAddBlog} className="flex items-center space-x-2">
-            <Plus className="h-4 w-4" />
-            <span>Add Blog Post</span>
-          </Button>
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-2xl font-bold">Blogs Management</h1>
+          <p className="text-gray-600">Manage blog posts and content</p>
         </div>
-
-        {/* Filters */}
-        <div className="flex flex-col sm:flex-row gap-4">
-          <div className="flex-1">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-              <Input
-                placeholder="Search blogs..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-          </div>
-          <div className="w-full sm:w-48">
-            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-              <SelectTrigger>
-                <SelectValue placeholder="Filter by category" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Categories</SelectItem>
-                {educationalCategories.map((category) => (
-                  <SelectItem key={category} value={category}>
-                    {category}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="w-full sm:w-48">
-            <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-              <SelectTrigger>
-                <SelectValue placeholder="Filter by status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="published">Published</SelectItem>
-                <SelectItem value="draft">Draft</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-
-        {/* Blogs Table */}
-        <AdminTable
-          data={paginatedBlogs}
-          columns={columns}
-          actions={actions}
-          loading={dataLoading}
-          emptyMessage="No blog posts found. Create your first blog post to get started."
-        />
-
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="flex items-center justify-between mt-12">
-            <div className="text-sm text-gray-300">
-              Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, filteredBlogs.length)} of {filteredBlogs.length} posts
-            </div>
-            <div className="flex items-center space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-                className="flex items-center space-x-1"
-              >
-                <ChevronLeft className="h-4 w-4" />
-                <span>Previous</span>
-              </Button>
-              
-              <div className="flex items-center space-x-1">
-                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                  let pageNum
-                  if (totalPages <= 5) {
-                    pageNum = i + 1
-                  } else if (currentPage <= 3) {
-                    pageNum = i + 1
-                  } else if (currentPage >= totalPages - 2) {
-                    pageNum = totalPages - 4 + i
-                  } else {
-                    pageNum = currentPage - 2 + i
-                  }
-                  
-                  return (
-                    <Button
-                      key={pageNum}
-                      variant={currentPage === pageNum ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setCurrentPage(pageNum)}
-                      className="w-8 h-8 p-0"
-                    >
-                      {pageNum}
-                    </Button>
-                  )
-                })}
-              </div>
-              
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                disabled={currentPage === totalPages}
-                className="flex items-center space-x-1"
-              >
-                <span>Next</span>
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-        )}
-
-        {/* Add/Edit Modal */}
-        <AdminModal
-          open={isModalOpen}
-          onOpenChange={setIsModalOpen}
-          title={editingBlog ? 'Edit Blog Post' : 'Create New Blog Post'}
-          description={editingBlog ? 'Update blog post information' : 'Create a new blog post'}
-          onConfirm={handleSaveBlog}
-          loading={saveBlogMutation.isPending}
-          size="xl"
-        >
-          <AdminForm
-            fields={formFields}
-            data={formData}
-            onChange={(field: string, value: unknown) => {
-              console.log(`📝 Blog form field changed: ${field} = ${value}`)
-              setFormData(prev => ({ 
-                ...prev, 
-                [field]: value,
-                // Auto-generate slug when title changes and slug is empty or being edited for the first time
-                ...(field === 'title' && (!prev.slug || prev.slug === generateSlug(prev.title)) ? {
-                  slug: generateSlug(value as string)
-                } : {})
-              }))
-            }}
-            loading={saveBlogMutation.isPending}
-          />
-        </AdminModal>
-
-        {/* Delete Confirmation Modal */}
-        <AdminModal
-          open={deleteModalOpen}
-          onOpenChange={setDeleteModalOpen}
-          title="Delete Blog Post"
-          description={`Are you sure you want to delete "${blogToDelete?.title}"? This action cannot be undone.`}
-          confirmText="Delete"
-          cancelText="Cancel"
-          onConfirm={handleDeleteBlog}
-          loading={deleteBlogMutation.isPending}
-          size="sm"
-        >
-          <div className="flex items-center space-x-2 text-sm text-gray-300">
-            <FileText className="h-4 w-4" />
-            <span>{blogToDelete?.title}</span>
-          </div>
-        </AdminModal>
+        <Button onClick={actions.openCreateModal} className="flex items-center gap-2">
+          <Plus size={16} />
+          Add Blog
+        </Button>
       </div>
+
+      {/* Search and Filters */}
+      <div className="flex items-center space-x-4">
+        <div className="relative flex-1 max-w-md">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          <Input
+            type="text"
+            placeholder="Search blogs..."
+            value={searchTerm}
+            onChange={(e) => actions.setSearchTerm(e.target.value)}
+            className="pl-10"
+          />
+        </div>
+
+        <Select
+          value={selectedFilters.category || 'all'}
+          onValueChange={(value) => actions.setFilter('category', value)}
+        >
+          <SelectTrigger className="w-40">
+            <SelectValue placeholder="Category" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Categories</SelectItem>
+            <SelectItem value="education">Education</SelectItem>
+            <SelectItem value="career">Career</SelectItem>
+            <SelectItem value="study-abroad">Study Abroad</SelectItem>
+            <SelectItem value="exams">Exams</SelectItem>
+            <SelectItem value="tips">Tips & Tricks</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select
+          value={selectedFilters.status || 'all'}
+          onValueChange={(value) => actions.setFilter('status', value)}
+        >
+          <SelectTrigger className="w-32">
+            <SelectValue placeholder="Status" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Status</SelectItem>
+            <SelectItem value="published">Published</SelectItem>
+            <SelectItem value="draft">Draft</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <AdminTable
+        columns={columns}
+        data={paginatedBlogs}
+        actions={tableActions}
+        loading={dataLoading}
+        emptyMessage="No blogs found"
+      />
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between">
+          <div className="text-sm text-gray-600">
+            Showing {paginatedBlogs.length} of {filteredBlogs.length} blogs
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => actions.setCurrentPage(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              <ChevronLeft size={16} />
+              Previous
+            </Button>
+
+            <span className="text-sm">
+              Page {currentPage} of {totalPages}
+            </span>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => actions.setCurrentPage(currentPage + 1)}
+              disabled={currentPage === totalPages}
+            >
+              Next
+              <ChevronRight size={16} />
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Create/Edit Modal */}
+      <AdminModal
+        title={editingBlog ? 'Edit Blog' : 'Add Blog'}
+        open={isModalOpen}
+        onOpenChange={actions.closeModal}
+        size="xl"
+      >
+        <AdminForm
+          fields={formFields}
+          data={formData}
+          onChange={(field, value) => actions.updateFormField(field, value)}
+          onSubmit={handleSave}
+          loading={saveBlogMutation.isPending}
+          submitLabel={editingBlog ? 'Update Blog' : 'Create Blog'}
+        />
+      </AdminModal>
+
+      {/* Delete Confirmation Modal */}
+      <AdminModal
+        title="Delete Blog"
+        open={deleteModalOpen}
+        onOpenChange={actions.closeDeleteModal}
+      >
+        <div className="space-y-4">
+          <p>Are you sure you want to delete the blog "{blogToDelete?.title}"?</p>
+          <p className="text-sm text-gray-600">This action cannot be undone.</p>
+          <div className="flex justify-end space-x-2">
+            <Button variant="outline" onClick={actions.closeDeleteModal}>
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleDelete}
+              disabled={deleteBlogMutation.isPending}
+            >
+              {deleteBlogMutation.isPending ? 'Deleting...' : 'Delete'}
+            </Button>
+          </div>
+        </div>
+      </AdminModal>
     </div>
+  )
+}
+
+// Wrapped component with provider
+export default function BlogsPage() {
+  return (
+    <BlogsAdminProvider>
+      <BlogsPageContent />
+    </BlogsAdminProvider>
   )
 }

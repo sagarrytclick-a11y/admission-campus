@@ -13,9 +13,10 @@ import { useAdminBlogs } from '@/hooks/useAdminBlogs'
 import { useAdminCities } from '@/hooks/useAdminCities'
 import { useAdminCategories } from '@/hooks/useAdminCategories'
 import { useAdminEnquiries } from '@/hooks/useAdminEnquiries'
+import { useDashboardAdminContext, DashboardAdminProvider } from '@/context/DashboardAdminContext'
 import { dummyCountries, dummyColleges, dummyBlogs } from '@/data/dummyData'
 
-export default function DashboardPage() {
+function DashboardPageContent() {
   // TanStack Query hooks
   const { data: dbStats = { countries: 0, colleges: 0, blogs: 0, exams: 0 }, isLoading: statsLoading, error: statsError } = useAdminDashboardStats()
   const { data: countries = [], isLoading: countriesLoading } = useAdminCountries()
@@ -318,5 +319,13 @@ export default function DashboardPage() {
           </Card>
         </div>
       </div>
+  )
+}
+
+export default function DashboardPage() {
+  return (
+    <DashboardAdminProvider>
+      <DashboardPageContent />
+    </DashboardAdminProvider>
   )
 }
