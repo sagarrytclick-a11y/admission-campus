@@ -1,16 +1,18 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { AdminTable, createEditAction, createDeleteAction } from '@/components/admin/AdminTable'
 import { AdminModal } from '@/components/admin/AdminModal'
 import { AdminForm } from '@/components/admin/AdminForm'
 import { Button } from '@/components/ui/button'
 import { Plus, Tags } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
-import { useAdminCategories, useCreateCategory, useUpdateCategory, useDeleteCategory, AdminCategory } from '@/hooks/useAdminCategories'
 import { generateSlug } from '@/lib/slug'
+import { useAdminCategories, useCreateCategory, useUpdateCategory, useDeleteCategory } from '@/hooks/useAdminCategories'
+import { useCategoriesAdminContext, useCategoriesAdminActions, CategoriesAdminProvider } from '@/context/CategoriesAdminContext'
 import { toast } from 'sonner'
 
+// Category interface
 export interface Category {
   _id: string
   name: string
@@ -22,18 +24,10 @@ export interface Category {
   updatedAt: string
 }
 
-export default function CategoriesPage() {
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [editingCategory, setEditingCategory] = useState<Category | null>(null)
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
-  const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(null)
-  const [formData, setFormData] = useState({
-    name: '',
-    slug: '',
-    description: '',
-    image: '',
-    is_active: true
-  })
+// Main CategoriesPage component wrapped with provider
+function CategoriesPageContent() {
+  const { state, dispatch } = useCategoriesAdminContext()
+  const actions = useCategoriesAdminActions()
 
   // TanStack Query hooks
   const { data: categories = [], isLoading: dataLoading } = useAdminCategories()
@@ -41,19 +35,27 @@ export default function CategoriesPage() {
   const updateCategoryMutation = useUpdateCategory()
   const deleteCategoryMutation = useDeleteCategory()
 
+  // Extract state from context
+  const {
+    isModalOpen,
+    editingItem: editingCategory,
+    deleteModalOpen,
+    itemToDelete: categoryToDelete,
+    formData
+  } = state
+
   // Auto-generate slug from name
   useEffect(() => {
     if (formData.name && !editingCategory) {
-      const generatedSlug = generateSlug(formData.name)
-      setFormData(prev => ({ ...prev, slug: generatedSlug }))
+      actions.updateFormField('slug', generateSlug(formData.name))
     }
-  }, [formData.name, editingCategory])
+  }, [formData.name, editingCategory, actions])
 
   const columns = [
     {
       key: 'image',
       title: 'Image',
-      render: (value: string, record: AdminCategory, index: number) => (
+      render: (value: string, record: Category, index: number) => (
         <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 border border-gray-300">
           {value ? (
             <img 
@@ -75,14 +77,14 @@ export default function CategoriesPage() {
     {
       key: 'name',
       title: 'Name',
-      render: (value: string, record: AdminCategory, index: number) => (
+      render: (value: string, record: Category, index: number) => (
         <span className="font-medium">{value}</span>
       )
     },
     {
       key: 'slug',
       title: 'Slug',
-      render: (value: string, record: AdminCategory, index: number) => (
+      render: (value: string, record: Category, index: number) => (
         <code className="bg-gray-100 px-2 py-1 rounded text-sm font-mono text-gray-900">
           {value}
         </code>
@@ -91,7 +93,7 @@ export default function CategoriesPage() {
     {
       key: 'description',
       title: 'Description',
-      render: (value: string, record: AdminCategory, index: number) => (
+      render: (value: string, record: Category, index: number) => (
         <span className="text-sm text-white max-w-xs truncate block">
           {value}
         </span>
@@ -100,7 +102,7 @@ export default function CategoriesPage() {
     {
       key: 'is_active',
       title: 'Status',
-      render: (value: boolean, record: AdminCategory, index: number) => (
+      render: (value: boolean, record: Category, index: number) => (
         <Badge variant={value ? 'default' : 'secondary'}>
           {value ? 'Active' : 'Inactive'}
         </Badge>
@@ -109,7 +111,7 @@ export default function CategoriesPage() {
     {
       key: 'createdAt',
       title: 'Created',
-      render: (value: string, record: AdminCategory, index: number) => (
+      render: (value: string, record: Category, index: number) => (
         <span className="text-sm text-white">
           {new Date(value).toLocaleDateString()}
         </span>
@@ -117,26 +119,29 @@ export default function CategoriesPage() {
     }
   ]
 
-  const handleEdit = (category: Category) => {
-    setEditingCategory(category)
-    setFormData({
-      name: category.name,
-      slug: category.slug,
-      description: category.description,
-      image: category.image || '',
-      is_active: category.is_active
+  const tableActions = [
+    createEditAction((category: Category) => {
+      actions.setEditingItem(category)
+      actions.setFormData({
+        name: category.name,
+        slug: category.slug,
+        description: category.description,
+        image: category.image,
+        is_active: category.is_active
+      })
+      actions.openCreateModal()
+    }),
+    createDeleteAction((category: Category) => {
+      actions.openDeleteModal(category)
     })
-    setIsModalOpen(true)
-  }
+  ]
 
-  const handleDelete = (category: Category) => {
-    setCategoryToDelete(category)
-    setDeleteModalOpen(true)
-  }
-
-  const handleSubmit = async () => {
+  const handleSave = async () => {
     try {
-      if (editingCategory) {
+      const isEditing = !!editingCategory
+
+      if (isEditing) {
+        // Update existing category - needs slug + all other fields
         await updateCategoryMutation.mutateAsync({
           slug: editingCategory.slug,
           name: formData.name,
@@ -144,51 +149,40 @@ export default function CategoriesPage() {
           image: formData.image,
           is_active: formData.is_active
         })
-        toast.success('Category updated successfully')
       } else {
+        // Create new category - doesn't need slug
         await createCategoryMutation.mutateAsync({
           name: formData.name,
           description: formData.description,
           image: formData.image
         })
-        toast.success('Category created successfully')
       }
 
-      setIsModalOpen(false)
-      setEditingCategory(null)
-      resetForm()
+      toast.success(`Category ${isEditing ? 'updated' : 'created'} successfully`)
+
+      actions.closeModal()
+      actions.resetState({
+        name: '',
+        slug: '',
+        description: '',
+        image: '',
+        is_active: true
+      })
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Failed to save category')
     }
   }
 
-  const handleConfirmDelete = async () => {
+  const handleDelete = async () => {
     if (!categoryToDelete) return
 
     try {
       await deleteCategoryMutation.mutateAsync(categoryToDelete.slug)
       toast.success('Category deleted successfully')
-      setDeleteModalOpen(false)
-      setCategoryToDelete(null)
+      actions.closeDeleteModal()
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Failed to delete category')
     }
-  }
-
-  const resetForm = () => {
-    setFormData({
-      name: '',
-      slug: '',
-      description: '',
-      image: '',
-      is_active: true
-    })
-  }
-
-  const openCreateModal = () => {
-    setEditingCategory(null)
-    resetForm()
-    setIsModalOpen(true)
   }
 
   const formFields = [
@@ -205,123 +199,104 @@ export default function CategoriesPage() {
       label: 'Slug',
       type: 'text' as const,
       required: true,
-      placeholder: 'e.g., engineering, medical, management',
-      description: 'URL-friendly identifier (auto-generated from name)',
-      disabled: !editingCategory // Allow editing slug only when editing
+      placeholder: 'category-slug',
+      description: 'URL-friendly identifier'
     },
     {
       name: 'description',
       label: 'Description',
       type: 'textarea' as const,
       required: true,
-      placeholder: 'Describe what this category represents...',
+      placeholder: 'Describe this category...',
       description: 'Brief description of the category'
     },
     {
       name: 'image',
       label: 'Image URL',
       type: 'text' as const,
-      required: false,
       placeholder: 'https://example.com/image.jpg',
-      description: 'URL for the category image (optional)'
+      description: 'Category image URL'
     },
-    ...(editingCategory ? [{
+    {
       name: 'is_active',
-      label: 'Active Status',
+      label: 'Active',
       type: 'checkbox' as const,
-      description: 'Whether this category is active and available for selection'
-    }] : [])
+      required: true
+    }
   ]
 
   const isLoading = dataLoading || createCategoryMutation.isPending || updateCategoryMutation.isPending || deleteCategoryMutation.isPending
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-white flex items-center gap-2">
-           
-            Categories
-          </h1>
-          <p className="text-gray-600 mt-1">
-            Manage college categories that can be selected when adding colleges
-          </p>
+          <h1 className="text-2xl font-bold">Categories Management</h1>
+          <p className="text-gray-600">Manage blog categories and their configurations</p>
         </div>
-        <Button
-          onClick={openCreateModal}
-          className="bg-blue-600 hover:bg-blue-700"
-          disabled={isLoading}
-        >
-          <Plus className="h-4 w-4 mr-2" />
+        <Button onClick={actions.openCreateModal} className="flex items-center gap-2">
+          <Plus size={16} />
           Add Category
         </Button>
       </div>
 
-      {/* Table */}
       <AdminTable
-        data={categories}
         columns={columns}
+        data={categories}
+        actions={tableActions}
         loading={dataLoading}
         emptyMessage="No categories found"
-        actions={[
-          createEditAction(handleEdit),
-          createDeleteAction(handleDelete)
-        ]}
       />
 
       {/* Create/Edit Modal */}
       <AdminModal
+        title={editingCategory ? 'Edit Category' : 'Add Category'}
         open={isModalOpen}
-        onOpenChange={setIsModalOpen}
-        title={editingCategory ? 'Edit Category' : 'Create Category'}
-        size="lg"
+        onOpenChange={actions.closeModal}
+        size="xl"
       >
         <AdminForm
           fields={formFields}
           data={formData}
-          onChange={(field, value) => {
-            setFormData(prev => ({ ...prev, [field]: value }))
-          }}
-          onSubmit={handleSubmit}
-          loading={isLoading}
+          onChange={(field, value) => actions.updateFormField(field, value)}
+          onSubmit={handleSave}
+          loading={createCategoryMutation.isPending || updateCategoryMutation.isPending}
           submitLabel={editingCategory ? 'Update Category' : 'Create Category'}
         />
       </AdminModal>
 
       {/* Delete Confirmation Modal */}
       <AdminModal
-        open={deleteModalOpen}
-        onOpenChange={setDeleteModalOpen}
         title="Delete Category"
-        size="sm"
+        open={deleteModalOpen}
+        onOpenChange={actions.closeDeleteModal}
       >
         <div className="space-y-4">
-          <p className="text-gray-600">
-            Are you sure you want to delete the category <strong>{categoryToDelete?.name}</strong>?
-            This action cannot be undone.
-          </p>
-          <div className="flex gap-3 justify-end">
-            <Button
-              variant="outline"
-              onClick={() => {
-                setDeleteModalOpen(false)
-                setCategoryToDelete(null)
-              }}
-              disabled={isLoading}
-            >
+          <p>Are you sure you want to delete the category "{categoryToDelete?.name}"?</p>
+          <p className="text-sm text-gray-600">This action cannot be undone.</p>
+          <div className="flex justify-end space-x-2">
+            <Button variant="outline" onClick={actions.closeDeleteModal}>
               Cancel
             </Button>
             <Button
               variant="destructive"
-              onClick={handleConfirmDelete}
-              disabled={isLoading}
+              onClick={handleDelete}
+              disabled={deleteCategoryMutation.isPending}
             >
-              Delete
+              {deleteCategoryMutation.isPending ? 'Deleting...' : 'Delete'}
             </Button>
           </div>
         </div>
       </AdminModal>
     </div>
+  )
+}
+
+// Wrapped component with provider
+export default function CategoriesPage() {
+  return (
+    <CategoriesAdminProvider>
+      <CategoriesPageContent />
+    </CategoriesAdminProvider>
   )
 }

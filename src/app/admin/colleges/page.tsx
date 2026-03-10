@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useMemo } from 'react'
+import React, { useMemo, useEffect } from 'react'
 import { AdminTable, createEditAction, createDeleteAction } from '@/components/admin/AdminTable'
 import { AdminModal } from '@/components/admin/AdminModal'
 import { ComprehensiveCollegeForm } from '@/components/admin/ComprehensiveCollegeForm'
@@ -18,6 +18,7 @@ import { Plus, GraduationCap, Search, Filter, ChevronLeft, ChevronRight } from '
 import { dummyCountries } from '@/data/dummyData'
 import { generateSlug } from '@/lib/slug'
 import { useAdminColleges, useAdminCountries, useSaveCollege, useDeleteCollege, AdminCollege } from '@/hooks/useAdminColleges'
+import { useCollegesAdminContext, useCollegesAdminActions, CollegesAdminProvider } from '@/context/CollegesAdminContext'
 import { toast } from 'sonner'
 
 interface AdminCountry {
@@ -27,15 +28,34 @@ interface AdminCountry {
   flag: string
 }
 
-export default function AdminCollegesPage() {
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [editingAdminCollege, setEditingAdminCollege] = useState<AdminCollege | null>(null)
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
-  const [collegeToDelete, setAdminCollegeToDelete] = useState<AdminCollege | null>(null)
-  const [searchTerm, setSearchTerm] = useState('')
-  const [selectedCountry, setSelectedCountry] = useState<string>('all')
-  const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 10
+function AdminCollegesPageContent() {
+  const { state, dispatch } = useCollegesAdminContext()
+  const {
+    openCreateModal,
+    closeModal,
+    setEditingItem,
+    openDeleteModal,
+    closeDeleteModal,
+    setSearchTerm,
+    setFilter,
+    setCurrentPage,
+    updateFormField,
+    setFormData
+  } = useCollegesAdminActions()
+  
+  const {
+    isModalOpen,
+    editingItem: editingAdminCollege,
+    deleteModalOpen,
+    itemToDelete: collegeToDelete,
+    searchTerm,
+    selectedFilters,
+    currentPage,
+    itemsPerPage,
+    formData
+  } = state
+  
+  const selectedCountry = selectedFilters.country || 'all'
   
   // TanStack Query hooks
   const { data: colleges = [], isLoading: dataLoading, error: collegesError } = useAdminColleges()
@@ -43,65 +63,68 @@ export default function AdminCollegesPage() {
   const saveCollegeMutation = useSaveCollege()
   const deleteCollegeMutation = useDeleteCollege()
   
-  const [formData, setFormData] = useState({
-    // Basic Info
-    name: 'Default AdminCollege Name',
-    slug: 'default-college-name',
-    country_ref: '',
-    city: '',
-    exams: [] as string[],
-    categories: [] as string[],
-    banner_url: '',
-    is_active: true,
-    establishment_year: '2024',
-    
-    // Overview
-    overview_title: 'Overview',
-    overview_description: 'This is a default overview description for the college with comprehensive information about programs, facilities, and academic excellence.',
-    
-    // Key Highlights
-    key_highlights_title: 'Key Highlights',
-    key_highlights_description: 'Key highlights description featuring the main advantages and features of the institution.',
-    key_highlights_features: ['Excellent Faculty', 'Modern Infrastructure', 'Research Opportunities'],
-    
-    // Why Choose Us
-    why_choose_us_title: 'Why Choose Us',
-    why_choose_us_description: 'Why choose us description explaining the unique benefits and advantages of selecting this institution.',
-    why_choose_us_features: [
-      { title: 'Quality Education', description: 'We provide high-quality education with experienced faculty' },
-      { title: 'Affordable Fees', description: 'Competitive fee structure for all programs' }
-    ],
-    
-    // Ranking & Recognition
-    ranking_title: 'Ranking & Recognition',
-    ranking_description: 'Ranking description highlighting the institution position and achievements.',
-    country_ranking: '#1 in Country',
-    world_ranking: 'Top 500 Global',
-    accreditation: ['NAAC Accreditation', 'ISO Certified'],
-    
-    // Admission Process
-    admission_process_title: 'Admission Process',
-    admission_process_description: 'Admission process description explaining the step-by-step procedure for enrollment.',
-    admission_process_steps: ['Online Application', 'Document Verification', 'Interview Process'],
-    
-    // Documents Required
-    documents_required_title: 'Documents Required',
-    documents_required_description: 'Documents required description listing all necessary paperwork for admission.',
-    documents_required_documents: ['High School Transcript', 'ID Proof', 'Passport Copy'],
-    
-    // Fees Structure
-    fees_structure_title: 'Fees Structure',
-    fees_structure_description: 'Fees structure description detailing the cost breakdown for various programs.',
-    fees_structure_courses: [
-      { course_name: 'Computer Science', duration: '4 Years', annual_tuition_fee: '$15,000' },
-      { course_name: 'Business Administration', duration: '2 Years', annual_tuition_fee: '$12,000' }
-    ],
-    
-    // Campus Highlights
-    campus_highlights_title: 'Campus Highlights',
-    campus_highlights_description: 'Campus highlights description showcasing the facilities and environment.',
-    campus_highlights_highlights: ['Modern Library', 'Sports Complex', 'Hostel Facilities']
-  })
+  // Initialize form data with default values
+  useEffect(() => {
+    setFormData({
+      // Basic Info
+      name: 'Default AdminCollege Name',
+      slug: 'default-college-name',
+      country_ref: '',
+      city: '',
+      exams: [],
+      categories: [],
+      banner_url: '',
+      is_active: true,
+      establishment_year: '2024',
+      
+      // Overview
+      overview_title: 'Overview',
+      overview_description: 'This is a default overview description for the college with comprehensive information about programs, facilities, and academic excellence.',
+      
+      // Key Highlights
+      key_highlights_title: 'Key Highlights',
+      key_highlights_description: 'Key highlights description featuring the main advantages and features of the institution.',
+      key_highlights_features: ['Excellent Faculty', 'Modern Infrastructure', 'Research Opportunities'],
+      
+      // Why Choose Us
+      why_choose_us_title: 'Why Choose Us',
+      why_choose_us_description: 'Why choose us description explaining the unique benefits and advantages of selecting this institution.',
+      why_choose_us_features: [
+        { title: 'Quality Education', description: 'We provide high-quality education with experienced faculty' },
+        { title: 'Affordable Fees', description: 'Competitive fee structure for all programs' }
+      ],
+      
+      // Ranking & Recognition
+      ranking_title: 'Ranking & Recognition',
+      ranking_description: 'Ranking description highlighting the institution position and achievements.',
+      country_ranking: '#1 in Country',
+      world_ranking: 'Top 500 Global',
+      accreditation: ['NAAC Accreditation', 'ISO Certified'],
+      
+      // Admission Process
+      admission_process_title: 'Admission Process',
+      admission_process_description: 'Admission process description explaining the step-by-step procedure for enrollment.',
+      admission_process_steps: ['Online Application', 'Document Verification', 'Interview Process'],
+      
+      // Documents Required
+      documents_required_title: 'Documents Required',
+      documents_required_description: 'Documents required description listing all necessary paperwork for admission.',
+      documents_required_documents: ['High School Transcript', 'ID Proof', 'Passport Copy'],
+      
+      // Fees Structure
+      fees_structure_title: 'Fees Structure',
+      fees_structure_description: 'Fees structure description detailing the cost breakdown for various programs.',
+      fees_structure_courses: [
+        { course_name: 'Computer Science', duration: '4 Years', annual_tuition_fee: '$15,000' },
+        { course_name: 'Business Administration', duration: '2 Years', annual_tuition_fee: '$12,000' }
+      ],
+      
+      // Campus Highlights
+      campus_highlights_title: 'Campus Highlights',
+      campus_highlights_description: 'Campus highlights description showcasing the facilities and environment.',
+      campus_highlights_highlights: ['Modern Library', 'Sports Complex', 'Hostel Facilities']
+    })
+  }, [])
 
   // Filter colleges based on search and country using useMemo
   const filteredAdminColleges = useMemo(() => {
@@ -136,9 +159,9 @@ export default function AdminCollegesPage() {
   const totalPages = Math.ceil(filteredAdminColleges.length / itemsPerPage)
 
   // Reset to page 1 when filters change
-  useMemo(() => {
-    setCurrentPage(1)
-  }, [searchTerm, selectedCountry])
+  useEffect(() => {
+    dispatch({ type: 'SET_CURRENT_PAGE', payload: 1 })
+  }, [searchTerm, selectedCountry, dispatch])
 
   const columns = [
     {
@@ -286,7 +309,7 @@ export default function AdminCollegesPage() {
       console.log('🔍 DEBUG: college.ranking type:', typeof college.ranking)
       console.log('🔍 DEBUG: college.ranking value:', college.ranking)
       
-      setEditingAdminCollege(college)
+      setEditingItem(college)
       
       // Properly extract all existing data when editing
       const extractedRanking = typeof college.ranking === 'object' && college.ranking !== null 
@@ -363,16 +386,15 @@ export default function AdminCollegesPage() {
         campus_highlights_description: college.campus_highlights?.description || '',
         campus_highlights_highlights: college.campus_highlights?.highlights || [],
       })
-      setIsModalOpen(true)
+    openCreateModal()
     }),
     createDeleteAction((college: AdminCollege) => {
-      setAdminCollegeToDelete(college)
-      setDeleteModalOpen(true)
+      openDeleteModal(college)
     })
   ]
 
   const handleAdminCollege = () => {
-    setEditingAdminCollege(null)
+    setEditingItem(null)
     setFormData({
       // Basic Info
       name: '',
@@ -426,7 +448,7 @@ export default function AdminCollegesPage() {
       campus_highlights_description: '',
       campus_highlights_highlights: [] as string[],
     })
-    setIsModalOpen(true)
+    openCreateModal()
   }
 
   const handleSaveAdminCollege = async () => {
@@ -706,8 +728,8 @@ export default function AdminCollegesPage() {
       
       console.log('✅ AdminCollege saved successfully!')
       toast.success(editingAdminCollege ? 'AdminCollege updated successfully!' : 'AdminCollege created successfully!')
-      setIsModalOpen(false)
-      setEditingAdminCollege(null)
+      closeModal()
+      setEditingItem(null)
       
     } catch (error) {
       console.error('❌ Error saving college:', error)
@@ -722,8 +744,7 @@ export default function AdminCollegesPage() {
     try {
       await deleteCollegeMutation.mutateAsync(collegeToDelete._id)
       toast.success('AdminCollege deleted successfully!')
-      setDeleteModalOpen(false)
-      setAdminCollegeToDelete(null)
+      closeDeleteModal()
     } catch (error) {
       console.error('Error deleting college:', error)
       toast.error('Error deleting college')
@@ -761,7 +782,7 @@ export default function AdminCollegesPage() {
             </div>
           </div>
           <div className="w-full sm:w-48">
-            <Select value={selectedCountry} onValueChange={setSelectedCountry}>
+            <Select value={selectedCountry} onValueChange={(value) => setFilter('country', value)}>
               <SelectTrigger>
                 <Filter className="h-4 w-4 mr-2" />
                 <SelectValue placeholder="Filter by country" />
@@ -797,7 +818,7 @@ export default function AdminCollegesPage() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))}
                 disabled={currentPage === 1}
                 className="flex items-center space-x-1"
               >
@@ -835,7 +856,7 @@ export default function AdminCollegesPage() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                onClick={() => setCurrentPage(Math.min(currentPage + 1, totalPages))}
                 disabled={currentPage === totalPages}
                 className="flex items-center space-x-1"
               >
@@ -849,7 +870,7 @@ export default function AdminCollegesPage() {
         {/* Add/Edit Modal */}
         <AdminModal
           open={isModalOpen}
-          onOpenChange={setIsModalOpen}
+          onOpenChange={(open) => !open && closeModal()}
           title={editingAdminCollege ? 'Edit AdminCollege' : 'Add New AdminCollege'}
           description={editingAdminCollege ? 'Update college information' : 'Add a new college to the system'}
           onConfirm={handleSaveAdminCollege}
@@ -863,14 +884,11 @@ export default function AdminCollegesPage() {
               _id: (c as any)._id || (c as any).id || `country-${index}` 
             }))}
             onChange={(field: string, value: any) => {
-              setFormData(prev => ({ 
-                ...prev, 
-                [field]: value,
-                // Auto-generate slug when name changes and slug is empty or being edited for the first time
-                ...(field === 'name' && (!prev.slug || prev.slug === generateSlug(prev.name)) ? {
-                  slug: generateSlug(value as string)
-                } : {})
-              }))
+              updateFormField(field, value)
+              // Auto-generate slug when name changes and slug is empty or being edited for the first time
+              if (field === 'name' && (!formData.slug || formData.slug === generateSlug(formData.name))) {
+                updateFormField('slug', generateSlug(value as string))
+              }
             }}
             onSubmit={handleSaveAdminCollege}
             loading={saveCollegeMutation.isPending}
@@ -880,7 +898,7 @@ export default function AdminCollegesPage() {
         {/* Delete Confirmation Modal */}
         <AdminModal
           open={deleteModalOpen}
-          onOpenChange={setDeleteModalOpen}
+          onOpenChange={(open) => !open && closeDeleteModal()}
           title="Delete AdminCollege"
           description={`Are you sure you want to delete "${collegeToDelete?.name}"? This action cannot be undone.`}
           confirmText="Delete"
@@ -896,5 +914,13 @@ export default function AdminCollegesPage() {
         </AdminModal>
       </div>
     </div>
+  )
+}
+
+export default function AdminCollegesPage() {
+  return (
+    <CollegesAdminProvider>
+      <AdminCollegesPageContent />
+    </CollegesAdminProvider>
   )
 }

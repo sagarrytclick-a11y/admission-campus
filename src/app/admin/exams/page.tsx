@@ -15,8 +15,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import { Plus, Search, MoreHorizontal, Edit, Trash2, Eye } from 'lucide-react'
-import { generateSlug } from '@/lib/slug'
+import { Plus, MoreHorizontal, Edit, Trash2, Eye } from 'lucide-react'
 import { useAdminExams, useSaveExam, useDeleteExam } from '@/hooks/useAdminExams'
 import { toast } from 'sonner'
 
