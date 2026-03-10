@@ -161,7 +161,7 @@ function AdminCollegesPageContent() {
   // Reset to page 1 when filters change
   useEffect(() => {
     dispatch({ type: 'SET_CURRENT_PAGE', payload: 1 })
-  }, [searchTerm, selectedCountry, dispatch])
+  }, [searchTerm, selectedCountry])
 
   const columns = [
     {
@@ -885,9 +885,12 @@ function AdminCollegesPageContent() {
             }))}
             onChange={(field: string, value: any) => {
               updateFormField(field, value)
-              // Auto-generate slug when name changes and slug is empty or being edited for the first time
-              if (field === 'name' && (!formData.slug || formData.slug === generateSlug(formData.name))) {
-                updateFormField('slug', generateSlug(value as string))
+              // Auto-generate slug when name changes and slug is empty or matches the current name's slug
+              if (field === 'name' && value && (!formData.slug || formData.slug === generateSlug(formData.name))) {
+                const newSlug = generateSlug(value as string)
+                if (formData.slug !== newSlug) {
+                  updateFormField('slug', newSlug)
+                }
               }
             }}
             onSubmit={handleSaveAdminCollege}
