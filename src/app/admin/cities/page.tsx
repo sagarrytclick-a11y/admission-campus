@@ -69,10 +69,10 @@ function CitiesPageContent() {
   // Auto-generate slug when name changes
   useEffect(() => {
     if (formData.name && !editingCity) {
-      actions.updateFormField('slug', generateSlug(formData.name))
-      actions.updateFormField('id', generateSlug(formData.name))
+      dispatch({ type: 'UPDATE_FORM_FIELD', payload: { field: 'slug', value: generateSlug(formData.name) } })
+      dispatch({ type: 'UPDATE_FORM_FIELD', payload: { field: 'id', value: generateSlug(formData.name) } })
     }
-  }, [formData.name, editingCity, actions])
+  }, [formData.name, editingCity, dispatch])
 
   const columns = [
     {
