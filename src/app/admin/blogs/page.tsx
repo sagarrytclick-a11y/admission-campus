@@ -48,9 +48,9 @@ function BlogsPageContent() {
   // Extract state from context
   const {
     isModalOpen,
-    editingBlog,
+    editingItem: editingBlog,
     deleteModalOpen,
-    blogToDelete,
+    itemToDelete: blogToDelete,
     searchTerm,
     selectedFilters,
     currentPage,
