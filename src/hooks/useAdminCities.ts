@@ -117,26 +117,92 @@ const fetchCityBySlug = async (slug: string): Promise<AdminCity | null> => {
   return city || null;
 }
 
-// Hooks
-export function useAdminCities(params?: { page?: number; limit?: number; search?: string }) {
-  return useQuery({
-    queryKey: ['admin', 'cities', params?.page || 1, params?.limit || 10, params?.search || ''],
-    queryFn: () => fetchAdminCities(params),
-    staleTime: 10 * 60 * 1000, // 10 minutes
-    gcTime: 30 * 60 * 1000, // 30 minutes
-    retry: 2,
-    refetchOnWindowFocus: false,
-  })
+// Enhanced caching with localStorage
+const CACHE_KEY = 'admin-cities-cache'
+const CACHE_DURATION = 24 * 60 * 60 * 1000 // 24 hours
+
+interface CacheData {
+  data: any
+  timestamp: number
 }
 
-export function useCityBySlug(slug: string) {
+const getCachedCities = (): AdminCity[] | null => {
+  if (typeof window === 'undefined') return null
+
+  try {
+    const cached = localStorage.getItem(CACHE_KEY)
+    if (!cached) return null
+
+    const { data, timestamp }: CacheData = JSON.parse(cached)
+    const isExpired = Date.now() - timestamp > CACHE_DURATION
+
+    if (isExpired) {
+      localStorage.removeItem(CACHE_KEY)
+      return null
+    }
+
+    return data
+  } catch {
+    return null
+  }
+}
+
+const setCachedCities = (cities: AdminCity[]): void => {
+  if (typeof window === 'undefined') return
+
+  try {
+    const cacheData: CacheData = {
+      data: cities,
+      timestamp: Date.now()
+    }
+    localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData))
+  } catch {
+    // Ignore localStorage errors
+  }
+}
+
+// Enhanced useAdminCities hook with localStorage caching
+export function useAdminCities(params?: { page?: number; limit?: number; search?: string }) {
+  const page = params?.page || 1
+  const limit = params?.limit || 10
+  const search = params?.search || ''
+
   return useQuery({
-    queryKey: ['admin', 'city', slug],
-    queryFn: () => fetchCityBySlug(slug),
+    queryKey: ['admin', 'cities', page, limit, search],
+    queryFn: async () => {
+      // Try localStorage cache first (only for full list queries)
+      if (page === 1 && limit >= 100 && !search) {
+        const cached = getCachedCities()
+        if (cached) {
+          return {
+            cities: cached,
+            pagination: {
+              currentPage: 1,
+              totalPages: Math.ceil(cached.length / limit),
+              totalCities: cached.length,
+              limit,
+              hasNextPage: false,
+              hasPrevPage: false,
+            }
+          }
+        }
+      }
+
+      // Fetch from API
+      const result = await fetchAdminCities(params)
+
+      // Cache all cities for future use
+      if (page === 1 && limit >= 100 && !search) {
+        setCachedCities(result.cities)
+      }
+
+      return result
+    },
     staleTime: 10 * 60 * 1000, // 10 minutes
     gcTime: 30 * 60 * 1000, // 30 minutes
     retry: 2,
     refetchOnWindowFocus: false,
+    placeholderData: (previousData) => previousData, // Keep previous data while loading
   })
 }
 
