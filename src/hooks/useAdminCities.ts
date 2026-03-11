@@ -206,6 +206,17 @@ export function useAdminCities(params?: { page?: number; limit?: number; search?
   })
 }
 
+export function useCityBySlug(slug: string) {
+  return useQuery({
+    queryKey: ['admin', 'city', slug],
+    queryFn: () => fetchCityBySlug(slug),
+    staleTime: 10 * 60 * 1000, // 10 minutes
+    gcTime: 30 * 60 * 1000, // 30 minutes
+    retry: 2,
+    refetchOnWindowFocus: false,
+  })
+}
+
 export function useSaveCity() {
   const queryClient = useQueryClient()
 

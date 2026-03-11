@@ -58,7 +58,7 @@ const THEME: CitySliderTheme = {
 // Memoized CityCard Component
 const CityCard = memo<CityCardProps>(({ city }) => {
   return (
-    <div className="flex-shrink-0 px-1.5 sm:px-2 lg:px-3">
+    <div className="shrink-0 px-1.5 sm:px-2 lg:px-3">
       <div className="border-2 border-slate-200 rounded-lg sm:rounded-xl p-3 sm:p-4 lg:p-6 hover:border-[#007BFF] hover:shadow-lg transition-all duration-200 bg-white h-full group">
         {/* City Image */}
         {city.cityImage && (
