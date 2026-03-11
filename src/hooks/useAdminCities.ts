@@ -170,8 +170,8 @@ export function useAdminCities(params?: { page?: number; limit?: number; search?
   return useQuery({
     queryKey: ['admin', 'cities', page, limit, search],
     queryFn: async () => {
-      // Try localStorage cache first (only for full list queries)
-      if (page === 1 && limit >= 100 && !search) {
+      // Try localStorage cache first (only for smaller queries, not all cities)
+      if (page === 1 && limit >= 100 && limit < 1000 && !search) {
         const cached = getCachedCities()
         if (cached) {
           return {
@@ -191,8 +191,8 @@ export function useAdminCities(params?: { page?: number; limit?: number; search?
       // Fetch from API
       const result = await fetchAdminCities(params)
 
-      // Cache all cities for future use
-      if (page === 1 && limit >= 100 && !search) {
+      // Cache all cities for future use (only for smaller queries)
+      if (page === 1 && limit >= 100 && limit < 1000 && !search) {
         setCachedCities(result.cities)
       }
 

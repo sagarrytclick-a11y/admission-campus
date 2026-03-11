@@ -281,7 +281,7 @@ export function ComprehensiveCollegeForm({ data, countries, onChange, onSubmit, 
                       <SelectTrigger className="bg-gray-700 border-gray-600 text-white">
                         <SelectValue placeholder="Select a metro city" />
                       </SelectTrigger>
-                      <SelectContent className="bg-gray-700 border-gray-600">
+                      <SelectContent className="bg-gray-700 border-gray-600 max-h-96" position="popper">
                         {cities
                           .filter(city => city.country_ref.slug === 'india')
                           .map((city) => (
