@@ -433,7 +433,7 @@ if (isLoading) {
                   ].map((item, i) => item.show && (
                     <div key={i} className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg">
                       <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center">
-                        <item.icon className="w-6 h-6 text-[#]" />
+                        <item.icon className="w-6 h-6 text-[#007BFF]" />
                       </div>
                       <div>
                         <div className="text-xs text-[#64748B] uppercase font-medium mb-1">{item.label}</div>
