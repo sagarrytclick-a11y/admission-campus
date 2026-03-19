@@ -26,6 +26,8 @@ export async function GET() {
       name: enquiry.name,
       email: enquiry.email,
       phone: enquiry.phone,
+      city: enquiry.city || '',
+      course_category: enquiry.course_category || null, // Handle missing field
       subject: enquiry.subject,
       message: enquiry.message,
       status: enquiry.status,

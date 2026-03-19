@@ -7,6 +7,8 @@ export interface Enquiry {
   name: string
   email: string
   phone: string
+  city: string
+  course_category?: string
   subject: string
   message: string
   status: 'pending' | 'contacted' | 'resolved' | 'closed'
