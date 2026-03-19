@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { MessageSquare, Search, Eye, Mail, Phone, Calendar, ChevronLeft, ChevronRight } from 'lucide-react'
+import { MessageSquare, Search, Eye, Mail, Phone, Calendar, ChevronLeft, ChevronRight, MapPin } from 'lucide-react'
 import { useAdminEnquiries, useDeleteEnquiry, useUpdateEnquiry } from '@/hooks/useAdminEnquiries'
 import { useEnquiriesAdminContext, useEnquiriesAdminActions, EnquiriesAdminProvider } from '@/context/EnquiriesAdminContext'
 import { Enquiry } from '@/context/EnquiriesAdminContext'
@@ -44,6 +44,7 @@ function EnquiriesPageContent() {
   
   const selectedStatus = selectedFilters.status || 'all'
   const selectedPriority = selectedFilters.priority || 'all'
+  const selectedCourseCategory = selectedFilters.course_category || 'all'
 
   // API hooks
   const { data: enquiries = [], isLoading: dataLoading } = useAdminEnquiries()
@@ -65,7 +66,7 @@ function EnquiriesPageContent() {
     }
   }
 
-  // Filter enquiries based on search, status, and priority using useMemo
+  // Filter enquiries based on search, status, priority, and course category using useMemo
   const filteredEnquiries = useMemo(() => {
     let filtered = enquiries
 
@@ -77,17 +78,23 @@ function EnquiriesPageContent() {
       filtered = filtered.filter((enquiry: Enquiry) => enquiry.priority === selectedPriority)
     }
 
+    if (selectedCourseCategory !== 'all') {
+      filtered = filtered.filter((enquiry: Enquiry) => enquiry.course_category === selectedCourseCategory)
+    }
+
     if (searchTerm) {
       filtered = filtered.filter((enquiry: Enquiry) =>
         enquiry.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         enquiry.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
         enquiry.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        enquiry.message.toLowerCase().includes(searchTerm.toLowerCase())
+        enquiry.message.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        enquiry.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (enquiry.course_category && enquiry.course_category.toLowerCase().includes(searchTerm.toLowerCase()))
       )
     }
 
     return filtered
-  }, [enquiries, searchTerm, selectedStatus, selectedPriority])
+  }, [enquiries, searchTerm, selectedStatus, selectedPriority, selectedCourseCategory])
 
   // Pagination logic
   const { paginatedEnquiries, totalPages } = useMemo(() => {
@@ -101,7 +108,7 @@ function EnquiriesPageContent() {
   // Reset to page 1 when filters change
   useEffect(() => {
     dispatch({ type: 'SET_CURRENT_PAGE', payload: 1 })
-  }, [searchTerm, selectedStatus, selectedPriority, dispatch])
+  }, [searchTerm, selectedStatus, selectedPriority, selectedCourseCategory, dispatch])
 
   const columns = [
     {
@@ -112,8 +119,32 @@ function EnquiriesPageContent() {
           <div className="font-medium text-white">{value}</div>
           <div className="text-sm text-white">{record.email}</div>
           <div className="text-sm text-white">{record.phone}</div>
+          <div className="text-sm text-white">{record.city}</div>
         </div>
       )
+    },
+    {
+      key: 'course_category' as keyof Enquiry,
+      title: 'Course Category',
+      render: (value: any) => {
+        // Handle all possible falsy values and string representations
+        if (!value || value === null || value === undefined || 
+            value === 'undefined' || value === 'null' || value === '') {
+          return (
+            <div className="max-w-xs">
+              <span className="text-gray-400 text-sm">Not specified</span>
+            </div>
+          );
+        }
+        
+        return (
+          <div className="max-w-xs">
+            <Badge variant="outline" className="text-blue-300 border-blue-300/50">
+              {String(value)}
+            </Badge>
+          </div>
+        );
+      }
     },
     {
       key: 'subject' as keyof Enquiry,
@@ -243,6 +274,21 @@ function EnquiriesPageContent() {
             <SelectItem value="low">Low</SelectItem>
           </SelectContent>
         </Select>
+
+        <Select value={selectedCourseCategory} onValueChange={(value) => setFilter('course_category', value)}>
+          <SelectTrigger className="w-full sm:w-48">
+            <SelectValue placeholder="Filter by course" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Courses</SelectItem>
+            <SelectItem value="Medical">Medical</SelectItem>
+            <SelectItem value="Management">Management</SelectItem>
+            <SelectItem value="Law">Law</SelectItem>
+            <SelectItem value="Design">Design</SelectItem>
+            <SelectItem value="Engineering">Engineering</SelectItem>
+            <SelectItem value="Online MBA">Online MBA</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       {/* Table */}
@@ -345,6 +391,21 @@ function EnquiriesPageContent() {
                   <span className="text-white">{selectedEnquiry.phone}</span>
                 </div>
               </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-white">City</label>
+                <div className="flex items-center gap-2">
+                  <MapPin className="h-4 w-4 text-white" />
+                  <span className="text-white">{selectedEnquiry.city}</span>
+                </div>
+              </div>
+              {selectedEnquiry.course_category && selectedEnquiry.course_category !== 'undefined' && selectedEnquiry.course_category !== 'null' ? (
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-white">Course Category</label>
+                  <Badge variant="outline" className="text-blue-300 border-blue-300/50">
+                    {selectedEnquiry.course_category}
+                  </Badge>
+                </div>
+              ) : null}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-white">Source</label>
                 <Badge variant="outline" className="text-white border-white/50">{selectedEnquiry.source}</Badge>

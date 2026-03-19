@@ -12,8 +12,8 @@ export async function POST(req: Request) {
     console.log('=== SEND ROUTE CALLED ===');
     const body = await req.json();
     console.log('Request body:', body);
-    const { name, email, number, city } = body;
-    console.log('Extracted data:', { name, email, number, city });
+    const { name, email, number, city, course_category } = body;
+    console.log('Extracted data:', { name, email, number, city, course_category });
 
     // Validate required fields
     if (!name || !email || !number || !city) {
@@ -32,6 +32,15 @@ export async function POST(req: Request) {
       );
     }
 
+    // Validate course category (optional for backward compatibility)
+    const validCourseCategories = ['Medical', 'Management', 'Law', 'Design', 'Engineering', 'Online MBA'];
+    if (course_category && !validCourseCategories.includes(course_category)) {
+      return NextResponse.json(
+        { error: 'Invalid course category' },
+        { status: 400 }
+      );
+    }
+
     // Connect to database
     await connectDB();
 
@@ -41,8 +50,13 @@ export async function POST(req: Request) {
       email,
       phone: number,
       city,
-      subject: `Contact Form Enquiry from ${city}`,
-      message: `New enquiry received from ${name} via contact form.`,
+      course_category: course_category || null,
+      subject: course_category 
+        ? `Contact Form Enquiry from ${city} - ${course_category}`
+        : `Contact Form Enquiry from ${city}`,
+      message: course_category 
+        ? `New enquiry received from ${name} via contact form. Interested in: ${course_category}`
+        : `New enquiry received from ${name} via contact form.`,
       source: 'contact-form'
     });
 
@@ -83,6 +97,11 @@ export async function POST(req: Request) {
               <p style="margin: 10px 0;">
                 <strong>City:</strong> ${city}
               </p>
+              
+              ${course_category ? `
+              <p style="margin: 10px 0;">
+                <strong>Course Category:</strong> ${course_category}
+              </p>` : ''}
             </div>
             
             <div style="background-color: #ecfdf5; border-left: 4px solid #10b981; padding: 15px; margin: 20px 0;">

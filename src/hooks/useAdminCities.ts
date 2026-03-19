@@ -198,8 +198,8 @@ export function useAdminCities(params?: { page?: number; limit?: number; search?
 
       return result
     },
-    staleTime: 10 * 60 * 1000, // 10 minutes
-    gcTime: 30 * 60 * 1000, // 30 minutes
+    staleTime: 10 * 60 * 1000, 
+    gcTime: 30 * 60 * 1000,
     retry: 2,
     refetchOnWindowFocus: false,
     placeholderData: (previousData) => previousData, // Keep previous data while loading

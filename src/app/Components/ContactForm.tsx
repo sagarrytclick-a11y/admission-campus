@@ -9,6 +9,7 @@ interface ContactFormData {
   email: string;
   phone: string;
   city: string;
+  course_category: string;
 }
 
 interface ContactFormProps {
@@ -23,7 +24,8 @@ export default function ContactForm({ onClose, isModal = false, collegeName }: C
     name: "",
     email: "",
     phone: "",
-    city: ""
+    city: "",
+    course_category: ""
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -85,7 +87,7 @@ const handleSubmit = async (e: React.FormEvent) => {
       type: collegeName ? 'college_application' : 'general_inquiry'
     };
 
-    const res = await fetch("/api/contact", {
+    const res = await fetch("/api/send", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(submissionData),
@@ -102,6 +104,7 @@ const handleSubmit = async (e: React.FormEvent) => {
         email: "",
         phone: "",
         city: "",
+        course_category: ""
       });
       if (onClose) onClose();
     }, 3000);
@@ -214,6 +217,38 @@ const handleSubmit = async (e: React.FormEvent) => {
           {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
         </div>
 
+        {/* Course Category Field */}
+        <div>
+          <label htmlFor="course_category" className="block text-sm font-medium text-slate-700 mb-1">
+            Which course you are looking for? *
+          </label>
+          <div className="relative">
+            <select
+              id="course_category"
+              name="course_category"
+              value={formData.course_category}
+              onChange={handleChange}
+              className={`w-full pl-4 pr-10 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all appearance-none bg-white ${
+                errors.course_category ? 'border-red-300 bg-red-50' : 'border-slate-300'
+              }`}
+            >
+              <option value="">Select a course category</option>
+              <option value="Medical">Medical</option>
+              <option value="Management">Management</option>
+              <option value="Law">Law</option>
+              <option value="Design">Design</option>
+              <option value="Engineering">Engineering</option>
+              <option value="Online MBA">Online MBA</option>
+            </select>
+            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+              <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </div>
+          {errors.course_category && <p className="text-red-500 text-xs mt-1">{errors.course_category}</p>}
+        </div>
+
         {/* City Field */}
         <div>
           <label htmlFor="city" className="block text-sm font-medium text-slate-700 mb-1">
@@ -240,7 +275,7 @@ const handleSubmit = async (e: React.FormEvent) => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 disabled:from-slate-400 disabled:to-slate-500 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 disabled:hover:scale-100 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="w-full bg-linear-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 disabled:from-slate-400 disabled:to-slate-500 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 disabled:hover:scale-100 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
           {isSubmitting ? (
             <>

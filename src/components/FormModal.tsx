@@ -108,6 +108,33 @@ export const FormModal: React.FC = () => {
                 </div>
               </div>
             ))}
+
+            {/* Course Category Dropdown */}
+            <div className="group">
+              <label className="text-[10px] sm:text-[11px] font-black text-[#94A3B8] uppercase tracking-[0.1em] mb-1.5 block">
+                Which course you are looking for?
+              </label>
+              <div className="relative">
+                <select
+                  value={(formData as any).course_category}
+                  onChange={(e) => updateFormData({ course_category: e.target.value })}
+                  className="w-full pl-4 pr-10 py-3 sm:py-3.5 bg-slate-50/50 border border-slate-200 rounded-xl sm:rounded-2xl text-[#1E293B] focus:bg-white focus:border-[#007BFF] focus:ring-4 focus:ring-[#007BFF]/5 outline-none transition-all font-semibold text-sm appearance-none"
+                >
+                  <option value="">Select a course category</option>
+                  <option value="Medical">Medical</option>
+                  <option value="Management">Management</option>
+                  <option value="Law">Law</option>
+                  <option value="Design">Design</option>
+                  <option value="Engineering">Engineering</option>
+                  <option value="Online MBA">Online MBA</option>
+                </select>
+                <div className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 group-focus-within:text-[#007BFF] transition-colors">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Status Feedback */}

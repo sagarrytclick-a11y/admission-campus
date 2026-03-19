@@ -18,6 +18,11 @@ const EnquirySchema = new Schema(
       required: true,
       trim: true
     },
+    course_category: {
+      type: String,
+      enum: ['Medical', 'Management', 'Law', 'Design', 'Engineering', 'Online MBA'],
+      required: false
+    },
     city: {
       type: String,
       required: true,
