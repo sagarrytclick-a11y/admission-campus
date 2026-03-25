@@ -7,29 +7,71 @@ import { useAdminColleges } from '@/hooks/useAdminColleges'
 
 interface AdminCollege {
   _id: string
-  id: string
   name: string
   slug: string
-  country_ref: {
-    _id: string
-    name: string
-    slug: string
+  country_ref: any
+  city?: string
+  exams: string[]
+  categories: string[]
+  fees?: number
+  duration?: string
+  establishment_year?: string
+  ranking?: string | {
+    title: string
+    description: string
+    country_ranking: string
+    world_ranking: string
+    accreditation: string[]
   }
-  city_ref: {
-    _id: string
-    name: string
-    slug: string
-  }
-  collegeImage: string
-  totalFees: string
-  ranking: {
-    nirf: number
-    year: number
-  }
-  totalCourses: number
+  banner_url?: string
+  about_content?: string
   is_active: boolean
+  display_order: number
   createdAt: string
   updatedAt: string
+  
+  // Comprehensive structure fields
+  overview?: {
+    title: string
+    description: string
+  }
+  key_highlights?: {
+    title: string
+    description: string
+    features: string[]
+  }
+  why_choose_us?: {
+    title: string
+    description: string
+    features: { title: string; description: string }[]
+  }
+  ranking_section?: {
+    title: string
+    description: string
+    country_ranking: string
+    world_ranking: string
+    accreditation: string[]
+  }
+  admission_process?: {
+    title: string
+    description: string
+    steps: string[]
+  }
+  documents_required?: {
+    title: string
+    description: string
+    documents: string[]
+  }
+  fees_structure?: {
+    title: string
+    description: string
+    courses: { course_name: string; duration: string; annual_tuition_fee: string }[]
+  }
+  campus_highlights?: {
+    title: string
+    description: string
+    highlights: string[]
+  }
 }
 
 interface CollegeCardProps {
@@ -44,9 +86,9 @@ const CollegeCard = memo<CollegeCardProps>(({ college }) => {
 
         {/* Image */}
         <div className="relative h-48 sm:h-52 lg:h-56 overflow-hidden">
-          {college.collegeImage ? (
+          {college.banner_url ? (
             <img
-              src={college.collegeImage}
+              src={college.banner_url}
               alt={college.name}
               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
               loading="lazy"
@@ -70,7 +112,7 @@ const CollegeCard = memo<CollegeCardProps>(({ college }) => {
             </h3>
             <div className="flex items-center gap-1 text-[12px] text-white/90">
               <MapPin size={12} />
-              <span>{college.city_ref.name}, {college.country_ref.name}</span>
+              <span>{college.city || 'Unknown'}, {college.country_ref?.name || 'India'}</span>
             </div>
           </div>
         </div>
@@ -80,7 +122,7 @@ const CollegeCard = memo<CollegeCardProps>(({ college }) => {
           {/* Fees */}
           <div className="flex items-center justify-between">
             <span className="text-xs text-slate-600">Total Fees</span>
-            <span className="text-sm font-bold text-slate-800">₹{college.totalFees || '2.5L'}</span>
+            <span className="text-sm font-bold text-slate-800">₹{college.fees || '2.5L'}</span>
           </div>
 
           {/* Ranking */}
@@ -88,15 +130,15 @@ const CollegeCard = memo<CollegeCardProps>(({ college }) => {
             <span className="text-xs text-slate-600">Ranking</span>
             <div className="flex items-center gap-1">
               <span className="text-xs font-bold text-blue-600">nirf</span>
-              <span className="text-sm font-bold text-slate-800">#{college.ranking?.nirf || '45'}</span>
-              <span className="text-xs text-slate-500">in {college.ranking?.year || '2024'}</span>
+              <span className="text-sm font-bold text-slate-800">#{typeof college.ranking === 'string' ? college.ranking : college.ranking?.country_ranking || '45'}</span>
+              <span className="text-xs text-slate-500">in {college.establishment_year || '2024'}</span>
             </div>
           </div>
 
           {/* Courses */}
           <div className="flex items-center justify-between">
             <span className="text-xs text-slate-600">Total Courses</span>
-            <span className="text-sm font-bold text-slate-800">{college.totalCourses || '25'}</span>
+            <span className="text-sm font-bold text-slate-800">{college.categories?.length || '25'}</span>
           </div>
 
           {/* Rating */}
@@ -105,10 +147,10 @@ const CollegeCard = memo<CollegeCardProps>(({ college }) => {
               <Star
                 key={i}
                 size={12}
-                className={i < (college.rating || 4) ? "fill-yellow-400 text-yellow-400" : "text-slate-300"}
+                className={i < 4 ? "fill-yellow-400 text-yellow-400" : "text-slate-300"}
               />
             ))}
-            <span className="text-xs text-slate-600 ml-1">{college.rating || '4.0'}</span>
+            <span className="text-xs text-slate-600 ml-1">4.0</span>
           </div>
 
           {/* Action Buttons */}
@@ -168,14 +210,11 @@ const useResponsiveItemsPerView = () => {
 const CollegeSlider = () => {
   const itemsPerView = useResponsiveItemsPerView()
 
-  const { data: collegesData, isLoading: collegesLoading, error } = useAdminColleges({
-    page: 1,
-    limit: 1000
-  })
+  const { data: collegesData, isLoading: collegesLoading, error } = useAdminColleges()
 
   const indianColleges = useMemo(() => {
-    return collegesData?.colleges?.filter(college => college.country_ref.slug === 'india') || []
-  }, [collegesData?.colleges])
+    return collegesData?.filter(college => college.country_ref.slug === 'india') || []
+  }, [collegesData])
 
   const maxIndex = Math.max(0, indianColleges.length - itemsPerView)
   const { currentIndex, handleNext, handlePrev } = useSlider(maxIndex)
