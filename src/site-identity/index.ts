@@ -85,7 +85,7 @@ export const SITE_IDENTITY: SiteIdentity = {
       general: "Info@admissioncampus.in",
     },
     address: {
-      office: "Wave One, Silver Wing, Floor 24th, Office No. 20 & 21, Noida Sector 18, Noida - 201301",
+      office: "2nd floor opposite Hotel Golden tulip 4 station road Hussainganj, lucknow 226001",
       city: "Noida",
       country: "Uttar Pradesh",
       mapLink: "https://goo.gl/maps/example",
