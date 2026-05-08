@@ -4,6 +4,8 @@ import { SITE_IDENTITY } from "@/site-identity";
 import { FormModalProvider } from "@/context/FormModalContext";
 import { FormModal } from "@/components/FormModal";
 import { QueryProvider } from "@/providers/QueryProvider";
+import { PopupProvider } from "@/context/PopupContext";
+import { LayoutBody } from "@/components/LayoutBody";
 
 export const metadata: Metadata = {
   title: SITE_IDENTITY.meta.title,
@@ -26,8 +28,8 @@ export const metadata: Metadata = {
     images: [SITE_IDENTITY.meta.ogImage || SITE_IDENTITY.assets.logo.main],
   },
   icons: {
-    icon: SITE_IDENTITY.assets.logo.favicon,
-    apple: SITE_IDENTITY.assets.logo.appleTouchIcon,
+    icon: '/logo.png',
+    apple: '/logo.png',
   },
   manifest: "/manifest.json",
 };
@@ -42,8 +44,12 @@ export default function RootLayout({
       <body className="antialiased bg-[#12141D] text-[#F8FAFC]">
         <QueryProvider>
           <FormModalProvider>
-            {children}
-            <FormModal />
+            <PopupProvider>
+              <LayoutBody>
+                {children}
+              </LayoutBody>
+              <FormModal />
+            </PopupProvider>
           </FormModalProvider>
         </QueryProvider>
       </body>

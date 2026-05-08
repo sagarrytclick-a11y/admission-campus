@@ -14,16 +14,19 @@ import StudyPrograms from "@/app/Components/StudyPrograms";
 import ExplorePrograms from "../Components/ExplorePrograms";
 import ExploreTopCourses from "../Components/ExploreTopCourses";
 import CitySlider from "../Components/CitySlider";
+import MedicalSection from "@/app/Components/MedicalSection";
 
 const page = () => {
   return (
     <div className="w-full bg-white text-black overflow-x-hidden">
       <Hero />
+      <MedicalSection />
       <CitySlider />
       <FeaturedSection />
       <ExploreTopCourses />
       <ExplorePrograms />
       <StudyPrograms />
+      <MedicalSection />
       <EducationStats />
       <LatestBlogs />
       <Services />
