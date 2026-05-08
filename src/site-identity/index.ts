@@ -85,7 +85,7 @@ export const SITE_IDENTITY: SiteIdentity = {
       general: "Info@admissioncampus.in",
     },
     address: {
-      office: "2nd floor opposite Hotel Golden tulip 4 station road Hussainganj, lucknow 226001",
+      office: "S0-1, Geniefolks Building (2nd Floor), Block A, Plot No. A-28, Sector 4, Noida, Uttar Pradesh - 201301",
       city: "Noida",
       country: "Uttar Pradesh",
       mapLink: "https://goo.gl/maps/example",
