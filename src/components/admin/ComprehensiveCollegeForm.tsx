@@ -114,7 +114,7 @@ export function ComprehensiveCollegeForm({ data, countries, onChange, onSubmit, 
       data.slug?.trim(),
       data.country_ref,
       // Only require city if country is India
-      data.country_ref === 'india' ? data.city?.trim() : true,
+      data.country_ref?.toLowerCase() === 'india' ? data.city?.trim() : true,
       data.overview_description?.trim(),
       data.key_highlights_description?.trim(),
       data.key_highlights_features?.length,
@@ -268,7 +268,7 @@ export function ComprehensiveCollegeForm({ data, countries, onChange, onSubmit, 
               </div>
 
               {/* Conditional City Field - Only show for India */}
-              {data.country_ref === 'india' && (
+              {data.country_ref?.toLowerCase() === 'india' && (
                 <div>
                   <Label htmlFor="city" className="mb-3 block text-gray-200">City *</Label>
                   {citiesLoading ? (
@@ -283,7 +283,12 @@ export function ComprehensiveCollegeForm({ data, countries, onChange, onSubmit, 
                       </SelectTrigger>
                       <SelectContent className="bg-gray-700 border-gray-600 max-h-96" position="popper">
                         {cities
-                          .filter(city => city.country_ref.slug === 'india')
+                          .filter(city => {
+                            const countrySlug = typeof city.country_ref === 'object' && city.country_ref?.slug
+                              ? city.country_ref.slug.toLowerCase()
+                              : String(city.country_ref || '').toLowerCase()
+                            return countrySlug === 'india'
+                          })
                           .map((city) => (
                             <SelectItem key={city._id} value={city.slug} className="text-white hover:bg-gray-600">
                               {city.name}
