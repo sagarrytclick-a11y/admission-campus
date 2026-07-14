@@ -87,6 +87,18 @@ export const dummyCountries: Country[] = [
     status: 'inactive',
     createdAt: '2024-01-18T10:00:00Z',
     updatedAt: '2024-01-18T10:00:00Z'
+  },
+  {
+    id: '5',
+    name: 'India',
+    slug: 'india',
+    flag: '🇮🇳',
+    description: 'India offers a diverse and rich educational landscape with world-class institutions.',
+    metaTitle: 'Study in India | Admission Campus',
+    metaDescription: 'Discover top colleges and universities in India for higher education.',
+    status: 'active',
+    createdAt: '2024-01-19T10:00:00Z',
+    updatedAt: '2024-01-19T10:00:00Z'
   }
 ]
 

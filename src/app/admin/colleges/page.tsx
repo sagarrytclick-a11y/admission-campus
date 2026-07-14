@@ -479,7 +479,7 @@ function AdminCollegesPageContent() {
     }
     
     // City validation for India
-    if (formData.country_ref === 'india' && (!formData.city || formData.city.trim() === '')) {
+    if (formData.country_ref?.toLowerCase() === 'india' && (!formData.city || formData.city.trim() === '')) {
       missingFields.push('City (required for Indian colleges)')
       console.log('❌ City is missing for Indian college')
     }
