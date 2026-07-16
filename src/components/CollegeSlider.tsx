@@ -173,7 +173,7 @@ const fetchColleges = async (countrySlug?: string): Promise<College[]> => {
                 slug: typeof college.slug === 'string' ? college.slug : college._id || Math.random().toString(),
                 banner_url: college.banner_url,
                 location: college.country_ref?.name || 'Unknown Location',
-                rank: college.ranking ? `Rank ${college.ranking}` : undefined,
+                rank: college.ranking ? `Rank ${typeof college.ranking === 'object' ? (college.ranking.country_ranking || college.ranking.world_ranking || '') : college.ranking}` : undefined,
                 tuition: college.fees ? `$${college.fees.toLocaleString()}/year` : undefined,
                 acceptance: undefined,
                 rating: undefined,

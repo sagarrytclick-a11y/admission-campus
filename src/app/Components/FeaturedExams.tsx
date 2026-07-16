@@ -250,7 +250,7 @@ export default function FeaturedSection() {
               slug={u.slug}
               country={u.country_ref?.name}
               establishment_year={u.establishment_year}
-              ranking={u.ranking?.country_ranking || u.ranking}
+              ranking={typeof u.ranking === 'object' ? (u.ranking?.country_ranking || u.ranking?.world_ranking || '') : (u.ranking || '')}
               fees={
                 u.fees ||
                 u.annual_fees ||
