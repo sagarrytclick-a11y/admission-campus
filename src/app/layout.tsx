@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { SITE_IDENTITY } from "@/site-identity";
 import { FormModalProvider } from "@/context/FormModalContext";
@@ -10,11 +10,11 @@ import { LayoutBody } from "@/components/LayoutBody";
 export const metadata: Metadata = {
   title: SITE_IDENTITY.meta.title,
   description: SITE_IDENTITY.meta.description,
-   keywords: SITE_IDENTITY.meta.keywords,
+  keywords: SITE_IDENTITY.meta.keywords,
   authors: [{ name: SITE_IDENTITY.meta.author }],
   creator: SITE_IDENTITY.meta.author,
   publisher: SITE_IDENTITY.meta.author,
-  viewport: 'width=device-width, initial-scale=1',
+  metadataBase: new URL("https://admissioncampus.com"),
   openGraph: {
     title: SITE_IDENTITY.meta.title,
     description: SITE_IDENTITY.meta.description,
@@ -32,6 +32,11 @@ export const metadata: Metadata = {
     apple: '/logo.png',
   },
   manifest: "/manifest.json",
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
 };
 
 export default function RootLayout({
