@@ -12,6 +12,14 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
+type RankingObject = {
+  title?: string;
+  description?: string;
+  country_ranking?: string;
+  world_ranking?: string;
+  accreditation?: string;
+}
+
 type College = {
   _id: string;
   name: string;
@@ -21,7 +29,7 @@ type College = {
   image: string;
   image_url: string;
   slug: string;
-  ranking?: string;
+  ranking?: string | RankingObject;
   established?: string;
   numberOfCourses?: string;
 };
@@ -108,7 +116,7 @@ export default function FeaturedColleges() {
                 {/* Ranking Badge with Default */}
                 <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md text-white px-3 py-1 rounded-lg flex items-center gap-1.5 text-xs font-bold border border-white/20">
                   <Trophy size={12} className="text-yellow-400" />
-                  Rank {college.ranking || "N/A"}
+                  Rank {typeof college.ranking === 'object' ? (college.ranking.country_ranking || college.ranking.world_ranking || 'N/A') : (college.ranking || 'N/A')}
                 </div>
               </div>
 

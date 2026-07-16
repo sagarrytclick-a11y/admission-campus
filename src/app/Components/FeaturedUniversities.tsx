@@ -130,7 +130,7 @@ const fetchUniversities = async (): Promise<UniversityCardProps[]> => {
       name: university.name,
       image: university.banner_url || "/next.svg",
       location: university.city || "Location",
-      ranking: university.ranking,
+      ranking: typeof university.ranking === 'object' ? (university.ranking?.country_ranking || university.ranking?.world_ranking || '') : (university.ranking || ''),
       fees: university.fees,
       duration: university.duration,
       establishment_year: university.establishment_year,
