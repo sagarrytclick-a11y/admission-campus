@@ -1,60 +1,59 @@
-<<<<<<< HEAD
-# Campus Meet
+# Admission Campus
 
-Campus Meet is a modern education and admission guidance platform designed to help students discover colleges, explore courses, understand entrance exams, and make informed decisions about higher education.
+Admission Campus is an education and admission guidance platform built to help students discover colleges, explore courses, understand entrance examinations, and navigate the admission process with greater clarity.
 
-The platform brings college information, admission resources, exam guidance, course discovery, counselling support, and educational content together in one place.
+The platform brings college information, course discovery, entrance exam resources, counselling guidance, admission information, and educational content together in one place.
 
 ## Overview
 
-Choosing the right college and course can be difficult when information is spread across different websites and sources. Campus Meet aims to simplify that process by providing students with a structured way to explore institutions, compare academic options, understand admission requirements, and stay updated with important education-related information.
+Finding the right college and course often requires students to search across multiple websites and sources. Admission Campus is designed to make this process simpler by organizing important education and admission information into a structured and accessible platform.
 
-The platform covers major academic areas including engineering, medical education, management, professional courses, commerce, science, arts, humanities, design, and architecture.
+The platform covers multiple academic categories, including engineering, medical education, management, professional courses, commerce, science, arts, humanities, design, and architecture.
 
 ## Core Features
 
 ### College Discovery
 
-Browse and explore colleges and universities across India with information organized around academic programs, admission requirements, facilities, locations, and other relevant details.
+Explore colleges and universities with structured information covering courses, admissions, facilities, location, fees, and other relevant academic details.
 
 ### Course Discovery
 
-Explore undergraduate, postgraduate, professional, and specialized programs across different academic fields.
+Discover undergraduate, postgraduate, professional, and specialized programs across different academic disciplines.
 
 ### Entrance Exam Information
 
-Access information related to major entrance examinations, including:
+Access information and resources related to major entrance examinations such as:
 
 * JEE Main
 * NEET
 * CAT
-* Other national and university-level entrance examinations
+* Other national, state, and university-level entrance examinations
 
 ### College Comparison
 
-Compare institutions based on relevant academic and admission factors to make the college selection process easier.
+Compare colleges and academic options using relevant information to make the college selection process easier.
 
 ### Admission Guidance
 
-Understand admission processes, eligibility requirements, counselling procedures, entrance examinations, and application-related information.
+Understand admission requirements, eligibility criteria, application procedures, counselling processes, entrance examinations, and other important admission-related information.
 
 ### Counselling Support
 
-The platform provides guidance related to counselling processes such as:
+Admission Campus provides guidance and resources related to different counselling processes, including:
 
 * NEET Counselling
-* JEE / Engineering Counselling
-* State-level counselling
-* College selection
-* Admission planning
+* Engineering Counselling
+* State-level Counselling
+* College Selection
+* Admission Planning
 
 ### Educational Resources
 
-The platform includes articles, admission updates, exam information, preparation resources, and career guidance content to help students throughout their academic journey.
+The platform provides educational content covering admission updates, examination information, preparation resources, college information, and career guidance.
 
 ## Academic Categories
 
-Campus Meet covers a wide range of educational categories:
+Admission Campus covers a broad range of academic categories:
 
 * Engineering
 * Medical
@@ -67,10 +66,8 @@ Campus Meet covers a wide range of educational categories:
 
 ## Platform Structure
 
-The application is organized around several core areas:
-
 ```text
-Campus Meet
+Admission Campus
 │
 ├── Colleges
 │   ├── All Colleges
@@ -88,7 +85,7 @@ Campus Meet
 │   ├── Engineering
 │   ├── Medical
 │   ├── Management
-│   ├── Professional
+│   ├── Professional Courses
 │   ├── Commerce
 │   ├── Science
 │   ├── Arts & Humanities
@@ -107,23 +104,9 @@ Campus Meet
     └── Career Guidance
 ```
 
-## Why Campus Meet
+## Technology Stack
 
-Campus Meet is built around a simple idea: students should be able to find useful and relevant education information without having to search through multiple disconnected sources.
-
-The platform focuses on:
-
-* Structured college information
-* Course discovery
-* Entrance exam guidance
-* Admission and counselling resources
-* College comparison
-* Educational articles and updates
-* Career-oriented information
-
-## Technology
-
-The project is built as a modern web application with a focus on performance, maintainability, responsive design, and scalable content management.
+Admission Campus is built using a modern web stack focused on maintainability, performance, responsive design, and scalable content management.
 
 ### Frontend
 
@@ -134,15 +117,15 @@ The project is built as a modern web application with a focus on performance, ma
 
 ### Backend & Data
 
-* Next.js API architecture
+* Next.js API Routes
 * Prisma ORM
 * PostgreSQL
-* REST-based data fetching
+* REST APIs
 
-### Authentication & Integrations
+### Authentication & Services
 
 * Clerk Authentication
-* External APIs and data sources where required
+* External APIs and third-party services where required
 
 ### Development Tools
 
@@ -154,136 +137,154 @@ The project is built as a modern web application with a focus on performance, ma
 
 ## Project Goals
 
-The primary goals of Campus Meet are to:
+Admission Campus is designed to:
 
-1. Make college discovery easier.
-2. Organize admission information in a structured format.
+1. Simplify college discovery.
+2. Organize admission information in one place.
 3. Help students understand entrance examinations.
-4. Simplify college and course comparison.
+4. Make course and college comparison easier.
 5. Provide useful admission and counselling resources.
-6. Build a reliable education-focused information platform.
-7. Create a scalable foundation for future education services.
+6. Publish structured education and career information.
+7. Provide a scalable foundation for future education services.
 
 ## Getting Started
 
-Clone the repository:
+### Prerequisites
+
+Make sure the following are installed on your system:
+
+* Node.js
+* npm
+* Git
+* PostgreSQL
+
+### Clone the Repository
 
 ```bash
 git clone <repository-url>
 ```
 
-Move into the project directory:
+### Navigate to the Project
 
 ```bash
-cd campus-meet
+cd admission-campus
 ```
 
-Install dependencies:
+### Install Dependencies
 
 ```bash
 npm install
 ```
 
-Create an environment file:
+### Environment Configuration
+
+Create a `.env` file in the root directory:
 
 ```bash
-cp .env.example .env
+touch .env
 ```
 
-Add the required environment variables to `.env`.
-
-Run the development server:
-
-```bash
-npm run dev
-```
-
-Open the application at:
-
-```text
-http://localhost:3000
-```
-
-## Environment Variables
-
-Depending on the project configuration, the application may require environment variables for database access, authentication, and other integrations.
+Add the environment variables required by your local setup.
 
 Example:
 
 ```env
-DATABASE_URL=
-
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
-CLERK_SECRET_KEY=
-
-NEXT_PUBLIC_APP_URL=
-```
-
-Never commit private credentials, API keys, or production secrets to the repository.
-
-## Development
-
-To create a production build:
-
-```bash
-npm run build
-```
-
-To start the production server:
-
-```bash
-npm start
-```
-
-To check the project with ESLint:
-
-```bash
-npm run lint
-```
-
-## Data & Content
-
-College, course, examination, fee, admission, and other educational information should be verified against the relevant institution or official authority before being used for important academic or financial decisions.
-
-Campus Meet is intended to make information easier to discover and understand; it should not be treated as a substitute for official admission notifications, counselling authorities, universities, or regulatory bodies.
-
-## Contributing
-
-Contributions are welcome when they improve the reliability, usability, performance, accessibility, or maintainability of the platform.
-
-A typical contribution workflow:
-
-```bash
-git checkout -b feature/your-feature
-```
-
-Make your changes, then:
-
-```bash
-git add .
-git commit -m "Add your change"
-git push origin feature/your-feature
-```
-
-Open a pull request with a clear description of the changes.
-
-## Project Status
-
-Campus Meet is actively being developed with a focus on expanding college and course coverage, improving admission resources, and making education information easier to access and understand.
-
-## License
-
-This project is currently maintained as a private/proprietary project.
-
-Unless explicitly permitted by the project owner, the source code, design, content, and other project assets should not be copied, redistributed, or used commercially.
----
-
-Campus Meet — helping students make better-informed decisions about colleges, courses, and admissions.
-=======
 MONGODB_URI=
 ADMIN_USERNAME=
 ADMIN_PASSWORD=
 JWT_SECRET=
 RESEND_API_KEY=
 ADMIN_EMAIL=
->>>>>>> company/main
+```
+
+Do not commit `.env` or any file containing private credentials, API keys, passwords, tokens, or other sensitive configuration.
+
+### Start Development Server
+
+```bash
+npm run dev
+```
+
+The application will be available at:
+
+```text
+http://localhost:3000
+```
+
+## Production
+
+Create a production build:
+
+```bash
+npm run build
+```
+
+Start the production server:
+
+```bash
+npm start
+```
+
+Run linting:
+
+```bash
+npm run lint
+```
+
+## Environment Variables
+
+The application uses environment variables for database connectivity, authentication, email services, and other private configuration.
+
+The exact variables required may vary depending on the deployment environment.
+
+Keep production credentials outside the repository and configure them through the deployment platform or secure environment configuration.
+
+## Data & Content
+
+Admission Campus provides structured information about colleges, courses, examinations, fees, admissions, counselling, and related educational topics.
+
+Students should verify important admission, fee, eligibility, examination, and counselling information with the relevant college, university, examination authority, or official counselling authority before making academic or financial decisions.
+
+## Development Workflow
+
+Create a feature branch:
+
+```bash
+git checkout -b feature/your-feature
+```
+
+Make your changes and verify the application locally.
+
+Then commit your changes:
+
+```bash
+git add .
+git commit -m "Describe your changes"
+```
+
+Push the branch:
+
+```bash
+git push origin feature/your-feature
+```
+
+For collaborative development, open a pull request with a clear description of the changes.
+
+## Project Status
+
+Admission Campus is under active development.
+
+The platform continues to evolve with improvements to college data, course discovery, admission resources, counselling information, educational content, performance, and user experience.
+
+## License
+
+This project is currently maintained as a private/proprietary project.
+
+Unless explicitly authorized by the project owner, the source code, design, content, database structure, and other project assets should not be copied, redistributed, modified, or used commercially.
+
+## Website
+
+https://www.admissioncampus.in/
+
+```
+```
