@@ -1,0 +1,63 @@
+import type { Metadata, Viewport } from "next";
+import "./globals.css";
+import { SITE_IDENTITY } from "@/site-identity";
+import { FormModalProvider } from "@/context/FormModalContext";
+import { FormModal } from "@/components/FormModal";
+import { QueryProvider } from "@/providers/QueryProvider";
+import { PopupProvider } from "@/context/PopupContext";
+import { LayoutBody } from "@/components/LayoutBody";
+
+export const metadata: Metadata = {
+  title: SITE_IDENTITY.meta.title,
+  description: SITE_IDENTITY.meta.description,
+  keywords: SITE_IDENTITY.meta.keywords,
+  authors: [{ name: SITE_IDENTITY.meta.author }],
+  creator: SITE_IDENTITY.meta.author,
+  publisher: SITE_IDENTITY.meta.author,
+  metadataBase: new URL("https://admissioncampus.com"),
+  openGraph: {
+    title: SITE_IDENTITY.meta.title,
+    description: SITE_IDENTITY.meta.description,
+    type: "website",
+    images: [SITE_IDENTITY.meta.ogImage || SITE_IDENTITY.assets.logo.main],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_IDENTITY.meta.title,
+    description: SITE_IDENTITY.meta.description,
+    images: [SITE_IDENTITY.meta.ogImage || SITE_IDENTITY.assets.logo.main],
+  },
+  icons: {
+    icon: '/logo.png',
+    apple: '/logo.png',
+  },
+  manifest: "/manifest.json",
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body className="antialiased bg-[#12141D] text-[#F8FAFC]">
+        <QueryProvider>
+          <FormModalProvider>
+            <PopupProvider>
+              <LayoutBody>
+                {children}
+              </LayoutBody>
+              <FormModal />
+            </PopupProvider>
+          </FormModalProvider>
+        </QueryProvider>
+      </body>
+    </html>
+  );
+}

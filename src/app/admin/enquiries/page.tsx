@@ -1,0 +1,527 @@
+'use client'
+
+import React, { useMemo, useEffect } from 'react'
+import { AdminTable, createViewAction, createDeleteAction } from '@/components/admin/AdminTable'
+import { AdminModal } from '@/components/admin/AdminModal'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Badge } from '@/components/ui/badge'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { MessageSquare, Search, Eye, Mail, Phone, Calendar, ChevronLeft, ChevronRight, MapPin } from 'lucide-react'
+import { useAdminEnquiries, useDeleteEnquiry, useUpdateEnquiry } from '@/hooks/useAdminEnquiries'
+import { useEnquiriesAdminContext, useEnquiriesAdminActions, EnquiriesAdminProvider } from '@/context/EnquiriesAdminContext'
+import { Enquiry } from '@/context/EnquiriesAdminContext'
+
+function EnquiriesPageContent() {
+  const { state, dispatch } = useEnquiriesAdminContext()
+  const {
+    openCreateModal,
+    closeModal,
+    setEditingItem,
+    openDeleteModal,
+    closeDeleteModal,
+    setSearchTerm,
+    setFilter,
+    setCurrentPage
+  } = useEnquiriesAdminActions()
+  
+  const {
+    isModalOpen,
+    editingItem: selectedEnquiry,
+    deleteModalOpen,
+    itemToDelete: enquiryToDelete,
+    searchTerm,
+    selectedFilters,
+    currentPage,
+    itemsPerPage
+  } = state
+  
+  const selectedStatus = selectedFilters.status || 'all'
+  const selectedPriority = selectedFilters.priority || 'all'
+  const selectedCourseCategory = selectedFilters.course_category || 'all'
+
+  // API hooks
+  const { data: enquiries = [], isLoading: dataLoading } = useAdminEnquiries()
+  const deleteEnquiryMutation = useDeleteEnquiry()
+  const updateEnquiryMutation = useUpdateEnquiry()
+
+  // Status update handler
+  const handleStatusUpdate = async (enquiryId: string, newStatus: string) => {
+    // Optimistically update local state for real-time UI feedback
+    if (selectedEnquiry && selectedEnquiry._id === enquiryId) {
+      setEditingItem({ ...selectedEnquiry, status: newStatus as Enquiry['status'] })
+    }
+
+    try {
+      await updateEnquiryMutation.mutateAsync({ id: enquiryId, status: newStatus })
+    } catch (error) {
+      console.error('Failed to update status:', error)
+      // Revert on error - refetch will restore correct data
+    }
+  }
+
+  // Filter enquiries based on search, status, priority, and course category using useMemo
+  const filteredEnquiries = useMemo(() => {
+    let filtered = enquiries
+
+    if (selectedStatus !== 'all') {
+      filtered = filtered.filter((enquiry: Enquiry) => enquiry.status === selectedStatus)
+    }
+
+    if (selectedPriority !== 'all') {
+      filtered = filtered.filter((enquiry: Enquiry) => enquiry.priority === selectedPriority)
+    }
+
+    if (selectedCourseCategory !== 'all') {
+      filtered = filtered.filter((enquiry: Enquiry) => enquiry.course_category === selectedCourseCategory)
+    }
+
+    if (searchTerm) {
+      filtered = filtered.filter((enquiry: Enquiry) =>
+        enquiry.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        enquiry.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        enquiry.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        enquiry.message.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        enquiry.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (enquiry.course_category && enquiry.course_category.toLowerCase().includes(searchTerm.toLowerCase()))
+      )
+    }
+
+    return filtered
+  }, [enquiries, searchTerm, selectedStatus, selectedPriority, selectedCourseCategory])
+
+  // Pagination logic
+  const { paginatedEnquiries, totalPages } = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage
+    const endIndex = startIndex + itemsPerPage
+    const paginated = filteredEnquiries.slice(startIndex, endIndex)
+    const pages = Math.ceil(filteredEnquiries.length / itemsPerPage)
+    return { paginatedEnquiries: paginated, totalPages: pages }
+  }, [filteredEnquiries, currentPage])
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    dispatch({ type: 'SET_CURRENT_PAGE', payload: 1 })
+  }, [searchTerm, selectedStatus, selectedPriority, selectedCourseCategory, dispatch])
+
+  const columns = [
+    {
+      key: 'name' as keyof Enquiry,
+      title: 'Contact',
+      render: (value: string, record: Enquiry) => (
+        <div className="max-w-md">
+          <div className="font-medium text-white">{value}</div>
+          <div className="text-sm text-white">{record.email}</div>
+          <div className="text-sm text-white">{record.phone}</div>
+          <div className="text-sm text-white">{record.city}</div>
+        </div>
+      )
+    },
+    {
+      key: 'course_category' as keyof Enquiry,
+      title: 'Course Category',
+      render: (value: any) => {
+        // Handle all possible falsy values and string representations
+        if (!value || value === null || value === undefined || 
+            value === 'undefined' || value === 'null' || value === '') {
+          return (
+            <div className="max-w-xs">
+              <span className="text-gray-400 text-sm">Not specified</span>
+            </div>
+          );
+        }
+        
+        return (
+          <div className="max-w-xs">
+            <Badge variant="outline" className="text-blue-300 border-blue-300/50">
+              {String(value)}
+            </Badge>
+          </div>
+        );
+      }
+    },
+    {
+      key: 'subject' as keyof Enquiry,
+      title: 'Subject',
+      render: (value: string) => (
+        <div className="max-w-xs">
+          <div className="font-medium text-white line-clamp-2">{value}</div>
+        </div>
+      )
+    },
+    {
+      key: 'priority' as keyof Enquiry,
+      title: 'Priority',
+      render: (value: string) => {
+        const colors = {
+          urgent: 'bg-red-100 text-red-800 border-red-200',
+          high: 'bg-orange-100 text-orange-800 border-orange-200',
+          medium: 'bg-yellow-100 text-yellow-800 border-yellow-200',
+          low: 'bg-green-100 text-green-800 border-green-200'
+        }
+        return (
+          <Badge className={`border ${colors[value as keyof typeof colors] || colors.low}`}>
+            {value}
+          </Badge>
+        )
+      }
+    },
+    {
+      key: 'status' as keyof Enquiry,
+      title: 'Status',
+      render: (value: string) => {
+        const colors = {
+          pending: 'bg-gray-100 text-gray-800 border-gray-200',
+          contacted: 'bg-blue-100 text-blue-800 border-blue-200',
+          resolved: 'bg-green-100 text-green-800 border-green-200',
+          closed: 'bg-slate-100 text-slate-800 border-slate-200'
+        }
+        return (
+          <Badge className={`border ${colors[value as keyof typeof colors] || colors.pending}`}>
+            {value}
+          </Badge>
+        )
+      }
+    },
+    {
+      key: 'createdAt' as keyof Enquiry,
+      title: 'Created',
+      render: (value: string) => {
+        const date = new Date(value)
+        return (
+          <div className="text-sm">
+            <div>{date.toLocaleDateString('en-US')}</div>
+            <div className="text-gray-500">{date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</div>
+          </div>
+        )
+      }
+    }
+  ]
+
+  const actions = [
+    createViewAction((enquiry: Enquiry) => {
+      setEditingItem(enquiry)
+      openCreateModal()
+    }),
+    createDeleteAction((enquiry: Enquiry) => {
+      openDeleteModal(enquiry)
+    })
+  ]
+
+  const handleDeleteEnquiry = async () => {
+    if (!enquiryToDelete) return
+
+    try {
+      await deleteEnquiryMutation.mutateAsync(enquiryToDelete._id)
+      closeDeleteModal()
+    } catch (error) {
+      console.error('Delete error:', error)
+    }
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-white">Enquiries</h1>
+          <p className="text-white">Manage student enquiries and support requests</p>
+        </div>
+      </div>
+
+      {/* Filters */}
+      <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex-1">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <Input
+              placeholder="Search enquiries..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10"
+            />
+          </div>
+        </div>
+
+        <Select value={selectedStatus} onValueChange={(value) => setFilter('status', value)}>
+          <SelectTrigger className="w-full sm:w-48">
+            <SelectValue placeholder="Filter by status" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Status</SelectItem>
+            <SelectItem value="pending">Pending</SelectItem>
+            <SelectItem value="contacted">Contacted</SelectItem>
+            <SelectItem value="resolved">Resolved</SelectItem>
+            <SelectItem value="closed">Closed</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select value={selectedPriority} onValueChange={(value) => setFilter('priority', value)}>
+          <SelectTrigger className="w-full sm:w-48">
+            <SelectValue placeholder="Filter by priority" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Priority</SelectItem>
+            <SelectItem value="urgent">Urgent</SelectItem>
+            <SelectItem value="high">High</SelectItem>
+            <SelectItem value="medium">Medium</SelectItem>
+            <SelectItem value="low">Low</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select value={selectedCourseCategory} onValueChange={(value) => setFilter('course_category', value)}>
+          <SelectTrigger className="w-full sm:w-48">
+            <SelectValue placeholder="Filter by course" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Courses</SelectItem>
+            <SelectItem value="Medical">Medical</SelectItem>
+            <SelectItem value="Management">Management</SelectItem>
+            <SelectItem value="Law">Law</SelectItem>
+            <SelectItem value="Design">Design</SelectItem>
+            <SelectItem value="Engineering">Engineering</SelectItem>
+            <SelectItem value="Online MBA">Online MBA</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Table */}
+      <AdminTable
+        data={paginatedEnquiries}
+        columns={columns}
+        actions={actions}
+        loading={false}
+      />
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between mt-12">
+          <div className="text-sm text-white">
+            Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, filteredEnquiries.length)} of {filteredEnquiries.length} enquiries
+          </div>
+          <div className="flex items-center space-x-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))}
+              disabled={currentPage === 1}
+              className="flex items-center space-x-1"
+            >
+              <ChevronLeft className="h-4 w-4" />
+              <span>Previous</span>
+            </Button>
+
+            <div className="flex items-center space-x-1">
+              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                let pageNum
+                if (totalPages <= 5) {
+                  pageNum = i + 1
+                } else if (currentPage <= 3) {
+                  pageNum = i + 1
+                } else if (currentPage >= totalPages - 2) {
+                  pageNum = totalPages - 4 + i
+                } else {
+                  pageNum = currentPage - 2 + i
+                }
+
+                return (
+                  <Button
+                    key={pageNum}
+                    variant={currentPage === pageNum ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setCurrentPage(pageNum)}
+                    className="w-8 h-8 p-0"
+                  >
+                    {pageNum}
+                  </Button>
+                )
+              })}
+            </div>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage(Math.min(currentPage + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className="flex items-center space-x-1"
+            >
+              <span>Next</span>
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* View Enquiry Modal */}
+      <AdminModal
+        open={isModalOpen}
+        onOpenChange={(open) => !open && closeModal()}
+        title="Enquiry Details"
+        size="lg"
+        showFooter={false}
+      >
+        {selectedEnquiry && (
+          <div className="space-y-6">
+            {/* Contact Information */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-white">Name</label>
+                <div className="flex items-center gap-2">
+                  <MessageSquare className="h-4 w-4 text-white" />
+                  <span>{selectedEnquiry.name}</span>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-white">Email</label>
+                <div className="flex items-center gap-2">
+                  <Mail className="h-4 w-4 text-white" />
+                  <span>{selectedEnquiry.email}</span>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-white">Phone</label>
+                <div className="flex items-center gap-2">
+                  <Phone className="h-4 w-4 text-white" />
+                  <span className="text-white">{selectedEnquiry.phone}</span>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-white">City</label>
+                <div className="flex items-center gap-2">
+                  <MapPin className="h-4 w-4 text-white" />
+                  <span className="text-white">{selectedEnquiry.city}</span>
+                </div>
+              </div>
+              {selectedEnquiry.course_category && selectedEnquiry.course_category !== 'undefined' && selectedEnquiry.course_category !== 'null' ? (
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-white">Course Category</label>
+                  <Badge variant="outline" className="text-blue-300 border-blue-300/50">
+                    {selectedEnquiry.course_category}
+                  </Badge>
+                </div>
+              ) : null}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-white">Source</label>
+                <Badge variant="outline" className="text-white border-white/50">{selectedEnquiry.source}</Badge>
+              </div>
+            </div>
+
+            {/* Enquiry Details */}
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm font-medium text-white">Subject</label>
+                <div className="mt-1 p-3 rounded-lg">
+                  {selectedEnquiry.subject}
+                </div>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium text-white">Message</label>
+                <div className="mt-1 p-3  rounded-lg whitespace-pre-wrap">
+                  {selectedEnquiry.message}
+                </div>
+              </div>
+            </div>
+
+            {/* Status and Priority */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-white">Status</label>
+                <Select
+                  value={selectedEnquiry.status}
+                  onValueChange={(value) => handleStatusUpdate(selectedEnquiry._id, value)}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="pending">Pending</SelectItem>
+                    <SelectItem value="contacted">Contacted</SelectItem>
+                    <SelectItem value="resolved">Resolved</SelectItem>
+                    <SelectItem value="closed">Closed</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-white">Priority</label>
+                <Badge className={
+                  selectedEnquiry.priority === 'urgent' ? 'bg-red-100 text-red-800 border-red-200' :
+                    selectedEnquiry.priority === 'high' ? 'bg-orange-100 text-orange-800 border-orange-200' :
+                      selectedEnquiry.priority === 'medium' ? 'bg-yellow-100 text-yellow-800 border-yellow-200' :
+                        'bg-green-100 text-green-800 border-green-200'
+                }>
+                  {selectedEnquiry.priority}
+                </Badge>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-white">Assigned To</label>
+                <div>{selectedEnquiry.assignedTo || 'Unassigned'}</div>
+              </div>
+            </div>
+
+            {/* Timestamps */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-white">
+              <div className="flex items-center gap-2">
+                <Calendar className="h-4 w-4" />
+                <span>Created: {new Date(selectedEnquiry.createdAt).toLocaleString()}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Calendar className="h-4 w-4" />
+                <span>Updated: {new Date(selectedEnquiry.updatedAt).toLocaleString()}</span>
+              </div>
+            </div>
+          </div>
+        )}
+      </AdminModal>
+
+      {/* Delete Confirmation Modal */}
+      <AdminModal
+        open={deleteModalOpen}
+        onOpenChange={(open) => !open && closeDeleteModal()}
+        title="Delete Enquiry"
+        size="sm"
+        showFooter={false}
+      >
+        <div className="space-y-4">
+          <p className="text-white">
+            Are you sure you want to delete this enquiry? This action cannot be undone.
+          </p>
+          {enquiryToDelete && (
+            <div className="p-3 bg-gray-50 rounded-lg">
+              <div className="font-medium">{enquiryToDelete.name}</div>
+              <div className="text-sm text-white">{enquiryToDelete.subject}</div>
+            </div>
+          )}
+          <div className="flex gap-3 justify-end">
+            <Button
+              variant="outline"
+              onClick={() => closeDeleteModal()}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleDeleteEnquiry}
+            >
+              Delete Enquiry
+            </Button>
+          </div>
+        </div>
+      </AdminModal>
+    </div>
+  )
+}
+
+export default function EnquiriesPage() {
+  return (
+    <EnquiriesAdminProvider>
+      <EnquiriesPageContent />
+    </EnquiriesAdminProvider>
+  )
+}
