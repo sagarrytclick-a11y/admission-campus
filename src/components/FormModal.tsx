@@ -64,7 +64,7 @@ export const FormModal: React.FC = () => {
 
   return (
     <div
-      className="fixed inset-0 z-100 flex items-end sm:items-center justify-center sm:p-4"
+      className="fixed inset-0 z-100 flex items-center justify-center p-3 sm:p-4"
       role="dialog"
       aria-modal="true"
       aria-labelledby="form-modal-title"
@@ -72,35 +72,30 @@ export const FormModal: React.FC = () => {
       <button
         type="button"
         aria-label="Close modal"
-        className="absolute inset-0 bg-[#12141D]/55 backdrop-blur-sm sm:backdrop-blur-md"
+        className="absolute inset-0 bg-[#12141D]/60 backdrop-blur-sm"
         onClick={handleClose}
       />
 
       <form
         onSubmit={handleSubmit}
-        className="relative z-10 w-full sm:w-full sm:max-w-md md:max-w-lg flex flex-col max-h-[92dvh] sm:max-h-[90vh] bg-white rounded-t-2xl sm:rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.22)] border border-slate-100 overflow-hidden animate-in slide-in-from-bottom-4 sm:zoom-in-95 fade-in duration-200"
+        className="relative z-10 w-full max-w-[calc(100vw-1.5rem)] sm:max-w-md md:max-w-lg flex flex-col max-h-[min(88dvh,640px)] sm:max-h-[90vh] bg-white rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.25)] border border-slate-100 overflow-hidden animate-in zoom-in-95 fade-in duration-200"
       >
-        {/* Mobile drag handle */}
-        <div className="sm:hidden flex justify-center pt-2.5 pb-1 shrink-0">
-          <div className="h-1 w-10 rounded-full bg-slate-200" />
-        </div>
-
-        <div className="hidden sm:block h-1.5 w-full bg-[#0066F5] shrink-0" />
+        <div className="h-1.5 w-full bg-[#0066F5] shrink-0" />
 
         {/* Header */}
-        <div className="shrink-0 px-4 sm:px-6 pt-2 sm:pt-5 pb-3 sm:pb-4 flex items-start justify-between gap-3 border-b border-slate-100">
-          <div className="min-w-0 flex items-start gap-3">
-            <div className="hidden sm:flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#0066F5]/10 text-[#0066F5]">
-              <GraduationCap size={20} />
+        <div className="shrink-0 px-4 sm:px-6 pt-4 sm:pt-5 pb-3 sm:pb-4 flex items-start justify-between gap-3 border-b border-slate-100">
+          <div className="min-w-0 flex items-start gap-2.5 sm:gap-3">
+            <div className="flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-xl bg-[#0066F5]/10 text-[#0066F5]">
+              <GraduationCap size={18} className="sm:w-5 sm:h-5" />
             </div>
-            <div className="min-w-0">
+            <div className="min-w-0 pt-0.5">
               <h2
                 id="form-modal-title"
-                className="text-lg sm:text-xl font-bold text-[#1E293B] tracking-tight leading-tight"
+                className="text-base sm:text-xl font-bold text-[#1E293B] tracking-tight leading-tight"
               >
                 Get in <span className="text-[#0066F5]">Touch</span>
               </h2>
-              <p className="text-xs text-[#64748B] mt-0.5 leading-snug">
+              <p className="text-[11px] sm:text-xs text-[#64748B] mt-0.5 leading-snug">
                 Connect with our admission strategists.
               </p>
             </div>
@@ -108,7 +103,7 @@ export const FormModal: React.FC = () => {
           <button
             type="button"
             onClick={handleClose}
-            className="shrink-0 p-2 text-slate-400 hover:text-[#0066F5] hover:bg-[#BFDBFE]/60 rounded-lg transition-colors"
+            className="shrink-0 p-2 -mr-1 text-slate-400 hover:text-[#0066F5] hover:bg-[#BFDBFE]/60 rounded-lg transition-colors"
             aria-label="Close"
           >
             <X size={18} />
@@ -116,8 +111,8 @@ export const FormModal: React.FC = () => {
         </div>
 
         {/* Scrollable fields */}
-        <div className="flex-1 overflow-y-auto overscroll-contain px-4 sm:px-6 py-4 space-y-3.5 min-h-0">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-3.5">
+        <div className="flex-1 overflow-y-auto overscroll-contain px-4 sm:px-6 py-3.5 sm:py-4 space-y-3 min-h-0">
+          <div className="grid grid-cols-1 gap-3">
             {fields.map((field) => (
               <div key={field.id} className="group">
                 <label
@@ -135,16 +130,17 @@ export const FormModal: React.FC = () => {
                     type={field.type}
                     required
                     autoComplete={field.autoComplete}
+                    inputMode={field.type === 'tel' ? 'tel' : field.type === 'email' ? 'email' : 'text'}
                     value={formData[field.id]}
                     onChange={(e) => updateFormData({ [field.id]: e.target.value })}
-                    className="w-full pl-9 pr-3 py-2.5 sm:py-3 bg-slate-50 border border-slate-200 rounded-lg text-[#1E293B] placeholder:text-slate-400 focus:bg-white focus:border-[#0066F5] focus:ring-2 focus:ring-[#0066F5]/15 outline-none transition-all text-sm font-medium"
+                    className="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-[#1E293B] placeholder:text-slate-400 focus:bg-white focus:border-[#0066F5] focus:ring-2 focus:ring-[#0066F5]/15 outline-none transition-all text-sm font-medium"
                     placeholder={field.placeholder}
                   />
                 </div>
               </div>
             ))}
 
-            <div className="group sm:col-span-2">
+            <div className="group">
               <label
                 htmlFor="modal-course"
                 className="text-[10px] font-bold text-[#64748B] uppercase tracking-wider mb-1.5 block"
@@ -156,7 +152,7 @@ export const FormModal: React.FC = () => {
                   id="modal-course"
                   value={formData.course_category}
                   onChange={(e) => updateFormData({ course_category: e.target.value })}
-                  className="w-full pl-3 pr-9 py-2.5 sm:py-3 bg-slate-50 border border-slate-200 rounded-lg text-[#1E293B] focus:bg-white focus:border-[#0066F5] focus:ring-2 focus:ring-[#0066F5]/15 outline-none transition-all text-sm font-medium appearance-none"
+                  className="w-full pl-3 pr-9 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-[#1E293B] focus:bg-white focus:border-[#0066F5] focus:ring-2 focus:ring-[#0066F5]/15 outline-none transition-all text-sm font-medium appearance-none"
                 >
                   <option value="">Select a course category</option>
                   <option value="Medical">Medical</option>
@@ -190,27 +186,27 @@ export const FormModal: React.FC = () => {
           )}
         </div>
 
-        {/* Sticky footer actions */}
-        <div className="shrink-0 px-4 sm:px-6 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:pb-5 border-t border-slate-100 bg-white">
+        {/* Actions */}
+        <div className="shrink-0 px-4 sm:px-6 pt-3 pb-4 sm:pb-5 border-t border-slate-100 bg-white">
           <div className="flex gap-2.5">
             <button
               type="button"
               onClick={handleClose}
-              className="flex-1 sm:flex-none sm:min-w-22 py-2.5 sm:py-3 text-sm font-semibold text-[#64748B] bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors active:scale-[0.98]"
+              className="flex-1 py-2.5 sm:py-3 text-sm font-semibold text-[#64748B] bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors active:scale-[0.98]"
             >
               Close
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex-2 py-2.5 sm:py-3 bg-[#0066F5] hover:bg-[#004ED4] text-white rounded-lg font-semibold text-sm shadow-md shadow-[#0066F5]/25 transition-colors active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2"
+              className="flex-[1.6] py-2.5 sm:py-3 bg-[#0066F5] hover:bg-[#004ED4] text-white rounded-lg font-semibold text-sm shadow-md shadow-[#0066F5]/25 transition-colors active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {isSubmitting ? (
                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
               ) : (
                 <>
                   <Send size={14} />
-                  <span>Submit Inquiry</span>
+                  <span>Submit</span>
                 </>
               )}
             </button>
