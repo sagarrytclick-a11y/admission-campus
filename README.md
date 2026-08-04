@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Campus Meet
 
 Campus Meet is a modern education and admission guidance platform designed to help students discover colleges, explore courses, understand entrance exams, and make informed decisions about higher education.
@@ -278,3 +279,11 @@ Unless explicitly permitted by the project owner, the source code, design, conte
 ---
 
 Campus Meet — helping students make better-informed decisions about colleges, courses, and admissions.
+=======
+MONGODB_URI=
+ADMIN_USERNAME=
+ADMIN_PASSWORD=
+JWT_SECRET=
+RESEND_API_KEY=
+ADMIN_EMAIL=
+>>>>>>> company/main
