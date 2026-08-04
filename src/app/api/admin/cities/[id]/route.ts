@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import City from "@/models/City";
+// Required for populate('country_ref') on serverless cold starts
+import "@/models/Country";
 
 export async function PUT(
   request: NextRequest,

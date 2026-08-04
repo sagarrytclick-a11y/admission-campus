@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback, useMemo, memo } from 'react'
 import Link from 'next/link'
 import { MapPin, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
-import { useAdminCities } from '@/hooks/useAdminCities'
+import { useCities } from '@/hooks/useCities'
 
 // UI restyled to match kollegeapply look
 // - Softer section background
@@ -131,13 +131,14 @@ const useResponsiveItemsPerView = () => {
 const CitySlider = () => {
   const itemsPerView = useResponsiveItemsPerView()
 
-  const { data: citiesData, isLoading: citiesLoading, error } = useAdminCities({
+  const { data: citiesData, isLoading: citiesLoading, error } = useCities({
     page: 1,
-    limit: 1000
+    limit: 1000,
+    country: 'india',
   })
 
   const indianCities = useMemo(() => {
-    return citiesData?.cities?.filter(city => city.country_ref?.slug === 'india') || []
+    return citiesData?.cities || []
   }, [citiesData?.cities])
 
   const maxIndex = Math.max(0, indianCities.length - itemsPerView)

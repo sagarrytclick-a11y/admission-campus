@@ -43,7 +43,4 @@ const CitySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Clear model cache to force schema reload
-delete mongoose.models.City;
-
-export default mongoose.model("City", CitySchema);
+export default mongoose.models.City || mongoose.model("City", CitySchema);
