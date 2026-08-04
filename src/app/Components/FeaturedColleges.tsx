@@ -11,6 +11,7 @@ import {
   Building
 } from "lucide-react";
 import Link from "next/link";
+import { formatRankingLabel } from "@/lib/formatRanking";
 
 type RankingObject = {
   title?: string;
@@ -59,7 +60,7 @@ export default function FeaturedColleges() {
   const { data: collegeData, isLoading, error, refetch } = useColleges();
 
   return (
-    <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-br from-white via-green-50/20 to-slate-50 relative overflow-hidden">
+    <section className="py-[32px] bg-gradient-to-br from-white via-green-50/20 to-slate-50 relative overflow-hidden">
       {/* ... Background Elements same as before ... */}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -103,7 +104,7 @@ export default function FeaturedColleges() {
             collegeData.map((college) => (
             <div
               key={college._id}
-              className="bg-white rounded-2xl sm:rounded-3xl overflow-hidden border-2 border-slate-300 shadow-lg hover:shadow-xl hover:shadow-[#007BFF]/20 hover:border-[#007BFF] transition-all duration-300 transform hover:-translate-y-2 group"
+              className="bg-white rounded-2xl sm:rounded-3xl overflow-hidden border-2 border-slate-300 shadow-lg hover:shadow-xl hover:shadow-[#0066F5]/20 hover:border-[#0066F5] transition-all duration-300 transform hover:-translate-y-2 group"
             >
               {/* Image Container */}
               <div className="relative h-48 sm:h-56 lg:h-64 w-full overflow-hidden border-b-2 border-slate-300 bg-slate-50">
@@ -114,10 +115,21 @@ export default function FeaturedColleges() {
                 />
                 
                 {/* Ranking Badge with Default */}
-                <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md text-white px-3 py-1 rounded-lg flex items-center gap-1.5 text-xs font-bold border border-white/20">
-                  <Trophy size={12} className="text-yellow-400" />
-                  Rank {typeof college.ranking === 'object' ? (college.ranking.country_ranking || college.ranking.world_ranking || 'N/A') : (college.ranking || 'N/A')}
-                </div>
+                {(() => {
+                  const rankLabel = formatRankingLabel(college.ranking)
+                  if (!rankLabel) return null
+                  return (
+                    <div className="absolute top-2.5 left-2.5 right-2.5 flex justify-start">
+                      <span
+                        title={rankLabel}
+                        className="inline-flex items-start gap-1.5 max-w-full bg-black/60 backdrop-blur-md text-white px-2.5 py-1 rounded-md text-xs font-bold border border-white/20 leading-snug line-clamp-2"
+                      >
+                        <Trophy size={12} className="text-yellow-400 shrink-0 mt-0.5" />
+                        <span className="line-clamp-2">{rankLabel}</span>
+                      </span>
+                    </div>
+                  )
+                })()}
               </div>
 
               {/* Content Container */}

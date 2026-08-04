@@ -58,12 +58,12 @@ export default function FAQ() {
       : faqs.filter(f => f.category === activeCategory);
 
   return (
-    <section className="py-20 bg-white font-sans text-[#1E293B]">
+    <section className="py-[32px] bg-white font-sans text-[#1E293B]">
       <div className="max-w-4xl mx-auto px-6 lg:px-24">
 
         {/* Header Section */}
-        <div className="text-center mb-16">
-          <div className="flex items-center justify-center gap-2 text-[#007BFF] mb-3">
+        <div className="text-center mb-8">
+          <div className="flex items-center justify-center gap-2 text-[#0066F5] mb-3">
             <Sparkles size={16} />
             <span className="text-[10px] font-bold uppercase tracking-widest">Support Center</span>
           </div>
@@ -86,8 +86,8 @@ export default function FAQ() {
               }}
               className={`px-5 py-2 rounded-md text-[10px] font-bold uppercase tracking-wider transition-all border ${
                 activeCategory === cat.id
-                  ? "bg-[#007BFF] text-white border-[#007BFF] shadow-sm"
-                  : "bg-[#F8FAFC] text-[#64748B] border-slate-100 hover:border-[#007BFF] hover:text-[#007BFF]"
+                  ? "bg-[#0066F5] text-white border-[#0066F5] shadow-sm"
+                  : "bg-[#F8FAFC] text-[#64748B] border-slate-100 hover:border-[#0066F5] hover:text-[#0066F5]"
               }`}
             >
               {cat.name}
@@ -102,7 +102,7 @@ export default function FAQ() {
               key={index}
               className={`transition-all border rounded-lg ${
                 openIndex === index
-                  ? "bg-[#F8FAFC] border-[#007BFF]"
+                  ? "bg-[#F8FAFC] border-[#0066F5]"
                   : "bg-white border-slate-100 hover:border-slate-200"
               }`}
             >
@@ -111,12 +111,12 @@ export default function FAQ() {
                 className="w-full px-6 py-5 flex justify-between items-center text-left"
               >
                 <div className="flex items-center gap-4">
-                  <HelpCircle size={18} className={`${openIndex === index ? "text-[#007BFF]" : "text-slate-300"}`} />
+                  <HelpCircle size={18} className={`${openIndex === index ? "text-[#0066F5]" : "text-slate-300"}`} />
                   <span className="font-semibold text-sm md:text-base text-[#1E293B]">
                     {faq.question}
                   </span>
                 </div>
-                <ChevronDown size={18} className={`transition-transform text-[#64748B] ${openIndex === index ? "rotate-180 text-[#007BFF]" : ""}`} />
+                <ChevronDown size={18} className={`transition-transform text-[#64748B] ${openIndex === index ? "rotate-180 text-[#0066F5]" : ""}`} />
               </button>
 
               <div className={`overflow-hidden transition-all duration-300 ${
@@ -132,7 +132,7 @@ export default function FAQ() {
 
         {/* CTA Section - Minimal Box */}
         <div className="mt-16 bg-[#F8FAFC] border border-slate-100 rounded-lg p-10 text-center">
-          <div className="w-12 h-12 bg-white border border-slate-200 rounded-full flex items-center justify-center text-[#007BFF] mx-auto mb-6 shadow-sm">
+          <div className="w-12 h-12 bg-white border border-slate-200 rounded-full flex items-center justify-center text-[#0066F5] mx-auto mb-6 shadow-sm">
             <MessageSquare size={22} />
           </div>
           <h3 className="text-xl font-bold text-[#1E293B] mb-2">
@@ -145,13 +145,13 @@ export default function FAQ() {
           <div className="flex flex-col sm:flex-row justify-center gap-3">
             <button
               onClick={openModal}
-              className="px-6 py-3 bg-[#1E293B] text-white rounded-md font-bold text-[10px] uppercase tracking-wider hover:bg-[#007BFF] transition-colors flex items-center justify-center gap-2"
+              className="px-6 py-3 bg-[#1E293B] text-white rounded-md font-bold text-[10px] uppercase tracking-wider hover:bg-[#0066F5] transition-colors flex items-center justify-center gap-2"
             >
               <Phone size={14} /> Free Counselling
             </button>
             <button
               onClick={openModal}
-              className="px-6 py-3 bg-white border border-slate-200 text-[#1E293B] rounded-md font-bold text-[10px] uppercase tracking-wider hover:border-[#007BFF] hover:text-[#007BFF] transition-all flex items-center justify-center gap-2"
+              className="px-6 py-3 bg-white border border-slate-200 text-[#1E293B] rounded-md font-bold text-[10px] uppercase tracking-wider hover:border-[#0066F5] hover:text-[#0066F5] transition-all flex items-center justify-center gap-2"
             >
               <Mail size={14} /> Contact Support
             </button>

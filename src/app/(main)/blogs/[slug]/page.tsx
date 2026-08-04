@@ -56,7 +56,7 @@ const BlogDetailPage = () => {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <div className="w-8 h-8 border-3 border-slate-200 border-t-[#007BFF] rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="w-8 h-8 border-3 border-slate-200 border-t-[#0066F5] rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-slate-600">Loading article...</p>
         </div>
       </div>
@@ -77,7 +77,7 @@ const BlogDetailPage = () => {
             The article you are looking for does not exist.
           </p>
           <Link href="/blogs">
-            <Button className="bg-[#007BFF] hover:bg-[#007BFF]/90 text-white">
+            <Button className="bg-[#0066F5] hover:bg-[#0066F5]/90 text-white">
               Back to Articles
             </Button>
           </Link>
@@ -93,16 +93,16 @@ const BlogDetailPage = () => {
         {/* Background Pattern */}
         <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-indigo-50 opacity-50"></div>
         
-        <div className="relative max-w-4xl mx-auto px-6 py-16 md:py-24">
+        <div className="relative max-w-4xl mx-auto px-6 py-[32px]">
           {/* Back Button */}
-          <Link href="/blogs" className="inline-flex items-center gap-2 text-[#007BFF] hover:text-[#007BFF] font-medium mb-8 transition-colors">
+          <Link href="/blogs" className="inline-flex items-center gap-2 text-[#0066F5] hover:text-[#0066F5] font-medium mb-8 transition-colors">
             <ArrowLeft size={18} />
             <span className="text-sm">Back to Articles</span>
           </Link>
           
           {/* Category & Tags */}
           <div className="flex flex-wrap gap-2 mb-6">
-            <Badge className="bg-[#007BFF] hover:bg-[#007BFF] text-white px-4 py-1.5 text-xs font-semibold">
+            <Badge className="bg-[#0066F5] hover:bg-[#004ED4] text-white px-4 py-1.5 text-xs font-semibold">
               {blog.category}
             </Badge>
             {blog.tags.map((tag) => (
@@ -120,8 +120,8 @@ const BlogDetailPage = () => {
           {/* Meta Info */}
           <div className="flex flex-wrap items-center gap-6 text-sm text-slate-600 mb-8">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-[#007BFF]/10 flex items-center justify-center">
-                <User size={14} className="text-[#007BFF]" />
+              <div className="w-8 h-8 rounded-full bg-[#0066F5]/10 flex items-center justify-center">
+                <User size={14} className="text-[#0066F5]" />
               </div>
               <span className="font-medium">{blog.author || 'Academic Team'}</span>
             </div>
@@ -157,10 +157,10 @@ const BlogDetailPage = () => {
       )}
 
       {/* Content Section */}
-      <div className="max-w-4xl mx-auto px-6 py-16">
+      <div className="max-w-4xl mx-auto px-6 py-[32px]">
         <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-8 md:p-12">
           {/* Article Content */}
-          <div className="prose prose-lg max-w-none prose-headings:text-slate-900 prose-p:text-slate-700 prose-p:leading-relaxed prose-a:text-[#007BFF] prose-strong:text-slate-900 prose-ul:text-slate-700 prose-ol:text-slate-700">
+          <div className="prose prose-lg max-w-none prose-headings:text-slate-900 prose-p:text-slate-700 prose-p:leading-relaxed prose-a:text-[#0066F5] prose-strong:text-slate-900 prose-ul:text-slate-700 prose-ol:text-slate-700">
             <div 
               className="text-slate-700 leading-relaxed"
               dangerouslySetInnerHTML={{ 
@@ -173,12 +173,12 @@ const BlogDetailPage = () => {
           {blog.related_exams.length > 0 && (
             <div className="mt-12 p-8 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
               <h3 className="text-lg font-semibold text-slate-900 mb-6 flex items-center gap-2">
-                <FileText size={18} className="text-[#007BFF]" />
+                <FileText size={18} className="text-[#0066F5]" />
                 Related Exams
               </h3>
               <div className="flex flex-wrap gap-3">
                 {blog.related_exams.map((exam) => (
-                  <Badge key={exam} className="bg-white text-[#007BFF] border border-[#007BFF]/20 hover:bg-[#007BFF] hover:text-white px-4 py-2 text-sm font-medium transition-colors">
+                  <Badge key={exam} className="bg-white text-[#0066F5] border border-[#0066F5]/20 hover:bg-[#0066F5] hover:text-white px-4 py-2 text-sm font-medium transition-colors">
                     {exam}
                   </Badge>
                 ))}
@@ -189,7 +189,7 @@ const BlogDetailPage = () => {
           {/* Action Buttons */}
           <div className="mt-12 flex flex-col sm:flex-row gap-4 items-center justify-between border-t border-slate-100 pt-8">
             <Link href="/blogs">
-              <Button className="bg-[#007BFF] hover:bg-[#007BFF] text-white px-8 py-3 rounded-lg font-medium transition-colors">
+              <Button className="bg-[#0066F5] hover:bg-[#004ED4] text-white px-8 py-3 rounded-lg font-medium transition-colors">
                 Read More Articles
               </Button>
             </Link>

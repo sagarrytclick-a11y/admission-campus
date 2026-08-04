@@ -30,12 +30,12 @@ export default function EducationStats() {
   ];
 
   return (
-    <section className="py-20 bg-white font-sans text-[#1E293B]">
+    <section className="py-[32px] bg-white font-sans text-[#1E293B]">
       <div className="max-w-7xl mx-auto px-6 lg:px-24">
         
         {/* Simple Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 text-[#007BFF] mb-3">
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center gap-2 text-[#0066F5] mb-3">
             <ShieldCheck size={16} />
             <span className="text-[10px] font-bold uppercase tracking-widest">Our Global Impact</span>
           </div>
@@ -53,10 +53,10 @@ export default function EducationStats() {
           {stats.map((stat, index) => (
             <div
               key={index}
-              className="group p-8 text-center bg-[#F8FAFC] border border-slate-100 rounded-lg hover:border-[#007BFF] transition-all flex flex-col items-center"
+              className="group p-8 text-center bg-[#F8FAFC] border border-slate-100 rounded-lg hover:border-[#0066F5] transition-all flex flex-col items-center"
             >
               {/* Simple Icon Container */}
-              <div className="w-12 h-12 mb-6 rounded-md bg-white border border-slate-100 text-[#007BFF] flex items-center justify-center group-hover:bg-[#007BFF] group-hover:text-white transition-all shadow-sm">
+              <div className="w-12 h-12 mb-6 rounded-md bg-white border border-slate-100 text-[#0066F5] flex items-center justify-center group-hover:bg-[#0066F5] group-hover:text-white transition-all shadow-sm">
                 <stat.icon size={22} />
               </div>
 
@@ -66,7 +66,7 @@ export default function EducationStats() {
               </div>
 
               {/* Label */}
-              <div className="text-[10px] font-bold text-[#007BFF] uppercase tracking-widest mb-4">
+              <div className="text-[10px] font-bold text-[#0066F5] uppercase tracking-widest mb-4">
                 {stat.label}
               </div>
 
@@ -86,7 +86,7 @@ export default function EducationStats() {
                   <img src={`https://i.pravatar.cc/100?img=${i+15}`} alt="student" className="w-full h-full object-cover" />
                 </div>
               ))}
-              <div className="w-10 h-10 rounded-full border-2 border-white bg-[#007BFF] flex items-center justify-center text-white font-bold text-[10px]">
+              <div className="w-10 h-10 rounded-full border-2 border-white bg-[#0066F5] flex items-center justify-center text-white font-bold text-[10px]">
                 +10k
               </div>
             </div>

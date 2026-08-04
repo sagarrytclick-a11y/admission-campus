@@ -4,7 +4,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import { useAllColleges } from '@/hooks/useColleges'
 import SearchSection from '@/components/colleges/SearchSection'
 import CollegeMapping from '@/components/colleges/CollegeMapping'
-import { Sparkles, GraduationCap, MapPin, Award, TrendingUp, Users, Building } from 'lucide-react'
+import { Sparkles, MapPin, Award, TrendingUp, Users, Building } from 'lucide-react'
 import CollegeFilters from '@/components/colleges/CollegeFilters'
 
 export default function CollegesPage() {
@@ -42,26 +42,26 @@ export default function CollegesPage() {
     return filtered
   }, [allColleges, selectedCourse, selectedState])
 
-  // Extract unique values for filters
+  // Extract unique values for filters from full list (not filtered)
   const { courses, states } = useMemo(() => {
-    const courseSet = new Set(colleges.flatMap((college: any) => college.categories || []))
-    const stateSet = new Set(colleges.map((college: any) => college.city).filter(Boolean))
+    const courseSet = new Set(allColleges.flatMap((college: any) => college.categories || []))
+    const stateSet = new Set(allColleges.map((college: any) => college.city).filter(Boolean))
     return {
       courses: Array.from(courseSet) as string[],
-      states: Array.from(stateSet) as string[]
+      states: Array.from(stateSet).sort((a, b) => String(a).localeCompare(String(b))) as string[]
     }
-  }, [colleges])
+  }, [allColleges])
 
   const totalPages = Math.ceil(colleges.length / itemsPerPage)
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans">
       {/* Hero Banner */}
-      <section className="relative bg-linear-to-br from-[#007BFF] to-[#0056CC] text-white overflow-hidden">
+      <section className="relative bg-linear-to-br from-[#0066F5] to-[#004ED4] text-white overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.3)_1px,transparent_0)] bg-[length:20px_20px]"></div>
         </div>
-        <div className="relative max-w-7xl mx-auto px-6 lg:px-24 py-20">
+        <div className="relative max-w-7xl mx-auto px-6 lg:px-24 py-[32px]">
           <div className="text-center">
             <div className="inline-flex items-center gap-2 text-white/90 mb-6">
               <Sparkles size={20} />
@@ -108,45 +108,48 @@ export default function CollegesPage() {
       </section>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-24 py-8 lg:py-16">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-24 py-8 lg:py-[32px]">
         {/* Mobile: Filters at top, Desktop: Sidebar layout */}
         <div className="lg:flex lg:gap-8">
 
-          {/* Filters Sidebar - Mobile: Full width at top, Desktop: Sidebar */}
+          {/* Filters Sidebar - Mobile: Full width at top, Desktop: Sticky + scrollable */}
           <div className="lg:w-80 lg:shrink-0 lg:order-2">
-            <div className="lg:sticky lg:top-8 space-y-6">
+            <div className="lg:sticky lg:top-28 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto lg:overscroll-contain space-y-6 pr-1">
               <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 sm:p-6">
-                <h3 className="text-base sm:text-lg font-bold text-[#007BFF] mb-4 flex items-center gap-2">
-                  <GraduationCap size={18} className="sm:w-5 sm:h-5" />
-                  <span className="text-sm sm:text-base">Filter Your Search</span>
-                </h3>
                 <CollegeFilters
                   courses={courses}
                   states={states}
                   selectedCourse={selectedCourse}
                   selectedState={selectedState}
-                  onCourseChange={setSelectedCourse}
-                  onStateChange={setSelectedState}
+                  onCourseChange={(course) => {
+                    setSelectedCourse(course)
+                    setCurrentPage(1)
+                  }}
+                  onStateChange={(state) => {
+                    setSelectedState(state)
+                    setCurrentPage(1)
+                  }}
+                  embedded
                 />
               </div>
 
               {/* Quick Tips */}
               <div className="bg-blue-50 rounded-xl p-4 sm:p-6 border border-blue-100">
-                <h4 className="font-bold text-[#007BFF] mb-3 flex items-center gap-2 text-sm sm:text-base">
+                <h4 className="font-bold text-[#0066F5] mb-3 flex items-center gap-2 text-sm sm:text-base">
                   <TrendingUp size={14} className="sm:w-4 sm:h-4" />
                   Pro Tips
                 </h4>
                 <ul className="space-y-3 text-sm text-slate-700">
                   <li className="flex items-start gap-3">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#007BFF] mt-2 shrink-0"></span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#0066F5] mt-2 shrink-0"></span>
                     <span className="leading-relaxed">Check NIRF rankings for quality assurance</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#007BFF] mt-2 shrink-0"></span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#0066F5] mt-2 shrink-0"></span>
                     <span className="leading-relaxed">Consider location and campus facilities</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#007BFF] mt-2 shrink-0"></span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#0066F5] mt-2 shrink-0"></span>
                     <span className="leading-relaxed">Review placement statistics and alumni network</span>
                   </li>
                 </ul>

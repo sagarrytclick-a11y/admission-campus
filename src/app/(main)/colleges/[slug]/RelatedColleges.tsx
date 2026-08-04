@@ -4,8 +4,8 @@ import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 import { getCountryName } from "@/lib/normalize"
+import { formatRankingLabel } from "@/lib/formatRanking"
 
 import { Button } from '@/components/ui/button'
 import {
@@ -86,7 +86,7 @@ const fetchRelatedColleges = async (slug: string): Promise<College[]> => {
 
   if (isError) {
     return (
-      <div className="text-center py-20 bg-[#F8FAFC] rounded-xl border border-slate-200">
+      <div className="text-center py-[32px] bg-[#F8FAFC] rounded-xl border border-slate-200">
         <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
           <GraduationCap className="w-8 h-8 text-red-500" />
         </div>
@@ -95,7 +95,7 @@ const fetchRelatedColleges = async (slug: string): Promise<College[]> => {
           Please try again later or explore our complete collection of top-ranked universities
         </p>
         <Link href="/colleges">
-          <Button className="bg-[#007BFF] hover:bg-[#007BFF]/90 text-white font-medium px-6 py-3 rounded-lg flex items-center gap-2">
+          <Button className="bg-[#0066F5] hover:bg-[#0066F5]/90 text-white font-medium px-6 py-3 rounded-lg flex items-center gap-2">
             Explore All Colleges
             <ArrowRight className="w-4 h-4" />
           </Button>
@@ -127,7 +127,7 @@ const fetchRelatedColleges = async (slug: string): Promise<College[]> => {
 
   if (colleges.length === 0) {
     return (
-      <div className="text-center py-20 bg-[#F8FAFC] rounded-xl border border-slate-200">
+      <div className="text-center py-[32px] bg-[#F8FAFC] rounded-xl border border-slate-200">
         <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <GraduationCap className="w-8 h-8 text-slate-400" />
         </div>
@@ -136,7 +136,7 @@ const fetchRelatedColleges = async (slug: string): Promise<College[]> => {
           Explore our complete collection of top-ranked universities worldwide
         </p>
         <Link href="/colleges">
-            <Button className="bg-[#007BFF] hover:bg-[#007BFF]/90 text-white font-medium px-6 py-3 rounded-lg flex items-center gap-2">
+            <Button className="bg-[#0066F5] hover:bg-[#0066F5]/90 text-white font-medium px-6 py-3 rounded-lg flex items-center gap-2">
             Explore All Colleges
             <ArrowRight className="w-4 h-4" />
           </Button>
@@ -171,19 +171,26 @@ const fetchRelatedColleges = async (slug: string): Promise<College[]> => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                 
                 {/* Ranking Badge */}
-                {college.ranking && (
-                  <div className="absolute top-4 right-4">
-                    <Badge className="bg-yellow-500 text-white border-none px-3 py-1 rounded-full text-xs font-medium">
-                      #{typeof college.ranking === 'object' ? college.ranking.country_ranking || college.ranking.world_ranking : college.ranking}
-                    </Badge>
-                  </div>
-                )}
+                {(() => {
+                  const rankLabel = formatRankingLabel(college.ranking)
+                  if (!rankLabel) return null
+                  return (
+                    <div className="absolute top-2.5 right-2.5 left-14 flex justify-end">
+                      <span
+                        title={rankLabel}
+                        className="inline-block max-w-full bg-[#0066F5] text-white px-2.5 py-1 rounded-md text-xs font-bold shadow-md leading-snug line-clamp-2 text-left"
+                      >
+                        {rankLabel}
+                      </span>
+                    </div>
+                  )
+                })()}
                 
                 {/* Country Badge */}
-                <div className="absolute top-4 left-4">
-                  <Badge className="bg-white/90 backdrop-blur-sm text-slate-900 border-none px-3 py-1 rounded-full text-xs font-medium">
+                <div className="absolute top-3 left-3 max-w-[40%]">
+                  <span className="inline-flex items-center bg-white/90 backdrop-blur-sm text-slate-900 px-2.5 py-1 rounded-md text-xs font-semibold leading-none truncate">
                     {getCountryName(college.country_ref)}
-                  </Badge>
+                  </span>
                 </div>
               </div>
 
@@ -195,7 +202,7 @@ const fetchRelatedColleges = async (slug: string): Promise<College[]> => {
                 <div className="grid grid-cols-2 gap-4 mb-6">
                   <div>
                     <div className="text-xs text-[#64748B] uppercase font-medium mb-1">Yearly Fees</div>
-                    <div className="flex items-center text-[#007BFF] font-semibold">
+                    <div className="flex items-center text-[#0066F5] font-semibold">
                       {/* <DollarSign size={16} /> */}
                       <span>
                         {college.fees 
@@ -218,7 +225,7 @@ const fetchRelatedColleges = async (slug: string): Promise<College[]> => {
 
                 <div className="mt-auto">
                   <Link href={`/colleges/${college.slug}`}>
-                    <Button className="w-full bg-[#007BFF] hover:bg-[#007BFF]/90 text-white font-medium py-3 rounded-lg transition-colors flex items-center justify-center gap-2">
+                    <Button className="w-full bg-[#0066F5] hover:bg-[#0066F5]/90 text-white font-medium py-3 rounded-lg transition-colors flex items-center justify-center gap-2">
                       View Details
                       <ArrowRight size={16} />
                     </Button>

@@ -19,12 +19,12 @@ export default function StudyPrograms() {
   ];
 
   return (
-    <section className="py-20 bg-white font-sans text-[#1E293B]">
+    <section className="py-[32px] bg-white font-sans text-[#1E293B]">
       <div className="max-w-7xl mx-auto px-6 lg:px-24">
         
         {/* Simple Header - Consistent with previous sections */}
         <div className="mb-12">
-          <div className="flex items-center gap-2 text-[#007BFF] mb-3">
+          <div className="flex items-center gap-2 text-[#0066F5] mb-3">
             <Sparkles size={16} />
             <span className="text-[10px] font-bold uppercase tracking-widest">Academic Pathways</span>
           </div>
@@ -42,14 +42,14 @@ export default function StudyPrograms() {
           {programs.map((program, index) => (
             <div
               key={index}
-              className="group bg-[#F8FAFC] border border-slate-100 rounded-lg p-6 hover:border-[#007BFF] transition-all flex flex-col h-full"
+              className="group bg-[#F8FAFC] border border-slate-100 rounded-lg p-6 hover:border-[#0066F5] transition-all flex flex-col h-full"
             >
               {/* Simple Icon */}
-              <div className="w-12 h-12 rounded-md bg-white border border-slate-100 text-[#007BFF] flex items-center justify-center mb-6 shadow-sm group-hover:bg-[#007BFF] group-hover:text-white transition-all">
+              <div className="w-12 h-12 rounded-md bg-white border border-slate-100 text-[#0066F5] flex items-center justify-center mb-6 shadow-sm group-hover:bg-[#0066F5] group-hover:text-white transition-all">
                 <program.icon size={22} />
               </div>
 
-              <h3 className="text-lg font-semibold text-[#1E293B] mb-3 group-hover:text-[#007BFF] transition-colors">
+              <h3 className="text-lg font-semibold text-[#1E293B] mb-3 group-hover:text-[#0066F5] transition-colors">
                 {program.title}
               </h3>
 
@@ -59,7 +59,7 @@ export default function StudyPrograms() {
 
               {/* Action Link */}
               <div className="pt-4 border-t border-slate-200/50">
-                <span className="text-xs font-bold text-[#007BFF] flex items-center gap-1 group-hover:gap-2 transition-all cursor-pointer">
+                <span className="text-xs font-bold text-[#0066F5] flex items-center gap-1 group-hover:gap-2 transition-all cursor-pointer">
                   Explore Now
                   <ArrowRight size={14} />
                 </span>
@@ -72,7 +72,7 @@ export default function StudyPrograms() {
         <div className="mt-16 flex justify-center">
           <div className="w-full max-w-3xl flex flex-col md:flex-row items-center justify-between gap-6 bg-[#F8FAFC] border border-slate-100 rounded-lg px-8 py-6">
             <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-[#007BFF]">
+              <div className="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-[#0066F5]">
                 <MessageCircle size={20} />
               </div>
               <div className="text-left">
@@ -83,7 +83,7 @@ export default function StudyPrograms() {
 
             <button 
               onClick={() => openModal()} 
-              className="w-full md:w-auto bg-[#1E293B] text-white px-8 py-3 rounded-md text-sm font-bold hover:bg-[#007BFF] transition-colors active:scale-95"
+              className="w-full md:w-auto bg-[#1E293B] text-white px-8 py-3 rounded-md text-sm font-bold hover:bg-[#0066F5] transition-colors active:scale-95"
             >
               Get Free Consultation
             </button>

@@ -52,13 +52,13 @@ export default function LatestBlogs() {
   if (error) return null;
 
   return (
-    <section className="py-20 bg-white font-sans text-[#1E293B]">
+    <section className="py-[32px] bg-white font-sans text-[#1E293B]">
       <div className="max-w-7xl mx-auto px-6 lg:px-24">
         
         {/* Simple Header */}
         <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
-            <div className="flex items-center gap-2 text-[#007BFF] mb-3">
+            <div className="flex items-center gap-2 text-[#0066F5] mb-3">
               <Newspaper size={16} />
               <span className="text-[10px] font-bold uppercase tracking-widest">Latest Updates</span>
             </div>
@@ -67,13 +67,13 @@ export default function LatestBlogs() {
               Stay updated with the latest admission news, exam notifications, and expert career guidance.
             </p>
           </div>
-          <Link href="/blogs" className="text-sm font-bold text-[#007BFF] hover:underline flex items-center gap-1 transition-all">
+          <Link href="/blogs" className="text-sm font-bold text-[#0066F5] hover:underline flex items-center gap-1 transition-all">
             View All Articles <ArrowRight size={14} />
           </Link>
         </div>
 
         {/* Blog Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
           {isLoading ? (
              [1, 2, 3].map((i) => <div key={i} className="h-96 bg-white rounded-xl animate-pulse border-2 border-slate-300" />)
           ) : (
@@ -81,7 +81,7 @@ export default function LatestBlogs() {
               <Link
                 key={blog._id}
                 href={`/blogs/${blog.slug}`}
-                className="group bg-white border-2 border-slate-300 rounded-xl overflow-hidden hover:border-[#007BFF] hover:shadow-lg hover:shadow-[#007BFF]/20 transition-all duration-300 flex flex-col h-full"
+                className="group bg-white border-2 border-slate-300 rounded-xl overflow-hidden hover:border-[#0066F5] hover:shadow-lg hover:shadow-[#0066F5]/20 transition-all duration-300 flex flex-col h-full"
               >
                 {/* Image Section */}
                 <div className="h-52 overflow-hidden border-b-2 border-slate-300 bg-slate-50">
@@ -92,7 +92,7 @@ export default function LatestBlogs() {
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 group-hover:opacity-100"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-slate-100 text-[#007BFF] font-bold text-3xl border border-slate-300">
+                    <div className="w-full h-full flex items-center justify-center bg-slate-100 text-[#0066F5] font-bold text-3xl border border-slate-300">
                       {initials(blog.title)}
                     </div>
                   )}
@@ -102,16 +102,16 @@ export default function LatestBlogs() {
                 <div className="p-6 flex flex-col flex-grow">
                   <div className="flex items-center gap-4 text-[10px] font-bold uppercase tracking-wider text-slate-600 mb-4">
                     <span className="flex items-center gap-1.5">
-                      <Calendar size={12} className="text-[#007BFF]" />
+                      <Calendar size={12} className="text-[#0066F5]" />
                       {formatDate(blog.createdAt)}
                     </span>
                     <span className="flex items-center gap-1.5">
-                      <Clock size={12} className="text-[#007BFF]" />
+                      <Clock size={12} className="text-[#0066F5]" />
                       {calculateReadTime(blog.content)}
                     </span>
                   </div>
 
-                  <h3 className="text-lg font-semibold text-[#1E293B] leading-snug mb-3 group-hover:text-[#007BFF] transition-colors line-clamp-2">
+                  <h3 className="text-lg font-semibold text-[#1E293B] leading-snug mb-3 group-hover:text-[#0066F5] transition-colors line-clamp-2">
                     {blog.title}
                   </h3>
 
@@ -121,12 +121,12 @@ export default function LatestBlogs() {
 
                   <div className="mt-auto pt-4 border-t border-slate-200/50 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-full bg-white border border-slate-200 flex items-center justify-center text-[#007BFF]">
+                      <div className="w-7 h-7 rounded-full bg-white border border-slate-200 flex items-center justify-center text-[#0066F5]">
                         <User size={14} />
                       </div>
                       <span className="text-[10px] font-bold text-[#1E293B] uppercase tracking-wider">Expert Team</span>
                     </div>
-                    <ArrowRight size={16} className="text-[#007BFF] group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight size={16} className="text-[#0066F5] group-hover:translate-x-1 transition-transform" />
                   </div>
                 </div>
               </Link>
@@ -138,7 +138,7 @@ export default function LatestBlogs() {
         <div className="flex justify-center">
           <div className="w-full max-w-4xl flex flex-col md:flex-row items-center justify-between gap-6 bg-[#F8FAFC] border border-slate-100 rounded-lg px-10 py-8">
             <div className="text-left">
-              <div className="flex items-center gap-2 text-[#007BFF] mb-1">
+              <div className="flex items-center gap-2 text-[#0066F5] mb-1">
                 <Sparkles size={16} />
                 <span className="text-[10px] font-bold uppercase tracking-widest">Knowledge Base</span>
               </div>
@@ -147,7 +147,7 @@ export default function LatestBlogs() {
             
             <Link
               href="/blogs"
-              className="w-full md:w-auto bg-[#1E293B] text-white px-8 py-3 rounded-md text-sm font-bold hover:bg-[#007BFF] transition-colors flex items-center justify-center gap-2 active:scale-95 shadow-sm"
+              className="w-full md:w-auto bg-[#1E293B] text-white px-8 py-3 rounded-md text-sm font-bold hover:bg-[#0066F5] transition-colors flex items-center justify-center gap-2 active:scale-95 shadow-sm"
             >
               View Full Library
               <ArrowRight size={16} />

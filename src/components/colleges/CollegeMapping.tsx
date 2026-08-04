@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { ChevronLeft, ChevronRight, ArrowRight, AlertCircle, MapPin, GraduationCap, RefreshCw, Search } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { formatRankingLabel } from '@/lib/formatRanking'
 
 interface CollegeMappingProps {
   colleges: any[]
@@ -26,8 +27,8 @@ interface CollegeMappingProps {
 const CollegeCard = memo(({ college }: { college: any }) => {
   const router = useRouter()
   // Extract data from college object
-  const ranking = college.ranking?.country_ranking || college.ranking?.world_ranking || 'N/A';
-  const accreditation = college.ranking?.accreditation?.[0] || 'UGC Approved';
+  const ranking = formatRankingLabel(college.ranking) || 'N/A'
+  const accreditation = college.ranking?.accreditation?.[0] || 'UGC Approved'
   const qsRanking = college.ranking?.world_ranking || Math.floor(Math.random() * 500 + 800).toString();
   const placementRate = Math.floor(Math.random() * 30 + 70) + '%'; 
   const facultyCount = Math.floor(Math.random() * 200 + 100) + '+'; 
@@ -43,7 +44,7 @@ const CollegeCard = memo(({ college }: { college: any }) => {
   }, [college._id]); // Use college._id to keep rating consistent
   
   return (
-    <div className="group bg-white rounded-xl border-2 border-slate-300 hover:border-[#007BFF] hover:shadow-lg hover:shadow-[#007BFF]/20 transition-all duration-300 overflow-hidden">
+    <div className="group bg-white rounded-xl border-2 border-slate-300 hover:border-[#0066F5] hover:shadow-lg hover:shadow-[#0066F5]/20 transition-all duration-300 overflow-hidden">
       <div className="flex flex-col md:flex-row">
         {/* College Image - Left Side */}
         <div className="w-full md:w-48 h-48 bg-slate-50 overflow-hidden">
@@ -62,22 +63,27 @@ const CollegeCard = memo(({ college }: { college: any }) => {
 
         {/* College Details - Right Side */}
         <div className="flex-1 p-6">
-          <div className="flex justify-between items-start mb-4">
+          <div className="flex flex-col gap-2 mb-4">
             {/* College Name and Location */}
-            <div className="flex-1">
-              <h3 className="text-xl font-bold text-[#1E293B] mb-2 group-hover:text-[#007BFF] transition-colors">
+            <div className="min-w-0">
+              <h3 className="text-xl font-bold text-[#1E293B] mb-2 group-hover:text-[#0066F5] transition-colors">
                 {college.name}
               </h3>
               <div className="flex items-center gap-2 text-sm text-slate-600">
-                <MapPin className="w-4 h-4 text-[#007BFF]" />
+                <MapPin className="w-4 h-4 text-[#0066F5] shrink-0" />
                 <span className="capitalize">{college.city}</span>
               </div>
             </div>
 
             {/* Ranking Badge */}
-            <div className="bg-[#007BFF] text-white px-3 py-1 rounded-lg text-xs font-bold">
-              #{ranking} Rank
-            </div>
+            {ranking !== 'N/A' && (
+              <span
+                title={ranking}
+                className="inline-block self-start max-w-full bg-[#0066F5] text-white px-2.5 py-1 rounded-md text-xs font-bold leading-snug line-clamp-2"
+              >
+                {ranking}
+              </span>
+            )}
           </div>
 
           {/* Accreditation and Rating */}
@@ -144,13 +150,13 @@ const CollegeCard = memo(({ college }: { college: any }) => {
             <div className="flex gap-2">
               <button 
                 onClick={() => router.push(`/colleges/${college.slug}`)}
-                className="bg-[#007BFF] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#0056CC] transition-colors"
+                className="bg-[#0066F5] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#004ED4] transition-colors"
               >
                 View Details
               </button>
               <button 
                 onClick={() => router.push(`/colleges/${college.slug}`)}
-                className="border border-slate-300 text-[#007BFF] px-4 py-2 rounded-lg text-sm font-semibold hover:bg-slate-50 transition-colors"
+                className="border border-slate-300 text-[#0066F5] px-4 py-2 rounded-lg text-sm font-semibold hover:bg-slate-50 transition-colors"
               >
                 Brochure
               </button>
@@ -220,8 +226,8 @@ const CollegeMapping = memo(({
 
   if (isLoading) {
     return (
-      <div className={`text-center py-16 ${className}`}>
-        <div className="w-12 h-12 border-4 border-slate-200 border-t-[#007BFF] rounded-full animate-spin mx-auto mb-4" />
+      <div className={`text-center py-[32px] ${className}`}>
+        <div className="w-12 h-12 border-4 border-slate-200 border-t-[#0066F5] rounded-full animate-spin mx-auto mb-4" />
         <p className="text-slate-600 font-medium">Loading colleges...</p>
       </div>
     )
@@ -229,12 +235,12 @@ const CollegeMapping = memo(({
 
   if (isError) {
     return (
-      <div className={`text-center py-16 ${className}`}>
+      <div className={`text-center py-[32px] ${className}`}>
         <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
         <h2 className="text-2xl font-bold text-slate-900 mb-2">Error Loading Colleges</h2>
         <p className="text-slate-600 mb-6">{error?.message || "Failed to load colleges"}</p>
         {onRefetch && (
-          <Button onClick={onRefetch} className="bg-[#007BFF] hover:bg-[#0056CC]">
+          <Button onClick={onRefetch} className="bg-[#0066F5] hover:bg-[#004ED4]">
             <RefreshCw className="w-4 h-4 mr-2" />
             Try Again
           </Button>
@@ -245,7 +251,7 @@ const CollegeMapping = memo(({
 
   if (colleges.length === 0) {
     return (
-      <div className={`text-center py-16 ${className}`}>
+      <div className={`text-center py-[32px] ${className}`}>
         <div className="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-slate-300">
           <MapPin className="w-12 h-12 text-slate-400" />
         </div>
@@ -254,7 +260,7 @@ const CollegeMapping = memo(({
           Try adjusting your search terms or filters to find colleges.
         </p>
         {onRefetch && (
-          <Button onClick={onRefetch} className="bg-[#007BFF] hover:bg-[#0056CC]">
+          <Button onClick={onRefetch} className="bg-[#0066F5] hover:bg-[#004ED4]">
             <RefreshCw className="w-4 h-4 mr-2" />
             Refresh Results
           </Button>
@@ -288,7 +294,7 @@ const CollegeMapping = memo(({
               placeholder="Search colleges by name or city..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border-2 border-slate-300 rounded-lg focus:outline-none focus:border-[#007BFF] text-black focus:ring-2 focus:ring-[#007BFF]/20"
+              className="w-full pl-10 pr-4 py-3 border-2 border-slate-300 rounded-lg focus:outline-none focus:border-[#0066F5] text-black focus:ring-2 focus:ring-[#0066F5]/20"
             />
           </div>
         </div>
@@ -319,7 +325,7 @@ const CollegeMapping = memo(({
               <button
                 onClick={() => onPageChange(Math.max(currentPage - 1, 1))}
                 disabled={currentPage === 1}
-                className="w-full sm:w-auto flex items-center justify-center gap-1 px-3 sm:px-4 py-2 text-sm font-medium rounded-lg border-2 border-slate-300 bg-white text-[#64748B] hover:border-[#007BFF] hover:text-[#007BFF] hover:bg-blue-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-slate-300 disabled:hover:text-[#64748B] disabled:hover:bg-white"
+                className="w-full sm:w-auto flex items-center justify-center gap-1 px-3 sm:px-4 py-2 text-sm font-medium rounded-lg border-2 border-slate-300 bg-white text-[#64748B] hover:border-[#0066F5] hover:text-[#0066F5] hover:bg-blue-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-slate-300 disabled:hover:text-[#64748B] disabled:hover:bg-white"
               >
                 <ChevronLeft className="h-4 w-4" />
                 <span className="hidden xs:inline">Previous</span>
@@ -344,8 +350,8 @@ const CollegeMapping = memo(({
                       key={pageNum}
                       onClick={() => onPageChange(pageNum)}
                       className={`w-8 h-8 sm:w-10 sm:h-10 text-sm font-medium rounded-lg border-2 transition-all ${currentPage === pageNum
-                          ? 'bg-[#007BFF] text-white border-[#007BFF] shadow-sm'
-                          : 'border-slate-300 bg-white text-[#64748B] hover:border-[#007BFF] hover:text-[#007BFF] hover:bg-[#007BFF]/5'
+                          ? 'bg-[#0066F5] text-white border-[#0066F5] shadow-sm'
+                          : 'border-slate-300 bg-white text-[#64748B] hover:border-[#0066F5] hover:text-[#0066F5] hover:bg-[#0066F5]/5'
                         }`}
                     >
                       {pageNum}
@@ -358,7 +364,7 @@ const CollegeMapping = memo(({
               <button
                 onClick={() => onPageChange(Math.min(currentPage + 1, totalPages))}
                 disabled={currentPage === totalPages}
-                className="w-full sm:w-auto flex items-center justify-center gap-1 px-3 sm:px-4 py-2 text-sm font-medium rounded-lg border-2 border-slate-300 bg-white text-[#64748B] hover:border-[#007BFF] hover:text-[#007BFF] hover:bg-blue-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-slate-300 disabled:hover:text-[#64748B] disabled:hover:bg-white"
+                className="w-full sm:w-auto flex items-center justify-center gap-1 px-3 sm:px-4 py-2 text-sm font-medium rounded-lg border-2 border-slate-300 bg-white text-[#64748B] hover:border-[#0066F5] hover:text-[#0066F5] hover:bg-blue-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-slate-300 disabled:hover:text-[#64748B] disabled:hover:bg-white"
               >
                 <span className="hidden xs:inline">Next</span>
                 <ChevronRight className="h-4 w-4" />

@@ -34,12 +34,12 @@ const ServicesPage = () => {
   ];
 
   return (
-    <div className="min-h-screen py-16 bg-white">
+    <div className="min-h-screen py-[32px] bg-white">
       
       {/* Hero Section */}
-      <section className="py-20 bg-[#1E293B] text-white">
+      <section className="py-[32px] bg-[#1E293B] text-white">
         <div className="max-w-6xl mx-auto px-6 text-center">
-          <div className="inline-flex items-center gap-2 bg-[#007BFF]/20 px-4 py-2 rounded-full text-sm font-bold mb-6">
+          <div className="inline-flex items-center gap-2 bg-[#0066F5]/20 px-4 py-2 rounded-full text-sm font-bold mb-6">
             <Star className="w-4 h-4" />
             Premium Services
           </div>
@@ -54,11 +54,11 @@ const ServicesPage = () => {
       </section>
 
       {/* Services Grid */}
-      <section className="py-20">
+      <section className="py-[32px]">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-[#1E293B] mb-4">
-              Our <span className="text-[#007BFF]">Services</span>
+              Our <span className="text-[#0066F5]">Services</span>
             </h2>
             <p className="text-[#64748B] text-lg">
               Comprehensive guidance tailored to your academic goals
@@ -67,12 +67,12 @@ const ServicesPage = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {services.map((service, index) => (
-              <div key={index} className="group p-8 bg-[#F8FAFC] border border-slate-200 rounded-xl hover:border-[#007BFF] hover:shadow-lg transition-all">
-                <div className="w-16 h-16 rounded-xl bg-[#007BFF]/10 text-[#007BFF] flex items-center justify-center mb-6 group-hover:bg-[#007BFF] group-hover:text-white transition-all">
+              <div key={index} className="group p-8 bg-[#F8FAFC] border border-slate-200 rounded-xl hover:border-[#0066F5] hover:shadow-lg transition-all">
+                <div className="w-16 h-16 rounded-xl bg-[#0066F5]/10 text-[#0066F5] flex items-center justify-center mb-6 group-hover:bg-[#0066F5] group-hover:text-white transition-all">
                   {service.icon}
                 </div>
                 
-                <h3 className="text-xl font-semibold text-[#1E293B] mb-3 group-hover:text-[#007BFF] transition-colors">
+                <h3 className="text-xl font-semibold text-[#1E293B] mb-3 group-hover:text-[#0066F5] transition-colors">
                   {service.title}
                 </h3>
                 
@@ -81,7 +81,7 @@ const ServicesPage = () => {
                 </p>
                 
                 <div className="pt-4 border-t border-slate-200/50">
-                  <Link href="#" className="inline-flex items-center gap-2 text-[#007BFF] font-medium hover:gap-3 transition-all">
+                  <Link href="#" className="inline-flex items-center gap-2 text-[#0066F5] font-medium hover:gap-3 transition-all">
                     Learn More
                     <ArrowRight size={16} />
                   </Link>
@@ -93,15 +93,15 @@ const ServicesPage = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-[#F8FAFC]">
+      <section className="py-[32px] bg-[#F8FAFC]">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <div className="inline-flex items-center gap-3 bg-white border border-slate-200 rounded-full px-8 py-4 mb-8">
-            <ShieldCheck className="w-6 h-6 text-[#007BFF]" />
+            <ShieldCheck className="w-6 h-6 text-[#0066F5]" />
             <span className="text-[#64748B] font-medium">50+ Years of Excellence</span>
           </div>
           
           <h2 className="text-3xl font-bold text-[#1E293B] mb-4">
-            Ready to <span className="text-[#007BFF]">Get Started?</span>
+            Ready to <span className="text-[#0066F5]">Get Started?</span>
           </h2>
           
           <p className="text-[#64748B] text-lg mb-8">
@@ -109,7 +109,7 @@ const ServicesPage = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/contact" className="bg-[#007BFF] hover:bg-[#007BFF]/90 text-white px-8 py-4 rounded-xl font-semibold transition-all flex items-center gap-2">
+            <Link href="/contact" className="bg-[#0066F5] hover:bg-[#0066F5]/90 text-white px-8 py-4 rounded-xl font-semibold transition-all flex items-center gap-2">
               Talk to Expert
               <ArrowRight size={18} />
             </Link>
@@ -120,7 +120,7 @@ const ServicesPage = () => {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-20 bg-white">
+      <section className="py-[32px] bg-white">
         <FAQ />
       </section>
     </div>

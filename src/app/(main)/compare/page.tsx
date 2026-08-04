@@ -168,8 +168,8 @@ export default function CompareColleges() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Loading State */}
         {isLoading && (
-          <div className="text-center py-16">
-            <div className="w-8 h-8 border-2 border-[#007BFF] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="text-center py-[32px]">
+            <div className="w-8 h-8 border-2 border-[#0066F5] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
             <h2 className="text-lg font-semibold text-slate-900">Loading Colleges...</h2>
             <p className="text-slate-600">Fetching college data for comparison</p>
           </div>
@@ -177,7 +177,7 @@ export default function CompareColleges() {
 
         {/* Error State */}
         {error && (
-          <div className="text-center py-16">
+          <div className="text-center py-[32px]">
             <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <X className="w-8 h-8 text-red-600" />
             </div>
@@ -185,7 +185,7 @@ export default function CompareColleges() {
             <p className="text-slate-600 mb-4">Failed to fetch college data. Please try again.</p>
             <button
               onClick={() => window.location.reload()}
-              className="px-4 py-2 bg-[#007BFF] text-white rounded-lg hover:bg-[#0056CC]"
+              className="px-4 py-2 bg-[#0066F5] text-white rounded-lg hover:bg-[#004ED4]"
             >
               Retry
             </button>
@@ -215,7 +215,7 @@ export default function CompareColleges() {
                 placeholder="Search colleges..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#007BFF] text-black focus:border-transparent"
+                className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0066F5] text-black focus:border-transparent"
               />
             </div>
 
@@ -224,7 +224,7 @@ export default function CompareColleges() {
                 {availableColleges.slice(0, 6).map((college : College) => (
                   <div
                     key={college._id}
-                    className="border border-slate-200 rounded-lg p-4 hover:border-[#007BFF] hover:shadow-md transition-all cursor-pointer"
+                    className="border border-slate-200 rounded-lg p-4 hover:border-[#0066F5] hover:shadow-md transition-all cursor-pointer"
                     onClick={() => addCollege(college)}
                   >
                     <div className="flex items-start gap-3">
@@ -256,7 +256,7 @@ export default function CompareColleges() {
                       </div>
                     </div>
                     <button className="ml-2 p-1 hover:bg-blue-50 rounded">
-                      <Plus className="w-4 h-4 text-[#007BFF]" />
+                      <Plus className="w-4 h-4 text-[#0066F5]" />
                     </button>
                   </div>
                 ))}
@@ -297,7 +297,7 @@ export default function CompareColleges() {
                                   }}
                                 />
                               ) : null}
-                              <GraduationCap className="w-10 h-10 text-[#007BFF] hidden" />
+                              <GraduationCap className="w-10 h-10 text-[#0066F5] hidden" />
                             </div>
                             <h3 className="font-semibold text-slate-900 text-sm">{college.name}</h3>
                             <p className="text-xs text-slate-600">{college.city}{college.country_ref?.name ? `, ${college.country_ref.name}` : ''}</p>
@@ -329,7 +329,7 @@ export default function CompareColleges() {
                     <tr key={metric.key} className="border-b border-slate-100 hover:bg-slate-50">
                       <td className="p-4 font-medium text-slate-700">
                         <div className="flex items-center gap-2">
-                          {React.createElement(metric.icon, { className: "w-4 h-4 text-[#007BFF]" })}
+                          {React.createElement(metric.icon, { className: "w-4 h-4 text-[#0066F5]" })}
                           {metric.label}
                         </div>
                       </td>
@@ -341,7 +341,7 @@ export default function CompareColleges() {
                             </div>
                             {metric.key === 'ranking' && typeof college.ranking === 'object' && college.ranking?.country_ranking && (
                               <div className="flex justify-center mt-1">
-                                <span className="text-xs bg-[#007BFF]/20 text-[#007BFF] px-2 py-1 rounded-full">
+                                <span className="text-xs bg-[#0066F5]/20 text-[#0066F5] px-2 py-1 rounded-full">
                                   #{college.ranking.country_ranking}
                                 </span>
                               </div>
@@ -359,7 +359,7 @@ export default function CompareColleges() {
                       <td key={college._id} className="p-4">
                         <div className="space-y-1">
                           {college.fees_structure?.courses?.slice(0, 3).map((course, index) => (
-                            <div key={index} className="text-xs bg-[#007BFF]/10 text-[#007BFF] px-2 py-1 rounded-full inline-block">
+                            <div key={index} className="text-xs bg-[#0066F5]/10 text-[#0066F5] px-2 py-1 rounded-full inline-block">
                               {course.course_name}
                             </div>
                           ))}
@@ -375,14 +375,14 @@ export default function CompareColleges() {
             </div>
 
             {/* Comparison Summary */}
-            <div className="bg-gradient-to-r from-[#007BFF]/10 to-[#FACC15]/10 p-6 border-t border-slate-200">
+            <div className="bg-gradient-to-r from-[#0066F5]/10 to-[#FACC15]/10 p-6 border-t border-slate-200">
               <h3 className="font-semibold text-slate-900 mb-4">Quick Comparison Summary</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {selectedColleges.map((college, index) => (
                   <div key={college._id} className="bg-white rounded-lg p-4 border border-slate-200">
                     <div className="flex items-center justify-between mb-2">
                       <h4 className="font-semibold text-slate-900">{college.name}</h4>
-                      <span className="text-xs bg-[#007BFF]/20 text-[#007BFF] px-2 py-1 rounded-full">
+                      <span className="text-xs bg-[#0066F5]/20 text-[#0066F5] px-2 py-1 rounded-full">
                         Option {index + 1}
                       </span>
                     </div>
@@ -424,7 +424,7 @@ export default function CompareColleges() {
 
         {/* Empty State */}
         {selectedColleges.length === 0 && !isLoading && !error && (
-          <div className="text-center py-16">
+          <div className="text-center py-[32px]">
             <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <ArrowUpDown className="w-10 h-10 text-slate-400" />
             </div>

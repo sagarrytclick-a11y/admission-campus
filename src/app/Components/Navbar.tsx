@@ -12,7 +12,7 @@ import { useContactInfo, createMailtoLink, createTelLink } from "@/hooks/useCont
 // Color Theme Definition
 const theme = {
   primary: '#FFC107',      // Yellow from logo
-  secondary: '#007BFF',    // Blue from logo
+  secondary: '#0066F5',    // Blue from logo
   accent: '#FF6B35',       // Orange accent
   dark: '#12141D',         // Dark background
   light: '#F8FAFC',        // Light text
@@ -109,14 +109,20 @@ export default function SimpleNavbar() {
   ];
 
   const toolsOptions = [
+    { name: "NEET Score Predictor", href: "/tools/neet-score-predictor" },
     { name: "Compare Colleges", href: "/compare" },
     { name: "About Us", href: "/about" },
   ];
 
+  const isToolsActive =
+    pathname?.includes("/tools") ||
+    pathname?.includes("/compare") ||
+    pathname === "/about";
+
   return (
     <>
       {/* Top Strip with Contact Info */}
-      <div className="hidden sm:block bg-[#007BFF] text-white py-2">
+      <div className="hidden sm:block bg-[#0066F5] text-white py-2">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center text-sm">
             <div className="flex items-center gap-6">
@@ -159,7 +165,7 @@ export default function SimpleNavbar() {
           <Link
             href="/"
             className={`px-5 py-3 rounded-lg text-xs font-semibold uppercase tracking-wide transition-all ${
-              pathname === "/" ? "text-[#007BFF] bg-[#E3F2FD]" : "text-slate-700 hover:text-white hover:bg-[#007BFF]"
+              pathname === "/" ? "text-[#0066F5] bg-[#BFDBFE]" : "text-slate-700 hover:text-white hover:bg-[#0066F5]"
             }`}
           >
             Home
@@ -173,8 +179,8 @@ export default function SimpleNavbar() {
           >
             <button
               className={`px-5 py-3 flex gap-2 items-center rounded-lg text-xs font-semibold uppercase tracking-wide transition-all ${pathname?.includes("/colleges/")
-                ? "text-[#007BFF] bg-[#E3F2FD]"
-                : "text-slate-700 hover:text-white hover:bg-[#007BFF]"
+                ? "text-[#0066F5] bg-[#BFDBFE]"
+                : "text-slate-700 hover:text-white hover:bg-[#0066F5]"
                 }`}
             >
               College
@@ -187,7 +193,7 @@ export default function SimpleNavbar() {
                   <Link
                     key={item.name}
                     href={item.href}
-                    className={`block px-5 py-4 text-sm text-slate-700 hover:bg-[#007BFF] hover:text-white hover:rounded-lg transition-colors ${index === 0 ? 'rounded-t-xl' : index === collegeTypes.length - 1 ? 'rounded-b-xl' : ''}`}
+                    className={`block px-5 py-4 text-sm text-slate-700 hover:bg-[#0066F5] hover:text-white hover:rounded-lg transition-colors ${index === 0 ? 'rounded-t-xl' : index === collegeTypes.length - 1 ? 'rounded-b-xl' : ''}`}
                   >
                     {item.name}
                   </Link>
@@ -201,8 +207,8 @@ export default function SimpleNavbar() {
           <Link
             href="/exams"
             className={`px-5 py-3 rounded-lg text-xs font-semibold uppercase tracking-wide transition-all ${pathname?.includes("/exams")
-              ? "text-[#007BFF] bg-[#E3F2FD]"
-              : "text-slate-700 hover:text-white hover:bg-[#007BFF]"
+              ? "text-[#0066F5] bg-[#BFDBFE]"
+              : "text-slate-700 hover:text-white hover:bg-[#0066F5]"
               }`}
           >
             Exam
@@ -211,8 +217,8 @@ export default function SimpleNavbar() {
           <Link
             href="/blogs"
             className={`px-5 py-3 rounded-lg text-xs font-semibold uppercase tracking-wide transition-all ${pathname?.includes("/blogs")
-              ? "text-[#007BFF] bg-[#E3F2FD]"
-              : "text-slate-700 hover:text-white hover:bg-[#007BFF]"
+              ? "text-[#0066F5] bg-[#BFDBFE]"
+              : "text-slate-700 hover:text-white hover:bg-[#0066F5]"
               }`}
           >
             Blogs
@@ -222,7 +228,7 @@ export default function SimpleNavbar() {
           <Link
             href="/contact"
             className={`px-5 py-3 rounded-lg text-xs font-semibold uppercase tracking-wide transition-all ${
-              pathname?.includes("/contact") ? "text-[#007BFF] bg-[#E3F2FD]" : "text-slate-700 hover:text-white hover:bg-[#007BFF]"
+              pathname?.includes("/contact") ? "text-[#0066F5] bg-[#BFDBFE]" : "text-slate-700 hover:text-white hover:bg-[#0066F5]"
             }`}
           >
             Contact Us
@@ -235,9 +241,9 @@ export default function SimpleNavbar() {
             onMouseLeave={handleToolsMouseLeave}
           >
             <button
-              className={`px-5 py-3 rounded-lg text-xs font-semibold uppercase tracking-wide transition-all flex items-center gap-2 ${pathname?.includes("/tools")
-                ? "text-[#007BFF] bg-[#E3F2FD]"
-                : "text-slate-700 hover:text-[#007BFF] hover:bg-slate-50"
+              className={`px-5 py-3 rounded-lg text-xs font-semibold uppercase tracking-wide transition-all flex items-center gap-2 ${isToolsActive
+                ? "text-[#0066F5] bg-[#BFDBFE]"
+                : "text-slate-700 hover:text-[#0066F5] hover:bg-slate-50"
                 }`}
             >
               Tools
@@ -250,7 +256,7 @@ export default function SimpleNavbar() {
                   <Link
                     key={item.name}
                     href={item.href}
-                    className={`block px-5 py-4 text-sm text-slate-700 hover:bg-[#007BFF] hover:text-white hover:rounded-lg transition-colors ${index === 0 ? 'rounded-t-xl' : index === toolsOptions.length - 1 ? 'rounded-b-xl' : ''}`}
+                    className={`block px-5 py-4 text-sm text-slate-700 hover:bg-[#0066F5] hover:text-white hover:rounded-lg transition-colors ${index === 0 ? 'rounded-t-xl' : index === toolsOptions.length - 1 ? 'rounded-b-xl' : ''}`}
                   >
                     {item.name}
                   </Link>
@@ -265,7 +271,7 @@ export default function SimpleNavbar() {
         <div className="flex items-center gap-2 sm:gap-4">
           <button
             onClick={openModal}
-            className="hidden md:flex items-center gap-2 bg-[#007BFF] text-white px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3 rounded-lg text-xs sm:text-sm font-semibold uppercase tracking-wide hover:bg-[#0056CC] transition-all active:scale-95 shadow-lg"
+            className="hidden md:flex items-center gap-2 bg-[#0066F5] text-white px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3 rounded-lg text-xs sm:text-sm font-semibold uppercase tracking-wide hover:bg-[#004ED4] transition-all active:scale-95 shadow-lg"
           >
             <span className="hidden sm:inline">Apply Now</span>
             <span className="sm:hidden">Apply</span>
@@ -293,7 +299,7 @@ export default function SimpleNavbar() {
             <Link
               href="/"
               onClick={() => setIsOpen(false)}
-              className={`text-base sm:text-lg font-bold tracking-tight py-3 px-4 rounded-lg transition-colors ${pathname === "/" ? "text-[#007BFF] bg-[#E3F2FD]" : "text-slate-700 hover:bg-[#007BFF] hover:text-white"
+              className={`text-base sm:text-lg font-bold tracking-tight py-3 px-4 rounded-lg transition-colors ${pathname === "/" ? "text-[#0066F5] bg-[#BFDBFE]" : "text-slate-700 hover:bg-[#0066F5] hover:text-white"
                 }`}
             >
               Home
@@ -302,7 +308,7 @@ export default function SimpleNavbar() {
             <Link
               href="/exams"
               onClick={() => setIsOpen(false)}
-              className={`text-base sm:text-lg font-bold tracking-tight py-3 px-4 rounded-lg transition-colors ${pathname?.includes("/exams") ? "text-[#007BFF] bg-[#E3F2FD]" : "text-slate-700 hover:bg-[#007BFF] hover:text-white"
+              className={`text-base sm:text-lg font-bold tracking-tight py-3 px-4 rounded-lg transition-colors ${pathname?.includes("/exams") ? "text-[#0066F5] bg-[#BFDBFE]" : "text-slate-700 hover:bg-[#0066F5] hover:text-white"
                 }`}
             >
               Exams
@@ -311,7 +317,7 @@ export default function SimpleNavbar() {
             <Link
               href="/blogs"
               onClick={() => setIsOpen(false)}
-              className={`text-base sm:text-lg font-bold tracking-tight py-3 px-4 rounded-lg transition-colors ${pathname?.includes("/blogs") ? "text-[#007BFF] bg-[#E3F2FD]" : "text-slate-700 hover:bg-[#007BFF] hover:text-white"
+              className={`text-base sm:text-lg font-bold tracking-tight py-3 px-4 rounded-lg transition-colors ${pathname?.includes("/blogs") ? "text-[#0066F5] bg-[#BFDBFE]" : "text-slate-700 hover:bg-[#0066F5] hover:text-white"
                 }`}
             >
               Updates
@@ -337,7 +343,7 @@ export default function SimpleNavbar() {
                     key={item.name}
                     href={item.href}
                     onClick={() => { setIsOpen(false); setMobileCollegesOpen(false); }}
-                    className={`text-sm sm:text-base font-medium tracking-tight py-2.5 px-4 pl-8 rounded-lg transition-colors ${pathname === item.href ? "text-[#007BFF] bg-[#F8FAFC]" : "text-[#64748B] hover:bg-blue-500 hover:text-white hover:rounded-lg"
+                    className={`text-sm sm:text-base font-medium tracking-tight py-2.5 px-4 pl-8 rounded-lg transition-colors ${pathname === item.href ? "text-[#0066F5] bg-[#F8FAFC]" : "text-[#64748B] hover:bg-blue-500 hover:text-white hover:rounded-lg"
                       }`}
                   >
                     {item.name}
@@ -366,7 +372,7 @@ export default function SimpleNavbar() {
                     key={item.name}
                     href={item.href}
                     onClick={() => { setIsOpen(false); setMobileCitiesOpen(false); }}
-                    className={`text-xs sm:text-sm font-medium tracking-tight py-2 px-3 rounded-lg text-center transition-colors ${pathname === item.href ? "text-[#007BFF] bg-[#E3F2FD]" : "text-slate-500 hover:bg-[#007BFF] hover:text-white hover:rounded-lg"
+                    className={`text-xs sm:text-sm font-medium tracking-tight py-2 px-3 rounded-lg text-center transition-colors ${pathname === item.href ? "text-[#0066F5] bg-[#BFDBFE]" : "text-slate-500 hover:bg-[#0066F5] hover:text-white hover:rounded-lg"
                       }`}
                   >
                     {item.name.replace(' Colleges', '')}
@@ -376,11 +382,29 @@ export default function SimpleNavbar() {
             </div>
           </div>
 
+          {/* Tools Section */}
+          <div className="border-t border-slate-100 pt-4">
+            <h3 className="text-sm font-bold text-slate-500 uppercase tracking-wider px-4 mb-2">Tools</h3>
+            <div className="flex flex-col gap-1">
+              {toolsOptions.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  onClick={() => setIsOpen(false)}
+                  className={`text-sm sm:text-base font-medium tracking-tight py-2.5 px-4 rounded-lg transition-colors ${pathname === item.href ? "text-[#0066F5] bg-[#BFDBFE]" : "text-[#64748B] hover:bg-[#0066F5] hover:text-white"
+                    }`}
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+
           {/* Mobile CTA Button */}
           <div className="border-t border-slate-100 pt-4 mt-2">
             <button
               onClick={() => { openModal(); setIsOpen(false); }}
-              className="w-full bg-[#007BFF] text-white py-3 sm:py-3.5 rounded-lg font-bold uppercase text-xs sm:text-sm tracking-widest flex items-center justify-center gap-2 hover:bg-[#0056CC] transition-all active:scale-95"
+              className="w-full bg-[#0066F5] text-white py-3 sm:py-3.5 rounded-lg font-bold uppercase text-xs sm:text-sm tracking-widest flex items-center justify-center gap-2 hover:bg-[#004ED4] transition-all active:scale-95"
             >
               Start Application <ArrowRight size={16} />
             </button>

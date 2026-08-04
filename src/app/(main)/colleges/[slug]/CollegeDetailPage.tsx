@@ -224,12 +224,12 @@ if (isLoading) {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button
               onClick={() => refetch()}
-              className="bg-[#007BFF] hover:bg-[#007BFF]/90 text-white"
+              className="bg-[#0066F5] hover:bg-[#0066F5]/90 text-white"
             >
               Try Again
             </Button>
             <Link href="/colleges">
-              <Button variant="outline" className="border-[#007BFF] text-[#007BFF] hover:bg-[#007BFF]/10">
+              <Button variant="outline" className="border-[#0066F5] text-[#0066F5] hover:bg-[#0066F5]/10">
                 Browse All Colleges
               </Button>
             </Link>
@@ -249,7 +249,7 @@ if (isLoading) {
             {/* LEFT SIDE: CONTENT */}
             <div>
               <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
-                <Badge className="bg-[#007BFF]/10 text-[#007BFF] border-none px-3 py-1 rounded-full text-sm font-medium">
+                <Badge className="bg-[#0066F5]/10 text-[#0066F5] border-none px-3 py-1 rounded-full text-sm font-medium">
                   <Flag className="w-3 h-3 mr-2" />
                   {college.country_ref?.name || 'International'}
                 </Badge>
@@ -264,7 +264,7 @@ if (isLoading) {
 
               <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#1E293B] mb-4 sm:mb-6">
                 {college.name}
-                <span className="text-[#007BFF]">.</span>
+                <span className="text-[#0066F5]">.</span>
               </h1>
 
               {/* Hero Description */}
@@ -276,8 +276,8 @@ if (isLoading) {
 
               <div className="flex flex-wrap gap-6 py-6 border-y border-slate-200">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-[#007BFF]/10 rounded-lg flex items-center justify-center">
-                    <MapPin className="w-5 h-5 text-[#007BFF]" />
+                  <div className="w-10 h-10 bg-[#0066F5]/10 rounded-lg flex items-center justify-center">
+                    <MapPin className="w-5 h-5 text-[#0066F5]" />
                   </div>
                   <div>
                     <p className="text-xs text-[#64748B] uppercase font-medium">Location</p>
@@ -287,8 +287,8 @@ if (isLoading) {
 
                 {college.establishment_year && (
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-[#007BFF]/10 rounded-lg flex items-center justify-center">
-                      <Calendar className="w-5 h-5 text-[#007BFF]" />
+                    <div className="w-10 h-10 bg-[#0066F5]/10 rounded-lg flex items-center justify-center">
+                      <Calendar className="w-5 h-5 text-[#0066F5]" />
                     </div>
                     <div>
                       <p className="text-xs text-[#64748B] uppercase font-medium">Founded</p>
@@ -298,8 +298,8 @@ if (isLoading) {
                 )}
 
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-[#007BFF]/10 rounded-lg flex items-center justify-center">
-                    <Users className="w-5 h-5 text-[#007BFF]" />
+                  <div className="w-10 h-10 bg-[#0066F5]/10 rounded-lg flex items-center justify-center">
+                    <Users className="w-5 h-5 text-[#0066F5]" />
                   </div>
                   <div>
                     <p className="text-xs text-[#64748B] uppercase font-medium">Community</p>
@@ -348,8 +348,8 @@ if (isLoading) {
                 }}
                 className={`px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all duration-300 whitespace-nowrap border-2 border-transparent ${
                   activeTab === tab.id
-                    ? 'bg-[#007BFF] text-white border-[#007BFF] shadow-md'
-                    : 'text-[#64748B] hover:text-[#007BFF] hover:border-[#007BFF] hover:bg-slate-50'
+                    ? 'bg-[#0066F5] text-white border-[#0066F5] shadow-md'
+                    : 'text-[#64748B] hover:text-[#0066F5] hover:border-[#0066F5] hover:bg-slate-50'
                 }`}
               >
                 {tab.name}
@@ -368,7 +368,7 @@ if (isLoading) {
             <div id="overview">
               <div className="bg-white border border-slate-200 rounded-xl p-8">
                 <div className="mb-6">
-                  <Badge className="bg-[#007BFF]/10 text-[#007BFF] border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
+                  <Badge className="bg-[#0066F5]/10 text-[#0066F5] border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
                     Institution
                   </Badge>
                   <h2 className="text-2xl font-bold text-[#1E293B] mb-4">
@@ -382,7 +382,7 @@ if (isLoading) {
 
                 <button
                   onClick={() => setIsExpanded(!isExpanded)}
-                  className="text-[#007BFF] font-medium text-sm flex items-center gap-2 hover:text-[#007BFF]/80"
+                  className="text-[#0066F5] font-medium text-sm flex items-center gap-2 hover:text-[#0066F5]/80"
                 >
                   {isExpanded ? 'Show Less' : 'Show More'}
                   <ArrowRight className={`w-4 h-4 transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
@@ -394,7 +394,7 @@ if (isLoading) {
             <div id="key-highlights">
               <div className="bg-white border border-slate-200 rounded-xl p-8">
                 <div className="mb-6">
-                  <Badge className="bg-[#007BFF]/10 text-[#007BFF] border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
+                  <Badge className="bg-[#0066F5]/10 text-[#0066F5] border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
                     Essentials
                   </Badge>
                   <h2 className="text-2xl font-bold text-[#1E293B]">Key Information</h2>
@@ -433,7 +433,7 @@ if (isLoading) {
                   ].map((item, i) => item.show && (
                     <div key={i} className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg">
                       <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center">
-                        <item.icon className="w-6 h-6 text-[#007BFF]" />
+                        <item.icon className="w-6 h-6 text-[#0066F5]" />
                       </div>
                       <div>
                         <div className="text-xs text-[#64748B] uppercase font-medium mb-1">{item.label}</div>
@@ -451,7 +451,7 @@ if (isLoading) {
               {college.exams && college.exams.length > 0 && (
                 <div className="bg-white border border-slate-200 rounded-xl p-8">
                   <div className="mb-6">
-                    <Badge className="bg-[#007BFF]/10 text-[#007BFF] border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
+                    <Badge className="bg-[#0066F5]/10 text-[#0066F5] border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
                       Eligibility
                     </Badge>
                     <h2 className="text-2xl font-bold text-[#1E293B]">Accepted Entrance Exams</h2>
@@ -465,7 +465,7 @@ if (isLoading) {
                     {college.exams.map((exam, index) => (
                       <div key={exam} className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg">
                         <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center">
-                          <FileText className="w-6 h-6 text-[#007BFF]" />
+                          <FileText className="w-6 h-6 text-[#0066F5]" />
                         </div>
                         <div>
                           <div className="font-semibold text-[#1E293B]">{exam}</div>
@@ -483,7 +483,7 @@ if (isLoading) {
               {college.key_highlights?.features && college.key_highlights.features.length > 0 && (
                 <div className="bg-white border border-slate-200 rounded-xl p-8">
                   <div className="mb-6">
-                    <Badge className="bg-[#007BFF]/10 text-[#007BFF] border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
+                    <Badge className="bg-[#0066F5]/10 text-[#0066F5] border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
                       At a Glance
                     </Badge>
                     <h2 className="text-2xl font-bold text-[#1E293B]">
@@ -500,8 +500,8 @@ if (isLoading) {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {college.key_highlights.features.map((feature, index) => (
                       <div key={index} className="flex items-start gap-3 p-4 bg-slate-50 rounded-lg">
-                        <div className="w-8 h-8 bg-[#007BFF]/10 rounded-lg flex items-center justify-center shrink-0 mt-1">
-                          <Star className="w-4 h-4 text-[#007BFF]" />
+                        <div className="w-8 h-8 bg-[#0066F5]/10 rounded-lg flex items-center justify-center shrink-0 mt-1">
+                          <Star className="w-4 h-4 text-[#0066F5]" />
                         </div>
                         <div className="text-[#64748B]">{feature}</div>
                       </div>
@@ -516,7 +516,7 @@ if (isLoading) {
               {college.why_choose_us?.features && college.why_choose_us.features.length > 0 && (
                 <div className="bg-white border border-slate-200 rounded-xl p-8">
                   <div className="mb-6">
-                    <Badge className="bg-[#007BFF]/10 text-[#007BFF] border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
+                    <Badge className="bg-[#0066F5]/10 text-[#0066F5] border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
                       Benefits
                     </Badge>
                     <h2 className="text-2xl font-bold text-[#1E293B]">
@@ -533,8 +533,8 @@ if (isLoading) {
                   <div className="space-y-4">
                     {college.why_choose_us.features.map((feature, index) => (
                       <div key={index} className="flex items-start gap-4 p-4 bg-slate-50 rounded-lg">
-                        <div className="w-8 h-8 bg-[#007BFF]/10 rounded-lg flex items-center justify-center shrink-0 mt-1">
-                          <Lightbulb className="w-4 h-4 text-[#007BFF]" />
+                        <div className="w-8 h-8 bg-[#0066F5]/10 rounded-lg flex items-center justify-center shrink-0 mt-1">
+                          <Lightbulb className="w-4 h-4 text-[#0066F5]" />
                         </div>
                         <div>
                           <h4 className="font-semibold text-[#1E293B] mb-2">{feature.title}</h4>
@@ -552,7 +552,7 @@ if (isLoading) {
               {college.ranking && typeof college.ranking === 'object' && (
                 <div className="bg-white border border-slate-200 rounded-xl p-8">
                   <div className="mb-6">
-                    <Badge className="bg-[#007BFF]/10 text-[#007BFF] border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
+                    <Badge className="bg-[#0066F5]/10 text-[#0066F5] border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
                       Recognition
                     </Badge>
                     <h2 className="text-2xl font-bold text-[#1E293B]">
@@ -582,9 +582,9 @@ if (isLoading) {
                       <div key={i} className="p-6 bg-slate-50 rounded-lg">
                         <div className="flex items-center justify-between mb-4">
                           <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center">
-                            <item.icon className="w-6 h-6 text-[#007BFF]" />
+                            <item.icon className="w-6 h-6 text-[#0066F5]" />
                           </div>
-                          <div className="text-3xl font-bold text-[#007BFF]">#{item.val}</div>
+                          <div className="text-3xl font-bold text-[#0066F5]">#{item.val}</div>
                         </div>
                         <h4 className="text-lg font-semibold text-[#1E293B]">#{item.val}</h4>
                         <p className="text-sm text-[#64748B]">{item.label}</p>
@@ -617,7 +617,7 @@ if (isLoading) {
               {college.admission_process?.steps && college.admission_process.steps.length > 0 && (
                 <div className="bg-white border border-slate-200 rounded-xl p-8">
                   <div className="mb-6">
-                    <Badge className="bg-[#007BFF]/10 text-[#007BFF] border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
+                    <Badge className="bg-[#0066F5]/10 text-[#0066F5] border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
                       Step-by-Step
                     </Badge>
                     <h2 className="text-2xl font-bold text-[#1E293B]">
@@ -634,7 +634,7 @@ if (isLoading) {
                   <div className="space-y-4">
                     {college.admission_process.steps.map((step, index) => (
                       <div key={index} className="flex items-start gap-4 p-4 bg-slate-50 rounded-lg">
-                        <div className="w-8 h-8 bg-[#007BFF] rounded-lg flex items-center justify-center text-white font-semibold shrink-0">
+                        <div className="w-8 h-8 bg-[#0066F5] rounded-lg flex items-center justify-center text-white font-semibold shrink-0">
                           {String(index + 1).padStart(2, '0')}
                         </div>
                         <div className="flex-1">
@@ -644,7 +644,7 @@ if (isLoading) {
                     ))}
                   </div>
 
-                  <div className="mt-8 p-6 bg-linear-to-r from-[#007BFF] to-[#007BFF]/90 rounded-xl text-white shadow-xl shadow-[#007BFF]/20">
+                  <div className="mt-8 p-6 bg-linear-to-r from-[#0066F5] to-[#0066F5]/90 rounded-xl text-white shadow-xl shadow-[#0066F5]/20">
                     <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                       <div className="flex items-center gap-4">
                         <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
@@ -657,7 +657,7 @@ if (isLoading) {
                       </div>
                       <button
                         onClick={openModal}
-                        className="bg-white text-[#007BFF] font-semibold px-6 py-3 rounded-lg hover:bg-black hover:text-white transition-colors"
+                        className="bg-white text-[#0066F5] font-semibold px-6 py-3 rounded-lg hover:bg-black hover:text-white transition-colors"
                       >
                         Get Free Assistance
                       </button>
@@ -672,7 +672,7 @@ if (isLoading) {
               {college.documents_required?.documents && college.documents_required.documents.length > 0 && (
                 <div className="bg-white border border-slate-200 rounded-xl p-8">
                   <div className="mb-6">
-                    <Badge className="bg-[#007BFF]/10 text-[#007BFF] border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
+                    <Badge className="bg-[#0066F5]/10 text-[#0066F5] border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
                       Checklist
                     </Badge>
                     <h2 className="text-2xl font-bold text-[#1E293B]">
@@ -690,7 +690,7 @@ if (isLoading) {
                     {college.documents_required.documents.map((doc, index) => (
                       <div key={index} className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg">
                         <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center">
-                          <Shield className="w-6 h-6 text-[#007BFF]" />
+                          <Shield className="w-6 h-6 text-[#0066F5]" />
                         </div>
                         <div className="font-medium text-[#1E293B]">{doc}</div>
                       </div>
@@ -705,7 +705,7 @@ if (isLoading) {
               {college.fees_structure?.courses && college.fees_structure.courses.length > 0 && (
                 <div className="bg-white border border-slate-200 rounded-xl p-8">
                   <div className="mb-6">
-                    <Badge className="bg-[#007BFF]/10 text-[#007BFF] border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
+                    <Badge className="bg-[#0066F5]/10 text-[#0066F5] border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
                       Investment
                     </Badge>
                     <h2 className="text-2xl font-bold text-[#1E293B]">
@@ -725,7 +725,7 @@ if (isLoading) {
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                           <div className="flex items-center gap-4">
                             <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center">
-                              <GraduationCap className="w-6 h-6 text-[#007BFF]" />
+                              <GraduationCap className="w-6 h-6 text-[#0066F5]" />
                             </div>
                             <div>
                               <h4 className="font-semibold text-[#1E293B]">{course.course_name}</h4>
@@ -733,7 +733,7 @@ if (isLoading) {
                             </div>
                           </div>
                           <div className="text-right">
-                            <div className="text-xl font-bold text-[#007BFF]">{course.annual_tuition_fee}</div>
+                            <div className="text-xl font-bold text-[#0066F5]">{course.annual_tuition_fee}</div>
                             <div className="text-xs text-[#64748B]">Tuition / Year</div>
                           </div>
                         </div>
@@ -749,7 +749,7 @@ if (isLoading) {
               {college.campus_highlights?.highlights && college.campus_highlights.highlights.length > 0 && (
                 <div className="bg-white border border-slate-200 rounded-xl p-8">
                   <div className="mb-6">
-                    <Badge className="bg-[#007BFF]/10 text-[#007BFF] border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
+                    <Badge className="bg-[#0066F5]/10 text-[#0066F5] border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
                       Lifestyle & Facilities
                     </Badge>
                     <h2 className="text-2xl font-bold text-[#1E293B]">
@@ -778,7 +778,7 @@ if (isLoading) {
                       return (
                         <div key={index} className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg">
                           <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center">
-                            <div className="text-[#007BFF]">
+                            <div className="text-[#0066F5]">
                               {getIcon(highlight)}
                             </div>
                           </div>
@@ -790,7 +790,7 @@ if (isLoading) {
 
                   <button
                     onClick={openModal}
-                    className="mt-6 w-full bg-[#007BFF] text-white rounded-lg py-3 px-6 font-medium hover:bg-[#007BFF]/90 transition-colors flex items-center justify-center gap-2"
+                    className="mt-6 w-full bg-[#0066F5] text-white rounded-lg py-3 px-6 font-medium hover:bg-[#0066F5]/90 transition-colors flex items-center justify-center gap-2"
                   >
                     <Globe className="w-5 h-5" />
                     Request a Virtual Campus Tour
@@ -803,7 +803,7 @@ if (isLoading) {
           {/* Right Column - CTA and Related */}
           <div className="space-y-8 lg:sticky lg:top-8 lg:h-fit">
             {/* CTA Card */}
-            <div className="bg-linear-to-br from-[#007BFF] to-[#007BFF]/90 text-white rounded-xl p-8 shadow-xl shadow-[#007BFF]/20">
+            <div className="bg-linear-to-br from-[#0066F5] to-[#0066F5]/90 text-white rounded-xl p-8 shadow-xl shadow-[#0066F5]/20">
               <div className="text-center">
                 <div className="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center mx-auto mb-4">
                   <GraduationCap className="w-8 h-8 text-white" />
@@ -813,14 +813,14 @@ if (isLoading) {
                 <div className="space-y-3">
                   <button
                     onClick={openModal}
-                    className="w-full bg-white text-[#007BFF] font-semibold rounded-lg  transition-colors py-3 px-6 flex items-center justify-center gap-2"
+                    className="w-full bg-white text-[#0066F5] font-semibold rounded-lg  transition-colors py-3 px-6 flex items-center justify-center gap-2"
                   >
                     <Bookmark className="w-4 h-4" />
                     Start Application
                   </button>
                   <button
                     onClick={openModal}
-                    className="w-full bg-white/20 backdrop-blur-sm text-white font-semibold rounded-lg hover:bg-[#007BFF]/10 transition-colors py-3 px-6 border border-white/30 flex items-center justify-center gap-2"
+                    className="w-full bg-white/20 backdrop-blur-sm text-white font-semibold rounded-lg hover:bg-[#0066F5]/10 transition-colors py-3 px-6 border border-white/30 flex items-center justify-center gap-2"
                   >
                     <Phone className="w-4 h-4" />
                     Get Free Consultation
@@ -833,15 +833,15 @@ if (isLoading) {
             <div className="bg-white border border-slate-200 rounded-xl p-6">
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
-                  <Phone className="w-5 h-5 text-[#007BFF]" />
+                  <Phone className="w-5 h-5 text-[#0066F5]" />
                   <span className="text-[#64748B] font-medium">{phones.primary}</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Mail className="w-5 h-5 text-[#007BFF]" />
+                  <Mail className="w-5 h-5 text-[#0066F5]" />
                   <span className="text-[#64748B] font-medium">{emails.info}</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Globe className="w-5 h-5 text-[#007BFF]" />
+                  <Globe className="w-5 h-5 text-[#0066F5]" />
                   <span className="text-[#64748B] font-medium">Global Opportunities</span>
                 </div>
               </div>

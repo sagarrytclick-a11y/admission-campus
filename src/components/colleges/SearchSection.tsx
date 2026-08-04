@@ -145,7 +145,7 @@ const SearchSection = memo(({
           <div className="flex justify-end">
             <button
               onClick={handleReset}
-              className="flex bg-[#007BFF] text-white px-4 py-2 rounded-lg hover:bg-[#3B82F6] transition-colors items-center gap-2"
+              className="flex bg-[#0066F5] text-white px-4 py-2 rounded-lg hover:bg-[#3B82F6] transition-colors items-center gap-2"
             >
               <RefreshCw className="w-4 h-4" />
               Reset Filters

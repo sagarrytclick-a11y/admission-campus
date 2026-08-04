@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import College from "@/models/College";
+// Required for populate('country_ref') on serverless cold starts
 import Country from "@/models/Country";
 import { generateSlug } from "@/lib/slug";
 

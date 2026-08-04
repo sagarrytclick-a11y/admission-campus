@@ -48,26 +48,26 @@ export default function BlogsPage() {
 
   const categories = useMemo(() => [...new Set(blogs.map(b => b.category).filter(Boolean))], [blogs])
 
-  if (isLoading) return <div className="min-h-screen flex items-center justify-center bg-white"><div className="w-8 h-8 border-2 border-[#007BFF] border-t-transparent rounded-full animate-spin" /></div>
+  if (isLoading) return <div className="min-h-screen flex items-center justify-center bg-white"><div className="w-8 h-8 border-2 border-[#0066F5] border-t-transparent rounded-full animate-spin" /></div>
 
   return (
     <div className="min-h-screen bg-white font-sans text-slate-900">
       {/* HEADER SECTION */}
       <header className="bg-[#F8FAFC] border-b border-slate-100 pt-28 pb-12">
         <div className="max-w-7xl mx-auto px-6 lg:px-24">
-          <div className="flex items-center gap-2 text-[#007BFF] mb-4">
+          <div className="flex items-center gap-2 text-[#0066F5] mb-4">
             <Sparkles size={16} />
             <span className="text-[10px] font-bold uppercase tracking-widest">Resources & Insights</span>
           </div>
 
           <h1 className="text-3xl md:text-4xl font-bold text-[#1E293B] mb-8 tracking-tight">
-            Blogs <span className="text-[#007BFF]">Hub</span>
+            Blogs <span className="text-[#0066F5]">Hub</span>
           </h1>
 
           {/* INLINE FILTERS BAR */}
           <div className="flex flex-col lg:flex-row gap-3">
             {/* Search - Text set to Slate-900 for visibility */}
-            <div className="relative flex-2 bg-white border border-slate-200 rounded-lg flex items-center px-3 shadow-sm focus-within:border-[#007BFF] transition-colors">
+            <div className="relative flex-2 bg-white border border-slate-200 rounded-lg flex items-center px-3 shadow-sm focus-within:border-[#0066F5] transition-colors">
               <Search className="text-slate-400" size={18} />
               <Input
                 placeholder="Search articles..."
@@ -94,15 +94,15 @@ export default function BlogsPage() {
       </header>
 
       {/* BLOG GRID */}
-      <main className="max-w-7xl mx-auto px-6 lg:px-24 py-16">
+      <main className="max-w-7xl mx-auto px-6 lg:px-24 py-[32px]">
         {filteredBlogs.length === 0 ? (
-          <div className="text-center py-20 bg-[#F8FAFC] rounded-lg border border-dashed border-slate-200">
+          <div className="text-center py-[32px] bg-[#F8FAFC] rounded-lg border border-dashed border-slate-200">
             <p className="text-sm font-bold text-slate-400 uppercase">No matches found</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {paginatedBlogs.map(blog => (
-              <article key={blog._id} className="bg-white border-2 border-slate-300 rounded-xl overflow-hidden hover:border-[#007BFF] hover:shadow-lg hover:shadow-[#007BFF]/20 transition-all duration-300 flex flex-col h-full">
+              <article key={blog._id} className="bg-white border-2 border-slate-300 rounded-xl overflow-hidden hover:border-[#0066F5] hover:shadow-lg hover:shadow-[#0066F5]/20 transition-all duration-300 flex flex-col h-full">
                 {/* Image Section - Fixed Height */}
                 <Link href={`/blogs/${blog.slug}`} className="relative h-48 bg-slate-50 border-b-2 border-slate-300">
                   <img 
@@ -134,11 +134,11 @@ export default function BlogsPage() {
                   <div className="mt-auto pt-3 border-t border-slate-100 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center">
-                        <User size={10} className="text-[#007BFF]" />
+                        <User size={10} className="text-[#0066F5]" />
                       </div>
                       <span className="text-[9px] font-bold uppercase tracking-wider text-[#64748B]">Admission Campus Team</span>
                     </div>
-                    <Link href={`/blogs/${blog.slug}`} className="text-[#007BFF] bg-[#007BFF]/10 text-[#007BFF] hover:translate-x-1 transition-all duration-200 rounded-full p-2 flex ">
+                    <Link href={`/blogs/${blog.slug}`} className="text-[#0066F5] bg-[#0066F5]/10 text-[#0066F5] hover:translate-x-1 transition-all duration-200 rounded-full p-2 flex ">
                        <p className="text-[10px] font-bold">View Details</p>
                       <ArrowRight size={14} />
                     </Link>

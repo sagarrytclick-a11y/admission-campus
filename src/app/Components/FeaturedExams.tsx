@@ -15,6 +15,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
+import { formatRankingLabel } from "@/lib/formatRanking";
 
 const COLLEGES_PER_PAGE = 6;
 
@@ -31,28 +32,33 @@ const UniversityCard = ({
   duration,
   establishment_year,
 }: any) => {
+  const rankLabel = formatRankingLabel(ranking);
+
   return (
     <Link href={`/colleges/${slug}`} className="group block h-full">
-      <div className="bg-white border-2 border-slate-300 rounded-xl overflow-hidden hover:border-[#007BFF] hover:shadow-lg hover:shadow-[#007BFF]/20 transition-all duration-300 flex flex-col h-full">
-        <div className="h-44 bg-slate-50 border-b-2 border-slate-300">
+      <div className="bg-white border-2 border-slate-300 rounded-xl overflow-hidden hover:border-[#0066F5] hover:shadow-lg hover:shadow-[#0066F5]/20 transition-all duration-300 flex flex-col h-full">
+        <div className="relative h-44 bg-slate-50 border-b-2 border-slate-300">
           <img
             src={image || `https://picsum.photos/seed/${slug}/400/300`}
             alt={name}
             className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"
           />
+          {rankLabel && (
+            <div className="absolute top-2.5 right-2.5 left-2.5 flex justify-end pointer-events-none">
+              <span
+                title={rankLabel}
+                className="inline-block max-w-full bg-[#0066F5] text-white px-2 py-1 rounded-md text-[10px] font-bold leading-snug shadow-md line-clamp-2 text-left"
+              >
+                {rankLabel}
+              </span>
+            </div>
+          )}
         </div>
 
         <div className="p-5 flex flex-col flex-grow">
-          <div className="flex justify-between items-start mb-2">
-            <h3 className="text-lg font-semibold leading-tight text-[#1E293B] group-hover:text-[#007BFF] transition-colors line-clamp-2">
-              {name}
-            </h3>
-            {ranking && (
-              <span className="text-[10px] font-bold bg-slate-100 border border-slate-300 px-2 py-1 rounded-lg shadow-sm whitespace-nowrap">
-                #{ranking} Rank
-              </span>
-            )}
-          </div>
+          <h3 className="text-lg font-semibold leading-tight text-[#1E293B] group-hover:text-[#0066F5] transition-colors line-clamp-2 mb-2">
+            {name}
+          </h3>
 
           <div className="flex items-center gap-1 text-slate-600 text-[10px] font-medium mb-4">
             <MapPin size={12} /> {country} • Est. {establishment_year || "---"}
@@ -79,7 +85,7 @@ const UniversityCard = ({
           </div>
 
           <div className="mt-auto pt-4 flex items-center justify-between">
-            <span className="text-xs font-bold text-[#007BFF] flex items-center gap-1 group-hover:gap-2 transition-all">
+            <span className="text-xs font-bold text-[#0066F5] flex items-center gap-1 group-hover:gap-2 transition-all">
               View Profile <ArrowRight size={14} />
             </span>
           </div>
@@ -100,7 +106,7 @@ const UpcomingExamsSection = ({
   loading: boolean;
 }) => {
   return (
-    <section className="py-16 bg-white border-t border-slate-100">
+    <section className="py-[32px] bg-white border-t border-slate-100">
       <div className="max-w-7xl mx-auto px-6 lg:px-24">
         <div className="mb-10">
           <div className="flex items-center gap-2 text-[#1E293B] mb-2">
@@ -228,9 +234,9 @@ export default function FeaturedSection() {
 
   return (
     <div className="bg-white font-sans text-[#1E293B]">
-      <section className="max-w-7xl mx-auto py-16 px-6 lg:px-24">
+      <section className="max-w-7xl mx-auto py-[32px] px-6 lg:px-24">
         <div className="mb-12">
-          <div className="flex items-center gap-2 text-[#007BFF] mb-3">
+          <div className="flex items-center gap-2 text-[#0066F5] mb-3">
             <Sparkles size={16} />
             <span className="text-[10px] font-bold uppercase tracking-widest">
               Partner Institutions
@@ -268,7 +274,7 @@ export default function FeaturedSection() {
             <button
               onClick={handleLoadMore}
               disabled={isLoadingMore}
-              className="px-8 py-3 bg-white border border-slate-200 text-sm font-bold rounded-md hover:border-[#007BFF] hover:text-[#007BFF]"
+              className="px-8 py-3 bg-white border border-slate-200 text-sm font-bold rounded-md hover:border-[#0066F5] hover:text-[#0066F5]"
             >
               {isLoadingMore ? "Loading..." : "Load More"}
             </button>

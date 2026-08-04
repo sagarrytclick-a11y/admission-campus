@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import College from "@/models/College";
-import Country from "@/models/Country";
+// Required for populate('country_ref') on serverless cold starts
+import "@/models/Country";
 
 export async function GET(
   request: NextRequest,
@@ -12,7 +13,7 @@ export async function GET(
     await connectDB();
     
     const college = await College.findOne({ slug, is_active: true })
-      .populate('country_ref')
+      .populate("country_ref", "name slug flag")
       .lean(); // Use lean() for better performance
 
     if (!college) {

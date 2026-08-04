@@ -76,8 +76,8 @@ export default function CityCollegesPage() {
       <div className="min-h-screen bg-slate-50">
         {/* Hero Header Skeleton */}
         <div className="bg-slate-950/80 border-b border-white/10">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
-            <div className="text-center mb-16">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-[32px]">
+            <div className="text-center mb-8">
               <div className="h-8 bg-slate-700 rounded-full w-48 mx-auto mb-8 animate-pulse"></div>
               <div className="h-16 bg-slate-700 rounded-lg w-3/4 mx-auto mb-6 animate-pulse"></div>
               <div className="h-4 bg-slate-700 rounded w-1/2 mx-auto animate-pulse"></div>
@@ -89,14 +89,14 @@ export default function CityCollegesPage() {
   }
 
   return (
-    <div className="min-h-screen py-16 bg-slate-50">
+    <div className="min-h-screen py-[32px] bg-slate-50">
       {/* Hero Header */}
       <div className={`relative bg-linear-to-br ${cityInfo.gradient} text-white`}>
         <BackgroundSlider>
           <div />
         </BackgroundSlider>
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-24">
-          <div className="text-center mb-16">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-[32px]">
+          <div className="text-center mb-8">
             <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full text-[11px] font-bold uppercase tracking-widest mb-6">
               <MapPin className="w-4 h-4" />
               {cityInfo.name} Colleges

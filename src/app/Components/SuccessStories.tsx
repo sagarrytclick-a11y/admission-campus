@@ -64,10 +64,10 @@ export default function SuccessStories() {
   ];
 
   return (
-    <section className="py-20 bg-gradient-to-br from-green-50 via-white to-blue-50">
+    <section className="py-[32px] bg-gradient-to-br from-green-50 via-white to-blue-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-bold mb-6">
             <span>🌟</span>
             Success Stories
@@ -81,7 +81,7 @@ export default function SuccessStories() {
         </div>
 
         {/* Success Stories Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           {stories.map((story, index) => (
             <div key={index} className="bg-white rounded-2xl shadow-lg border border-slate-100 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
               {/* Student Header */}

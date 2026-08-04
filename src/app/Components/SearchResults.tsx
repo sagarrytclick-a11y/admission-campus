@@ -45,14 +45,14 @@ const SearchResults = memo(({ category, color }: { category: string; color: stri
   }
 
   if (isLoading) return (
-    <div className="py-20 text-center">
+    <div className="py-[32px] text-center">
       <div className="w-12 h-12 border-4 border-slate-200 rounded-full animate-spin mx-auto mb-4" style={{ borderTop: `4px solid ${color}` }} />
       <p className="text-[#64748B] font-medium">Updating results...</p>
     </div>
   )
 
   if (colleges.length === 0) return (
-    <div className="text-center py-20 bg-slate-50 rounded-xl border border-dashed border-slate-200">
+    <div className="text-center py-[32px] bg-slate-50 rounded-xl border border-dashed border-slate-200">
       <AlertCircle className="mx-auto text-[#64748B] mb-4" size={40} />
       <p className="text-[#64748B] font-medium">No matching {category} colleges found</p>
     </div>

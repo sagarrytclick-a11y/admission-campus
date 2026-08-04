@@ -145,7 +145,7 @@ const CitySlider = () => {
   const { currentIndex, handleNext, handlePrev } = useSlider(maxIndex)
 
   return (
-    <section className="py-10 sm:py-14 lg:py-20 bg-gradient-to-b from-white to-slate-50">
+    <section className="py-[32px] bg-gradient-to-b from-white to-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
         {/* Header */}

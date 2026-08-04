@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import College from "@/models/College";
-import Country from "@/models/Country";
+// Required for populate('country_ref') on serverless cold starts
+import "@/models/Country";
 
 export async function GET(
   request: NextRequest,
@@ -13,7 +14,7 @@ export async function GET(
     
     // Find the current college to get its country
     const currentCollege = await College.findOne({ slug, is_active: true })
-      .populate('country_ref')
+      .populate("country_ref", "name slug flag")
       .lean();
 
     if (!currentCollege) {
@@ -26,14 +27,18 @@ export async function GET(
       );
     }
 
+    const countryId =
+      (currentCollege.country_ref as { _id?: unknown } | null)?._id ??
+      currentCollege.country_ref;
+
     // Find related colleges (same country, excluding current college)
     // If not enough colleges from same country, fetch from other countries
     let relatedColleges = await College.find({
       _id: { $ne: currentCollege._id },
-      country_ref: currentCollege.country_ref._id,
+      ...(countryId ? { country_ref: countryId } : {}),
       is_active: true
     })
-    .populate('country_ref')
+    .populate("country_ref", "name slug flag")
     .limit(6)
     .sort({ createdAt: -1 })
     .lean();
@@ -42,10 +47,10 @@ export async function GET(
     if (relatedColleges.length < 3) {
       const additionalColleges = await College.find({
         _id: { $ne: currentCollege._id },
-        country_ref: { $ne: currentCollege.country_ref._id },
+        ...(countryId ? { country_ref: { $ne: countryId } } : {}),
         is_active: true
       })
-      .populate('country_ref')
+      .populate("country_ref", "name slug flag")
       .limit(6 - relatedColleges.length)
       .sort({ createdAt: -1 })
       .lean();

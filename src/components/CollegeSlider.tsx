@@ -76,7 +76,7 @@ const fetchColleges = async (countrySlug?: string): Promise<College[]> => {
 
   if (isError) {
     return (
-      <div className="py-16">
+      <div className="py-[32px]">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
             <div className="w-16 h-16 text-red-500 mx-auto mb-4">
@@ -93,7 +93,7 @@ const fetchColleges = async (countrySlug?: string): Promise<College[]> => {
 
   if (isLoading) {
     return (
-      <div className="py-16">
+      <div className="py-[32px]">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
             <div className="w-16 h-16 border-4 border-admission-yellow/20 border-t-admission-yellow rounded-full animate-spin mx-auto mb-4"></div>
@@ -106,7 +106,7 @@ const fetchColleges = async (countrySlug?: string): Promise<College[]> => {
 
   if (colleges.length === 0) {
     return (
-      <div className="py-16">
+      <div className="py-[32px]">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
             <Building2 size={48} className="text-slate-300 mx-auto mb-4" />
@@ -121,7 +121,7 @@ const fetchColleges = async (countrySlug?: string): Promise<College[]> => {
   const visibleColleges = colleges.slice(currentIndex * 3, (currentIndex + 1) * 3)
 
   return (
-    <div className="py-16 bg-gradient-to-b from-white to-slate-50">
+    <div className="py-[32px] bg-gradient-to-b from-white to-slate-50">
       <div className="max-w-7xl mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">

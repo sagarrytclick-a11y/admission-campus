@@ -58,26 +58,26 @@ export default function ExamsPage() {
     return () => observerRef.current?.disconnect();
   }, [hasMore, isLoadingMore, isFetching, filteredExams.length]);
 
-  if (isLoading) return <div className="min-h-screen flex items-center justify-center bg-white"><div className="w-8 h-8 border-2 border-[#007BFF] border-t-transparent rounded-full animate-spin" /></div>
+  if (isLoading) return <div className="min-h-screen flex items-center justify-center bg-white"><div className="w-8 h-8 border-2 border-[#0066F5] border-t-transparent rounded-full animate-spin" /></div>
 
   return (
     <div className="min-h-screen bg-white font-sans text-slate-900">
       {/* HEADER SECTION */}
       <header className="bg-[#F8FAFC] border-b border-slate-100 pt-28 pb-12">
         <div className="max-w-7xl mx-auto px-6 lg:px-24">
-          <div className="flex items-center gap-2 text-[#007BFF] mb-4">
+          <div className="flex items-center gap-2 text-[#0066F5] mb-4">
             <Sparkles size={16} />
             <span className="text-[10px] font-bold uppercase tracking-widest">Entrance Exams 2026</span>
           </div>
           
           <h1 className="text-3xl md:text-4xl font-bold text-[#1E293B] mb-8 tracking-tight">
-            Explore <span className="text-[#007BFF]">Entrance Exams</span>
+            Explore <span className="text-[#0066F5]">Entrance Exams</span>
           </h1>
 
           {/* ALL-IN-ONE SEARCH & FILTERS BAR */}
           <div className="flex flex-col lg:flex-row gap-3">
             {/* Search */}
-            <div className="relative flex-[2] bg-white border border-slate-200 rounded-lg flex items-center px-3 shadow-sm focus-within:border-[#007BFF] transition-colors">
+            <div className="relative flex-[2] bg-white border border-slate-200 rounded-lg flex items-center px-3 shadow-sm focus-within:border-[#0066F5] transition-colors">
               <Search className="text-slate-400" size={18} />
               <Input
                 placeholder="Search exams (JEE, NEET, CAT...)"
@@ -116,18 +116,18 @@ export default function ExamsPage() {
       </header>
 
       {/* GRID SECTION */}
-      <main className="max-w-7xl mx-auto px-6 lg:px-24 py-16">
+      <main className="max-w-7xl mx-auto px-6 lg:px-24 py-[32px]">
         {filteredExams.length === 0 ? (
-          <div className="text-center py-20 bg-[#F8FAFC] rounded-lg border border-dashed border-slate-200">
+          <div className="text-center py-[32px] bg-[#F8FAFC] rounded-lg border border-dashed border-slate-200">
             <p className="text-sm font-bold text-slate-400 uppercase">No exams found</p>
           </div>
         ) : (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {displayedExams.map((exam) => (
-                <div key={exam._id} className="group bg-white border border-slate-100 rounded-lg p-6 hover:border-[#007BFF] transition-all shadow-sm flex flex-col">
+                <div key={exam._id} className="group bg-white border border-slate-100 rounded-lg p-6 hover:border-[#0066F5] transition-all shadow-sm flex flex-col">
                   <div className="flex justify-between items-start mb-4">
-                    <div className="w-10 h-10 bg-slate-50 text-[#007BFF] rounded flex items-center justify-center">
+                    <div className="w-10 h-10 bg-slate-50 text-[#0066F5] rounded flex items-center justify-center">
                       <FileText size={20} />
                     </div>
                     <span className="text-[10px] font-bold bg-[#F8FAFC] text-[#1E293B] px-2 py-1 rounded border border-slate-100 uppercase">
@@ -135,8 +135,8 @@ export default function ExamsPage() {
                     </span>
                   </div>
                   
-                  <h3 className="text-lg font-bold text-[#1E293B] mb-2 group-hover:text-[#007BFF] transition-colors">{exam.name}</h3>
-                  <p className="text-[10px] font-bold text-[#007BFF] uppercase tracking-wider mb-6">{exam.exam_type}</p>
+                  <h3 className="text-lg font-bold text-[#1E293B] mb-2 group-hover:text-[#0066F5] transition-colors">{exam.name}</h3>
+                  <p className="text-[10px] font-bold text-[#0066F5] uppercase tracking-wider mb-6">{exam.exam_type}</p>
 
                   <div className="space-y-3 mb-8">
                     <div className="flex items-center gap-3 text-xs">
@@ -150,7 +150,7 @@ export default function ExamsPage() {
                   </div>
 
                   <Link href={`/exams/${exam.slug}`} className="mt-auto">
-                    <Button className="w-full bg-[#1E293B] hover:bg-[#007BFF] text-white rounded-md h-10 text-[10px] font-bold uppercase tracking-widest transition-colors">
+                    <Button className="w-full bg-[#1E293B] hover:bg-[#0066F5] text-white rounded-md h-10 text-[10px] font-bold uppercase tracking-widest transition-colors">
                       Learn More <ArrowRight size={14} className="ml-2" />
                     </Button>
                   </Link>
@@ -160,7 +160,7 @@ export default function ExamsPage() {
 
             {/* Load More Trigger */}
             <div ref={loadMoreRef} className="mt-12 text-center">
-              {isLoadingMore && <div className="w-6 h-6 border-2 border-[#007BFF] border-t-transparent rounded-full animate-spin mx-auto" />}
+              {isLoadingMore && <div className="w-6 h-6 border-2 border-[#0066F5] border-t-transparent rounded-full animate-spin mx-auto" />}
               {!hasMore && filteredExams.length > 0 && (
                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">End of List</p>
               )}
@@ -169,7 +169,7 @@ export default function ExamsPage() {
         )}
       </main>
 
-      <div className="bg-[#F8FAFC] py-16 border-t border-slate-100">
+      <div className="bg-[#F8FAFC] py-[32px] border-t border-slate-100">
         <FAQ />
       </div>
     </div>

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Stethoscope, Heart, Brain, Bone, Eye, Baby, Activity, Pill } from 'lucide-react'
 import { useFormModal } from '@/context/FormModalContext'
+import { formatRankingLabel } from '@/lib/formatRanking'
 
 const medicalSpecialties = [
   {
@@ -90,7 +91,7 @@ export default function MedicalSection() {
             // Transform the API data to match our format - take exactly 6 colleges
             const transformedData = result.data.colleges.slice(0, 6).map((college: any, index: number) => ({
               name: college.name || `Medical College ${index + 1}`,
-              ranking: college.ranking?.country_ranking ? `#${college.ranking.country_ranking}` : college.legacy_ranking ? `#${college.legacy_ranking}` : `#${index + 1}`,
+              ranking: formatRankingLabel(college.ranking?.country_ranking || college.legacy_ranking) || `#${index + 1}`,
               neetScore: college.fees_structure?.courses?.[0]?.annual_tuition_fee ? `${college.fees_structure.courses[0].annual_tuition_fee}` : `${720 - index * 5}+`,
               image: college.banner_url || `/Hero/hero-${(index % 3) + 1}.jpg`
             }))
@@ -125,7 +126,7 @@ export default function MedicalSection() {
   })
 
   return (
-    <div className="py-16 px-4 bg-gray-50">
+    <div className="py-[32px] px-4 bg-gray-50">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-12">
@@ -203,7 +204,7 @@ export default function MedicalSection() {
                     {/* Skeleton Image */}
                     <div className="h-48 bg-gray-200 relative">
                       <div className="absolute top-3 right-3">
-                        <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
+                        <div className="h-5 w-12 bg-gray-300 rounded-md"></div>
                       </div>
                     </div>
                     
@@ -231,8 +232,11 @@ export default function MedicalSection() {
                           e.currentTarget.src = `/Hero/hero-${(index % 3) + 1}.jpg`
                         }}
                       />
-                      <div className="absolute top-3 right-3">
-                        <span className="inline-flex items-center justify-center w-10 h-10 bg-blue-600 text-white rounded-full font-bold text-sm shadow-lg">
+                      <div className="absolute top-2.5 right-2.5 left-2.5 flex justify-end">
+                        <span
+                          title={college.ranking}
+                          className="inline-block max-w-full bg-[#0066F5] text-white px-2 py-1 rounded-md text-[10px] font-bold shadow-md leading-snug line-clamp-2 text-left"
+                        >
                           {college.ranking}
                         </span>
                       </div>
