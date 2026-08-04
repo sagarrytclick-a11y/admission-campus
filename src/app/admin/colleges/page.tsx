@@ -135,15 +135,21 @@ function AdminCollegesPageContent() {
         if (!college.country_ref) return false
         const countrySlug = typeof college.country_ref === 'string' 
           ? college.country_ref 
-          : college.country_ref.slug
+          : college.country_ref?.slug
         return countrySlug === selectedCountry
       })
     }
 
     if (searchTerm) {
-      filtered = filtered.filter(college => 
-        college.name.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+      const query = searchTerm.toLowerCase().trim()
+      filtered = filtered.filter(college => {
+        const name = college.name?.toLowerCase() ?? ''
+        const slug = college.slug?.toLowerCase() ?? ''
+        const city = typeof college.city === 'string'
+          ? college.city.toLowerCase()
+          : ''
+        return name.includes(query) || slug.includes(query) || city.includes(query)
+      })
     }
 
     return filtered
@@ -172,14 +178,15 @@ function AdminCollegesPageContent() {
           ? 'No country'
           : typeof record.country_ref === 'string' 
             ? record.country_ref 
-            : record.country_ref.name || 'Unknown country'
+            : record.country_ref?.name || 'Unknown country'
+        const cityLabel = typeof record.city === 'string' ? record.city : ''
         
         return (
           <div>
-            <div className="font-medium">{value}</div>
+            <div className="font-medium">{value || 'Unnamed college'}</div>
             <div className="text-sm text-gray-500">{countryName}</div>
-            {record.city && (
-              <div className="text-xs text-blue-600">{record.city}</div>
+            {cityLabel && (
+              <div className="text-xs text-blue-600">{cityLabel}</div>
             )}
           </div>
         )
@@ -207,8 +214,9 @@ function AdminCollegesPageContent() {
       key: 'fees',
       title: 'Fees',
       render: (value: number, record: AdminCollege) => {
-        if (record.fees_structure && record.fees_structure.courses.length > 0) {
-          return record.fees_structure.courses[0].annual_tuition_fee || 'N/A'
+        const courses = record.fees_structure?.courses
+        if (courses && courses.length > 0) {
+          return courses[0].annual_tuition_fee || 'N/A'
         }
         return value ? `$${value.toLocaleString()}/year` : 'N/A'
       }
@@ -217,8 +225,9 @@ function AdminCollegesPageContent() {
       key: 'duration',
       title: 'Duration',
       render: (value: string, record: AdminCollege) => {
-        if (record.fees_structure && record.fees_structure.courses.length > 0) {
-          return record.fees_structure.courses[0].duration || 'N/A'
+        const courses = record.fees_structure?.courses
+        if (courses && courses.length > 0) {
+          return courses[0].duration || 'N/A'
         }
         return value || 'N/A'
       }
@@ -271,7 +280,7 @@ function AdminCollegesPageContent() {
                   <span className="text-gray-500">World:</span> #{rankingData.world_ranking}
                 </div>
               )}
-              {rankingData.accreditation && rankingData.accreditation.length > 0 && (
+              {rankingData?.accreditation && Array.isArray(rankingData.accreditation) && rankingData.accreditation.length > 0 && (
                 <div className="text-xs text-gray-400">
                   {rankingData.accreditation.length} accreditation(s)
                 </div>
