@@ -15,12 +15,14 @@ import ExplorePrograms from "../Components/ExplorePrograms";
 import ExploreTopCourses from "../Components/ExploreTopCourses";
 import CitySlider from "../Components/CitySlider";
 import MedicalSection from "@/app/Components/MedicalSection";
+import NeetPredictorSection from "@/app/Components/NeetPredictorSection";
 
 const page = () => {
   return (
     <div className="w-full bg-white text-black overflow-x-hidden">
       <Hero />
       <MedicalSection />
+      <NeetPredictorSection />
       <CitySlider />
       <FeaturedSection />
       <ExploreTopCourses />

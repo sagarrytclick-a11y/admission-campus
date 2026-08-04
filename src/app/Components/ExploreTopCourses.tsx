@@ -46,11 +46,11 @@ const ExploreTopCourses = () => {
   })) || fallbackCategories;
 
   return (
-    <div className="bg-white py-12 sm:py-16 px-4 sm:px-6 lg:px-24 max-w-7xl mx-auto font-sans text-[#1E293B]">
+    <div className="bg-white py-[32px] px-4 sm:px-6 lg:px-24 max-w-7xl mx-auto font-sans text-[#1E293B]">
 
       {/* Header - Same as College Section */}
       <div className="mb-12">
-        <div className="flex items-center gap-2 text-[#007BFF] mb-3">
+        <div className="flex items-center gap-2 text-[#0066F5] mb-3">
           <Sparkles size={16} />
           <span className="text-[10px] font-bold uppercase tracking-widest">Course Categories</span>
         </div>
@@ -93,7 +93,7 @@ const ExploreTopCourses = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {transformedCategories.map((item: any, index: number) => (
             <Link key={index} href={item.href} className="group">
-              <div className="border-2 border-slate-300 rounded-xl overflow-hidden transition-all duration-300 hover:border-[#007BFF] hover:shadow-lg hover:shadow-[#007BFF]/20 bg-white">
+              <div className="border-2 border-slate-300 rounded-xl overflow-hidden transition-all duration-300 hover:border-[#0066F5] hover:shadow-lg hover:shadow-[#0066F5]/20 bg-white">
 
                 {/* Image Section */}
                 <div className="aspect-video w-full overflow-hidden bg-slate-50 border-b-2 border-slate-300">
@@ -121,7 +121,7 @@ const ExploreTopCourses = () => {
                     {item.description}
                   </p>
 
-                  <div className="flex items-center text-[#007BFF] text-sm font-bold gap-2 transition-colors">
+                  <div className="flex items-center text-[#0066F5] text-sm font-bold gap-2 transition-colors">
                     View Colleges <ArrowRight size={14} />
                   </div>
                 </div>
@@ -137,7 +137,7 @@ const ExploreTopCourses = () => {
           <h3 className="text-lg sm:text-xl font-semibold mb-1">Need career guidance?</h3>
           <p className="text-[#64748B] text-sm font-medium">Talk to our experts for a personalized admission roadmap.</p>
         </div>
-        <button onClick={() => openModal()} className="bg-[#1E293B] text-white px-6 sm:px-8 py-3 rounded-md text-sm font-bold hover:bg-[#007BFF] transition-colors active:scale-95 w-full sm:w-auto">
+        <button onClick={() => openModal()} className="bg-[#1E293B] text-white px-6 sm:px-8 py-3 rounded-md text-sm font-bold hover:bg-[#0066F5] transition-colors active:scale-95 w-full sm:w-auto">
           Contact Support
         </button>
       </div>

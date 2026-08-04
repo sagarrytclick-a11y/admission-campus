@@ -79,7 +79,7 @@ export default function CategoryCollegesPage() {
     return (
       <div className="min-h-screen bg-linear-to-br from-slate-50 to-blue-50 flex items-center justify-center px-4">
         <div className="text-center">
-          <div className="w-12 h-12 border-4 border-[#007BFF]/30 border-t-[#007BFF] rounded-full animate-spin mx-auto mb-4" />
+          <div className="w-12 h-12 border-4 border-[#0066F5]/30 border-t-[#0066F5] rounded-full animate-spin mx-auto mb-4" />
           <p className="text-[#64748B]">Loading category...</p>
         </div>
       </div>
@@ -95,7 +95,7 @@ export default function CategoryCollegesPage() {
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold text-[#1E293B] mb-4">Category Not Found</h1>
           <p className="text-[#64748B] mb-6 sm:mb-8">The category you're looking for doesn't exist.</p>
-          <a href="/colleges" className="inline-flex items-center gap-2 bg-[#007BFF] text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg hover:bg-[#0056CC] transition-colors text-sm sm:text-base">
+          <a href="/colleges" className="inline-flex items-center gap-2 bg-[#0066F5] text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg hover:bg-[#004ED4] transition-colors text-sm sm:text-base">
             <GraduationCap size={18} />
             View All Colleges
           </a>
@@ -108,11 +108,11 @@ export default function CategoryCollegesPage() {
     <div className="min-h-screen bg-linear-to-br from-slate-50 to-blue-50">
 
       {/* Hero Section */}
-      <section className="relative bg-linear-to-br from-[#007BFF] to-[#4F46E5] text-white overflow-hidden">
+      <section className="relative bg-linear-to-br from-[#0066F5] to-[#4F46E5] text-white overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.3)_1px,transparent_0)] bg-size-[20px_20px]"></div>
         </div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-[32px]">
           <div className="text-center">
             <div className="inline-flex items-center gap-2 text-white/90 mb-6">
               <GraduationCap size={20} />
@@ -168,7 +168,7 @@ export default function CategoryCollegesPage() {
 
             {/* Filters Sidebar */}
             <div className="w-full lg:w-80 shrink-0">
-              <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 sm:p-6 lg:sticky lg:top-6">
+              <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 sm:p-6 lg:sticky lg:top-28 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto lg:overscroll-contain">
                 <CollegeFilters
                   courses={[categorySlug]}
                   states={states}
@@ -176,26 +176,27 @@ export default function CategoryCollegesPage() {
                   selectedState={selectedState}
                   onCourseChange={setSelectedCourse}
                   onStateChange={setSelectedState}
+                  embedded
                 />
 
                 {/* Quick Stats Card */}
-                <div className="mt-4 sm:mt-6 bg-linear-to-br from-[#007BFF]/5 to-[#FACC15]/5 rounded-lg p-3 sm:p-4 border border-[#007BFF]/10">
+                <div className="mt-4 sm:mt-6 bg-linear-to-br from-[#0066F5]/5 to-[#FACC15]/5 rounded-lg p-3 sm:p-4 border border-[#0066F5]/10">
                   <h4 className="font-semibold text-[#1E293B] mb-3 flex items-center gap-2">
-                    <Star className="w-4 h-4 text-[#007BFF]" />
+                    <Star className="w-4 h-4 text-[#0066F5]" />
                     Category Overview
                   </h4>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span className="text-[#64748B]">Total Colleges:</span>
-                      <span className="font-semibold text-[#007BFF]">{categoryStats.totalColleges}</span>
+                      <span className="font-semibold text-[#0066F5]">{categoryStats.totalColleges}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-[#64748B]">Locations:</span>
-                      <span className="font-semibold text-[#007BFF]">{categoryStats.statesCount}</span>
+                      <span className="font-semibold text-[#0066F5]">{categoryStats.statesCount}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-[#64748B]">Avg. Fees:</span>
-                      <span className="font-semibold text-[#007BFF]">
+                      <span className="font-semibold text-[#0066F5]">
                         {categoryStats.avgFees ? `₹${categoryStats.avgFees.toLocaleString()}` : 'N/A'}
                       </span>
                     </div>

@@ -15,11 +15,11 @@ export default function AboutPage() {
     <main className="min-h-screen bg-[#12141D] text-[#F8FAFC]">
 
       {/* Hero Section */}
-      <section className="py-24">
+      <section className="py-[32px]">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6 text-white">
             Empowering Futures at
-            <span className="text-[#007BFF]"> Admission Campus</span>
+            <span className="text-[#0066F5]"> Admission Campus</span>
           </h1>
 
           <p className="text-lg text-[#94A3B8] leading-relaxed">
@@ -31,11 +31,11 @@ export default function AboutPage() {
       </section>
 
       {/* Mission / Vision */}
-      <section className="py-20 bg-[#1E212B]">
+      <section className="py-[32px] bg-[#1E212B]">
         <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-10">
 
           <div className="bg-[#12141D] p-8 rounded-xl border border-slate-800">
-            <Target className="text-[#007BFF] mb-4" size={28} />
+            <Target className="text-[#0066F5] mb-4" size={28} />
             <h3 className="text-xl font-semibold mb-3">Our Mission</h3>
             <p className="text-sm text-[#94A3B8] leading-relaxed">
               To make quality education accessible by providing transparent
@@ -44,7 +44,7 @@ export default function AboutPage() {
           </div>
 
           <div className="bg-[#12141D] p-8 rounded-xl border border-slate-800">
-            <Globe className="text-[#007BFF] mb-4" size={28} />
+            <Globe className="text-[#0066F5] mb-4" size={28} />
             <h3 className="text-xl font-semibold mb-3">Our Vision</h3>
             <p className="text-sm text-[#94A3B8] leading-relaxed">
               To become the most trusted platform helping millions of students
@@ -53,7 +53,7 @@ export default function AboutPage() {
           </div>
 
           <div className="bg-[#12141D] p-8 rounded-xl border border-slate-800">
-            <Award className="text-[#007BFF] mb-4" size={28} />
+            <Award className="text-[#0066F5] mb-4" size={28} />
             <h3 className="text-xl font-semibold mb-3">Our Values</h3>
             <p className="text-sm text-[#94A3B8] leading-relaxed">
               Integrity, transparency, and student success drive everything
@@ -65,7 +65,7 @@ export default function AboutPage() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 border-y border-slate-800">
+      <section className="py-[32px] border-y border-slate-800">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
 
@@ -73,22 +73,22 @@ export default function AboutPage() {
               {
                 value: "50K+",
                 label: "Students Helped",
-                icon: <Users className="text-[#007BFF]" size={20} />,
+                icon: <Users className="text-[#0066F5]" size={20} />,
               },
               {
                 value: "6000+",
                 label: "Institutions",
-                icon: <GraduationCap className="text-[#007BFF]" size={20} />,
+                icon: <GraduationCap className="text-[#0066F5]" size={20} />,
               },
               {
                 value: "200+",
                 label: "Exams Covered",
-                icon: <BookOpen className="text-[#007BFF]" size={20} />,
+                icon: <BookOpen className="text-[#0066F5]" size={20} />,
               },
               {
                 value: "150+",
                 label: "Countries",
-                icon: <Globe className="text-[#007BFF]" size={20} />,
+                icon: <Globe className="text-[#0066F5]" size={20} />,
               },
             ].map((stat, i) => (
               <div key={i} className="text-center group">
@@ -109,12 +109,12 @@ export default function AboutPage() {
       </section>
 
       {/* Services */}
-      <section className="py-20">
+      <section className="py-[32px]">
         <div className="max-w-6xl mx-auto px-6">
 
           <div className="text-center mb-14">
             <h2 className="text-3xl font-bold mb-3">
-              What We <span className="text-[#007BFF]">Offer</span>
+              What We <span className="text-[#0066F5]">Offer</span>
             </h2>
             <p className="text-[#94A3B8]">
               Complete support system for students planning higher education.
@@ -148,9 +148,9 @@ export default function AboutPage() {
 
               <div
                 key={i}
-                className="bg-[#1E212B] p-8 rounded-xl border border-slate-800 hover:border-[#007BFF] transition"
+                className="bg-[#1E212B] p-8 rounded-xl border border-slate-800 hover:border-[#0066F5] transition"
               >
-                <div className="text-[#007BFF] mb-4">{service.icon}</div>
+                <div className="text-[#0066F5] mb-4">{service.icon}</div>
                 <h3 className="text-lg font-semibold mb-2">{service.title}</h3>
                 <p className="text-sm text-[#94A3B8] leading-relaxed">
                   {service.desc}

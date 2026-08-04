@@ -16,7 +16,7 @@ const ExplorePrograms = () => {
       title: "Entrance Exams",
       description: "Get exam dates, syllabus, and preparation strategies for national tests.",
       image: "https://img.freepik.com/free-vector/online-exam-landing-page_33099-2374.jpg?semt=ais_user_personalization&w=740&q=80",
-      icon: <FileText size={18} className="text-[#007BFF]" />,
+      icon: <FileText size={18} className="text-[#0066F5]" />,
       tags: ["JEE Main", "NEET", "CAT"],
       footerAction: "Explore Exams",
       href: "/exams"
@@ -25,24 +25,24 @@ const ExplorePrograms = () => {
       title: "Top Colleges",
       description: "Discover premier institutions ranked by placements and infrastructure.",
       image: "https://img.freepik.com/free-photo/happy-college-students-with-books-hands-walking-together-campus_8353-6400.jpg?semt=ais_user_personalization&w=740&q=80",
-      icon: <Building2 size={18} className="text-[#007BFF]" />,
+      icon: <Building2 size={18} className="text-[#0066F5]" />,
       tags: ["IITs", "NITs", "IIMs"],
       footerAction: "Browse Colleges",
       href: "/colleges"
     },
     {
-      title: "College Compare",
-      description: "Compare colleges based on your entrance exam scores.",
+      title: "NEET Score Predictor",
+      description: "Estimate your NEET rank range from subject scores in seconds.",
       image: "https://i.pinimg.com/1200x/f1/9a/c9/f19ac975e74bf07432725b87ec30e60e.jpg",
-      icon: <GraduationCap size={18} className="text-[#007BFF]" />,
+      icon: <GraduationCap size={18} className="text-[#0066F5]" />,
       tags: ["Rank Predictor", "Cut-offs"],
-      footerAction: "Check Now",
-      href: "/compare"
+      footerAction: "Predict Now",
+      href: "/tools/neet-score-predictor"
     }
   ];
 
   return (
-    <div className="bg-white py-12 sm:py-16 px-4 sm:px-6 lg:px-24 max-w-7xl mx-auto font-sans text-[#1E293B]">
+    <div className="bg-white py-[32px] px-4 sm:px-6 lg:px-24 max-w-7xl mx-auto font-sans text-[#1E293B]">
       
       {/* Simple Header - Same font size as others */}
       <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -50,7 +50,7 @@ const ExplorePrograms = () => {
           <h2 className="text-3xl font-bold tracking-tight text-[#1E293B] mb-2">Campus Resources</h2>
           <p className="text-[#64748B] text-sm">Expert guidance and data-driven insights for your education journey.</p>
         </div>
-        <Link href="/colleges" className="text-sm font-bold text-[#007BFF] hover:underline flex items-center gap-1">
+        <Link href="/colleges" className="text-sm font-bold text-[#0066F5] hover:underline flex items-center gap-1">
           View All <ArrowRight size={14} />
         </Link>
       </div>
@@ -60,7 +60,7 @@ const ExplorePrograms = () => {
         {cards.map((card, index) => (
           <div 
             key={index} 
-            className="border-2 border-slate-300 rounded-xl overflow-hidden bg-white hover:border-[#007BFF] hover:shadow-lg hover:shadow-[#007BFF]/20 transition-all duration-300 group flex flex-col"
+            className="border-2 border-slate-300 rounded-xl overflow-hidden bg-white hover:border-[#0066F5] hover:shadow-lg hover:shadow-[#0066F5]/20 transition-all duration-300 group flex flex-col"
           >
             {/* Simple Image Header */}
             <div className="aspect-[16/10] w-full overflow-hidden border-b-2 border-slate-300 bg-slate-50">
@@ -95,7 +95,7 @@ const ExplorePrograms = () => {
 
               {/* Action Button - Same Simple Style */}
               <Link href={card.href} className="mt-auto">
-                <button className="w-full bg-white border-2 border-slate-300 hover:border-[#007BFF] hover:bg-[#007BFF] hover:text-white text-[#1E293B] font-bold py-3 rounded-md text-sm transition-all flex items-center justify-center gap-2">
+                <button className="w-full bg-white border-2 border-slate-300 hover:border-[#0066F5] hover:bg-[#0066F5] hover:text-white text-[#1E293B] font-bold py-3 rounded-md text-sm transition-all flex items-center justify-center gap-2">
                   {card.footerAction}
                   <ArrowRight size={14} />
                 </button>

@@ -35,7 +35,7 @@ const countries = [
 
 export default function PopularCountries() {
   return (
-    <section className="py-24 bg-gradient-to-br from-white via-slate-50 to-blue-50 relative overflow-hidden">
+    <section className="py-[32px] bg-gradient-to-br from-white via-slate-50 to-blue-50 relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-20 right-20 w-72 h-72 bg-blue-200 rounded-full blur-[120px]" />
@@ -45,7 +45,7 @@ export default function PopularCountries() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-semibold mb-6">
             � Study Abroad
           </div>

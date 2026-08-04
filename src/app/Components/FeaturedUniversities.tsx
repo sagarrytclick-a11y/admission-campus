@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { MapPin, Trophy, DollarSign, Calendar, ArrowRight, CheckCircle2, Building2 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
+import { formatRankingLabel } from '@/lib/formatRanking';
 
 interface UniversityCardProps {
   name: string;
@@ -19,6 +20,8 @@ interface UniversityCardProps {
 }
 
 const UniversityCard = ({ name, image, location, ranking, fees, duration, establishment_year, slug, country, about, exams }: UniversityCardProps) => {
+  const rankLabel = formatRankingLabel(ranking);
+
   return (
     <Link href={`/colleges/${slug}`} className="group block h-full">
       <div className="relative h-full bg-white rounded-[2rem] border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] transition-all duration-500 overflow-hidden flex flex-col">
@@ -33,10 +36,15 @@ const UniversityCard = ({ name, image, location, ranking, fees, duration, establ
           />
           
           {/* Floating Glass Rank Badge */}
-          {ranking && (
-            <div className="absolute top-4 right-4 backdrop-blur-md bg-white/70 border border-white/50 text-slate-800 px-3 py-1.5 rounded-2xl flex items-center gap-1.5 shadow-sm">
-              <Trophy size={14} className="text-orange-500" />
-              <span className="text-xs font-bold">Rank #{ranking}</span>
+          {rankLabel && (
+            <div className="absolute top-2.5 right-2.5 left-2.5 flex justify-end">
+              <span
+                title={rankLabel}
+                className="inline-flex items-start gap-1.5 max-w-full backdrop-blur-md bg-white/85 border border-white/50 text-slate-800 px-2.5 py-1 rounded-md text-xs font-bold shadow-sm leading-snug"
+              >
+                <Trophy size={12} className="text-orange-500 shrink-0 mt-0.5" />
+                <span className="line-clamp-2">{rankLabel}</span>
+              </span>
             </div>
           )}
         </div>
@@ -171,8 +179,8 @@ const fetchUniversities = async (): Promise<UniversityCardProps[]> => {
   };
 
   return (
-    <section className="max-w-7xl mx-auto px-4 py-20 bg-white">
-      <div className="text-center mb-16">
+    <section className="max-w-7xl mx-auto px-4 py-[32px] bg-white">
+      <div className="text-center mb-8">
         <h2 className="text-4xl font-black text-slate-900 mb-4">
           Featured <span className="text-green-600">Universities</span>
         </h2>

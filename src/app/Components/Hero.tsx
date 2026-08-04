@@ -159,7 +159,7 @@ export default function Hero() {
                   className="flex-1 px-3 py-2 outline-none text-gray-700 text-sm md:text-base"
                 />
               </div>
-              <button className="px-8 py-3.5 font-bold text-white transition-colors rounded-xl md:rounded-none" style={{ backgroundColor: '#007BFF' }}>
+              <button className="px-8 py-3.5 font-bold text-white transition-colors rounded-xl md:rounded-none" style={{ backgroundColor: '#0066F5' }}>
                 Search
               </button>
             </div>
@@ -202,7 +202,7 @@ export default function Hero() {
             <Link href="/colleges" className="w-full sm:w-auto">
               <button
                 className="w-full text-white px-8 py-4 rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg transition-transform hover:scale-105"
-                style={{ backgroundColor: '#007BFF' }}
+                style={{ backgroundColor: '#0066F5' }}
               >
                 Find Top Colleges
                 <ArrowRight size={18} />

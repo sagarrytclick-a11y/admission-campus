@@ -224,7 +224,7 @@ const CollegeSlider = () => {
   ]
 
   return (
-    <section className="py-10 sm:py-14 lg:py-20 bg-gradient-to-b from-slate-50 to-white">
+    <section className="py-[32px] bg-gradient-to-b from-slate-50 to-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
         {/* Header */}

@@ -46,7 +46,7 @@ export default function ContactPage() {
 
         {/* Title */}
 
-        <h1 className="text-4xl md:text-5xl font-bold text-center text-white mb-20">
+        <h1 className="text-4xl md:text-5xl font-bold text-center text-white mb-8">
           Contact Us
         </h1>
 

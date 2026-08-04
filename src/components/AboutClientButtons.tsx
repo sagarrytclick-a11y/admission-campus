@@ -10,7 +10,7 @@ export default function AboutClientButtons() {
     <>
       <button
         onClick={openModal}
-        className="bg-[#007BFF] hover:bg-[#10B981] text-white px-8 py-3 rounded-lg font-semibold uppercase tracking-wide transition-colors"
+        className="bg-[#0066F5] hover:bg-[#10B981] text-white px-8 py-3 rounded-lg font-semibold uppercase tracking-wide transition-colors"
       >
         Get Started <ArrowRight size={16} className="inline ml-2" />
       </button>

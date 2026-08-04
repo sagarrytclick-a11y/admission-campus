@@ -42,9 +42,9 @@ export default function StudentTestimonialSlider() {
   const duplicatedTestimonials = [...studentTestimonials, ...studentTestimonials];
 
   return (
-    <section className="py-20 bg-white overflow-hidden relative font-sans">
+    <section className="py-[32px] bg-white overflow-hidden relative font-sans">
       <div className="max-w-7xl mx-auto px-6 lg:px-24 mb-12">
-        <div className="flex items-center gap-2 text-[#007BFF] mb-3">
+        <div className="flex items-center gap-2 text-[#0066F5] mb-3">
           <Sparkles size={16} />
           <span className="text-[10px] font-bold uppercase tracking-widest">Success Stories</span>
         </div>
@@ -72,12 +72,12 @@ export default function StudentTestimonialSlider() {
           {duplicatedTestimonials.map((student, i) => (
             <div
               key={i}
-              className="w-[320px] md:w-[400px] flex-shrink-0 group bg-[#F8FAFC] border border-slate-100 rounded-lg p-6 md:p-8 hover:border-[#007BFF] transition-all duration-300 relative"
+              className="w-[320px] md:w-[400px] flex-shrink-0 group bg-[#F8FAFC] border border-slate-100 rounded-lg p-6 md:p-8 hover:border-[#0066F5] transition-all duration-300 relative"
             >
               {/* Simple Achievement Badge */}
               <div className="mb-6 flex justify-between items-start">
                 <div className="bg-white border border-slate-200 px-3 py-1 rounded-md shadow-sm flex items-center gap-2">
-                  <Award size={14} className="text-[#007BFF]" />
+                  <Award size={14} className="text-[#0066F5]" />
                   <span className="text-[9px] font-bold text-[#1E293B] uppercase tracking-wider">{student.achievement}</span>
                 </div>
                 <Quote size={24} className="text-slate-200" />
@@ -94,7 +94,7 @@ export default function StudentTestimonialSlider() {
                 </div>
                 <div>
                   <h4 className="font-bold text-[#1E293B] text-sm leading-none mb-1">{student.name}</h4>
-                  <p className="text-[10px] text-[#007BFF] font-bold uppercase tracking-wider">
+                  <p className="text-[10px] text-[#0066F5] font-bold uppercase tracking-wider">
                     {student.university}
                   </p>
                   <div className="flex gap-0.5 mt-1">

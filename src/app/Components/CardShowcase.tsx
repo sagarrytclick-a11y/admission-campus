@@ -6,6 +6,7 @@ import {
   FileText, Award, Clock, CheckCircle, Building2, User, MessageCircle, Eye,
   Globe, GraduationCap, Zap, Compass
 } from 'lucide-react';
+import { formatRankingLabel } from '@/lib/formatRanking';
 
 // --- Interfaces ---
 
@@ -63,15 +64,23 @@ interface CountryCardProps {
 
 // --- University Card Component ---
 
-const UniversityCard = ({ name, image, location, ranking, fees, duration, establishment_year, slug, country, about, overview, exams, annual_tuition_fee }: UniversityCardProps) => (
+const UniversityCard = ({ name, image, location, ranking, fees, duration, establishment_year, slug, country, about, overview, exams, annual_tuition_fee }: UniversityCardProps) => {
+  const rankLabel = formatRankingLabel(ranking);
+
+  return (
   <Link href={`/colleges/${slug}`} className="group block h-full">
     <div className="relative h-full bg-white rounded-xl border-2 border-slate-200 shadow-[0_4px_20px_rgb(0,0,0,0.04)] hover:shadow-[0_12px_30px_rgba(22,163,74,0.12)] hover:border-green-400 transition-all duration-500 overflow-hidden flex flex-col hover:-translate-y-1">
       <div className="relative h-40 w-full overflow-hidden">
         <img src={image || "/next.svg"} alt={name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-        {ranking && (
-          <div className="absolute top-3 right-3 backdrop-blur-md bg-white/70 border border-white/50 text-slate-800 px-2 py-1 rounded-xl flex items-center gap-1.5 shadow-sm">
-            <Trophy size={12} className="text-orange-500" />
-            <span className="text-[10px] font-bold">Rank #{ranking}</span>
+        {rankLabel && (
+          <div className="absolute top-2.5 right-2.5 left-2.5 flex justify-end">
+            <span
+              title={rankLabel}
+              className="inline-flex items-start gap-1.5 max-w-full backdrop-blur-md bg-white/85 border border-white/50 text-slate-800 px-2.5 py-1 rounded-md text-[10px] font-bold shadow-sm leading-snug"
+            >
+              <Trophy size={11} className="text-orange-500 shrink-0 mt-0.5" />
+              <span className="line-clamp-2">{rankLabel}</span>
+            </span>
           </div>
         )}
       </div>
@@ -128,7 +137,8 @@ const UniversityCard = ({ name, image, location, ranking, fees, duration, establ
       </div>
     </div>
   </Link>
-);
+  );
+};
 
 // --- Exam Card Component ---
 
@@ -443,7 +453,7 @@ export default function CardShowcase() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <div className="max-w-7xl mx-auto px-6 py-16">
+      <div className="max-w-7xl mx-auto px-6 py-[32px]">
         <h1 className="text-5xl md:text-7xl font-black text-slate-900 leading-[0.9] tracking-tighter mb-6">
           CARD <span className="text-green-600">SHOWCASE</span>
         </h1>
@@ -453,7 +463,7 @@ export default function CardShowcase() {
       </div>
 
       {/* Universities Section */}
-      <section className="max-w-7xl mx-auto px-6 py-16 border-t border-slate-100">
+      <section className="max-w-7xl mx-auto px-6 py-[32px] border-t border-slate-100">
         <div className="mb-12">
           <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-4 tracking-tighter">
             FEATURED <span className="text-green-600">UNIVERSITIES</span>
@@ -471,7 +481,7 @@ export default function CardShowcase() {
       </section>
 
       {/* Exams Section */}
-      <section className="max-w-7xl mx-auto px-6 py-16 border-t border-slate-100">
+      <section className="max-w-7xl mx-auto px-6 py-[32px] border-t border-slate-100">
         <div className="mb-12">
           <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-4 tracking-tighter">
             TOP <span className="text-green-600">EXAMS</span>
@@ -489,7 +499,7 @@ export default function CardShowcase() {
       </section>
 
       {/* Blog Section */}
-      <section className="max-w-7xl mx-auto px-6 py-16 border-t border-slate-100">
+      <section className="max-w-7xl mx-auto px-6 py-[32px] border-t border-slate-100">
         <div className="mb-12">
           <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-4 tracking-tighter">
             LATEST <span className="text-green-600">ARTICLES</span>
@@ -507,7 +517,7 @@ export default function CardShowcase() {
       </section>
 
       {/* Countries Section */}
-      <section className="max-w-7xl mx-auto px-6 py-16 border-t border-slate-100">
+      <section className="max-w-7xl mx-auto px-6 py-[32px] border-t border-slate-100">
         <div className="mb-12">
           <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-4 tracking-tighter">
             POPULAR <span className="text-green-600">DESTINATIONS</span>
