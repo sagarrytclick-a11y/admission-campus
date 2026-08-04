@@ -38,6 +38,16 @@ const nextConfig: NextConfig = {
         hostname: "encrypted-tbn0.gstatic.com",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "mbbscouncil.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "www.mbbscouncil.com",
+        pathname: "/**",
+      },
     ],
   },
 };

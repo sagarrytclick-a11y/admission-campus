@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { Types } from "mongoose";
 import { connectDB } from "@/lib/db";
 import College from "@/models/College";
 // Required for populate('country_ref') on serverless cold starts
@@ -11,7 +12,7 @@ export async function GET(
   try {
     const { slug } = await params;
     await connectDB();
-    
+
     // Find the current college to get its country
     const currentCollege = await College.findOne({ slug, is_active: true })
       .populate("country_ref", "name slug flag")
@@ -27,34 +28,43 @@ export async function GET(
       );
     }
 
-    const countryId =
-      (currentCollege.country_ref as { _id?: unknown } | null)?._id ??
-      currentCollege.country_ref;
+    const populatedCountry = currentCollege.country_ref as
+      | { _id?: Types.ObjectId }
+      | Types.ObjectId
+      | null
+      | undefined;
+
+    const countryId: Types.ObjectId | undefined =
+      populatedCountry && typeof populatedCountry === "object" && "_id" in populatedCountry
+        ? populatedCountry._id
+        : populatedCountry instanceof Types.ObjectId
+          ? populatedCountry
+          : undefined;
 
     // Find related colleges (same country, excluding current college)
     // If not enough colleges from same country, fetch from other countries
     let relatedColleges = await College.find({
       _id: { $ne: currentCollege._id },
       ...(countryId ? { country_ref: countryId } : {}),
-      is_active: true
+      is_active: true,
     })
-    .populate("country_ref", "name slug flag")
-    .limit(6)
-    .sort({ createdAt: -1 })
-    .lean();
+      .populate("country_ref", "name slug flag")
+      .limit(6)
+      .sort({ createdAt: -1 })
+      .lean();
 
     // If we don't have enough colleges from the same country, get more from other countries
     if (relatedColleges.length < 3) {
       const additionalColleges = await College.find({
         _id: { $ne: currentCollege._id },
         ...(countryId ? { country_ref: { $ne: countryId } } : {}),
-        is_active: true
+        is_active: true,
       })
-      .populate("country_ref", "name slug flag")
-      .limit(6 - relatedColleges.length)
-      .sort({ createdAt: -1 })
-      .lean();
-      
+        .populate("country_ref", "name slug flag")
+        .limit(6 - relatedColleges.length)
+        .sort({ createdAt: -1 })
+        .lean();
+
       relatedColleges = [...relatedColleges, ...additionalColleges];
     }
 
