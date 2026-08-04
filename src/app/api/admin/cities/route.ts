@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import City from "@/models/City";
+// Required for populate('country_ref') on serverless cold starts
+import "@/models/Country";
 
 export async function GET(request: NextRequest) {
   try {
@@ -8,8 +10,9 @@ export async function GET(request: NextRequest) {
 
     // Parse pagination and search parameters
     const { searchParams } = new URL(request.url);
-    const page = parseInt(searchParams.get('page') || '1');
-    const limit = parseInt(searchParams.get('limit') || '10');
+    const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10) || 1);
+    const rawLimit = parseInt(searchParams.get('limit') || '10', 10) || 10;
+    const limit = Math.min(Math.max(rawLimit, 1), 1000);
     const search = searchParams.get('search') || '';
     const exactSlug = searchParams.get('slug') || '';
 
@@ -36,7 +39,8 @@ export async function GET(request: NextRequest) {
       .populate('country_ref', 'name slug')
       .sort({ name: 1 })
       .skip(skip)
-      .limit(limit);
+      .limit(limit)
+      .lean();
 
     // Calculate pagination info
     const totalPages = Math.ceil(totalCities / limit);
