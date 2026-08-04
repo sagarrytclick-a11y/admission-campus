@@ -11,17 +11,22 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '10');
     const search = searchParams.get('search') || '';
+    const exactSlug = searchParams.get('slug') || '';
 
     // Calculate skip value for pagination
     const skip = (page - 1) * limit;
 
-    // Build search query
-    const searchQuery = search ? {
-      $or: [
-        { name: { $regex: search, $options: 'i' } },
-        { slug: { $regex: search, $options: 'i' } }
-      ]
-    } : {};
+    // Exact slug match takes priority over fuzzy search
+    const searchQuery = exactSlug
+      ? { slug: exactSlug }
+      : search
+        ? {
+            $or: [
+              { name: { $regex: search, $options: 'i' } },
+              { slug: { $regex: search, $options: 'i' } }
+            ]
+          }
+        : {};
 
     // Get total count for pagination info (with search filter)
     const totalCities = await City.countDocuments(searchQuery);

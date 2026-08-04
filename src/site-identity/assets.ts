@@ -9,10 +9,10 @@ export const SITE_ASSETS = {
     appleTouchIcon: "/logo.png",
   },
 
-  // PWA icons
+  // PWA icons (use logo until dedicated icon-192/512 assets exist)
   icons: {
-    icon192: "/icon-192.png",
-    icon512: "/icon-512.png",
+    icon192: "/logo.png",
+    icon512: "/logo.png",
   },
 
   // Hero images

@@ -15,6 +15,7 @@ export async function GET(request: Request) {
     const countrySlug = searchParams.get('country');
     const exam = searchParams.get('exam');
     const category = searchParams.get('category');
+    const city = searchParams.get('city');
     
     const skip = (page - 1) * limit;
     
@@ -51,6 +52,11 @@ export async function GET(request: Request) {
     // Filter by category
     if (category && category !== 'all') {
       query.categories = { $in: [category] };
+    }
+
+    // Filter by city slug (case-insensitive exact match)
+    if (city && city !== 'all') {
+      query.city = { $regex: new RegExp(`^${city.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i') };
     }
     
     // Get total count for pagination

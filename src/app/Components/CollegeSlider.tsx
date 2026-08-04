@@ -213,7 +213,7 @@ const CollegeSlider = () => {
   const { data: collegesData, isLoading: collegesLoading, error } = useAdminColleges()
 
   const indianColleges = useMemo(() => {
-    return collegesData?.filter(college => college.country_ref.slug === 'india') || []
+    return collegesData?.filter(college => college.country_ref?.slug === 'india') || []
   }, [collegesData])
 
   const maxIndex = Math.max(0, indianColleges.length - itemsPerView)

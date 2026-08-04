@@ -137,7 +137,7 @@ const CitySlider = () => {
   })
 
   const indianCities = useMemo(() => {
-    return citiesData?.cities?.filter(city => city.country_ref.slug === 'india') || []
+    return citiesData?.cities?.filter(city => city.country_ref?.slug === 'india') || []
   }, [citiesData?.cities])
 
   const maxIndex = Math.max(0, indianCities.length - itemsPerView)

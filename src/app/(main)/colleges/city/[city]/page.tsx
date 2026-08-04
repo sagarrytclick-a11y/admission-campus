@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useMemo, useCallback } from 'react'
+import React, { useState, useMemo } from 'react'
 import { useParams } from 'next/navigation'
 import { useAllColleges } from '@/hooks/useColleges'
 import { useCityBySlug } from '@/hooks/useAdminCities'
@@ -16,7 +16,7 @@ export default function CityCollegesPage() {
   const params = useParams()
   const citySlug = params.city as string
 
-  // Fetch dynamic city data
+  // Fetch dynamic city data by exact slug
   const { data: cityData, isLoading: cityLoading } = useCityBySlug(citySlug)
 
   // Create dynamic city info from API data
@@ -54,63 +54,20 @@ export default function CityCollegesPage() {
     }
   }, [cityData, citySlug])
 
-  const [searchTerm, setSearchTerm] = useState('')
-  const [selectedCountry, setSelectedCountry] = useState<string>('all')
-  const [selectedExam, setSelectedExam] = useState<string>('all')
-  const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 10
 
-  // Handle search from SearchSection component
-  const handleSearch = useCallback((term: string, country: string, exam: string, category?: string) => {
-    setSearchTerm(term)
-    setSelectedCountry(country)
-    setSelectedExam(exam)
-    setSelectedCategory(category || 'all')
-    setCurrentPage(1)
-  }, [])
-
+  // Filter by city on the server
   const {
     data: collegesResponse = { colleges: [], total: 0, page: 1, totalPages: 1, hasMore: false },
-    isLoading,
+    isLoading: collegesLoading,
     isError,
     error,
     refetch
-  } = useAllColleges(searchTerm, selectedCountry, selectedExam)
+  } = useAllColleges('', 'all', 'all', undefined, citySlug)
 
-  // Filter colleges for specific city
-  const cityColleges = useMemo(() => {
-    return collegesResponse.colleges.filter((college: any) => 
-      college.city && college.city.toLowerCase() === citySlug.toLowerCase()
-    )
-  }, [collegesResponse.colleges, citySlug])
-
-  // Apply additional filters
-  const filteredColleges = useMemo(() => {
-    let filtered = cityColleges
-    
-    if (selectedCategory !== 'all') {
-      filtered = filtered.filter((college: any) => 
-        college.categories && college.categories.includes(selectedCategory)
-      )
-    }
-    
-    return filtered
-  }, [cityColleges, selectedCategory])
-
-  const colleges = filteredColleges
-
-  // Extract unique values for filters
-  const { countries, exams } = useMemo(() => {
-    const countrySet = new Set(
-      colleges.map((c: any) => typeof c.country_ref === "object" ? c.country_ref.name : c.country_ref).filter(Boolean)
-    )
-    const examSet = new Set(colleges.flatMap((college: any) => college.exams))
-    return {
-      countries: Array.from(countrySet) as string[],
-      exams: Array.from(examSet) as string[]
-    }
-  }, [colleges])
+  const colleges = collegesResponse.colleges || []
+  const isLoading = cityLoading || collegesLoading
 
   const totalPages = Math.ceil(colleges.length / itemsPerPage)
 
@@ -147,30 +104,9 @@ export default function CityCollegesPage() {
             <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6">
               Top Colleges in <span className="text-[#FACC15]">{cityInfo.name}</span>
             </h1>
-            {/* <p className="text-xl text-white/90 max-w-3xl mx-auto leading-relaxed mb-8">
-              {cityInfo.description}. Find the perfect institution for your educational journey.
-            </p> */}
-            
-            {/* Quick Stats */}
-            {/* <div className="flex flex-wrap justify-center gap-8 text-center">
-              <div>
-                <div className="text-3xl font-bold text-[#FACC15]">{colleges.length}</div>
-                <div className="text-sm text-white/70 uppercase tracking-wider">Colleges Found</div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-[#FACC15]">{cityInfo.stats.students}</div>
-                <div className="text-sm text-white/70 uppercase tracking-wider">Students</div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-[#FACC15]">{cityInfo.stats.avgFees}</div>
-                <div className="text-sm text-white/70 uppercase tracking-wider">Avg Fees</div>
-              </div>
-            </div> */}
           </div>
         </div>
       </div>
-
-    
 
       {/* Results Section */}
       <div className="max-w-7xl py-5 mx-auto px-6 lg:px-8 pb-16">

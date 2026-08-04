@@ -18,15 +18,44 @@ if (!global.mongoose) {
 }
 
 export async function connectDB() {
-  if (cached.conn) return cached.conn;
-
-  if (!cached.promise) {
-    cached.promise = mongoose.connect(MONGODB_URI!, {
-      bufferCommands: false,
-    });
+  if (!MONGODB_URI) {
+    throw new Error(
+      "MONGODB_URI is not set. Configure it in your production environment variables."
+    );
   }
 
-  cached.conn = await cached.promise;
-  return cached.conn;
+  if (cached.conn) {
+    // Reuse only healthy connections
+    if (mongoose.connection.readyState === 1) {
+      return cached.conn;
+    }
+    cached.conn = null;
+    cached.promise = null;
+  }
+
+  if (!cached.promise) {
+    cached.promise = mongoose
+      .connect(MONGODB_URI, {
+        bufferCommands: false,
+        serverSelectionTimeoutMS: 10000,
+        maxPoolSize: 10,
+      })
+      .catch((error) => {
+        // Allow the next request to retry with a fresh connection attempt
+        cached.promise = null;
+        cached.conn = null;
+        throw error;
+      });
+  }
+
+  try {
+    cached.conn = await cached.promise;
+    return cached.conn;
+  } catch (error) {
+    cached.promise = null;
+    cached.conn = null;
+    throw error;
+  }
 }
+
 export default connectDB;

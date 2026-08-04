@@ -99,9 +99,13 @@ const deleteCity = async (id: string): Promise<void> => {
   }
 }
 
-// Fetch single city by slug
+// Fetch single city by exact slug
 const fetchCityBySlug = async (slug: string): Promise<AdminCity | null> => {
-  const response = await fetch(`/api/admin/cities?search=${slug}&limit=1`);
+  const response = await fetch(`/api/cities/${encodeURIComponent(slug)}`);
+
+  if (response.status === 404) {
+    return null;
+  }
 
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
@@ -112,9 +116,7 @@ const fetchCityBySlug = async (slug: string): Promise<AdminCity | null> => {
     throw new Error(result.message || 'Failed to fetch city');
   }
 
-  // Find the exact match
-  const city = result.data.find((c: AdminCity) => c.slug === slug);
-  return city || null;
+  return result.data as AdminCity;
 }
 
 // Enhanced caching with localStorage
@@ -208,8 +210,9 @@ export function useAdminCities(params?: { page?: number; limit?: number; search?
 
 export function useCityBySlug(slug: string) {
   return useQuery({
-    queryKey: ['admin', 'city', slug],
+    queryKey: ['city', slug],
     queryFn: () => fetchCityBySlug(slug),
+    enabled: !!slug,
     staleTime: 10 * 60 * 1000, // 10 minutes
     gcTime: 30 * 60 * 1000, // 30 minutes
     retry: 2,

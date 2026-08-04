@@ -7,7 +7,7 @@ import { useCategories } from '@/hooks/useCategories'
 import SearchSection from '@/components/colleges/SearchSection'
 import CollegeMapping from '@/components/colleges/CollegeMapping'
 import CollegeFilters from '@/components/colleges/CollegeFilters'
-import { GraduationCap, Award, Users, MapPin, TrendingUp, Star } from 'lucide-react'
+import { GraduationCap, Award, MapPin, TrendingUp, Star } from 'lucide-react'
 
 export default function CategoryCollegesPage() {
   const params = useParams()
@@ -18,8 +18,12 @@ export default function CategoryCollegesPage() {
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 10
 
-  // Get category info
-  const { data: categories } = useCategories()
+  // Get category info — wait for this before showing "not found"
+  const {
+    data: categories,
+    isLoading: categoriesLoading,
+    isError: categoriesError,
+  } = useCategories()
   const currentCategory = categories?.find(cat => cat.slug === categorySlug)
 
   // Handle search from SearchSection component
@@ -28,32 +32,33 @@ export default function CategoryCollegesPage() {
     setCurrentPage(1)
   }, [])
 
-  const { data: collegesResponse = { colleges: [] }, isLoading, error, refetch } = useAllColleges(searchTerm, 'all', 'all')
+  // Filter by category on the server so we don't miss colleges past a client-side slice
+  const {
+    data: collegesResponse = { colleges: [] },
+    isLoading: collegesLoading,
+    error,
+    refetch,
+  } = useAllColleges(searchTerm, 'all', 'all', categorySlug)
 
   const allColleges = collegesResponse.colleges || []
+  const isLoading = categoriesLoading || collegesLoading
 
-  // Filter colleges by selected course and state
+  // Optional location filter stays client-side on the already category-filtered set
   const colleges = useMemo(() => {
-    let filtered = allColleges.filter((college: any) =>
-      college.categories?.includes(categorySlug)
+    if (selectedState === 'all') return allColleges
+
+    return allColleges.filter((college: any) =>
+      college.city?.toLowerCase() === selectedState.toLowerCase()
     )
-
-    if (selectedState !== 'all') {
-      filtered = filtered.filter((college: any) =>
-        college.city?.toLowerCase() === selectedState.toLowerCase()
-      )
-    }
-
-    return filtered
-  }, [allColleges, categorySlug, selectedState])
+  }, [allColleges, selectedState])
 
   // Extract unique values for filters
   const { states } = useMemo(() => {
-    const stateSet = new Set(colleges.map((college: any) => college.city).filter(Boolean))
+    const stateSet = new Set(allColleges.map((college: any) => college.city).filter(Boolean))
     return {
       states: Array.from(stateSet) as string[]
     }
-  }, [colleges])
+  }, [allColleges])
 
   const totalPages = Math.ceil(colleges.length / itemsPerPage)
 
@@ -70,7 +75,18 @@ export default function CategoryCollegesPage() {
     }
   }, [colleges, states])
 
-  if (!currentCategory && !isLoading) {
+  if (categoriesLoading) {
+    return (
+      <div className="min-h-screen bg-linear-to-br from-slate-50 to-blue-50 flex items-center justify-center px-4">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-[#007BFF]/30 border-t-[#007BFF] rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-[#64748B]">Loading category...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if ((!currentCategory && !categoriesLoading) || categoriesError) {
     return (
       <div className="min-h-screen bg-linear-to-br from-slate-50 to-blue-50 flex items-center justify-center px-4">
         <div className="text-center max-w-md mx-auto">

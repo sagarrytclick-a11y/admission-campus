@@ -2,11 +2,11 @@ import { AdminCity } from '@/hooks/useAdminCities'
 
 // Utility functions for city data processing
 export const filterIndianCities = (cities: AdminCity[]): AdminCity[] => {
-  return cities?.filter(city => city.country_ref.slug === 'india') || []
+  return cities?.filter(city => city.country_ref?.slug === 'india') || []
 }
 
 export const getCitiesByCountry = (cities: AdminCity[], countrySlug: string): AdminCity[] => {
-  return cities?.filter(city => city.country_ref.slug === countrySlug) || []
+  return cities?.filter(city => city.country_ref?.slug === countrySlug) || []
 }
 
 export const getActiveCities = (cities: AdminCity[]): AdminCity[] => {
