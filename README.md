@@ -1,5 +1,5 @@
 <<<<<<< HEAD
-# Campus Meet
+# Addmission campus
 
 Campus Meet is a modern education and admission guidance platform designed to help students discover colleges, explore courses, understand entrance exams, and make informed decisions about higher education.
 
