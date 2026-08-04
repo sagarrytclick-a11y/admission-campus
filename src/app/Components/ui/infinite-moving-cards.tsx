@@ -1,6 +1,5 @@
 "use client";
 
-
 import React, { useEffect, useState } from "react";
 import { GraduationCap, BookOpen, Award, Star, Crown, Shield, MapPin, Target } from "lucide-react";
 import { cn } from "@/lib/utils";

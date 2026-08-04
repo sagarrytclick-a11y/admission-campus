@@ -157,7 +157,6 @@ function BlogsPageContent() {
   const tableActions = [
     createViewAction((blog: Blog) => {
       // Handle view action - could open in new tab or modal
-      console.log('View blog:', blog)
     }),
     createEditAction((blog: Blog) => {
       actions.setEditingItem(blog)
@@ -201,7 +200,6 @@ function BlogsPageContent() {
         is_active: true
       })
     } catch (error) {
-      console.error('💥 Error saving blog:', error)
       toast.error(error instanceof Error ? error.message : 'Failed to save blog')
     }
   }

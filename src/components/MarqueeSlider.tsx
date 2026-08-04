@@ -15,7 +15,7 @@ export function MarqueeSlider() {
   ])
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-blue-900 text-white py-3 z-1000 overflow-hidden">
+    <div className="fixed bottom-0 left-0 right-0 bg-blue-900 text-white py-3 z-[1000] overflow-hidden">
       <div className="flex whitespace-nowrap animate-marquee">
         {/* First set of items */}
         {institutions.map((institution, index) => (

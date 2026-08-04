@@ -9,7 +9,6 @@ interface BackgroundSliderProps {
 const BackgroundSlider: React.FC<BackgroundSliderProps> = ({ children }) => {
   const [currentSlide, setCurrentSlide] = useState(0)
 
-
   //baground change
 
   const slides = [

@@ -11,7 +11,6 @@ import { MapPin } from 'lucide-react'
 // Theme Constants
 const PRIMARY_BLUE = "#1A4AB2"
 
-
 export default function CityCollegesPage() {
   const params = useParams()
   const citySlug = params.city as string

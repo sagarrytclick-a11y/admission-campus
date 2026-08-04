@@ -94,7 +94,6 @@ export async function GET(request: Request) {
     
     return response;
   } catch (error) {
-    console.error("Error fetching colleges:", error);
     return NextResponse.json(
       {
         success: false,
@@ -191,7 +190,6 @@ export async function POST(request: Request) {
       { status: 201 }
     );
   } catch (error) {
-    console.error("Error creating college:", error);
     return NextResponse.json(
       {
         success: false,
@@ -268,7 +266,6 @@ export async function PUT(request: Request) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error updating college:", error);
     return NextResponse.json(
       {
         success: false,

@@ -72,7 +72,6 @@ export async function GET(request: NextRequest) {
 
     return response;
   } catch (error) {
-    console.error("Error fetching cities:", error);
     return NextResponse.json(
       {
         success: false,

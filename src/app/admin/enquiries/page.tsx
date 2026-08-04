@@ -60,8 +60,7 @@ function EnquiriesPageContent() {
 
     try {
       await updateEnquiryMutation.mutateAsync({ id: enquiryId, status: newStatus })
-    } catch (error) {
-      console.error('Failed to update status:', error)
+    } catch {
       // Revert on error - refetch will restore correct data
     }
   }
@@ -220,8 +219,7 @@ function EnquiriesPageContent() {
     try {
       await deleteEnquiryMutation.mutateAsync(enquiryToDelete._id)
       closeDeleteModal()
-    } catch (error) {
-      console.error('Delete error:', error)
+    } catch {
     }
   }
 

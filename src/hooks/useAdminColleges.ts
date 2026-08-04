@@ -184,7 +184,6 @@ export function useSaveCollege() {
       queryClient.invalidateQueries({ queryKey: ['admin', 'colleges'] })
     },
     onError: (error) => {
-      console.error('Error saving college:', error)
       throw error
     }
   })
@@ -199,7 +198,6 @@ export function useDeleteCollege() {
       queryClient.invalidateQueries({ queryKey: ['admin', 'colleges'] })
     },
     onError: (error) => {
-      console.error('Error deleting college:', error)
       throw error
     }
   })

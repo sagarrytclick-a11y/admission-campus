@@ -13,7 +13,6 @@ export async function GET() {
       data: blogs,
     });
   } catch (error) {
-    console.error("Error fetching blogs:", error);
     return NextResponse.json(
       {
         success: false,
@@ -81,7 +80,6 @@ export async function POST(request: NextRequest) {
       data: blog,
     });
   } catch (error) {
-    console.error("Error creating blog:", error);
     return NextResponse.json(
       {
         success: false,

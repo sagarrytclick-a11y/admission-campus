@@ -6,15 +6,10 @@ import { handleApiError, validateRequiredFields, createSuccessResponse, Validati
 
 export async function GET() {
   try {
-    console.log('🚀 [API] GET /api/admin/colleges - Request received');
     
-    console.log('🔗 [API] Connecting to database...');
     await connectDB();
-    console.log('✅ [API] Database connected successfully');
     
-    console.log('📋 [API] Fetching all colleges...');
     const colleges = await College.find({}).populate('country_ref').sort({ createdAt: -1 });
-    console.log('✅ [API] Colleges fetched:', colleges.length, 'colleges found');
 
     return NextResponse.json({
       success: true,
@@ -22,11 +17,7 @@ export async function GET() {
       data: colleges,
     });
   } catch (error) {
-    console.error("💥 [API] Error fetching colleges:", error);
-    console.error("💥 [API] Error details:", {
-      message: error instanceof Error ? error.message : 'Unknown error',
-      stack: error instanceof Error ? error.stack : 'No stack available'
-    });
+    
     return NextResponse.json(
       {
         success: false,
@@ -40,15 +31,10 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('🚀 [API] POST /api/admin/colleges - Request received');
     
-    console.log('🔗 [API] Connecting to database...');
     await connectDB();
-    console.log('✅ [API] Database connected successfully');
     
-    console.log('📥 [API] Parsing request body...');
     const body = await request.json();
-    console.log('📦 [API] Request body:', body);
     
     const { 
       name, 
@@ -76,38 +62,17 @@ export async function POST(request: NextRequest) {
       is_active 
     } = body;
 
-    console.log('🔍 [API] Extracted fields:', {
-      name,
-      slug,
-      city,
-      country_ref,
-      categories,
-      overview,
-      key_highlights,
-      why_choose_us,
-      ranking,
-      admission_process,
-      documents_required,
-      fees_structure,
-      campus_highlights,
-      is_active
-    });
-
     // Validation using utility
-    console.log('✅ [API] Starting validation...');
     validateRequiredFields(body, ['name', 'slug', 'country_ref']);
     
     // Validate that at least overview description is provided
     if (!overview?.description) {
       throw new ValidationError("Overview description is required");
     }
-    console.log('✅ [API] Validation passed');
 
     // Find country by slug to get ObjectId
-    console.log('🔍 [API] Finding country with slug:', country_ref);
     const country = await Country.findOne({ slug: country_ref });
     if (!country) {
-      console.log('❌ [API] Country not found with slug:', country_ref);
       
       // Get available countries for helpful error message
       const availableCountries = await Country.find({}).select('slug name flag');
@@ -122,11 +87,9 @@ export async function POST(request: NextRequest) {
         }
       );
     }
-    console.log('✅ [API] Country found:', country.name);
 
     // Validate city requirement for India
     if (country.name.toLowerCase() === 'india' && !city) {
-      console.log('❌ [API] City is required for Indian colleges');
       throw new ValidationError(
         "City is required for Indian colleges",
         { 
@@ -138,19 +101,15 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if college with same slug already exists
-    console.log('🔍 [API] Checking for existing college with slug:', slug);
     const existingCollege = await College.findOne({ slug });
     if (existingCollege) {
-      console.log('❌ [API] College with slug already exists:', existingCollege.name);
       throw new ValidationError(
         "College with this slug already exists",
         { existingSlug: slug, existingCollege: existingCollege.name }
       );
     }
-    console.log('✅ [API] No existing college found with slug');
 
-    console.log('🏗️ [API] Creating new college document...');
-    console.log('📋 [API] Categories being saved:', categories);
+    
     const college = new College({
       name,
       slug,
@@ -216,9 +175,7 @@ export async function POST(request: NextRequest) {
       is_active: is_active !== undefined ? is_active : true,
     });
 
-    console.log('💾 [API] Saving college to database...');
     const savedCollege = await college.save();
-    console.log('✅ [API] College saved successfully:', savedCollege);
 
     return createSuccessResponse(savedCollege, "College created successfully");
     

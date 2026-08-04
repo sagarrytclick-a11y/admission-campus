@@ -28,7 +28,6 @@ export async function GET(
       data: college,
     });
   } catch (error) {
-    console.error("Error fetching college:", error);
     return NextResponse.json(
       {
         success: false,
@@ -133,7 +132,6 @@ export async function PUT(
 
     const updateData: Record<string, unknown> = {};
     
-    console.log('📋 [API] Categories received for update:', categories);
     
     // Basic fields
     if (name !== undefined) updateData.name = name;
@@ -173,7 +171,6 @@ export async function PUT(
       data: updatedCollege,
     });
   } catch (error) {
-    console.error("Error updating college:", error);
     return NextResponse.json(
       {
         success: false,
@@ -211,7 +208,6 @@ export async function DELETE(
       message: "College deleted successfully",
     });
   } catch (error) {
-    console.error("Error deleting college:", error);
     return NextResponse.json(
       {
         success: false,

@@ -288,7 +288,6 @@ function AdminCollegesPageContent() {
             </div>
           )
         } catch (error) {
-          console.error('Error parsing ranking data:', error)
           return <span className="text-xs text-gray-400">Invalid data</span>
         }
       }
@@ -314,9 +313,7 @@ function AdminCollegesPageContent() {
 
   const actions = [
     createEditAction((college: AdminCollege) => {
-      console.log('🔍 DEBUG: Loading college for edit:', college)
-      console.log('🔍 DEBUG: college.ranking type:', typeof college.ranking)
-      console.log('🔍 DEBUG: college.ranking value:', college.ranking)
+      
       
       setEditingItem(college)
       
@@ -461,213 +458,172 @@ function AdminCollegesPageContent() {
   }
 
   const handleSaveAdminCollege = async () => {
-    console.log('🔥 Save button clicked! Starting validation...')
-    console.log('📝 Current formData:', formData)
-    console.log('📝 Is editing college:', editingAdminCollege ? 'YES' : 'NO')
+    
     
     // Collect all missing fields
     const missingFields = []
     
     // Enhanced validation for both ADD and EDIT
-    console.log('🔍 Checking each field for validation...')
     
     // Basic Info validation
     if (!formData.name || formData.name.trim() === '') {
       missingFields.push('AdminCollege Name')
-      console.log('❌ AdminCollege Name is missing or empty')
     }
     
     if (!formData.slug || formData.slug.trim() === '') {
       missingFields.push('AdminCollege Slug')
-      console.log('❌ AdminCollege Slug is missing or empty')
     }
     
     if (!formData.country_ref || formData.country_ref === '') {
       missingFields.push('Country')
-      console.log('❌ Country is missing or empty')
     }
     
     // City validation for India
     if (formData.country_ref?.toLowerCase() === 'india' && (!formData.city || formData.city.trim() === '')) {
       missingFields.push('City (required for Indian colleges)')
-      console.log('❌ City is missing for Indian college')
     }
     
     if (!formData.establishment_year || formData.establishment_year.trim() === '') {
       missingFields.push('Establishment Year')
-      console.log('❌ Establishment Year is missing or empty')
     }
     
     if (!formData.banner_url || formData.banner_url.trim() === '') {
       missingFields.push('Banner URL')
-      console.log('❌ Banner URL is missing or empty')
     }
     
     if (!formData.exams || formData.exams.length === 0) {
       missingFields.push('Exams')
-      console.log('❌ Exams is missing or empty')
     }
     
     if (!formData.categories || formData.categories.length === 0) {
       missingFields.push('Categories')
-      console.log('❌ Categories is missing or empty')
     }
     
     // Image URL validation (optional but if provided, should be valid)
     if (formData.banner_url && formData.banner_url.trim() !== '') {
       try {
         new URL(formData.banner_url)
-        console.log('✅ Banner URL is valid')
       } catch {
         missingFields.push('Invalid Banner URL')
-        console.log('❌ Banner URL is invalid')
       }
     }
     
     // Overview validation
     if (!formData.overview_title || formData.overview_title.trim() === '') {
       missingFields.push('Overview Title')
-      console.log('❌ Overview Title is missing or empty')
     }
     
     if (!formData.overview_description || formData.overview_description.trim() === '') {
       missingFields.push('Overview Description')
-      console.log('❌ Overview Description is missing or empty')
     }
     
     // Key Highlights validation
     if (!formData.key_highlights_title || formData.key_highlights_title.trim() === '') {
       missingFields.push('Key Highlights Title')
-      console.log('❌ Key Highlights Title is missing or empty')
     }
     
     if (!formData.key_highlights_description || formData.key_highlights_description.trim() === '') {
       missingFields.push('Key Highlights Description')
-      console.log('❌ Key Highlights Description is missing or empty')
     }
     
     if (!formData.key_highlights_features || formData.key_highlights_features.length === 0) {
       missingFields.push('Key Highlights Features')
-      console.log('❌ Key Highlights Features is missing or empty')
     }
     
     // Why Choose Us validation
     if (!formData.why_choose_us_title || formData.why_choose_us_title.trim() === '') {
       missingFields.push('Why Choose Us Title')
-      console.log('❌ Why Choose Us Title is missing or empty')
     }
     
     if (!formData.why_choose_us_description || formData.why_choose_us_description.trim() === '') {
       missingFields.push('Why Choose Us Description')
-      console.log('❌ Why Choose Us Description is missing or empty')
     }
     
     if (!formData.why_choose_us_features || formData.why_choose_us_features.length === 0) {
       missingFields.push('Why Choose Us Features')
-      console.log('❌ Why Choose Us Features is missing or empty')
     }
     
     // Ranking validation
     if (!formData.ranking_title || formData.ranking_title.trim() === '') {
       missingFields.push('Ranking Title')
-      console.log('❌ Ranking Title is missing or empty')
     }
     
     if (!formData.ranking_description || formData.ranking_description.trim() === '') {
       missingFields.push('Ranking Description')
-      console.log('❌ Ranking Description is missing or empty')
     }
     
     if (!formData.country_ranking || formData.country_ranking.trim() === '') {
       missingFields.push('Country Ranking')
-      console.log('❌ Country Ranking is missing or empty')
     }
     
     if (!formData.world_ranking || formData.world_ranking.trim() === '') {
       missingFields.push('World Ranking')
-      console.log('❌ World Ranking is missing or empty')
     }
     
     if (!formData.accreditation || formData.accreditation.length === 0) {
       missingFields.push('Accreditation')
-      console.log('❌ Accreditation is missing or empty')
     }
     
     // Admission Process validation
     if (!formData.admission_process_title || formData.admission_process_title.trim() === '') {
       missingFields.push('Admission Process Title')
-      console.log('❌ Admission Process Title is missing or empty')
     }
     
     if (!formData.admission_process_description || formData.admission_process_description.trim() === '') {
       missingFields.push('Admission Process Description')
-      console.log('❌ Admission Process Description is missing or empty')
     }
     
     if (!formData.admission_process_steps || formData.admission_process_steps.length === 0) {
       missingFields.push('Admission Process Steps')
-      console.log('❌ Admission Process Steps is missing or empty')
     }
     
     // Documents Required validation
     if (!formData.documents_required_title || formData.documents_required_title.trim() === '') {
       missingFields.push('Documents Required Title')
-      console.log('❌ Documents Required Title is missing or empty')
     }
     
     if (!formData.documents_required_description || formData.documents_required_description.trim() === '') {
       missingFields.push('Documents Required Description')
-      console.log('❌ Documents Required Description is missing or empty')
     }
     
     if (!formData.documents_required_documents || formData.documents_required_documents.length === 0) {
       missingFields.push('Required Documents')
-      console.log('❌ Required Documents is missing or empty')
     }
     
     // Fees Structure validation
     if (!formData.fees_structure_title || formData.fees_structure_title.trim() === '') {
       missingFields.push('Fees Structure Title')
-      console.log('❌ Fees Structure Title is missing or empty')
     }
     
     if (!formData.fees_structure_description || formData.fees_structure_description.trim() === '') {
       missingFields.push('Fees Structure Description')
-      console.log('❌ Fees Structure Description is missing or empty')
     }
     
     if (!formData.fees_structure_courses || formData.fees_structure_courses.length === 0) {
       missingFields.push('Fee Courses')
-      console.log('❌ Fee Courses is missing or empty')
     }
     
     // Campus Highlights validation
     if (!formData.campus_highlights_title || formData.campus_highlights_title.trim() === '') {
       missingFields.push('Campus Highlights Title')
-      console.log('❌ Campus Highlights Title is missing or empty')
     }
     
     if (!formData.campus_highlights_description || formData.campus_highlights_description.trim() === '') {
       missingFields.push('Campus Highlights Description')
-      console.log('❌ Campus Highlights Description is missing or empty')
     }
     
     if (!formData.campus_highlights_highlights || formData.campus_highlights_highlights.length === 0) {
       missingFields.push('Campus Highlights')
-      console.log('❌ Campus Highlights is missing or empty')
     }
     
-    console.log('📋 Final missingFields array:', missingFields)
     
     // Show alert for missing fields (works for both ADD and EDIT)
     if (missingFields.length > 0) {
       const alertMessage = `Please fill in the following required fields:\n\n${missingFields.map((field, index) => `${index + 1}. ${field}`).join('\n')}`
-      console.log('🚨 Showing alert for missing fields:', alertMessage)
       alert(alertMessage)
       return
     }
 
-    console.log('✅ All validation passed! Proceeding to save...')
     try {
       const payload = {
         name: formData.name,
@@ -730,19 +686,16 @@ function AdminCollegesPageContent() {
         ...(editingAdminCollege && { _id: editingAdminCollege._id })
       }
       
-      console.log('📦 Request payload:', payload)
-      console.log('� About to call saveCollegeMutation.mutateAsync...')
+      
       
       await saveCollegeMutation.mutateAsync(payload)
       
-      console.log('✅ AdminCollege saved successfully!')
       toast.success(editingAdminCollege ? 'AdminCollege updated successfully!' : 'AdminCollege created successfully!')
       closeModal()
       setEditingItem(null)
       
     } catch (error) {
-      console.error('❌ Error saving college:', error)
-      console.error('💥 Error stack:', error instanceof Error ? error.stack : 'No stack available')
+      
       toast.error('Error saving college: ' + (error instanceof Error ? error.message : 'Unknown error'))
     }
   }
@@ -755,7 +708,6 @@ function AdminCollegesPageContent() {
       toast.success('AdminCollege deleted successfully!')
       closeDeleteModal()
     } catch (error) {
-      console.error('Error deleting college:', error)
       toast.error('Error deleting college')
     }
   }

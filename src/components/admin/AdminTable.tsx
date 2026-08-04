@@ -134,7 +134,6 @@ export function AdminTable<T = Record<string, unknown>>({
                       // 5. Default for strings, numbers, booleans
                       return <span className="text-white">{String(value)}</span>;
                     } catch (error) {
-                      console.error('Error rendering table cell:', error);
                       return <span className="text-red-400">Render Error</span>;
                     }
                   })()}

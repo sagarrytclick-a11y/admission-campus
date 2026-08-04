@@ -38,7 +38,6 @@ export async function GET(
     
     return response;
   } catch (error) {
-    console.error("Error fetching exam:", error);
     return NextResponse.json(
       {
         success: false,

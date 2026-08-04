@@ -27,7 +27,6 @@ export async function GET(
       data: country,
     });
   } catch (error) {
-    console.error("Error fetching country:", error);
     return NextResponse.json(
       {
         success: false,
@@ -94,7 +93,6 @@ export async function PUT(
       data: updatedCountry,
     });
   } catch (error) {
-    console.error("Error updating country:", error);
     return NextResponse.json(
       {
         success: false,
@@ -132,7 +130,6 @@ export async function DELETE(
       message: "Country deleted successfully",
     });
   } catch (error) {
-    console.error("Error deleting country:", error);
     return NextResponse.json(
       {
         success: false,

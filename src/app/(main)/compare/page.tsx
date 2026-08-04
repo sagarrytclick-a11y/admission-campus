@@ -81,7 +81,6 @@ export default function CompareColleges() {
         const data = await res.json();
         return data.data?.colleges || [];
       } catch (error) {
-        console.error('Error fetching colleges:', error);
         throw error;
       }
     }

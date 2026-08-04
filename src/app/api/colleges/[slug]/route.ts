@@ -42,7 +42,6 @@ export async function GET(
     
     return response;
   } catch (error) {
-    console.error("Error fetching college:", error);
     return NextResponse.json(
       {
         success: false,

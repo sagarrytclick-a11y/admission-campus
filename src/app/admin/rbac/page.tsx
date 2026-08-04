@@ -41,7 +41,6 @@ const [isAddUserOpen, setIsAddUserOpen] = useState(false)
 </button>
             </div>
 
-
             <div className="grid md:grid-cols-3 gap-6">
               <RoleCard
                 title="Admin"

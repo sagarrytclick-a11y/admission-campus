@@ -95,7 +95,6 @@ export function useSaveCountry() {
       queryClient.invalidateQueries({ queryKey: ['admin', 'countries'] })
     },
     onError: (error) => {
-      console.error('Error saving country:', error)
       throw error
     }
   })
@@ -110,7 +109,6 @@ export function useDeleteCountry() {
       queryClient.invalidateQueries({ queryKey: ['admin', 'countries'] })
     },
     onError: (error) => {
-      console.error('Error deleting country:', error)
       throw error
     }
   })

@@ -8,7 +8,6 @@ export class ValidationError extends Error {
 }
 
 export function handleApiError(error: unknown) {
-  console.error('💥 API Error:', error);
 
   if (error instanceof ValidationError) {
     return NextResponse.json(

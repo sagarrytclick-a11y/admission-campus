@@ -160,12 +160,10 @@ const fetchColleges = async (countrySlug?: string): Promise<College[]> => {
             {visibleColleges.map((college: any) => {
               // Safety check - skip if college is not valid
               if (!college || typeof college !== 'object') {
-                console.warn('Invalid college data:', college);
                 return null;
               }
               
               // Debug log to see the college structure
-              console.log('College data:', college);
               
               const cardData = {
                 _id: college._id || Math.random().toString(),
@@ -182,7 +180,6 @@ const fetchColleges = async (countrySlug?: string): Promise<College[]> => {
               }
               
               // Debug log to see the cardData structure
-              console.log('Card data:', cardData);
               
               return <CollegeCard key={college._id || Math.random().toString()} data={cardData} />
             })}

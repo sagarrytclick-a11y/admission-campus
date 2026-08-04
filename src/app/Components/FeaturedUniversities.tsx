@@ -171,8 +171,7 @@ const fetchUniversities = async (): Promise<UniversityCardProps[]> => {
       
       const newDisplayCount = displayCount + 6;
       setDisplayCount(newDisplayCount);
-    } catch (error) {
-      console.error("Failed to load more universities:", error);
+    } catch {
     } finally {
       setLoadingMore(false);
     }

@@ -67,7 +67,6 @@ export async function PUT(
       data: updatedCity,
     });
   } catch (error) {
-    console.error("Error updating city:", error);
     return NextResponse.json(
       {
         success: false,
@@ -104,7 +103,6 @@ export async function DELETE(
       message: "City deleted successfully",
     });
   } catch (error) {
-    console.error("Error deleting city:", error);
     return NextResponse.json(
       {
         success: false,

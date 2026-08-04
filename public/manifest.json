@@ -1,11 +1,12 @@
 {
-  "name": "admission-campus",
-  "short_name": "admission-campus",
-  "description": "Comprehensive education services and college guidance for international students",
+  "name": "Admission Campus",
+  "short_name": "Admission Campus",
+  "description": "Comprehensive admission guidance for Indian universities, colleges, and entrance exams.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#ea580c",
+  "theme_color": "#0066F5",
+  "lang": "en",
   "icons": [
     {
       "src": "/logo.png",

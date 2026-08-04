@@ -96,7 +96,6 @@ export function useSaveBlog() {
       queryClient.invalidateQueries({ queryKey: ['admin', 'blogs'] })
     },
     onError: (error) => {
-      console.error('Error saving blog:', error)
       throw error
     }
   })
@@ -111,7 +110,6 @@ export function useDeleteBlog() {
       queryClient.invalidateQueries({ queryKey: ['admin', 'blogs'] })
     },
     onError: (error) => {
-      console.error('Error deleting blog:', error)
       throw error
     }
   })

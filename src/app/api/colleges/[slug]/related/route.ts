@@ -74,7 +74,6 @@ export async function GET(
       data: relatedColleges,
     });
   } catch (error) {
-    console.error("Error fetching related colleges:", error);
     return NextResponse.json(
       {
         success: false,

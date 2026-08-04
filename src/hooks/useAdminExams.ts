@@ -137,7 +137,6 @@ export function useSaveExam() {
       queryClient.invalidateQueries({ queryKey: ['admin', 'exams'] })
     },
     onError: (error) => {
-      console.error('Error saving exam:', error)
       throw error
     }
   })
@@ -152,7 +151,6 @@ export function useDeleteExam() {
       queryClient.invalidateQueries({ queryKey: ['admin', 'exams'] })
     },
     onError: (error) => {
-      console.error('Error deleting exam:', error)
       throw error
     }
   })

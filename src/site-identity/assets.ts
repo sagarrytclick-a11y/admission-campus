@@ -62,6 +62,5 @@ export const validateAssets = () => {
   });
 
   if (missingAssets.length > 0) {
-    console.warn('Missing required site identity assets:', missingAssets);
   }
 };

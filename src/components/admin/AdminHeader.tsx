@@ -45,7 +45,6 @@ export function AdminHeader({ title, subtitle }: AdminHeaderProps) {
         toast.error(data.message || 'Failed to logout')
       }
     } catch (error) {
-      console.error('Logout error:', error)
       toast.error('Something went wrong during logout')
     } finally {
       setIsLoggingOut(false)

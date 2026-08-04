@@ -20,7 +20,6 @@ interface Exam {
 }
 
 const fetchExams = async (): Promise<Exam[]> => {
-  console.log('Fetching exams from API...')
   try {
     const response = await fetch('/api/exams', {
       method: 'GET',
@@ -32,23 +31,19 @@ const fetchExams = async (): Promise<Exam[]> => {
       cache: 'no-store',
     })
     
-    console.log('API Response status:', response.status)
     
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
     }
     
     const result = await response.json()
-    console.log('API Response data:', result)
     
     if (!result.success) {
       throw new Error(result.message || 'Failed to fetch exams')
     }
     
-    console.log('Returning exams data:', result.data?.length || 0, 'exams')
     return result.data || []
   } catch (error) {
-    console.error('Error fetching exams:', error)
     throw error
   }
 }
@@ -65,14 +60,6 @@ export function useExams() {
     refetchOnReconnect: true,
     refetchOnMount: 'always', // Always refetch on mount
     initialData: [], // Start with empty array
-  })
-
-  console.log('useExams result:', {
-    isLoading: result.isLoading,
-    isFetching: result.isFetching,
-    error: result.error,
-    dataLength: result.data?.length || 0,
-    status: result.status
   })
 
   return result

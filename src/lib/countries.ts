@@ -11,7 +11,6 @@ export async function getCountryBySlug(slug: string) {
     const result = await response.json()
     return result.success ? result.data : null
   } catch (error) {
-    console.error('Error fetching country:', error)
     return null
   }
 }
@@ -29,7 +28,6 @@ export async function getAllCountries() {
     const result = await response.json()
     return result.success ? result.data : []
   } catch (error) {
-    console.error('Error fetching countries:', error)
     return []
   }
 }

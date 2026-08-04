@@ -27,7 +27,6 @@ export async function GET(
       data: exam,
     });
   } catch (error) {
-    console.error("Error fetching exam:", error);
     return NextResponse.json(
       {
         success: false,
@@ -48,7 +47,6 @@ export async function PUT(
     await connectDB();
     const body = await request.json();
     
-    console.log('📥 PUT /api/admin/exams/[id] - Received data:', JSON.stringify(body, null, 2));
     
     const { 
       name, 
@@ -191,13 +189,11 @@ export async function PUT(
     if (exam_dates !== undefined) updateData.exam_dates = exam_dates;
     if (result_statistics !== undefined) updateData.result_statistics = result_statistics;
 
-    console.log('💾 Updating exam in database...');
     const updatedExam = await Exam.findByIdAndUpdate(
       id,
       updateData,
       { new: true, runValidators: true }
     );
-    console.log('✅ Exam updated successfully:', updatedExam._id);
 
     return NextResponse.json({
       success: true,
@@ -205,7 +201,6 @@ export async function PUT(
       data: updatedExam,
     });
   } catch (error) {
-    console.error("❌ Error updating exam:", error);
     return NextResponse.json(
       {
         success: false,
@@ -243,7 +238,6 @@ export async function DELETE(
       message: "Exam deleted successfully",
     });
   } catch (error) {
-    console.error("Error deleting exam:", error);
     return NextResponse.json(
       {
         success: false,

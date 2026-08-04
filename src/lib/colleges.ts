@@ -3,19 +3,15 @@ import College from "@/models/College";
 
 export async function getCollegeBySlug(slug: string): Promise<any | null> {
   try {
-    console.log("🔍 Fetching college with slug:", slug);
     
     await connectDB();
-    console.log("✅ Database connected successfully");
 
     const college = await College.findOne({ slug, is_active: true })
       .populate("country_ref")
       .lean();
 
-    console.log("📊 College query result:", college ? "Found" : "Not found");
     
     if (!college) {
-      console.log("❌ No college found with slug:", slug);
       return null;
     }
 
@@ -36,12 +32,7 @@ export async function getCollegeBySlug(slug: string): Promise<any | null> {
         : null,
     };
   } catch (error) {
-    console.error("💥 Error fetching college by slug:", error);
-    console.error("💥 Error details:", {
-      slug,
-      error: error instanceof Error ? error.message : "Unknown error",
-      stack: error instanceof Error ? error.stack : undefined
-    });
+    
     throw new Error("Failed to fetch college data");
   }
 }

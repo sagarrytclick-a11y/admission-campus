@@ -61,7 +61,6 @@ export async function GET(request: NextRequest) {
       }
     });
   } catch (error) {
-    console.error("Error fetching cities:", error);
     return NextResponse.json(
       {
         success: false,
@@ -134,7 +133,6 @@ export async function POST(request: NextRequest) {
       data: populatedCity,
     });
   } catch (error) {
-    console.error("Error creating city:", error);
     return NextResponse.json(
       {
         success: false,

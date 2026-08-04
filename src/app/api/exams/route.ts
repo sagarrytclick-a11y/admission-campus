@@ -27,7 +27,6 @@ export async function GET() {
     
     return response;
   } catch (error) {
-    console.error("Error fetching exams:", error);
     return NextResponse.json(
       {
         success: false,

@@ -39,7 +39,6 @@ export async function GET(
 
     return response;
   } catch (error) {
-    console.error("Error fetching city by slug:", error);
     return NextResponse.json(
       {
         success: false,

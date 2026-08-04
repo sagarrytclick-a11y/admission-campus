@@ -95,18 +95,15 @@ export default function MedicalSection() {
               neetScore: college.fees_structure?.courses?.[0]?.annual_tuition_fee ? `${college.fees_structure.courses[0].annual_tuition_fee}` : `${720 - index * 5}+`,
               image: college.banner_url || `/Hero/hero-${(index % 3) + 1}.jpg`
             }))
-            console.log(`Successfully fetched ${transformedData.length} medical colleges`)
-            console.log('Sample college data:', transformedData[0])
+            
             return transformedData
           } else {
-            console.log('No medical colleges found, using fallback data')
             throw new Error('No medical colleges found in API response')
           }
         } else {
           throw new Error(`API request failed with status: ${response.status}`)
         }
       } catch (error) {
-        console.error('Error fetching medical colleges from local API:', error)
         
         // Fallback to hardcoded medical college data
         const fallbackData = [
@@ -117,7 +114,6 @@ export default function MedicalSection() {
           { name: "KMC Manipal", ranking: "#5", neetScore: "700+", image: "/Hero/hero-2.jpg" },
           { name: "GMC Mumbai", ranking: "#6", neetScore: "695+", image: "/Hero/hero-3.jpg" }
         ]
-        console.log('Using fallback medical college data')
         return fallbackData
       }
     },

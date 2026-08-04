@@ -17,7 +17,6 @@ export async function GET() {
       data: categories,
     });
   } catch (error) {
-    console.error("Error fetching admin categories:", error);
     return NextResponse.json(
       {
         success: false,
@@ -63,7 +62,6 @@ export async function DELETE(request: Request) {
       message: "Category permanently deleted from database",
     });
   } catch (error) {
-    console.error("Error deleting category:", error);
     return NextResponse.json(
       {
         success: false,

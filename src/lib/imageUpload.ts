@@ -22,7 +22,6 @@ export async function uploadImage(file: File, folder: string = 'colleges'): Prom
     // Return the public URL
     return `/uploads/${folder}/${filename}`;
   } catch (error) {
-    console.error('Error uploading image:', error);
     throw new Error('Failed to upload image');
   }
 }

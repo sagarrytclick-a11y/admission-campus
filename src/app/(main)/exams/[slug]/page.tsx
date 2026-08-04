@@ -51,8 +51,7 @@ const ExamPage = () => {
         const response = await fetch(`/api/exams/${slug}`)
         const result = await response.json()
         if (result.success) setExam(result.data)
-      } catch (error) {
-        console.error('Error fetching exam:', error)
+      } catch {
       } finally {
         setLoading(false)
       }

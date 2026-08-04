@@ -25,7 +25,6 @@ export async function GET() {
     
     return response;
   } catch (error) {
-    console.error("Error fetching blogs:", error);
     return NextResponse.json(
       {
         success: false,
@@ -36,6 +35,4 @@ export async function GET() {
     );
   }
 }
-
-
 

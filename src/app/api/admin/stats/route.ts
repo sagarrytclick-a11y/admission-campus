@@ -7,13 +7,9 @@ import Exam from "@/models/Exam";
 
 export async function GET() {
   try {
-    console.log('🚀 [API] GET /api/admin/stats - Request received');
     
-    console.log('🔗 [API] Connecting to database...');
     await connectDB();
-    console.log('✅ [API] Database connected successfully');
     
-    console.log('📊 [API] Counting documents in all collections...');
     
     // Get counts from all collections in parallel for better performance
     const [countriesCount, collegesCount, blogsCount, examsCount] = await Promise.all([
@@ -30,7 +26,6 @@ export async function GET() {
       exams: examsCount
     };
     
-    console.log('✅ [API] Stats calculated:', statsData);
     
     return NextResponse.json({
       success: true,
@@ -38,11 +33,7 @@ export async function GET() {
       data: statsData,
     });
   } catch (error) {
-    console.error("💥 [API] Error fetching stats:", error);
-    console.error("💥 [API] Error details:", {
-      message: error instanceof Error ? error.message : 'Unknown error',
-      stack: error instanceof Error ? error.stack : 'No stack available'
-    });
+    
     return NextResponse.json(
       {
         success: false,

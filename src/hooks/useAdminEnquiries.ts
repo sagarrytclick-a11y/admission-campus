@@ -62,7 +62,6 @@ export function useDeleteEnquiry() {
     },
     onError: (error: Error) => {
       toast.error(error.message || 'Failed to delete enquiry')
-      console.error('Delete enquiry error:', error)
     },
   })
 }
@@ -98,7 +97,6 @@ export function useUpdateEnquiry() {
     },
     onError: (error: Error) => {
       toast.error(error.message || 'Failed to update enquiry')
-      console.error('Update enquiry error:', error)
     },
   })
 }

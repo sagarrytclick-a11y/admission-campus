@@ -13,7 +13,6 @@ export async function GET() {
       data: exams,
     });
   } catch (error) {
-    console.error("Error fetching exams:", error);
     return NextResponse.json(
       {
         success: false,
@@ -29,8 +28,6 @@ export async function POST(request: NextRequest) {
   try {
     await connectDB();
     const body = await request.json();
-
-    console.log('📥 POST /api/admin/exams - Received data:', JSON.stringify(body, null, 2));
 
     const { 
       name, 
@@ -159,9 +156,7 @@ export async function POST(request: NextRequest) {
       result_statistics
     });
 
-    console.log('💾 Saving exam to database...');
     await exam.save();
-    console.log('✅ Exam saved successfully:', exam._id);
 
     return NextResponse.json({
       success: true,
@@ -169,7 +164,6 @@ export async function POST(request: NextRequest) {
       data: exam,
     });
   } catch (error) {
-    console.error("❌ Error creating exam:", error);
     return NextResponse.json(
       {
         success: false,

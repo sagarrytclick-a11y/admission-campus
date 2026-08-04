@@ -159,186 +159,145 @@ export default function SimpleExamsPage() {
   const saveExamMutation = useSaveExam()
   const deleteExamMutation = useDeleteExam()
 
-
   const handleSaveExam = async () => {
-    console.log('🔥 EXAM SAVE BUTTON CLICKED! Starting validation...')
-    console.log('📝 Current exam formData:', formData)
-    console.log('📝 Is editing exam:', editingExam ? 'YES' : 'NO')
+    
     
     // Collect all missing fields
     const validationErrors = []
     
-    console.log('🔍 Checking each exam field for validation...')
     
     // Basic Info Validation
     if (!formData.name?.trim()) {
       validationErrors.push('Exam Name is required')
-      console.log('❌ Exam Name validation failed')
     }
     if (!formData.slug?.trim()) {
       validationErrors.push('Exam Slug is required')
-      console.log('❌ Exam Slug validation failed')
     }
     if (!formData.short_name?.trim()) {
       validationErrors.push('Exam Short Name is required')
-      console.log('❌ Exam Short Name validation failed')
     }
     if (!formData.exam_type?.trim()) {
       validationErrors.push('Exam Type is required')
-      console.log('❌ Exam Type validation failed')
     }
     if (!formData.conducting_body?.trim()) {
       validationErrors.push('Conducting Body is required')
-      console.log('❌ Conducting Body validation failed')
     }
     if (!formData.exam_mode?.trim()) {
       validationErrors.push('Exam Mode is required')
-      console.log('❌ Exam Mode validation failed')
     }
     if (!formData.frequency?.trim()) {
       validationErrors.push('Frequency is required')
-      console.log('❌ Frequency validation failed')
     }
     if (!formData.description?.trim()) {
       validationErrors.push('Description is required')
-      console.log('❌ Description validation failed')
     }
     
     // Hero Section Validation
     if (!formData.hero_section?.title?.trim()) {
       validationErrors.push('Hero Title is required')
-      console.log('❌ Hero Title validation failed')
     }
     if (!formData.hero_section?.subtitle?.trim()) {
       validationErrors.push('Hero Subtitle is required')
-      console.log('❌ Hero Subtitle validation failed')
     }
     if (!formData.hero_section?.image?.trim()) {
       validationErrors.push('Hero Image is required')
-      console.log('❌ Hero Image validation failed')
     }
     
     // Overview Validation
     if (!formData.overview?.title?.trim()) {
       validationErrors.push('Overview Title is required')
-      console.log('❌ Overview Title validation failed')
     }
     if (!formData.overview?.content?.trim()) {
       validationErrors.push('Overview Content is required')
-      console.log('❌ Overview Content validation failed')
     }
     if (!formData.overview?.key_highlights?.length) {
       validationErrors.push('At least one Key Highlight is required')
-      console.log('❌ Key Highlights validation failed')
     }
     
     // Registration Validation
     if (!formData.registration?.title?.trim()) {
       validationErrors.push('Registration Title is required')
-      console.log('❌ Registration Title validation failed')
     }
     if (!formData.registration?.description?.trim()) {
       validationErrors.push('Registration Description is required')
-      console.log('❌ Registration Description validation failed')
     }
     if (!formData.registration?.bullet_points?.length) {
       validationErrors.push('At least one Bullet Point is required')
-      console.log('❌ Bullet Points validation failed')
     }
     
     // Exam Pattern Validation
     if (!formData.exam_pattern?.title?.trim()) {
       validationErrors.push('Exam Pattern Title is required')
-      console.log('❌ Exam Pattern Title validation failed')
     }
     if (!formData.exam_pattern?.description?.trim()) {
       validationErrors.push('Exam Pattern Description is required')
-      console.log('❌ Exam Pattern Description validation failed')
     }
     if (!formData.exam_pattern?.total_duration_mins || formData.exam_pattern.total_duration_mins <= 0) {
       validationErrors.push('Total Duration must be greater than 0')
-      console.log('❌ Total Duration validation failed')
     }
     if (!formData.exam_pattern?.score_range?.trim()) {
       validationErrors.push('Score Range is required')
-      console.log('❌ Score Range validation failed')
     }
     if (!formData.exam_pattern?.table_data?.length) {
       validationErrors.push('At least one Table Row is required')
-      console.log('❌ Table Data validation failed')
     }
     
     // Exam Dates Validation
     if (!formData.exam_dates?.title?.trim()) {
       validationErrors.push('Exam Dates Title is required')
-      console.log('❌ Exam Dates Title validation failed')
     }
     if (!formData.exam_dates?.important_dates?.length) {
       validationErrors.push('At least one Important Date is required')
-      console.log('❌ Important Dates validation failed')
     }
     
     // Result Statistics Validation
     if (!formData.result_statistics?.title?.trim()) {
       validationErrors.push('Result Statistics Title is required')
-      console.log('❌ Result Statistics Title validation failed')
     }
     if (!formData.result_statistics?.description?.trim()) {
       validationErrors.push('Result Statistics Description is required')
-      console.log('❌ Result Statistics Description validation failed')
     }
     if (!formData.result_statistics?.passing_criteria?.trim()) {
       validationErrors.push('Passing Criteria is required')
-      console.log('❌ Passing Criteria validation failed')
     }
     if (!formData.result_statistics?.total_marks || formData.result_statistics.total_marks <= 0) {
       validationErrors.push('Total Marks must be greater than 0')
-      console.log('❌ Total Marks validation failed')
     }
     if (!formData.result_statistics?.passing_marks || formData.result_statistics.passing_marks < 0) {
       validationErrors.push('Passing Marks must be 0 or greater')
-      console.log('❌ Passing Marks validation failed')
     }
     
-    console.log('📋 Final validationErrors array:', validationErrors)
     
     // Show alert for missing fields
     if (validationErrors.length > 0) {
       const alertMessage = `Please fill in the following required fields:\n\n${validationErrors.map((error, index) => `${index + 1}. ${error}`).join('\n')}`
-      console.log('🚨 Showing alert for missing exam fields:', alertMessage)
       alert(alertMessage)
       return
     }
 
-    console.log('✅ All exam validation passed! Proceeding to save...')
     try {
-      console.log('🚀 Starting exam save process...')
-      console.log('📝 Exam form data:', formData)
+      
       
       const payload = {
         ...formData,
         ...(editingExam && { _id: editingExam._id })
       }
       
-      console.log('📦 Exam request payload:', payload)
-      console.log('🔥 About to call saveExamMutation.mutateAsync...')
+      
       
       await saveExamMutation.mutateAsync(payload)
       
-      console.log('✅ Exam saved successfully!')
       toast.success(editingExam ? 'Exam updated successfully!' : 'Exam created successfully!')
       setIsModalOpen(false)
       setEditingExam(null)
       
     } catch (error) {
-      console.error('❌ Error saving exam:', error)
-      console.error('💥 Error stack:', error instanceof Error ? error.stack : 'No stack available')
+      
       toast.error('Error saving exam: ' + (error instanceof Error ? error.message : 'Unknown error'))
     }
   }
 
   const handleEditExam = (exam: Exam) => {
-    console.log('🔍 DEBUG: Loading exam for edit:', exam)
     
     setEditingExam(exam)
     
@@ -526,7 +485,6 @@ export default function SimpleExamsPage() {
         <DropdownMenuContent align="end">
           <DropdownMenuItem
             onClick={() => {
-              console.log("View exam:", record)
               alert(`Viewing exam: ${record.name}`)
             }}
           >
@@ -536,7 +494,6 @@ export default function SimpleExamsPage() {
 
           <DropdownMenuItem
             onClick={() => {
-              console.log("Edit exam:", record)
               handleEditExam(record)
             }}
           >

@@ -66,7 +66,6 @@ export async function POST(
       }
     });
   } catch (error) {
-    console.error("Error starting exam:", error);
     return NextResponse.json(
       {
         success: false,
@@ -152,7 +151,6 @@ export async function PUT(
       }
     });
   } catch (error) {
-    console.error("Error submitting exam:", error);
     return NextResponse.json(
       {
         success: false,

@@ -24,7 +24,6 @@ export async function GET() {
 
     return response;
   } catch (error) {
-    console.error("Error fetching categories:", error);
     return NextResponse.json(
       {
         success: false,
@@ -96,7 +95,6 @@ export async function POST(request: Request) {
       data: category,
     });
   } catch (error: any) {
-    console.error("Error creating category:", error);
     
     // Handle duplicate key error specifically
     if (error.code === 11000) {
@@ -171,7 +169,6 @@ export async function PUT(request: Request) {
       data: category,
     });
   } catch (error) {
-    console.error("Error updating category:", error);
     return NextResponse.json(
       {
         success: false,
@@ -221,7 +218,6 @@ export async function DELETE(request: Request) {
       message: "Category deleted successfully",
     });
   } catch (error) {
-    console.error("Error deleting category:", error);
     return NextResponse.json(
       {
         success: false,

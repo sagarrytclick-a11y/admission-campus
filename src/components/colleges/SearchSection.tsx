@@ -119,7 +119,6 @@ const SearchSection = memo(({
               </div>
             )}
 
-
             {exams.length > 0 && (
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">Entrance Exam</label>

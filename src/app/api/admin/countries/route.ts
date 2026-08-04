@@ -13,7 +13,6 @@ export async function GET() {
       data: countries,
     });
   } catch (error) {
-    console.error("Error fetching countries:", error);
     return NextResponse.json(
       {
         success: false,
@@ -71,7 +70,6 @@ export async function POST(request: NextRequest) {
       data: country,
     });
   } catch (error) {
-    console.error("Error creating country:", error);
     return NextResponse.json(
       {
         success: false,

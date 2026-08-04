@@ -27,7 +27,6 @@ export async function GET(
       data: blog,
     });
   } catch (error) {
-    console.error("Error fetching blog:", error);
     return NextResponse.json(
       {
         success: false,
@@ -104,7 +103,6 @@ export async function PUT(
       data: updatedBlog,
     });
   } catch (error) {
-    console.error("Error updating blog:", error);
     return NextResponse.json(
       {
         success: false,
@@ -142,7 +140,6 @@ export async function DELETE(
       message: "Blog deleted successfully",
     });
   } catch (error) {
-    console.error("Error deleting blog:", error);
     return NextResponse.json(
       {
         success: false,

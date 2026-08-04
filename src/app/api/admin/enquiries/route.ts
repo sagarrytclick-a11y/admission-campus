@@ -7,18 +7,13 @@ const VALID_STATUSES = ['pending', 'contacted', 'resolved', 'closed'];
 
 export async function GET() {
   try {
-    console.log('🚀 [API] GET /api/admin/enquiries - Request received');
     
-    console.log('🔗 [API] Connecting to database...');
     await connectDB();
-    console.log('✅ [API] Database connected successfully');
     
-    console.log('📋 [API] Fetching all enquiries...');
     const enquiries = await Enquiry.find({ is_active: true })
       .sort({ created_at: -1 }) // Sort by newest first
       .lean(); // Use lean() for better performance
     
-    console.log(`✅ [API] Enquiries fetched: ${enquiries.length} enquiries found`);
     
     // Transform the data to match the frontend interface
     const transformedEnquiries = enquiries.map(enquiry => ({
@@ -45,7 +40,6 @@ export async function GET() {
     });
     
   } catch (error) {
-    console.error('❌ [API] Error fetching enquiries:', error);
     return NextResponse.json(
       { 
         success: false,
@@ -69,7 +63,6 @@ export async function DELETE(request: NextRequest) {
       );
     }
     
-    console.log(`🗑️ [API] DELETE /api/admin/enquiries - Deleting enquiry: ${id}`);
     
     await connectDB();
     
@@ -87,7 +80,6 @@ export async function DELETE(request: NextRequest) {
       );
     }
     
-    console.log(`✅ [API] Enquiry deleted successfully: ${id}`);
     
     return NextResponse.json({
       success: true,
@@ -95,7 +87,6 @@ export async function DELETE(request: NextRequest) {
     });
     
   } catch (error) {
-    console.error('❌ [API] Error deleting enquiry:', error);
     return NextResponse.json(
       { 
         success: false,
@@ -128,7 +119,6 @@ export async function PUT(request: NextRequest) {
       );
     }
     
-    console.log(`✏️ [API] PUT /api/admin/enquiries - Updating enquiry: ${id}`);
     
     await connectDB();
     
@@ -152,7 +142,6 @@ export async function PUT(request: NextRequest) {
       );
     }
     
-    console.log(`✅ [API] Enquiry updated successfully: ${id}`);
     
     return NextResponse.json({
       success: true,
@@ -167,7 +156,6 @@ export async function PUT(request: NextRequest) {
     });
     
   } catch (error) {
-    console.error('❌ [API] Error updating enquiry:', error);
     return NextResponse.json(
       { 
         success: false,

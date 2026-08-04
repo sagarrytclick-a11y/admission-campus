@@ -5,15 +5,18 @@ import { connectDB } from '@/lib/db';
 import Enquiry from '@/models/Enquiry';
 import { EMAIL_CONFIG } from '@/config/email-config';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+function getResend() {
+  const key = process.env.RESEND_API_KEY;
+  if (!key) {
+    throw new Error('RESEND_API_KEY is not configured');
+  }
+  return new Resend(key);
+}
 
 export async function POST(req: Request) {
   try {
-    console.log('=== SEND ROUTE CALLED ===');
     const body = await req.json();
-    console.log('Request body:', body);
     const { name, email, number, city, course_category } = body;
-    console.log('Extracted data:', { name, email, number, city, course_category });
 
     // Validate required fields
     if (!name || !email || !number || !city) {
@@ -64,12 +67,10 @@ export async function POST(req: Request) {
 
     // Send email notification
     try {
-      console.log('=== ATTEMPTING TO SEND EMAIL ===');
-      console.log('From:', 'Admission Campus <onboarding@resend.dev>');
-      console.log('To:', [process.env.ADMIN_EMAIL || 'sagar.rytclick@gmail.com']);
-      console.log('Subject:', `New Enquiry from ${name}`);
+      
+      
 
-      const data = await resend.emails.send({
+      const data = await getResend().emails.send({
         from: 'onboarding@resend.dev', // Use Resend's verified domain for testing
         to: [process.env.ADMIN_EMAIL || 'sagar.rytclick@gmail.com'], // Use account owner's email for testing
         subject: `New Enquiry from ${name}`,
@@ -119,10 +120,8 @@ export async function POST(req: Request) {
           </div>
         `,
       });
-      console.log('=== EMAIL SENT SUCCESSFULLY ===');
-      console.log('Resend response:', data);
+      
     } catch (emailError) {
-      console.error('Email sending failed:', emailError);
       // Continue even if email fails - the enquiry is saved in database
     }
 
@@ -134,7 +133,6 @@ export async function POST(req: Request) {
       }
     });
   } catch (error) {
-    console.error('Enquiry submission error:', error);
     return NextResponse.json(
       { error: 'Failed to submit enquiry' },
       { status: 500 }

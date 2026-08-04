@@ -229,7 +229,6 @@ export function useSaveCity() {
       queryClient.invalidateQueries({ queryKey: ['admin', 'cities'] })
     },
     onError: (error) => {
-      console.error('Error saving city:', error)
       throw error
     }
   })
@@ -244,7 +243,6 @@ export function useDeleteCity() {
       queryClient.invalidateQueries({ queryKey: ['admin', 'cities'] })
     },
     onError: (error) => {
-      console.error('Error deleting city:', error)
       throw error
     }
   })

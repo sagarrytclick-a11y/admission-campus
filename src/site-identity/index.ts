@@ -67,11 +67,11 @@ export const SITE_IDENTITY: SiteIdentity = {
   shortName: "Admission Campus",
   description: "Comprehensive admission guidance for Indian universities and colleges",
   tagline: "Your Gateway to Top Indian Universities",
-  domain: "admissioncampus.com",
+  domain: "admissioncampus.in",
   brand: {
-    primaryColor: "#ea580c", // Orange color from manifest
+    primaryColor: "#0066F5",
     secondaryColor: "#ffffff",
-    accentColor: "#1f2937", // Dark gray for contrast
+    accentColor: "#1f2937",
   },
   contact: {
     phone: {

@@ -61,7 +61,6 @@ export type Course = {
   fees?: string;
 };
 
-
 export interface CollegeFilters {
   location?: string;
   type?: string;

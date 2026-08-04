@@ -161,7 +161,6 @@ export default function CollegeForm({ initialData, onSubmit, isLoading = false }
         </p>
       </div>
 
-
       {/* Form Fields */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>

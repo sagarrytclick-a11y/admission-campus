@@ -4,9 +4,16 @@ import { ArrowLeft, Sparkles } from 'lucide-react'
 import NeetScorePredictor from '@/components/NeetScorePredictor'
 
 export const metadata: Metadata = {
-  title: 'NEET Score Predictor | Admission Campus',
+  title: 'NEET Score Predictor',
   description:
     'Estimate your NEET rank range from Physics, Chemistry and Biology scores. Free static NEET score predictor tool.',
+  alternates: { canonical: '/tools/neet-score-predictor' },
+  openGraph: {
+    title: 'NEET Score Predictor',
+    description:
+      'Estimate your NEET rank range from Physics, Chemistry and Biology scores.',
+    url: '/tools/neet-score-predictor',
+  },
 }
 
 export default function NeetScorePredictorPage() {
