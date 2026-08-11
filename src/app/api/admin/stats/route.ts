@@ -4,9 +4,13 @@ import Country from "@/models/Country";
 import College from "@/models/College";
 import Blog from "@/models/Blog";
 import Exam from "@/models/Exam";
+import { requireAdmin, isAdminAuthFailure } from "@/lib/requireAdmin";
 
 export async function GET() {
   try {
+  const auth = await requireAdmin();
+  if (isAdminAuthFailure(auth)) return auth.error;
+
     
     await connectDB();
     

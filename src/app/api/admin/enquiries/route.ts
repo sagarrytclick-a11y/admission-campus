@@ -1,12 +1,16 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { connectDB } from '@/lib/db';
 import Enquiry from '@/models/Enquiry';
+import { requireAdmin, isAdminAuthFailure } from "@/lib/requireAdmin";
 
 // Valid status values
 const VALID_STATUSES = ['pending', 'contacted', 'resolved', 'closed'];
 
 export async function GET() {
   try {
+  const auth = await requireAdmin();
+  if (isAdminAuthFailure(auth)) return auth.error;
+
     
     await connectDB();
     
@@ -53,6 +57,9 @@ export async function GET() {
 
 export async function DELETE(request: NextRequest) {
   try {
+  const auth = await requireAdmin();
+  if (isAdminAuthFailure(auth)) return auth.error;
+
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
     
@@ -101,6 +108,9 @@ export async function DELETE(request: NextRequest) {
 // PUT - Update enquiry status
 export async function PUT(request: NextRequest) {
   try {
+  const auth = await requireAdmin();
+  if (isAdminAuthFailure(auth)) return auth.error;
+
     const body = await request.json();
     const { id, status, priority, assignedTo, notes } = body;
     

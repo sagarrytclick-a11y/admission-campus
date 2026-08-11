@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import City from "@/models/City";
+import { requireAdmin, isAdminAuthFailure } from "@/lib/requireAdmin";
 // Required for populate('country_ref') on serverless cold starts
 import "@/models/Country";
 
@@ -9,6 +10,9 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+  const auth = await requireAdmin();
+  if (isAdminAuthFailure(auth)) return auth.error;
+
     await connectDB();
     const body = await request.json();
     const { id } = await params;
@@ -83,6 +87,9 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+  const auth = await requireAdmin();
+  if (isAdminAuthFailure(auth)) return auth.error;
+
     await connectDB();
     const { id } = await params;
 

@@ -1,12 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import Blog from "@/models/Blog";
+import { requireAdmin, isAdminAuthFailure } from "@/lib/requireAdmin";
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+  const auth = await requireAdmin();
+  if (isAdminAuthFailure(auth)) return auth.error;
+
     const { id } = await params;
     await connectDB();
     const blog = await Blog.findById(id);
@@ -43,6 +47,9 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+  const auth = await requireAdmin();
+  if (isAdminAuthFailure(auth)) return auth.error;
+
     const { id } = await params;
     await connectDB();
     const body = await request.json();
@@ -119,6 +126,9 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+  const auth = await requireAdmin();
+  if (isAdminAuthFailure(auth)) return auth.error;
+
     const { id } = await params;
     await connectDB();
     const blog = await Blog.findById(id);

@@ -3,9 +3,13 @@ import { connectDB } from "@/lib/db";
 import College from "@/models/College";
 import Country from "@/models/Country";
 import { handleApiError, validateRequiredFields, createSuccessResponse, ValidationError } from "@/lib/validation";
+import { requireAdmin, isAdminAuthFailure } from "@/lib/requireAdmin";
 
 export async function GET() {
   try {
+  const auth = await requireAdmin();
+  if (isAdminAuthFailure(auth)) return auth.error;
+
     
     await connectDB();
     
@@ -31,6 +35,9 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
+  const auth = await requireAdmin();
+  if (isAdminAuthFailure(auth)) return auth.error;
+
     
     await connectDB();
     

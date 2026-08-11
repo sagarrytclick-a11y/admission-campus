@@ -15,7 +15,7 @@ export const ROLE_PERMISSIONS = {
     PERMISSIONS.EDIT_BLOG,
   ],
 
-  USER: [  PERMISSIONS.DELETE_USER],
+  USER: [],
 } as const;
 
 // 🔥 Auto-derived role type

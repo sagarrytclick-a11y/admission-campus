@@ -20,6 +20,7 @@ import {
   RefreshCw
 } from 'lucide-react'
 import { useBlog } from '@/hooks/useBlogs'
+import { plainTextToSafeHtml } from '@/lib/security'
 
 interface Blog {
   _id: string
@@ -164,7 +165,7 @@ const BlogDetailPage = () => {
             <div 
               className="text-slate-700 leading-relaxed"
               dangerouslySetInnerHTML={{ 
-                __html: blog.content.replace(/\n/g, '<br />') 
+                __html: plainTextToSafeHtml(blog.content) 
               }}
             />
           </div>

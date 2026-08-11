@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import Exam from "@/models/Exam";
+import { requireAdmin, isAdminAuthFailure } from "@/lib/requireAdmin";
 
 export async function GET() {
   try {
+  const auth = await requireAdmin();
+  if (isAdminAuthFailure(auth)) return auth.error;
+
     await connectDB();
     const exams = await Exam.find({}).sort({ display_order: 1, name: 1 });
     
@@ -26,6 +30,9 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
+  const auth = await requireAdmin();
+  if (isAdminAuthFailure(auth)) return auth.error;
+
     await connectDB();
     const body = await request.json();
 

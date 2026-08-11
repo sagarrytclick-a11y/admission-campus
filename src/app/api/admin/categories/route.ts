@@ -1,9 +1,13 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import Category from "@/models/Category";
+import { requireAdmin, isAdminAuthFailure } from "@/lib/requireAdmin";
 
 export async function GET() {
   try {
+  const auth = await requireAdmin();
+  if (isAdminAuthFailure(auth)) return auth.error;
+
     await connectDB();
     
     // For admin, get ALL categories (both active and inactive)
@@ -30,6 +34,9 @@ export async function GET() {
 
 export async function DELETE(request: Request) {
   try {
+  const auth = await requireAdmin();
+  if (isAdminAuthFailure(auth)) return auth.error;
+
     await connectDB();
     const { searchParams } = new URL(request.url);
     const slug = searchParams.get('slug');

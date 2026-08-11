@@ -8,7 +8,7 @@ export const EMAIL_CONFIG = {
   WEBSITES: {
     admissioncampus: {
       name: 'Admission Campus',
-      recipientEmail: process.env.ADMISSION_CAMPUS_EMAIL || 'sagarbisht409@gmail.com',
+      recipientEmail: process.env.ADMISSION_CAMPUS_EMAIL || '',
       branding: {
         primaryColor: '#3b82f6',
         logo: '/logo.jpg'
@@ -16,7 +16,7 @@ export const EMAIL_CONFIG = {
     },
     website2: {
       name: 'Your Second Website',
-      recipientEmail: process.env.WEBSITE2_EMAIL || 'your-email@gmail.com',
+      recipientEmail: process.env.WEBSITE2_EMAIL || '',
       branding: {
         primaryColor: '#10b981',
         logo: '/logo2.jpg'

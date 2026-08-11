@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import College from "@/models/College";
+import { requireAdmin, isAdminAuthFailure } from "@/lib/requireAdmin";
 // Required for populate('country_ref') on serverless cold starts
 import Country from "@/models/Country";
 import { generateSlug } from "@/lib/slug";
+import { escapeRegex, sanitizeSearchTerm } from "@/lib/security";
 
 export async function GET(request: Request) {
   try {
@@ -11,8 +13,8 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     
     const page = parseInt(searchParams.get('page') || '1');
-    const limit = parseInt(searchParams.get('limit') || '12');
-    const search = searchParams.get('search');
+    const limit = Math.min(parseInt(searchParams.get('limit') || '12') || 12, 50);
+    const search = sanitizeSearchTerm(searchParams.get('search'));
     const countrySlug = searchParams.get('country');
     const exam = searchParams.get('exam');
     const category = searchParams.get('category');
@@ -25,9 +27,10 @@ export async function GET(request: Request) {
     
     // Search by name or about content
     if (search) {
+      const safeSearch = escapeRegex(search);
       query.$or = [
-        { name: { $regex: search, $options: 'i' } },
-        { about_content: { $regex: search, $options: 'i' } }
+        { name: { $regex: safeSearch, $options: 'i' } },
+        { about_content: { $regex: safeSearch, $options: 'i' } }
       ];
     }
     
@@ -107,6 +110,9 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+  const auth = await requireAdmin();
+  if (isAdminAuthFailure(auth)) return auth.error;
+
     await connectDB();
     const body = await request.json();
     
@@ -203,9 +209,12 @@ export async function POST(request: Request) {
 
 export async function PUT(request: Request) {
   try {
+  const auth = await requireAdmin();
+  if (isAdminAuthFailure(auth)) return auth.error;
+
     await connectDB();
     const body = await request.json();
-    const { id, ...updateData } = body;
+    const { id } = body;
     
     if (!id) {
       return NextResponse.json(
@@ -217,17 +226,52 @@ export async function PUT(request: Request) {
       );
     }
 
+    // Whitelist only known fields — prevent mass assignment
+    const allowedKeys = [
+      "name",
+      "country_ref",
+      "city",
+      "exams",
+      "categories",
+      "overview",
+      "key_highlights",
+      "why_choose_us",
+      "ranking_section",
+      "ranking",
+      "admission_process",
+      "documents_required",
+      "fees_structure",
+      "campus_highlights",
+      "banner_url",
+      "is_active",
+      "establishment_year",
+      "about_content",
+    ] as const;
+
+    const updateData: Record<string, unknown> = {};
+    for (const key of allowedKeys) {
+      if (body[key] !== undefined) {
+        updateData[key] = body[key];
+      }
+    }
+
+    if (updateData.ranking_section !== undefined && updateData.ranking === undefined) {
+      updateData.ranking = updateData.ranking_section;
+      delete updateData.ranking_section;
+    }
+
     // Generate new slug if name is being updated
-    if (updateData.name) {
+    if (typeof updateData.name === "string") {
       updateData.slug = generateSlug(updateData.name);
     }
 
     // Validate city requirement for India if country is being updated
     if (updateData.country_ref || updateData.city !== undefined) {
-      const countryId = updateData.country_ref || id;
-      const country = await Country.findById(countryId);
+      const countryId = updateData.country_ref;
+      const country = countryId
+        ? await Country.findById(countryId)
+        : null;
       if (country && country.name.toLowerCase() === 'india' && !updateData.city) {
-        // Check if existing college has city
         const existingCollege = await College.findById(id);
         if (!existingCollege?.city) {
           return NextResponse.json(
