@@ -16,11 +16,13 @@ import ExploreTopCourses from "../Components/ExploreTopCourses";
 import CitySlider from "../Components/CitySlider";
 import MedicalSection from "@/app/Components/MedicalSection";
 import NeetPredictorSection from "@/app/Components/NeetPredictorSection";
+import MdMsHomeSection from "@/app/Components/MdMsHomeSection";
 
 const page = () => {
   return (
     <div className="w-full bg-white text-black overflow-x-hidden">
       <Hero />
+      <MdMsHomeSection />
       <MedicalSection />
       <NeetPredictorSection />
       <CitySlider />
@@ -28,7 +30,6 @@ const page = () => {
       <ExploreTopCourses />
       <ExplorePrograms />
       <StudyPrograms />
-      <MedicalSection />
       <EducationStats />
       <LatestBlogs />
       <Services />

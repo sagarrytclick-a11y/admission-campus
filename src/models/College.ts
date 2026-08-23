@@ -187,6 +187,12 @@ const CollegeSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+CollegeSchema.index({ is_active: 1, categories: 1 });
+CollegeSchema.index({ is_active: 1, country_ref: 1 });
+CollegeSchema.index({ is_active: 1, city: 1 });
+CollegeSchema.index({ is_active: 1, ranking: 1, name: 1 });
+CollegeSchema.index({ is_active: 1, exams: 1 });
+
 // Force reload the model by clearing it from cache
 delete mongoose.models.College;
 

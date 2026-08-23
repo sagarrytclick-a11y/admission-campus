@@ -1,5 +1,10 @@
 import type { MetadataRoute } from "next";
 import { SITE_IDENTITY } from "@/site-identity";
+import { getAllMdMsColleges } from "@/lib/mdMsData";
+import { connectDB } from "@/lib/db";
+import College from "@/models/College";
+import Exam from "@/models/Exam";
+import Blog from "@/models/Blog";
 
 const SITE_URL = `https://${SITE_IDENTITY.domain}`;
 
@@ -8,6 +13,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "",
     "/colleges",
     "/exams",
+    "/md-ms",
     "/blogs",
     "/compare",
     "/about",
@@ -20,74 +26,69 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url: `${SITE_URL}${path || "/"}`,
     lastModified: new Date(),
     changeFrequency: path === "" ? "daily" : "weekly",
-    priority: path === "" ? 1 : path === "/colleges" || path === "/exams" ? 0.9 : 0.7,
+    priority:
+      path === ""
+        ? 1
+        : path === "/colleges" || path === "/exams" || path === "/md-ms"
+          ? 0.9
+          : 0.7,
   }));
 
-  let dynamicRoutes: MetadataRoute.Sitemap = [];
+  const dynamicRoutes: MetadataRoute.Sitemap = [];
+
+  // MD/MS — local JSON, no API round-trip
+  dynamicRoutes.push(
+    ...getAllMdMsColleges().map((c) => ({
+      url: `${SITE_URL}/md-ms/${c.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
+    }))
+  );
 
   try {
-    const base =
-      process.env.NEXT_PUBLIC_SITE_URL ||
-      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : SITE_URL);
+    await connectDB();
 
-    const [collegesRes, blogsRes, examsRes] = await Promise.all([
-      fetch(`${base}/api/colleges?limit=1000&page=1`, { next: { revalidate: 3600 } }).catch(() => null),
-      fetch(`${base}/api/blogs`, { next: { revalidate: 3600 } }).catch(() => null),
-      fetch(`${base}/api/exams`, { next: { revalidate: 3600 } }).catch(() => null),
+    const [colleges, blogs, exams] = await Promise.all([
+      College.find({ is_active: true }).select("slug updatedAt").lean(),
+      Blog.find({ is_active: true }).select("slug updatedAt").lean(),
+      Exam.find({ is_active: true }).select("slug updatedAt").lean(),
     ]);
 
-    if (collegesRes?.ok) {
-      const data = await collegesRes.json();
-      const colleges = data?.data?.colleges || data?.data || [];
-      if (Array.isArray(colleges)) {
-        dynamicRoutes.push(
-          ...colleges
-            .filter((c: { slug?: string; is_active?: boolean }) => c?.slug && c.is_active !== false)
-            .map((c: { slug: string; updatedAt?: string }) => ({
-              url: `${SITE_URL}/colleges/${c.slug}`,
-              lastModified: c.updatedAt ? new Date(c.updatedAt) : new Date(),
-              changeFrequency: "weekly" as const,
-              priority: 0.8,
-            }))
-        );
-      }
-    }
+    dynamicRoutes.push(
+      ...colleges
+        .filter((c) => c?.slug)
+        .map((c) => ({
+          url: `${SITE_URL}/colleges/${c.slug}`,
+          lastModified: c.updatedAt ? new Date(c.updatedAt) : new Date(),
+          changeFrequency: "weekly" as const,
+          priority: 0.8,
+        }))
+    );
 
-    if (blogsRes?.ok) {
-      const data = await blogsRes.json();
-      const blogs = data?.data || [];
-      if (Array.isArray(blogs)) {
-        dynamicRoutes.push(
-          ...blogs
-            .filter((b: { slug?: string; is_active?: boolean }) => b?.slug && b.is_active !== false)
-            .map((b: { slug: string; updatedAt?: string }) => ({
-              url: `${SITE_URL}/blogs/${b.slug}`,
-              lastModified: b.updatedAt ? new Date(b.updatedAt) : new Date(),
-              changeFrequency: "weekly" as const,
-              priority: 0.7,
-            }))
-        );
-      }
-    }
+    dynamicRoutes.push(
+      ...blogs
+        .filter((b) => b?.slug)
+        .map((b) => ({
+          url: `${SITE_URL}/blogs/${b.slug}`,
+          lastModified: b.updatedAt ? new Date(b.updatedAt) : new Date(),
+          changeFrequency: "weekly" as const,
+          priority: 0.7,
+        }))
+    );
 
-    if (examsRes?.ok) {
-      const data = await examsRes.json();
-      const exams = data?.data || [];
-      if (Array.isArray(exams)) {
-        dynamicRoutes.push(
-          ...exams
-            .filter((e: { slug?: string; is_active?: boolean }) => e?.slug && e.is_active !== false)
-            .map((e: { slug: string; updatedAt?: string }) => ({
-              url: `${SITE_URL}/exams/${e.slug}`,
-              lastModified: e.updatedAt ? new Date(e.updatedAt) : new Date(),
-              changeFrequency: "weekly" as const,
-              priority: 0.8,
-            }))
-        );
-      }
-    }
+    dynamicRoutes.push(
+      ...exams
+        .filter((e) => e?.slug)
+        .map((e) => ({
+          url: `${SITE_URL}/exams/${e.slug}`,
+          lastModified: e.updatedAt ? new Date(e.updatedAt) : new Date(),
+          changeFrequency: "weekly" as const,
+          priority: 0.8,
+        }))
+    );
   } catch {
-    // Static routes only if dynamic fetch fails
+    // Keep static + MD/MS routes if DB is unavailable
   }
 
   return [...staticRoutes, ...dynamicRoutes];

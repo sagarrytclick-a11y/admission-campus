@@ -7,73 +7,94 @@ import Country from "@/models/Country";
 import { generateSlug } from "@/lib/slug";
 import { escapeRegex, sanitizeSearchTerm } from "@/lib/security";
 
+/** Card/list fields — avoids shipping full overview blobs on listing APIs */
+const LIST_FIELDS =
+  "name slug banner_url city exams categories fees duration establishment_year ranking fees_structure.courses is_active country_ref createdAt updatedAt";
+
 export async function GET(request: Request) {
   try {
     await connectDB();
     const { searchParams } = new URL(request.url);
-    
-    const page = parseInt(searchParams.get('page') || '1');
-    const limit = Math.min(parseInt(searchParams.get('limit') || '12') || 12, 50);
-    const search = sanitizeSearchTerm(searchParams.get('search'));
-    const countrySlug = searchParams.get('country');
-    const exam = searchParams.get('exam');
-    const category = searchParams.get('category');
-    const city = searchParams.get('city');
-    
+
+    const page = parseInt(searchParams.get("page") || "1", 10) || 1;
+    // sitemap=1 allows up to 1000 slim records; normal clients capped at 50
+    const forSitemap = searchParams.get("sitemap") === "1";
+    const rawLimit = parseInt(searchParams.get("limit") || "12", 10) || 12;
+    const limit = forSitemap
+      ? Math.min(rawLimit, 1000)
+      : Math.min(rawLimit, 50);
+    const search = sanitizeSearchTerm(searchParams.get("search"));
+    const countrySlug = searchParams.get("country");
+    const exam = searchParams.get("exam");
+    const category = searchParams.get("category");
+    const city = searchParams.get("city");
+
     const skip = (page - 1) * limit;
-    
-    // Build query
+
     const query: Record<string, unknown> = { is_active: true };
-    
-    // Search by name or about content
+
     if (search) {
       const safeSearch = escapeRegex(search);
       query.$or = [
-        { name: { $regex: safeSearch, $options: 'i' } },
-        { about_content: { $regex: safeSearch, $options: 'i' } }
+        { name: { $regex: safeSearch, $options: "i" } },
+        { about_content: { $regex: safeSearch, $options: "i" } },
       ];
     }
-    
-    // Filter by country
-    if (countrySlug && countrySlug !== 'all') {
-      const country = await Country.findOne({ slug: countrySlug, is_active: true });
+
+    if (countrySlug && countrySlug !== "all") {
+      const country = await Country.findOne({
+        slug: countrySlug,
+        is_active: true,
+      })
+        .select("_id")
+        .lean();
       if (country) {
         query.country_ref = country._id;
       } else {
         return NextResponse.json({
           success: true,
           message: "Colleges fetched successfully",
-          data: { colleges: [], total: 0 },
+          data: {
+            colleges: [],
+            total: 0,
+            page,
+            limit,
+            totalPages: 0,
+            hasNext: false,
+          },
         });
       }
     }
-    
-    // Filter by exam
-    if (exam && exam !== 'all') {
+
+    if (exam && exam !== "all") {
       query.exams = { $in: [exam] };
     }
-    
-    // Filter by category
-    if (category && category !== 'all') {
+
+    if (category && category !== "all") {
       query.categories = { $in: [category] };
     }
 
-    // Filter by city slug (case-insensitive exact match)
-    if (city && city !== 'all') {
-      query.city = { $regex: new RegExp(`^${city.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i') };
+    if (city && city !== "all") {
+      query.city = {
+        $regex: new RegExp(
+          `^${city.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`,
+          "i"
+        ),
+      };
     }
-    
-    // Get total count for pagination
-    const total = await College.countDocuments(query);
-    
-    // Fetch paginated results
-    const colleges = await College.find(query)
-      .populate('country_ref', 'name slug flag')
-      .sort({ ranking: 1, name: 1 })
-      .skip(skip)
-      .limit(limit)
-      .lean(); // Use lean() for better performance
-    
+
+    // Parallel count + find (biggest list latency win)
+    const [total, colleges] = await Promise.all([
+      College.countDocuments(query),
+      College.find(query)
+        .select(LIST_FIELDS)
+        .populate("country_ref", "name slug flag")
+        .sort({ ranking: 1, name: 1 })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+    ]);
+
     const response = NextResponse.json({
       success: true,
       message: "Colleges fetched successfully",
@@ -83,18 +104,17 @@ export async function GET(request: Request) {
         page,
         limit,
         totalPages: Math.ceil(total / limit),
-        hasNext: skip + limit < total
+        hasNext: skip + limit < total,
       },
     });
-    
-    // Add caching headers
+
     response.headers.set(
-      'Cache-Control',
-      'public, s-maxage=180, stale-while-revalidate=300'
+      "Cache-Control",
+      "public, s-maxage=300, stale-while-revalidate=600"
     );
-    response.headers.set('CDN-Cache-Control', 'public, s-maxage=300');
-    response.headers.set('Vercel-CDN-Cache-Control', 'public, s-maxage=300');
-    
+    response.headers.set("CDN-Cache-Control", "public, s-maxage=600");
+    response.headers.set("Vercel-CDN-Cache-Control", "public, s-maxage=600");
+
     return response;
   } catch (error) {
     return NextResponse.json(
@@ -110,12 +130,12 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-  const auth = await requireAdmin();
-  if (isAdminAuthFailure(auth)) return auth.error;
+    const auth = await requireAdmin();
+    if (isAdminAuthFailure(auth)) return auth.error;
 
     await connectDB();
     const body = await request.json();
-    
+
     const {
       name,
       country_ref,
@@ -132,14 +152,12 @@ export async function POST(request: Request) {
       campus_highlights,
       banner_url,
       is_active = true,
-      establishment_year
+      establishment_year,
     } = body;
 
-    // Generate slug from name
     const slug = generateSlug(name);
 
-    // Check if college with same slug already exists
-    const existingCollege = await College.findOne({ slug });
+    const existingCollege = await College.findOne({ slug }).select("_id").lean();
     if (existingCollege) {
       return NextResponse.json(
         {
@@ -150,10 +168,9 @@ export async function POST(request: Request) {
       );
     }
 
-    // Validate city requirement for India
     if (country_ref) {
-      const country = await Country.findById(country_ref);
-      if (country && country.name.toLowerCase() === 'india' && !city) {
+      const country = await Country.findById(country_ref).select("name").lean();
+      if (country && country.name.toLowerCase() === "india" && !city) {
         return NextResponse.json(
           {
             success: false,
@@ -164,7 +181,6 @@ export async function POST(request: Request) {
       }
     }
 
-    // Create new college
     const newCollege = new College({
       name,
       slug,
@@ -182,7 +198,7 @@ export async function POST(request: Request) {
       campus_highlights,
       banner_url,
       is_active,
-      establishment_year
+      establishment_year,
     });
 
     await newCollege.save();
@@ -209,13 +225,13 @@ export async function POST(request: Request) {
 
 export async function PUT(request: Request) {
   try {
-  const auth = await requireAdmin();
-  if (isAdminAuthFailure(auth)) return auth.error;
+    const auth = await requireAdmin();
+    if (isAdminAuthFailure(auth)) return auth.error;
 
     await connectDB();
     const body = await request.json();
     const { id } = body;
-    
+
     if (!id) {
       return NextResponse.json(
         {
@@ -226,7 +242,6 @@ export async function PUT(request: Request) {
       );
     }
 
-    // Whitelist only known fields — prevent mass assignment
     const allowedKeys = [
       "name",
       "country_ref",
@@ -255,24 +270,25 @@ export async function PUT(request: Request) {
       }
     }
 
-    if (updateData.ranking_section !== undefined && updateData.ranking === undefined) {
+    if (
+      updateData.ranking_section !== undefined &&
+      updateData.ranking === undefined
+    ) {
       updateData.ranking = updateData.ranking_section;
       delete updateData.ranking_section;
     }
 
-    // Generate new slug if name is being updated
     if (typeof updateData.name === "string") {
       updateData.slug = generateSlug(updateData.name);
     }
 
-    // Validate city requirement for India if country is being updated
     if (updateData.country_ref || updateData.city !== undefined) {
       const countryId = updateData.country_ref;
       const country = countryId
-        ? await Country.findById(countryId)
+        ? await Country.findById(countryId).select("name").lean()
         : null;
-      if (country && country.name.toLowerCase() === 'india' && !updateData.city) {
-        const existingCollege = await College.findById(id);
+      if (country && country.name.toLowerCase() === "india" && !updateData.city) {
+        const existingCollege = await College.findById(id).select("city").lean();
         if (!existingCollege?.city) {
           return NextResponse.json(
             {
@@ -285,11 +301,10 @@ export async function PUT(request: Request) {
       }
     }
 
-    const updatedCollege = await College.findByIdAndUpdate(
-      id,
-      updateData,
-      { new: true, runValidators: true }
-    ).populate('country_ref', 'name slug flag');
+    const updatedCollege = await College.findByIdAndUpdate(id, updateData, {
+      new: true,
+      runValidators: true,
+    }).populate("country_ref", "name slug flag");
 
     if (!updatedCollege) {
       return NextResponse.json(

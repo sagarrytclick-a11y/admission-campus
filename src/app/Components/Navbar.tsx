@@ -96,6 +96,7 @@ export default function SimpleNavbar() {
       name: `${category.name} Colleges`,
       href: `/colleges/category/${category.slug}`
     })) || []),
+    { name: "MD / MS Colleges", href: "/md-ms" },
     { name: "All Colleges", href: "/colleges" },
   ];
 
@@ -201,6 +202,18 @@ export default function SimpleNavbar() {
               </div>
             )}
           </div>
+
+          {/* MD / MS — top-level */}
+          <Link
+            href="/md-ms"
+            className={`px-5 py-3 rounded-lg text-xs font-semibold uppercase tracking-wide transition-all ${
+              pathname?.includes("/md-ms")
+                ? "text-[#0066F5] bg-[#BFDBFE]"
+                : "text-slate-700 hover:text-white hover:bg-[#0066F5]"
+            }`}
+          >
+            MD / MS
+          </Link>
 
           {/* Courses */}
           {/* Exams */}
@@ -312,6 +325,15 @@ export default function SimpleNavbar() {
                 }`}
             >
               Exams
+            </Link>
+
+            <Link
+              href="/md-ms"
+              onClick={() => setIsOpen(false)}
+              className={`text-base sm:text-lg font-bold tracking-tight py-3 px-4 rounded-lg transition-colors ${pathname?.includes("/md-ms") ? "text-[#0066F5] bg-[#BFDBFE]" : "text-slate-700 hover:bg-[#0066F5] hover:text-white"
+                }`}
+            >
+              MD / MS
             </Link>
 
             <Link
