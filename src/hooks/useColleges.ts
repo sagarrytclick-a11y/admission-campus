@@ -193,11 +193,12 @@ export function useInfiniteColleges(search: string, country: string, exam: strin
 }
 
 // Hook for single college details
-export function useCollege(slug: string) {
+export function useCollege(slug: string, initialData?: College | null) {
   return useQuery({
     queryKey: ['college', slug],
     queryFn: () => fetchCollegeBySlug(slug),
     enabled: !!slug,
+    initialData: initialData ?? undefined,
     staleTime: 10 * 60 * 1000, // 10 minutes
     gcTime: 30 * 60 * 1000, // 30 minutes
     retry: 2,

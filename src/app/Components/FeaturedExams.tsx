@@ -10,8 +10,9 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
+import type { Swiper as SwiperType } from "swiper";
 import { Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -98,6 +99,25 @@ const UniversityCard = ({
 /* =======================
    UPCOMING EXAMS (SWIPER SLIDER)
 ======================= */
+function getExamDateLabel(exam: any): string {
+  const dates = exam?.exam_dates?.important_dates;
+  if (Array.isArray(dates) && dates.length > 0) {
+    const sorted = [...dates].sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    );
+    const upcoming =
+      sorted.find((d) => new Date(d.date).getTime() >= Date.now()) || sorted[0];
+    if (upcoming?.date) {
+      return new Date(upcoming.date).toLocaleDateString("en-IN", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      });
+    }
+  }
+  return "TBA";
+}
+
 const UpcomingExamsSection = ({
   exams,
   loading,
@@ -105,103 +125,162 @@ const UpcomingExamsSection = ({
   exams: any[];
   loading: boolean;
 }) => {
+  const prevRef = useRef<HTMLButtonElement | null>(null);
+  const nextRef = useRef<HTMLButtonElement | null>(null);
+
   return (
-    <section className="py-[32px] bg-white border-t border-slate-100">
+    <section className="py-10 md:py-12 bg-slate-50 border-t border-slate-100">
       <div className="max-w-7xl mx-auto px-6 lg:px-24">
-        <div className="mb-10">
-          <div className="flex items-center gap-2 text-[#1E293B] mb-2">
-            <CalendarDays size={16} />
-            <span className="text-[10px] font-bold uppercase tracking-widest">
-              Entrance Calendar 2026
-            </span>
+        <div className="mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2 text-[#0066F5] mb-2">
+              <CalendarDays size={16} />
+              <span className="text-[10px] font-bold uppercase tracking-widest">
+                Entrance Calendar
+              </span>
+            </div>
+            <h2 className="text-3xl font-bold tracking-tight text-[#1E293B]">
+              Upcoming Exam Dates
+            </h2>
           </div>
-          <h2 className="text-3xl font-bold tracking-tight text-[#1E293B]">
-            Upcoming Exam Dates
-          </h2>
+          <Link
+            href="/exams"
+            className="inline-flex items-center gap-1.5 text-sm font-bold text-[#0066F5] hover:underline"
+          >
+            View all exams <ArrowRight size={16} />
+          </Link>
         </div>
 
         {loading ? (
           <div className="flex justify-center items-center h-48">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0066F5]" />
+          </div>
+        ) : exams.length === 0 ? (
+          <div className="rounded-xl border border-dashed border-slate-300 bg-white p-10 text-center text-slate-500">
+            No upcoming exams available right now.
           </div>
         ) : (
           <div className="relative">
-            <Swiper
-              modules={[Navigation, Autoplay]}
-              spaceBetween={16}
-              slidesPerView={1}
-              navigation={{
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-              }}
-              autoplay={{
-                delay: 3000,
-                disableOnInteraction: false,
-              }}
-              loop={true}
-              breakpoints={{
-                640: {
-                  slidesPerView: 2,
-                },
-                1024: {
-                  slidesPerView: 3,
-                },
-              }}
-              className="!pb-12"
-            >
-              {exams.map((exam, idx) => (
-                <SwiperSlide key={idx}>
-                  <Link
-                    href={`/exams/${exam.slug}`}
-                    className="group block overflow-hidden rounded-lg border border-blue-200 bg-white shadow-sm hover:shadow-md h-full"
-                  >
-                    <div className="p-4">
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                          <span className="text-xs font-bold text-blue-600">
-                            {(exam.short_name || exam.name || "")
-                              .substring(0, 6)
-                              .toUpperCase()}
+            {exams.length > 1 && (
+              <>
+                <button
+                  ref={prevRef}
+                  type="button"
+                  aria-label="Previous exams"
+                  className="hidden sm:flex absolute left-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white shadow-md border border-slate-200 items-center justify-center text-slate-700 hover:bg-[#0066F5] hover:text-white hover:border-[#0066F5] transition-all"
+                >
+                  <ChevronLeft size={18} />
+                </button>
+                <button
+                  ref={nextRef}
+                  type="button"
+                  aria-label="Next exams"
+                  className="hidden sm:flex absolute right-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white shadow-md border border-slate-200 items-center justify-center text-slate-700 hover:bg-[#0066F5] hover:text-white hover:border-[#0066F5] transition-all"
+                >
+                  <ChevronRight size={18} />
+                </button>
+              </>
+            )}
+
+            <div className="sm:px-12">
+              <Swiper
+                modules={[Navigation, Autoplay]}
+                spaceBetween={16}
+                slidesPerView={1.15}
+                centeredSlides={exams.length === 1}
+                onBeforeInit={(swiper: SwiperType) => {
+                  const nav = swiper.params.navigation;
+                  if (nav && typeof nav !== "boolean") {
+                    nav.prevEl = prevRef.current;
+                    nav.nextEl = nextRef.current;
+                  }
+                }}
+                onSwiper={(swiper) => {
+                  // Re-bind nav after refs are mounted (SSR/client hydration)
+                  setTimeout(() => {
+                    if (
+                      swiper.params.navigation &&
+                      typeof swiper.params.navigation !== "boolean"
+                    ) {
+                      swiper.params.navigation.prevEl = prevRef.current;
+                      swiper.params.navigation.nextEl = nextRef.current;
+                      swiper.navigation.destroy();
+                      swiper.navigation.init();
+                      swiper.navigation.update();
+                    }
+                  }, 0);
+                }}
+                navigation
+                autoplay={
+                  exams.length > 1
+                    ? { delay: 3500, disableOnInteraction: false }
+                    : false
+                }
+                loop={exams.length > 3}
+                watchOverflow
+                breakpoints={{
+                  640: {
+                    slidesPerView: Math.min(2, exams.length),
+                    centeredSlides: false,
+                  },
+                  1024: {
+                    slidesPerView: Math.min(3, exams.length),
+                    centeredSlides: false,
+                  },
+                }}
+              >
+                {exams.map((exam) => (
+                  <SwiperSlide key={exam._id || exam.slug} className="!h-auto">
+                    <Link
+                      href={`/exams/${exam.slug}`}
+                      className="group flex flex-col h-full min-h-[220px] overflow-hidden rounded-xl border-2 border-slate-200 bg-white shadow-sm hover:border-[#0066F5] hover:shadow-lg hover:shadow-[#0066F5]/15 transition-all"
+                    >
+                      <div className="p-5 flex-1">
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center border border-blue-100">
+                            <span className="text-[10px] font-bold text-[#0066F5]">
+                              {(exam.short_name || exam.name || "")
+                                .substring(0, 6)
+                                .toUpperCase()}
+                            </span>
+                          </div>
+                          <span className="inline-flex items-center rounded-full border border-blue-200 bg-blue-50 px-2.5 py-0.5 text-xs font-semibold text-[#0066F5]">
+                            {exam.exam_mode || "Online"}
                           </span>
                         </div>
-                        <span className="inline-flex items-center rounded-full border border-blue-300 bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700">
-                          Online
-                        </span>
+
+                        <h3 className="text-lg font-bold text-[#1E293B] mb-1 group-hover:text-[#0066F5] line-clamp-2">
+                          {exam.short_name || exam.name}
+                        </h3>
+
+                        <p className="text-xs text-slate-500 mb-3">
+                          {exam.exam_type || "Entrance Exam"}
+                          {exam.conducting_body
+                            ? ` · ${exam.conducting_body}`
+                            : ""}
+                        </p>
+
+                        <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+                          Exam Date
+                        </p>
+                        <p className="text-sm font-bold text-[#0066F5] mt-0.5">
+                          {getExamDateLabel(exam)}
+                        </p>
                       </div>
 
-                      <h3 className="text-lg font-bold text-[#1E293B] mb-1 group-hover:text-blue-600">
-                        {exam.short_name || exam.name}
-                      </h3>
-
-                      {exam.type && (
-                        <p className="text-xs text-slate-500 mb-2">
-                          {exam.type}
-                        </p>
-                      )}
-
-                      <p className="text-sm text-slate-600">Exam Date</p>
-                      <p className="text-sm font-bold text-blue-600">
-                        {exam.next_date || "TBA"}
-                      </p>
-                    </div>
-
-                    <div className="bg-blue-600 px-4 py-3 flex items-center justify-between">
-                      <span className="text-white text-sm font-medium">
-                        Exam Info
-                      </span>
-                      <ArrowRight size={16} className="text-white" />
-                    </div>
-                  </Link>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-
-            {/* Custom Navigation Buttons */}
-            <div className="swiper-button-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white shadow-lg border border-blue-200 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all z-10">
-              <ChevronLeft size={16} />
-            </div>
-            <div className="swiper-button-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white shadow-lg border border-blue-200 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all z-10">
-              <ChevronRight size={16} />
+                      <div className="bg-[#0066F5] px-5 py-3 flex items-center justify-between mt-auto">
+                        <span className="text-white text-sm font-semibold">
+                          Exam Info
+                        </span>
+                        <ArrowRight
+                          size={16}
+                          className="text-white group-hover:translate-x-0.5 transition-transform"
+                        />
+                      </div>
+                    </Link>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
             </div>
           </div>
         )}
@@ -292,19 +371,25 @@ export default function FeaturedSection() {
 ======================= */
 const useFeaturedData = () => {
   const colleges = useQuery({
-    queryKey: ["colleges"],
-    queryFn: async () => (await fetch("/api/colleges")).json(),
+    queryKey: ["colleges", "featured"],
+    queryFn: async () =>
+      (await fetch("/api/colleges?limit=12")).json(),
+    staleTime: 5 * 60 * 1000,
   });
 
   const exams = useQuery({
-    queryKey: ["exams"],
-    queryFn: async () => (await fetch("/api/admin/exams")).json(),
+    queryKey: ["featured-exams"],
+    queryFn: async () => {
+      const res = await fetch("/api/exams");
+      if (!res.ok) throw new Error("Failed to fetch exams");
+      return res.json();
+    },
+    staleTime: 5 * 60 * 1000,
   });
 
-  
   return {
     universities: colleges.data?.data?.colleges || [],
-    exams: exams.data?.data || [],
+    exams: Array.isArray(exams.data?.data) ? exams.data.data : [],
     loading: colleges.isLoading || exams.isLoading,
   };
 };

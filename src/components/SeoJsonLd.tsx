@@ -57,3 +57,70 @@ export function WebsiteJsonLd() {
     />
   );
 }
+
+export function CollegeJsonLd({
+  name,
+  description,
+  url,
+  image,
+  city,
+  country,
+}: {
+  name: string;
+  description: string;
+  url: string;
+  image?: string;
+  city?: string;
+  country?: string;
+}) {
+  const data = {
+    "@context": "https://schema.org",
+    "@type": "CollegeOrUniversity",
+    name,
+    description: description.slice(0, 300),
+    url: url.startsWith("http") ? url : `${SITE_URL}${url}`,
+    ...(image
+      ? { image: image.startsWith("http") ? image : `${SITE_URL}${image}` }
+      : {}),
+    ...(city || country
+      ? {
+          address: {
+            "@type": "PostalAddress",
+            ...(city ? { addressLocality: city } : {}),
+            ...(country ? { addressCountry: country } : {}),
+          },
+        }
+      : {}),
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: safeJsonLd(data) }}
+    />
+  );
+}
+
+export function BreadcrumbJsonLd({
+  items,
+}: {
+  items: { name: string; url: string }[];
+}) {
+  const data = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: item.url.startsWith("http") ? item.url : `${SITE_URL}${item.url}`,
+    })),
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: safeJsonLd(data) }}
+    />
+  );
+}

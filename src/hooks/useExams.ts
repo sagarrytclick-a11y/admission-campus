@@ -20,47 +20,29 @@ interface Exam {
 }
 
 const fetchExams = async (): Promise<Exam[]> => {
-  try {
-    const response = await fetch('/api/exams', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Cache-Control': 'no-cache',
-        'Pragma': 'no-cache',
-      },
-      cache: 'no-store',
-    })
-    
-    
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
-    
-    const result = await response.json()
-    
-    if (!result.success) {
-      throw new Error(result.message || 'Failed to fetch exams')
-    }
-    
-    return result.data || []
-  } catch (error) {
-    throw error
+  const response = await fetch('/api/exams')
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`)
   }
+
+  const result = await response.json()
+
+  if (!result.success) {
+    throw new Error(result.message || 'Failed to fetch exams')
+  }
+
+  return result.data || []
 }
 
 export function useExams() {
-  const result = useQuery({
+  return useQuery({
     queryKey: ['exams'],
     queryFn: fetchExams,
-    staleTime: 30 * 1000, // 30 seconds
-    gcTime: 5 * 60 * 1000, // 5 minutes
-    retry: 3,
-    retryDelay: 1000,
-    refetchOnWindowFocus: false, // Disable to prevent unwanted refetches
-    refetchOnReconnect: true,
-    refetchOnMount: 'always', // Always refetch on mount
-    initialData: [], // Start with empty array
+    staleTime: 5 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+    retry: 2,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   })
-
-  return result
 }

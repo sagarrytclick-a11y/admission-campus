@@ -10,13 +10,13 @@ export function QueryProvider({ children }: { children: React.ReactNode }) {
       new QueryClient({
         defaultOptions: {
           queries: {
-            staleTime: 30 * 1000, // 30 seconds
-            gcTime: 5 * 60 * 1000, // 5 minutes
+            // Prefer cached data — APIs already send CDN Cache-Control
+            staleTime: 5 * 60 * 1000, // 5 minutes
+            gcTime: 30 * 60 * 1000, // 30 minutes
             retry: 2,
-            refetchOnWindowFocus: false, // Disable to prevent conflicts
+            refetchOnWindowFocus: false,
             refetchOnReconnect: true,
-            refetchOnMount: 'always', // Always fetch on mount
-            initialData: undefined, // Don't use initial data
+            refetchOnMount: false,
           },
         },
       })

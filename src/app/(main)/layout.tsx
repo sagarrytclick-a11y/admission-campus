@@ -8,9 +8,6 @@ export const metadata: Metadata = {
     template: `%s | ${SITE_IDENTITY.name}`,
   },
   description: SITE_IDENTITY.meta.description,
-  alternates: {
-    canonical: "/",
-  },
 };
 
 export default function MainLayout({

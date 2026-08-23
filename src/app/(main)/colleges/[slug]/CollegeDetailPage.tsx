@@ -126,9 +126,10 @@ interface College {
 
 interface CollegeDetailPageProps {
   slug: string
+  initialCollege?: any
 }
 
-const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
+const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug, initialCollege }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
@@ -181,7 +182,7 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug }) => {
     isLoading,
     error,
     refetch
-  } = useCollege(slug);
+  } = useCollege(slug, initialCollege);
 if (isLoading) {
   return (
     <div className="min-h-screen bg-[#F8FAFC] p-8 space-y-6">
@@ -240,80 +241,90 @@ if (isLoading) {
   }
 
   return (
-    <div className="min-h-screen  bg-white">
+    <div className="min-h-screen bg-[#F8FAFC]">
       {/* Hero Section */}
-      <div className="bg-linear-to-br from-[#F8FAFC] to-white py-12">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-center">
+      <div className="relative overflow-hidden bg-[#0F172A] text-white">
+        <div className="absolute inset-0">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={college.banner_url || `https://picsum.photos/seed/${college.slug}/1200/600`}
+            alt=""
+            className="w-full h-full object-cover opacity-30"
+          />
+          <div className="absolute inset-0 bg-linear-to-r from-[#0F172A] via-[#0F172A]/90 to-[#0F172A]/65" />
+        </div>
 
-            {/* LEFT SIDE: CONTENT */}
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-10 md:py-14">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div>
-              <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
-                <Badge className="bg-[#0066F5]/10 text-[#0066F5] border-none px-3 py-1 rounded-full text-sm font-medium">
-                  <Flag className="w-3 h-3 mr-2" />
-                  {college.country_ref?.name || 'International'}
-                </Badge>
-
+              <div className="flex flex-wrap items-center gap-2 mb-5">
+                <span className="inline-flex items-center gap-1.5 bg-[#0066F5] text-white px-3 py-1.5 rounded-full text-xs font-bold">
+                  <Flag className="w-3 h-3" />
+                  {college.country_ref?.name || "International"}
+                </span>
                 {college.ranking && (
-                  <Badge className="bg-[#FFD700]/20 text-[#FFD700]/90 border-none px-3 py-1 rounded-full text-sm font-medium">
-                    <Trophy className="w-3 h-3 mr-2" />
-                    Ranked #{typeof college.ranking === 'object' ? college.ranking.country_ranking : college.ranking}
-                  </Badge>
+                  <span className="inline-flex items-center gap-1.5 bg-amber-400 text-slate-900 px-3 py-1.5 rounded-full text-xs font-bold">
+                    <Trophy className="w-3 h-3" />
+                    Ranked #
+                    {typeof college.ranking === "object"
+                      ? college.ranking.country_ranking
+                      : college.ranking}
+                  </span>
                 )}
               </div>
 
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#1E293B] mb-4 sm:mb-6">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-5">
                 {college.name}
-                <span className="text-[#0066F5]">.</span>
               </h1>
 
-              {/* Hero Description */}
-              <div className="mb-6 sm:mb-8">
-                <p className="text-[#64748B] max-w-xl leading-relaxed">
-                  {college.overview?.description || college.about_content}
-                </p>
-              </div>
+              <p className="text-white/85 text-base md:text-lg max-w-xl leading-relaxed mb-8 line-clamp-4">
+                {college.overview?.description || college.about_content}
+              </p>
 
-              <div className="flex flex-wrap gap-6 py-6 border-y border-slate-200">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-[#0066F5]/10 rounded-lg flex items-center justify-center">
-                    <MapPin className="w-5 h-5 text-[#0066F5]" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-[#64748B] uppercase font-medium">Location</p>
-                    <p className="text-sm font-semibold text-[#1E293B]">{college.country_ref?.name || 'Global'}</p>
-                  </div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                <div className="rounded-xl bg-white/10 border border-white/15 p-4 backdrop-blur-sm">
+                  <p className="text-[11px] uppercase tracking-wide text-white/60 font-bold mb-1">
+                    Location
+                  </p>
+                  <p className="text-sm font-bold">
+                    {college.country_ref?.name || "Global"}
+                  </p>
                 </div>
-
                 {college.establishment_year && (
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-[#0066F5]/10 rounded-lg flex items-center justify-center">
-                      <Calendar className="w-5 h-5 text-[#0066F5]" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-[#64748B] uppercase font-medium">Founded</p>
-                      <p className="text-sm font-semibold text-[#1E293B]">{college.establishment_year}</p>
-                    </div>
+                  <div className="rounded-xl bg-white/10 border border-white/15 p-4 backdrop-blur-sm">
+                    <p className="text-[11px] uppercase tracking-wide text-white/60 font-bold mb-1">
+                      Founded
+                    </p>
+                    <p className="text-sm font-bold">{college.establishment_year}</p>
                   </div>
                 )}
-
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-[#0066F5]/10 rounded-lg flex items-center justify-center">
-                    <Users className="w-5 h-5 text-[#0066F5]" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-[#64748B] uppercase font-medium">Community</p>
-                    <p className="text-sm font-semibold text-[#1E293B]">Intl. Students</p>
-                  </div>
+                <div className="rounded-xl bg-white/10 border border-white/15 p-4 backdrop-blur-sm">
+                  <p className="text-[11px] uppercase tracking-wide text-white/60 font-bold mb-1">
+                    Community
+                  </p>
+                  <p className="text-sm font-bold">Intl. Students</p>
                 </div>
+              </div>
+
+              <div className="mt-8">
+                <Button
+                  onClick={() => openModal()}
+                  className="bg-[#0066F5] hover:bg-[#004ED4] text-white font-bold px-6 py-3 rounded-xl"
+                >
+                  Get Free Counselling
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
               </div>
             </div>
 
-            {/* RIGHT SIDE: IMAGE */}
-            <div className="relative">
-              <div className="rounded-2xl overflow-hidden border border-slate-200">
+            <div className="relative hidden sm:block">
+              <div className="rounded-2xl overflow-hidden border-4 border-white/20 shadow-2xl">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={college.banner_url || `https://picsum.photos/seed/${college.slug}/600/400`}
+                  src={
+                    college.banner_url ||
+                    `https://picsum.photos/seed/${college.slug}/600/400`
+                  }
                   alt={college.name}
                   className="w-full h-80 object-cover"
                 />
@@ -324,15 +335,16 @@ if (isLoading) {
       </div>
 
       {/* Navigation Tab Bar */}
-      <div className="sticky z-50 top-16 sm:top-0 bg-white/95 backdrop-blur-md border-b-2 border-slate-200 shadow-lg">
+      <div className="sticky z-50 top-16 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center gap-2 sm:gap-6 py-4 overflow-x-auto">
+          <div className="flex items-center gap-1 sm:gap-2 py-2.5 overflow-x-auto">
             {[
               { name: 'Overview', id: 'overview' },
-              { name: 'Key Highlights', id: 'key-highlights' },
-              { name: 'Why Choose ?', id: 'why-choose' },
+              { name: 'Key Info', id: 'key-information' },
+              { name: 'Highlights', id: 'key-highlights' },
+              { name: 'Why Choose?', id: 'why-choose' },
               { name: 'Ranking', id: 'ranking' },
-              { name: 'Admission Process', id: 'admission-process' },
+              { name: 'Admission', id: 'admission-process' },
               { name: 'Eligibility', id: 'entrance-exams' },
               { name: 'Documents', id: 'documents-required' },
               { name: 'Fees', id: 'fees-structure' },
@@ -346,10 +358,10 @@ if (isLoading) {
                     element.scrollIntoView({ behavior: 'smooth', block: 'start' });
                   }
                 }}
-                className={`px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all duration-300 whitespace-nowrap border-2 border-transparent ${
+                className={`px-3.5 py-2 text-xs sm:text-sm font-bold rounded-lg transition-all whitespace-nowrap ${
                   activeTab === tab.id
-                    ? 'bg-[#0066F5] text-white border-[#0066F5] shadow-md'
-                    : 'text-[#64748B] hover:text-[#0066F5] hover:border-[#0066F5] hover:bg-slate-50'
+                    ? 'bg-[#0066F5] text-white shadow-sm'
+                    : 'text-slate-600 hover:text-[#0066F5] hover:bg-blue-50'
                 }`}
               >
                 {tab.name}
@@ -365,39 +377,50 @@ if (isLoading) {
           {/* Left Column - Main Content */}
           <div className="lg:col-span-2 space-y-8">
             {/* About Section */}
-            <div id="overview">
-              <div className="bg-white border border-slate-200 rounded-xl p-8">
+            <div id="overview" className="scroll-mt-28">
+              <div className="bg-white border border-slate-200 rounded-2xl p-6 md:p-8 shadow-sm">
                 <div className="mb-6">
                   <Badge className="bg-[#0066F5]/10 text-[#0066F5] border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
                     Institution
                   </Badge>
-                  <h2 className="text-2xl font-bold text-[#1E293B] mb-4">
+                  <h2 className="text-2xl font-bold text-slate-900 mb-4">
                     {college.overview?.title || 'About the Institution'}
                   </h2>
                 </div>
 
-                <p className="text-[#64748B] leading-relaxed mb-6">
+                <p
+                  className={`text-slate-700 leading-relaxed mb-4 text-base ${
+                    isExpanded ? "" : "line-clamp-4"
+                  }`}
+                >
                   {college.overview?.description || college.about_content}
                 </p>
 
-                <button
-                  onClick={() => setIsExpanded(!isExpanded)}
-                  className="text-[#0066F5] font-medium text-sm flex items-center gap-2 hover:text-[#0066F5]/80"
-                >
-                  {isExpanded ? 'Show Less' : 'Show More'}
-                  <ArrowRight className={`w-4 h-4 transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
-                </button>
+                {(college.overview?.description || college.about_content || "").length >
+                  220 && (
+                  <button
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    className="text-[#0066F5] font-bold text-sm flex items-center gap-2 hover:text-[#004ED4]"
+                  >
+                    {isExpanded ? "Show Less" : "Show More"}
+                    <ArrowRight
+                      className={`w-4 h-4 transition-transform ${
+                        isExpanded ? "rotate-90" : ""
+                      }`}
+                    />
+                  </button>
+                )}
               </div>
             </div>
 
             {/* Key Information */}
-            <div id="key-highlights">
-              <div className="bg-white border border-slate-200 rounded-xl p-8">
+            <div id="key-information" className="scroll-mt-28">
+              <div className="bg-white border border-slate-200 rounded-2xl p-6 md:p-8 shadow-sm">
                 <div className="mb-6">
                   <Badge className="bg-[#0066F5]/10 text-[#0066F5] border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
                     Essentials
                   </Badge>
-                  <h2 className="text-2xl font-bold text-[#1E293B]">Key Information</h2>
+                  <h2 className="text-2xl font-bold text-slate-900">Key Information</h2>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -479,31 +502,31 @@ if (isLoading) {
             </div>
 
             {/* Key Highlights */}
-            <div id="key-highlights">
+            <div id="key-highlights" className="scroll-mt-28">
               {college.key_highlights?.features && college.key_highlights.features.length > 0 && (
-                <div className="bg-white border border-slate-200 rounded-xl p-8">
+                <div className="bg-white border border-slate-200 rounded-2xl p-6 md:p-8 shadow-sm">
                   <div className="mb-6">
                     <Badge className="bg-[#0066F5]/10 text-[#0066F5] border-none px-3 py-1 rounded-full text-sm font-medium mb-4">
                       At a Glance
                     </Badge>
-                    <h2 className="text-2xl font-bold text-[#1E293B]">
+                    <h2 className="text-2xl font-bold text-slate-900">
                       {college.key_highlights.title || 'Key Highlights'}
                     </h2>
                   </div>
 
                   {college.key_highlights.description && (
-                    <p className="text-[#64748B] mb-6">
+                    <p className="text-slate-700 mb-6 leading-relaxed">
                       {college.key_highlights.description}
                     </p>
                   )}
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {college.key_highlights.features.map((feature, index) => (
-                      <div key={index} className="flex items-start gap-3 p-4 bg-slate-50 rounded-lg">
+                      <div key={index} className="flex items-start gap-3 p-4 bg-slate-50 border border-slate-100 rounded-xl">
                         <div className="w-8 h-8 bg-[#0066F5]/10 rounded-lg flex items-center justify-center shrink-0 mt-1">
                           <Star className="w-4 h-4 text-[#0066F5]" />
                         </div>
-                        <div className="text-[#64748B]">{feature}</div>
+                        <div className="text-slate-800 font-medium">{feature}</div>
                       </div>
                     ))}
                   </div>
@@ -801,26 +824,28 @@ if (isLoading) {
           </div>
 
           {/* Right Column - CTA and Related */}
-          <div className="space-y-8 lg:sticky lg:top-8 lg:h-fit">
+          <div className="space-y-6 lg:sticky lg:top-32 lg:h-fit">
             {/* CTA Card */}
-            <div className="bg-linear-to-br from-[#0066F5] to-[#0066F5]/90 text-white rounded-xl p-8 shadow-xl shadow-[#0066F5]/20">
+            <div className="bg-linear-to-br from-[#0066F5] to-[#0047B3] text-white rounded-2xl p-7 shadow-xl shadow-[#0066F5]/25">
               <div className="text-center">
-                <div className="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center mx-auto mb-4">
-                  <GraduationCap className="w-8 h-8 text-white" />
+                <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center mx-auto mb-4">
+                  <GraduationCap className="w-7 h-7 text-white" />
                 </div>
-                <h3 className="text-xl font-bold mb-4">Ready to Apply?</h3>
-                <p className="text-blue-100 mb-6">Get expert guidance for your admission process</p>
+                <h3 className="text-xl font-bold mb-2">Ready to Apply?</h3>
+                <p className="text-blue-100 text-sm mb-6 leading-relaxed">
+                  Get expert guidance for your admission process
+                </p>
                 <div className="space-y-3">
                   <button
                     onClick={openModal}
-                    className="w-full bg-white text-[#0066F5] font-semibold rounded-lg  transition-colors py-3 px-6 flex items-center justify-center gap-2"
+                    className="w-full bg-white text-[#0066F5] font-bold rounded-xl hover:bg-blue-50 transition-colors py-3 px-6 flex items-center justify-center gap-2"
                   >
                     <Bookmark className="w-4 h-4" />
                     Start Application
                   </button>
                   <button
                     onClick={openModal}
-                    className="w-full bg-white/20 backdrop-blur-sm text-white font-semibold rounded-lg hover:bg-[#0066F5]/10 transition-colors py-3 px-6 border border-white/30 flex items-center justify-center gap-2"
+                    className="w-full bg-white/15 backdrop-blur-sm text-white font-bold rounded-xl hover:bg-white/25 transition-colors py-3 px-6 border border-white/30 flex items-center justify-center gap-2"
                   >
                     <Phone className="w-4 h-4" />
                     Get Free Consultation
@@ -830,19 +855,22 @@ if (isLoading) {
             </div>
 
             {/* Quick Info */}
-            <div className="bg-white border border-slate-200 rounded-xl p-6">
+            <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+              <p className="text-xs font-bold uppercase tracking-wide text-slate-500 mb-4">
+                Contact
+              </p>
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
-                  <Phone className="w-5 h-5 text-[#0066F5]" />
-                  <span className="text-[#64748B] font-medium">{phones.primary}</span>
+                  <Phone className="w-5 h-5 text-[#0066F5] shrink-0" />
+                  <span className="text-slate-800 font-semibold text-sm">{phones.primary}</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Mail className="w-5 h-5 text-[#0066F5]" />
-                  <span className="text-[#64748B] font-medium">{emails.info}</span>
+                  <Mail className="w-5 h-5 text-[#0066F5] shrink-0" />
+                  <span className="text-slate-800 font-semibold text-sm break-all">{emails.info}</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Globe className="w-5 h-5 text-[#0066F5]" />
-                  <span className="text-[#64748B] font-medium">Global Opportunities</span>
+                  <Globe className="w-5 h-5 text-[#0066F5] shrink-0" />
+                  <span className="text-slate-800 font-semibold text-sm">Global Opportunities</span>
                 </div>
               </div>
             </div>

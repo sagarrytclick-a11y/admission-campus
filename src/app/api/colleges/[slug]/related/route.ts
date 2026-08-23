@@ -2,8 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { Types } from "mongoose";
 import { connectDB } from "@/lib/db";
 import College from "@/models/College";
-// Required for populate('country_ref') on serverless cold starts
 import "@/models/Country";
+
+const RELATED_FIELDS =
+  "name slug banner_url city fees duration establishment_year ranking exams fees_structure.courses country_ref is_active";
 
 export async function GET(
   request: NextRequest,
@@ -13,9 +15,8 @@ export async function GET(
     const { slug } = await params;
     await connectDB();
 
-    // Find the current college to get its country
     const currentCollege = await College.findOne({ slug, is_active: true })
-      .populate("country_ref", "name slug flag")
+      .select("_id country_ref")
       .lean();
 
     if (!currentCollege) {
@@ -28,38 +29,36 @@ export async function GET(
       );
     }
 
-    const populatedCountry = currentCollege.country_ref as
-      | { _id?: Types.ObjectId }
-      | Types.ObjectId
-      | null
-      | undefined;
-
-    const countryId: Types.ObjectId | undefined =
-      populatedCountry && typeof populatedCountry === "object" && "_id" in populatedCountry
-        ? populatedCountry._id
-        : populatedCountry instanceof Types.ObjectId
-          ? populatedCountry
+    const countryId =
+      currentCollege.country_ref instanceof Types.ObjectId
+        ? currentCollege.country_ref
+        : currentCollege.country_ref
+          ? new Types.ObjectId(String(currentCollege.country_ref))
           : undefined;
 
-    // Find related colleges (same country, excluding current college)
-    // If not enough colleges from same country, fetch from other countries
     let relatedColleges = await College.find({
       _id: { $ne: currentCollege._id },
       ...(countryId ? { country_ref: countryId } : {}),
       is_active: true,
     })
+      .select(RELATED_FIELDS)
       .populate("country_ref", "name slug flag")
       .limit(6)
       .sort({ createdAt: -1 })
       .lean();
 
-    // If we don't have enough colleges from the same country, get more from other countries
     if (relatedColleges.length < 3) {
       const additionalColleges = await College.find({
-        _id: { $ne: currentCollege._id },
+        _id: {
+          $nin: [
+            currentCollege._id,
+            ...relatedColleges.map((c) => c._id),
+          ],
+        },
         ...(countryId ? { country_ref: { $ne: countryId } } : {}),
         is_active: true,
       })
+        .select(RELATED_FIELDS)
         .populate("country_ref", "name slug flag")
         .limit(6 - relatedColleges.length)
         .sort({ createdAt: -1 })
@@ -68,11 +67,20 @@ export async function GET(
       relatedColleges = [...relatedColleges, ...additionalColleges];
     }
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       message: "Related colleges fetched successfully",
       data: relatedColleges,
     });
+
+    response.headers.set(
+      "Cache-Control",
+      "public, s-maxage=600, stale-while-revalidate=900"
+    );
+    response.headers.set("CDN-Cache-Control", "public, s-maxage=900");
+    response.headers.set("Vercel-CDN-Cache-Control", "public, s-maxage=900");
+
+    return response;
   } catch (error) {
     return NextResponse.json(
       {
