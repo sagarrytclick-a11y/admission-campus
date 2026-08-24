@@ -86,12 +86,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${poppins.variable} ${poppins.className} font-sans`}>
+    <html
+      lang="en"
+      className={`${poppins.variable} ${poppins.className} font-sans`}
+      suppressHydrationWarning
+    >
       <head>
         <OrganizationJsonLd />
         <WebsiteJsonLd />
       </head>
-      <body className="font-sans antialiased bg-[#F4F7FC] text-[#0F172A]">
+      <body
+        className="font-sans antialiased bg-[#F4F7FC] text-[#0F172A]"
+        suppressHydrationWarning
+      >
         <QueryProvider>
           <FormModalProvider>
             <PopupProvider>
