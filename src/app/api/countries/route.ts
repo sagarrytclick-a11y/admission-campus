@@ -6,8 +6,9 @@ export async function GET() {
   try {
     await connectDB();
     const countries = await Country.find({ is_active: true })
+      .select("name slug flag is_active")
       .sort({ name: 1 })
-      .lean(); // Use lean() for better performance
+      .lean();
     
     const response = NextResponse.json({
       success: true,

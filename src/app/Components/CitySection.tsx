@@ -10,7 +10,7 @@ import {
 
 const CitySection = () => {
   // Theme Color Tokens
-  const PRIMARY_BLUE = "#1A4AB2"
+  const PRIMARY_BLUE = "#0066F5"
   const ACCENT_GOLD = "#FACC15"
 
   const cities = [
@@ -18,9 +18,9 @@ const CitySection = () => {
       title: "Engineering",
       description: "Explore top engineering colleges offering B.Tech, M.Tech programs with excellent placement records and cutting-edge research facilities.",
       examName: "JEE",
-      examColor: "text-[#1A4AB2]",
-      borderColor: "border-[#1A4AB2]",
-      hoverBg: "hover:bg-[#1A4AB2]/5",
+      examColor: "text-[#0066F5]",
+      borderColor: "border-[#0066F5]",
+      hoverBg: "hover:bg-[#0066F5]/5",
       href: "/colleges/engineering",
       features: ["Top IITs & NITs", "Excellent Placements", "Research Opportunities"],
       stats: { colleges: "5000+", exams: "JEE Main, GATE" }
@@ -54,12 +54,12 @@ const CitySection = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
         <div className="mb-8 text-center">
-          <div className="inline-flex items-center gap-2 bg-[#1A4AB2]/10 border border-[#1A4AB2]/20 text-[#1A4AB2] px-4 py-2 rounded-full text-[11px] font-bold uppercase tracking-widest mb-4">
+          <div className="inline-flex items-center gap-2 bg-[#0066F5]/10 border border-[#0066F5]/20 text-[#0066F5] px-4 py-2 rounded-full text-[11px] font-bold uppercase tracking-widest mb-4">
             <span className="w-2 h-2 bg-[#FACC15] rounded-full animate-pulse" />
             Explore Top Courses
           </div>
           <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-6">
-            Find Your <span className="text-[#1A4AB2]">Perfect</span> Career Path
+            Find Your <span className="text-[#0066F5]">Perfect</span> Career Path
           </h2>
           <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
             Discover premier institutions across Engineering, Medical, and Management streams. 
@@ -94,7 +94,7 @@ const CitySection = () => {
               <div className="space-y-3 mb-6 relative z-10">
                 {category.features.map((feature, idx) => (
                   <div key={idx} className="flex items-center gap-3">
-                    <div className={`w-2 h-2 ${category.examColor === 'text-[#1A4AB2]' ? 'bg-[#1A4AB2]' : category.examColor === 'text-[#10B981]' ? 'bg-[#10B981]' : 'bg-[#8B5CF6]'} rounded-full`} />
+                    <div className={`w-2 h-2 ${category.examColor === 'text-[#0066F5]' ? 'bg-[#0066F5]' : category.examColor === 'text-[#10B981]' ? 'bg-[#10B981]' : 'bg-[#8B5CF6]'} rounded-full`} />
                     <span className="text-sm font-semibold text-slate-700">{feature}</span>
                   </div>
                 ))}
@@ -117,7 +117,7 @@ const CitySection = () => {
               {/* Action Buttons - Matching the Image Design */}
               <div className="flex gap-3 relative z-10">
                 <Link href={category.href} className="flex-1">
-                  <button className={`w-full ${category.examColor === 'text-[#1A4AB2]' ? 'bg-[#1A4AB2] hover:bg-[#1A4AB2]/90' : category.examColor === 'text-[#10B981]' ? 'bg-[#10B981] hover:bg-[#10B981]/90' : 'bg-[#8B5CF6] hover:bg-[#8B5CF6]/90'} text-white font-bold py-3 px-4 rounded-xl text-sm flex items-center justify-center gap-2 transition-all duration-300 shadow-lg`}>
+                  <button className={`w-full ${category.examColor === 'text-[#0066F5]' ? 'bg-[#0066F5] hover:bg-[#0066F5]/90' : category.examColor === 'text-[#10B981]' ? 'bg-[#10B981] hover:bg-[#10B981]/90' : 'bg-[#8B5CF6] hover:bg-[#8B5CF6]/90'} text-white font-bold py-3 px-4 rounded-xl text-sm flex items-center justify-center gap-2 transition-all duration-300 shadow-lg`}>
                     Explore Exams
                     <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                   </button>
@@ -131,7 +131,7 @@ const CitySection = () => {
         </div>
 
         {/* Bottom CTA Section */}
-        <div className="text-center bg-gradient-to-r from-[#1A4AB2]/5 to-[#FACC15]/5 rounded-3xl p-12">
+        <div className="text-center bg-gradient-to-r from-[#0066F5]/5 to-[#FACC15]/5 rounded-3xl p-12">
           <h3 className="text-2xl font-bold text-slate-900 mb-4">
             Not Sure Which Path to Choose?
           </h3>
@@ -141,13 +141,13 @@ const CitySection = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/colleges">
-              <button className="bg-[#1A4AB2] hover:bg-[#1A4AB2]/90 text-white font-bold py-4 px-8 rounded-xl text-sm flex items-center justify-center gap-2 transition-all duration-300 shadow-lg">
+              <button className="bg-[#0066F5] hover:bg-[#0066F5]/90 text-white font-bold py-4 px-8 rounded-xl text-sm flex items-center justify-center gap-2 transition-all duration-300 shadow-lg">
                 Browse All Colleges
                 <ArrowRight size={16} />
               </button>
             </Link>
             <Link href="/exams">
-              <button className="bg-white hover:bg-slate-50 text-[#1A4AB2] border-2 border-[#1A4AB2] font-bold py-4 px-8 rounded-xl text-sm flex items-center justify-center gap-2 transition-all duration-300">
+              <button className="bg-white hover:bg-slate-50 text-[#0066F5] border-2 border-[#0066F5] font-bold py-4 px-8 rounded-xl text-sm flex items-center justify-center gap-2 transition-all duration-300">
                 View All Exams
                 <TrendingUp size={16} />
               </button>

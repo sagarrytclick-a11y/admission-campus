@@ -100,7 +100,7 @@ export default function ComprehensiveServices() {
           <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/service"
-              className="bg-[#0066F5] hover:bg-[#004ED4] text-white px-8 py-3 rounded-xl font-semibold transition-colors flex items-center gap-2"
+              className="bg-[#0066F5] hover:bg-[#0047B3] text-white px-8 py-3 rounded-xl font-bold transition-colors flex items-center gap-2"
             >
               Explore All Services
               <ArrowRight size={18} />
@@ -108,7 +108,7 @@ export default function ComprehensiveServices() {
             
             <button 
               onClick={() => openModal()} 
-              className="bg-white border border-slate-200 text-[#1E293B] px-8 py-3 rounded-xl font-semibold hover:border-[#0066F5] hover:text-[#0066F5] transition-all"
+              className="bg-[#0066F5] hover:bg-[#0047B3] text-white px-8 py-3 rounded-xl font-bold transition-all"
             >
               Free Consultation
             </button>

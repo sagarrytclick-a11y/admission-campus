@@ -199,10 +199,13 @@ export function useCollege(slug: string, initialData?: College | null) {
     queryFn: () => fetchCollegeBySlug(slug),
     enabled: !!slug,
     initialData: initialData ?? undefined,
-    staleTime: 10 * 60 * 1000, // 10 minutes
-    gcTime: 30 * 60 * 1000, // 30 minutes
-    retry: 2,
+    // Treat SSR data as fresh — avoid immediate refetch that slows first paint
+    initialDataUpdatedAt: initialData ? Date.now() : undefined,
+    staleTime: 10 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+    retry: 1,
     refetchOnWindowFocus: false,
+    refetchOnMount: false,
   })
 }
 

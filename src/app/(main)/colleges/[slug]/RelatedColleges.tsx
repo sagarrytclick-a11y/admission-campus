@@ -78,9 +78,10 @@ const fetchRelatedColleges = async (slug: string): Promise<College[]> => {
   const { data: colleges = [], isLoading, isError, error } = useQuery({
     queryKey: ['related-colleges', currentCollegeSlug],
     queryFn: () => fetchRelatedColleges(currentCollegeSlug),
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 10 * 60 * 1000, // 10 minutes
-    retry: 2,
+    staleTime: 10 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+    retry: 1,
+    refetchOnMount: false,
     refetchOnWindowFocus: false,
   });
 

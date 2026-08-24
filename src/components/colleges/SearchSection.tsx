@@ -85,7 +85,7 @@ const SearchSection = memo(({
             placeholder={placeholder}
             value={localSearchTerm}
             onChange={(e) => handleSearchChange(e.target.value)}
-            className="w-full text-black pl-12 pr-12 border-2 border-slate-300 focus:border-blue-500 focus:ring-blue-500"
+            className="w-full text-black pl-12 pr-12 border-2 border-slate-300 focus:border-[#0066F5] focus:ring-[#0066F5]"
           />
           {localSearchTerm && (
             <button
@@ -104,7 +104,7 @@ const SearchSection = memo(({
               <div>
                 <label className="block text-sm font-medium text-black mb-2">Category</label>
                 <Select value={selectedCategory} onValueChange={setSelectedCategory} disabled={categoriesLoading}>
-                  <SelectTrigger className="w-full border-2 text-black border-slate-300 focus:border-blue-500">
+                  <SelectTrigger className="w-full border-2 text-black border-slate-300 focus:border-[#0066F5]">
                     <SelectValue placeholder={categoriesLoading ? "Loading..." : "All Categories"} />
                   </SelectTrigger>
                   <SelectContent>
@@ -123,7 +123,7 @@ const SearchSection = memo(({
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">Entrance Exam</label>
                 <Select value={selectedExam} onValueChange={setSelectedExam}>
-                  <SelectTrigger className="w-full border-2 border-slate-300 focus:border-blue-500">
+                  <SelectTrigger className="w-full border-2 border-slate-300 focus:border-[#0066F5]">
                     <Award className="w-4 h-4 mr-2 text-black" />
                     <SelectValue placeholder="All Exams" />
                   </SelectTrigger>
@@ -144,7 +144,7 @@ const SearchSection = memo(({
           <div className="flex justify-end">
             <button
               onClick={handleReset}
-              className="flex bg-[#0066F5] text-white px-4 py-2 rounded-lg hover:bg-[#3B82F6] transition-colors items-center gap-2"
+              className="flex bg-[#0066F5] text-white px-4 py-2 rounded-lg hover:bg-[#0047B3] transition-colors items-center gap-2"
             >
               <RefreshCw className="w-4 h-4" />
               Reset Filters

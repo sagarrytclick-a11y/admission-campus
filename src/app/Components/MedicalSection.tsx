@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import Link from 'next/link'
 import { useQuery } from '@tanstack/react-query'
-import { Stethoscope, Heart, Brain, Bone, Eye, Baby, Activity, Pill } from 'lucide-react'
+import { Stethoscope, Heart, Brain, Bone, Eye, Baby, Activity, Pill, ArrowRight } from 'lucide-react'
 import { useFormModal } from '@/context/FormModalContext'
 import { formatRankingLabel } from '@/lib/formatRanking'
 
@@ -70,6 +71,7 @@ interface College {
   ranking: string
   neetScore: string
   image?: string
+  slug?: string
 }
 
 export default function MedicalSection() {
@@ -93,7 +95,8 @@ export default function MedicalSection() {
               name: college.name || `Medical College ${index + 1}`,
               ranking: formatRankingLabel(college.ranking?.country_ranking || college.legacy_ranking) || `#${index + 1}`,
               neetScore: college.fees_structure?.courses?.[0]?.annual_tuition_fee ? `${college.fees_structure.courses[0].annual_tuition_fee}` : `${720 - index * 5}+`,
-              image: college.banner_url || `/Hero/hero-${(index % 3) + 1}.jpg`
+              image: college.banner_url || `/Hero/hero-${(index % 3) + 1}.jpg`,
+              slug: college.slug,
             }))
             
             return transformedData
@@ -107,12 +110,12 @@ export default function MedicalSection() {
         
         // Fallback to hardcoded medical college data
         const fallbackData = [
-          { name: "AIIMS Delhi", ranking: "#1", neetScore: "720+", image: "/Hero/hero-1.jpg" },
-          { name: "PGIMER Chandigarh", ranking: "#2", neetScore: "715+", image: "/Hero/hero-2.jpg" },
-          { name: "CMC Vellore", ranking: "#3", neetScore: "710+", image: "/Hero/hero-3.jpg" },
-          { name: "JIPMER Puducherry", ranking: "#4", neetScore: "705+", image: "/Hero/hero-1.jpg" },
-          { name: "KMC Manipal", ranking: "#5", neetScore: "700+", image: "/Hero/hero-2.jpg" },
-          { name: "GMC Mumbai", ranking: "#6", neetScore: "695+", image: "/Hero/hero-3.jpg" }
+          { name: "AIIMS Delhi", ranking: "#1", neetScore: "720+", image: "/Hero/hero-1.jpg", slug: "" },
+          { name: "PGIMER Chandigarh", ranking: "#2", neetScore: "715+", image: "/Hero/hero-2.jpg", slug: "" },
+          { name: "CMC Vellore", ranking: "#3", neetScore: "710+", image: "/Hero/hero-3.jpg", slug: "" },
+          { name: "JIPMER Puducherry", ranking: "#4", neetScore: "705+", image: "/Hero/hero-1.jpg", slug: "" },
+          { name: "KMC Manipal", ranking: "#5", neetScore: "700+", image: "/Hero/hero-2.jpg", slug: "" },
+          { name: "GMC Mumbai", ranking: "#6", neetScore: "695+", image: "/Hero/hero-3.jpg", slug: "" }
         ]
         return fallbackData
       }
@@ -122,38 +125,38 @@ export default function MedicalSection() {
   })
 
   return (
-    <div className="py-[32px] px-4 bg-gray-50">
+    <div className="py-8 px-4 bg-[#F4F7FC]">
       <div className="max-w-7xl mx-auto">
-        {/* Section Header */}
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-[#0F172A] mb-4">
             Medical Education in India
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Pursue your dream of becoming a doctor with world-class medical education 
-            and training at India's top institutions
+          <p className="text-base md:text-lg text-[#64748B] max-w-3xl mx-auto">
+            Pursue your dream of becoming a doctor with world-class medical education
+            and training at India&apos;s top institutions
           </p>
         </div>
 
-        {/* Tabs */}
         <div className="flex justify-center mb-8">
-          <div className="bg-white rounded-lg shadow-sm p-1 inline-flex">
+          <div className="bg-white rounded-xl border border-[#E2E8F0] p-1 inline-flex">
             <button
+              type="button"
               onClick={() => setActiveTab('specialties')}
-              className={`px-6 py-2 rounded-md transition-colors ${
+              className={`px-6 py-2 rounded-lg text-sm font-semibold transition-colors ${
                 activeTab === 'specialties'
-                  ? 'bg-blue-600 text-white'
-                  : 'text-gray-600 hover:text-gray-900'
+                  ? 'bg-[#0066F5] text-white'
+                  : 'text-[#64748B] hover:text-[#0066F5]'
               }`}
             >
               Medical Specialties
             </button>
             <button
+              type="button"
               onClick={() => setActiveTab('colleges')}
-              className={`px-6 py-2 rounded-md transition-colors ${
+              className={`px-6 py-2 rounded-lg text-sm font-semibold transition-colors ${
                 activeTab === 'colleges'
-                  ? 'bg-blue-600 text-white'
-                  : 'text-gray-600 hover:text-gray-900'
+                  ? 'bg-[#0066F5] text-white'
+                  : 'text-[#64748B] hover:text-[#0066F5]'
               }`}
             >
               Top Medical Colleges
@@ -161,30 +164,25 @@ export default function MedicalSection() {
           </div>
         </div>
 
-        {/* Tab Content */}
         {activeTab === 'specialties' && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {medicalSpecialties.map((specialty, index) => (
               <div
                 key={index}
-                className="bg-white rounded-xl p-6 shadow-sm hover:shadow-lg transition-shadow"
+                className="bg-white rounded-xl p-6 border border-[#E2E8F0] hover:border-[#0066F5] hover:shadow-lg hover:shadow-[#0066F5]/10 transition-all"
               >
-                <div className="text-blue-600 mb-4">
-                  {specialty.icon}
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                <div className="text-[#0066F5] mb-4">{specialty.icon}</div>
+                <h3 className="text-lg font-bold text-[#0F172A] mb-2">
                   {specialty.title}
                 </h3>
-                <p className="text-gray-600 mb-4 text-sm">
-                  {specialty.description}
-                </p>
+                <p className="text-[#64748B] mb-4 text-sm">{specialty.description}</p>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Duration:</span>
-                  <span className="font-medium text-gray-900">{specialty.duration}</span>
+                  <span className="text-[#64748B]">Duration:</span>
+                  <span className="font-semibold text-[#0F172A]">{specialty.duration}</span>
                 </div>
                 <div className="flex justify-between text-sm mt-2">
-                  <span className="text-gray-500">Seats:</span>
-                  <span className="font-medium text-gray-900">{specialty.seats}</span>
+                  <span className="text-[#64748B]">Seats:</span>
+                  <span className="font-semibold text-[#0F172A]">{specialty.seats}</span>
                 </div>
               </div>
             ))}
@@ -196,99 +194,94 @@ export default function MedicalSection() {
             {isLoading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[1, 2, 3, 4, 5, 6].map((index) => (
-                  <div key={index} className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 animate-pulse">
-                    {/* Skeleton Image */}
-                    <div className="h-48 bg-gray-200 relative">
-                      <div className="absolute top-3 right-3">
-                        <div className="h-5 w-12 bg-gray-300 rounded-md"></div>
-                      </div>
-                    </div>
-                    
-                    {/* Skeleton Content */}
-                    <div className="p-6 space-y-3">
-                      <div className="h-6 bg-gray-300 rounded"></div>
-                      <div className="h-4 bg-gray-200 rounded"></div>
-                      <div className="h-8 bg-gray-200 rounded"></div>
+                  <div key={index} className="bg-white rounded-xl overflow-hidden border border-[#E2E8F0] animate-pulse">
+                    <div className="h-48 bg-slate-200" />
+                    <div className="p-5 space-y-3">
+                      <div className="h-6 bg-slate-200 rounded" />
+                      <div className="h-4 bg-slate-100 rounded" />
+                      <div className="h-10 bg-slate-200 rounded-xl" />
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {colleges.map((college: College, index: number) => (
-                  <div key={index} className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-shadow overflow-hidden border border-gray-100">
-                    {/* College Image */}
-                    <div className="h-48 bg-gray-100 relative">
-                      <img 
-                        src={college.image} 
-                        alt={college.name}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          // Fallback to placeholder if image fails
-                          e.currentTarget.src = `/Hero/hero-${(index % 3) + 1}.jpg`
-                        }}
-                      />
-                      <div className="absolute top-2.5 right-2.5 left-2.5 flex justify-end">
-                        <span
-                          title={college.ranking}
-                          className="inline-block max-w-full bg-[#0066F5] text-white px-2 py-1 rounded-md text-[10px] font-bold shadow-md leading-snug line-clamp-2 text-left"
-                        >
-                          {college.ranking}
-                        </span>
+                {colleges.map((college: College, index: number) => {
+                  const href = college.slug
+                    ? `/colleges/${college.slug}`
+                    : "/colleges/category/medical";
+                  return (
+                    <div
+                      key={index}
+                      className="group bg-white rounded-xl overflow-hidden border border-[#E2E8F0] hover:border-[#0066F5] hover:shadow-lg hover:shadow-[#0066F5]/15 transition-all flex flex-col"
+                    >
+                      <div className="h-48 bg-slate-100 relative overflow-hidden">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={college.image}
+                          alt={college.name}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          onError={(e) => {
+                            e.currentTarget.src = `/Hero/hero-${(index % 3) + 1}.jpg`;
+                          }}
+                        />
+                        <div className="absolute top-2.5 right-2.5 left-2.5 flex justify-end">
+                          <span
+                            title={college.ranking}
+                            className="inline-block max-w-full bg-[#0066F5] text-white px-2 py-1 rounded-md text-[10px] font-bold shadow-md leading-snug line-clamp-2 text-left"
+                          >
+                            {college.ranking}
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                    
-                    {/* College Info */}
-                    <div className="p-6">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-3">
-                        {college.name}
-                      </h3>
-                      
-                      <div className="space-y-3">
-                        <div className="flex justify-between items-center">
-                          <span className="text-gray-500 text-sm">NEET Score Required:</span>
-                          <span className="font-semibold text-green-700 text-sm bg-green-50 px-2 py-1 rounded">
+
+                      <div className="p-5 flex flex-col flex-1">
+                        <h3 className="text-lg font-bold text-[#0F172A] mb-3 group-hover:text-[#0066F5] transition-colors line-clamp-2">
+                          {college.name}
+                        </h3>
+
+                        <div className="flex justify-between items-center mb-4">
+                          <span className="text-[#64748B] text-sm">Fees / Score</span>
+                          <span className="font-semibold text-[#0066F5] text-sm bg-[#E8F1FF] px-2 py-1 rounded-md">
                             {college.neetScore}
                           </span>
                         </div>
-                        
-                        <div className="pt-3 border-t border-gray-100">
-                          <button 
-                            onClick={openModal}
-                            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm"
-                          >
-                            View Details
-                          </button>
-                        </div>
+
+                        <Link
+                          href={href}
+                          className="mt-auto inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#0066F5] text-white font-bold py-2.5 text-sm hover:bg-[#0047B3] transition-colors"
+                        >
+                          View Details
+                          <ArrowRight size={14} />
+                        </Link>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>
         )}
 
-        {/* Call to Action */}
-        <div className="mt-12 text-center bg-blue-600 rounded-xl p-8 text-white">
-          <h3 className="text-2xl font-bold mb-4">
-            Start Your Medical Journey Today
-          </h3>
-          <p className="mb-6 text-blue-100">
+        <div className="mt-12 text-center bg-[#0066F5] rounded-2xl p-8 text-white">
+          <h3 className="text-2xl font-bold mb-4">Start Your Medical Journey Today</h3>
+          <p className="mb-6 text-white/85">
             Get expert guidance for NEET preparation and medical college admissions
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button 
+            <button
+              type="button"
               onClick={openModal}
-              className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+              className="bg-white text-[#0066F5] px-6 py-3 rounded-xl font-semibold hover:bg-[#E8F1FF] transition-colors"
             >
               Explore Medical Colleges
             </button>
-            <button 
+            <button
+              type="button"
               onClick={openModal}
-              className="border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors"
+              className="border-2 border-white text-white px-6 py-3 rounded-xl font-semibold hover:bg-white hover:text-[#0066F5] transition-colors"
             >
-              NEET Preparation Tips
+              Get Free Counselling
             </button>
           </div>
         </div>

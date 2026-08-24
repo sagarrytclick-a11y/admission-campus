@@ -1,11 +1,12 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import CollegeDetailPage from "./CollegeDetailPage";
-import { connectDB } from "@/lib/db";
-import College from "@/models/College";
-import "@/models/Country";
+import { getCollegeBySlug } from "@/lib/slugQueries";
 import { CollegeJsonLd, BreadcrumbJsonLd } from "@/components/SeoJsonLd";
 import { SITE_IDENTITY } from "@/site-identity";
+
+/** Cache college pages — faster soft navigations */
+export const revalidate = 300;
 
 interface CollegePageProps {
   params: Promise<{ slug: string }>;
@@ -19,13 +20,6 @@ function humanizeSlug(slug: string) {
     .join(" ");
 }
 
-async function getCollege(slug: string) {
-  await connectDB();
-  return College.findOne({ slug, is_active: true })
-    .populate("country_ref", "name slug flag")
-    .lean();
-}
-
 export async function generateMetadata({
   params,
 }: CollegePageProps): Promise<Metadata> {
@@ -33,7 +27,7 @@ export async function generateMetadata({
   const fallbackTitle = humanizeSlug(slug);
 
   try {
-    const college = await getCollege(slug);
+    const college = await getCollegeBySlug(slug);
 
     if (!college) {
       return {
@@ -83,7 +77,7 @@ export default async function CollegePage({ params }: CollegePageProps) {
 
   let college = null;
   try {
-    college = await getCollege(slug);
+    college = await getCollegeBySlug(slug);
   } catch {
     college = null;
   }

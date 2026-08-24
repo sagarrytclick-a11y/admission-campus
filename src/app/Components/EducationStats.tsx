@@ -30,16 +30,16 @@ export default function EducationStats() {
   ];
 
   return (
-    <section className="py-[32px] bg-white font-sans text-[#1E293B]">
-      <div className="max-w-7xl mx-auto px-6 lg:px-24">
+    <section className="py-12 md:py-16 bg-white font-sans text-[#0F172A]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
         
         {/* Simple Header */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-10">
           <div className="inline-flex items-center gap-2 text-[#0066F5] mb-3">
             <ShieldCheck size={16} />
-            <span className="text-[10px] font-bold uppercase tracking-widest">Our Global Impact</span>
+            <span className="text-[10px] font-bold uppercase tracking-widest">Our Impact</span>
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4 text-[#1E293B]">
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4 text-[#0F172A]">
             Numbers That Inspire
           </h2>
           <p className="text-[#64748B] text-sm max-w-2xl mx-auto font-medium leading-relaxed">
@@ -49,14 +49,14 @@ export default function EducationStats() {
         </div>
 
         {/* Stats Grid - Clean & Minimal */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {stats.map((stat, index) => (
             <div
               key={index}
-              className="group p-8 text-center bg-[#F8FAFC] border border-slate-100 rounded-lg hover:border-[#0066F5] transition-all flex flex-col items-center"
+              className="group p-8 text-center bg-[#F4F7FC] border border-[#E2E8F0] rounded-2xl hover:border-[#0066F5] hover:shadow-md transition-all flex flex-col items-center"
             >
               {/* Simple Icon Container */}
-              <div className="w-12 h-12 mb-6 rounded-md bg-white border border-slate-100 text-[#0066F5] flex items-center justify-center group-hover:bg-[#0066F5] group-hover:text-white transition-all shadow-sm">
+              <div className="w-12 h-12 mb-6 rounded-xl bg-white border border-[#E2E8F0] text-[#0066F5] flex items-center justify-center group-hover:bg-[#0066F5] group-hover:text-white transition-all shadow-sm">
                 <stat.icon size={22} />
               </div>
 

@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Poppins } from "next/font/google";
 import { SITE_IDENTITY } from "@/site-identity";
 import { OrganizationJsonLd, WebsiteJsonLd } from "@/components/SeoJsonLd";
 import "./globals.css";
@@ -7,6 +8,13 @@ import { FormModal } from "@/components/FormModal";
 import { QueryProvider } from "@/providers/QueryProvider";
 import { PopupProvider } from "@/context/PopupContext";
 import { LayoutBody } from "@/components/LayoutBody";
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-poppins",
+  display: "swap",
+});
 
 const SITE_URL = `https://${SITE_IDENTITY.domain}`;
 
@@ -78,12 +86,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${poppins.variable} ${poppins.className} font-sans`}>
       <head>
         <OrganizationJsonLd />
         <WebsiteJsonLd />
       </head>
-      <body className="antialiased bg-[#12141D] text-[#F8FAFC]">
+      <body className="font-sans antialiased bg-[#F4F7FC] text-[#0F172A]">
         <QueryProvider>
           <FormModalProvider>
             <PopupProvider>

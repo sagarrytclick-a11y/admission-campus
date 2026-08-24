@@ -9,7 +9,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        'admission-yellow': '#FFB800',
+        'admission-yellow': '#0066F5',
       },
     },
   },

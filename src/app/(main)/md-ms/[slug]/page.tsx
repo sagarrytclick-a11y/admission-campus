@@ -234,7 +234,7 @@ export default async function MdMsDetailPage({ params }: PageProps) {
               <a
                 key={tab.id}
                 href={`#${tab.id}`}
-                className="shrink-0 px-4 py-2.5 text-sm font-bold text-slate-600 hover:text-[#0066F5] hover:bg-blue-50 rounded-lg transition-colors"
+                className="shrink-0 px-4 py-2.5 text-sm font-bold text-slate-600 hover:text-[#0066F5] hover:bg-[#E8F1FF] rounded-lg transition-colors"
               >
                 {tab.label}
               </a>
@@ -259,7 +259,7 @@ export default async function MdMsDetailPage({ params }: PageProps) {
                 ))}
               </ul>
               {college.stateDescription && (
-                <div className="mt-6 p-5 rounded-xl bg-blue-50 border border-blue-100">
+                <div className="mt-6 p-5 rounded-xl bg-[#E8F1FF] border border-[#0066F5]/15">
                   <p className="text-sm md:text-base text-slate-700 leading-relaxed">
                     {college.stateDescription}
                   </p>
@@ -350,11 +350,11 @@ export default async function MdMsDetailPage({ params }: PageProps) {
                     {college.placementStats?.medianSalaryUG || "—"}
                   </p>
                 </div>
-                <div className="p-5 rounded-xl bg-blue-50 border border-blue-200">
-                  <p className="text-xs font-bold text-blue-700 uppercase mb-1">
+                <div className="p-5 rounded-xl bg-[#E8F1FF] border border-[#0066F5]/20">
+                  <p className="text-xs font-bold text-[#0047B3] uppercase mb-1">
                     Median PG
                   </p>
-                  <p className="text-xl font-bold text-blue-950">
+                  <p className="text-xl font-bold text-[#0047B3]">
                     {college.placementStats?.medianSalaryPG || "—"}
                   </p>
                 </div>
@@ -429,7 +429,7 @@ export default async function MdMsDetailPage({ params }: PageProps) {
               </div>
 
               <div className="bg-linear-to-br from-[#0066F5] to-[#0047B3] text-white rounded-2xl p-6 shadow-lg shadow-blue-500/20">
-                <Building2 className="w-8 h-8 text-yellow-300 mb-3" />
+                <Building2 className="w-8 h-8 text-white/80 mb-3" />
                 <h3 className="font-bold text-lg mb-2">Need counselling?</h3>
                 <p className="text-sm text-white/90 mb-4 leading-relaxed">
                   Get free guidance for NEET PG counselling and college shortlisting.

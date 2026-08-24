@@ -5,6 +5,8 @@ import { connectDB } from "@/lib/db";
 import College from "@/models/College";
 import Exam from "@/models/Exam";
 import Blog from "@/models/Blog";
+import Category from "@/models/Category";
+import City from "@/models/City";
 
 const SITE_URL = `https://${SITE_IDENTITY.domain}`;
 
@@ -36,7 +38,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const dynamicRoutes: MetadataRoute.Sitemap = [];
 
-  // MD/MS — local JSON, no API round-trip
   dynamicRoutes.push(
     ...getAllMdMsColleges().map((c) => ({
       url: `${SITE_URL}/md-ms/${c.slug}`,
@@ -49,10 +50,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     await connectDB();
 
-    const [colleges, blogs, exams] = await Promise.all([
+    const [colleges, blogs, exams, categories, cities] = await Promise.all([
       College.find({ is_active: true }).select("slug updatedAt").lean(),
       Blog.find({ is_active: true }).select("slug updatedAt").lean(),
       Exam.find({ is_active: true }).select("slug updatedAt").lean(),
+      Category.find({ is_active: true }).select("slug updatedAt").lean(),
+      City.find({ is_active: true }).select("slug updatedAt").lean(),
     ]);
 
     dynamicRoutes.push(
@@ -63,10 +66,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           lastModified: c.updatedAt ? new Date(c.updatedAt) : new Date(),
           changeFrequency: "weekly" as const,
           priority: 0.8,
-        }))
-    );
-
-    dynamicRoutes.push(
+        })),
       ...blogs
         .filter((b) => b?.slug)
         .map((b) => ({
@@ -74,10 +74,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           lastModified: b.updatedAt ? new Date(b.updatedAt) : new Date(),
           changeFrequency: "weekly" as const,
           priority: 0.7,
-        }))
-    );
-
-    dynamicRoutes.push(
+        })),
       ...exams
         .filter((e) => e?.slug)
         .map((e) => ({
@@ -85,6 +82,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           lastModified: e.updatedAt ? new Date(e.updatedAt) : new Date(),
           changeFrequency: "weekly" as const,
           priority: 0.8,
+        })),
+      ...categories
+        .filter((c) => c?.slug)
+        .map((c) => ({
+          url: `${SITE_URL}/colleges/category/${c.slug}`,
+          lastModified: c.updatedAt ? new Date(c.updatedAt) : new Date(),
+          changeFrequency: "weekly" as const,
+          priority: 0.75,
+        })),
+      ...cities
+        .filter((c) => c?.slug)
+        .map((c) => ({
+          url: `${SITE_URL}/colleges/city/${c.slug}`,
+          lastModified: c.updatedAt ? new Date(c.updatedAt) : new Date(),
+          changeFrequency: "weekly" as const,
+          priority: 0.75,
         }))
     );
   } catch {

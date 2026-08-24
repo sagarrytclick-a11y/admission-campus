@@ -89,11 +89,11 @@ export const InfiniteMovingCards = ({
           const IconComponent = item.icon;
           return (
             <li
-              className="relative w-[160px] max-w-full shrink-0 rounded-2xl bg-white border border-slate-100 px-6 py-6 flex items-center justify-center transition-all duration-300 hover:border-blue-500/20 hover:bg-blue-50 hover:scale-105 shadow-lg hover:shadow-xl"
+              className="relative w-[160px] max-w-full shrink-0 rounded-2xl bg-white border border-slate-100 px-6 py-6 flex items-center justify-center transition-all duration-300 hover:border-[#0066F5]/20 hover:bg-[#E8F1FF] hover:scale-105 shadow-lg hover:shadow-xl"
               key={item.name}
             >
               <div className="flex flex-col items-center gap-3">
-                <IconComponent className="w-16 h-16 text-blue-600 hover:text-blue-700 transition-colors duration-300 drop-shadow-sm" />
+                <IconComponent className="w-16 h-16 text-[#0066F5] hover:text-[#0047B3] transition-colors duration-300 drop-shadow-sm" />
                 <span className="text-base font-bold text-slate-900 whitespace-nowrap text-center">
                   {item.name}
                 </span>

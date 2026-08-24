@@ -42,14 +42,14 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-[#E8F1FF] flex items-center justify-center p-4 relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,#3b82f6_0%,transparent_50%)] opacity-10" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,#1e40af_0%,transparent_50%)] opacity-10" />
       
       {/* Floating Elements */}
-      <div className="absolute top-20 left-20 w-32 h-32 bg-blue-100 rounded-full blur-3xl opacity-30 animate-pulse" />
-      <div className="absolute bottom-20 right-20 w-40 h-40 bg-blue-200 rounded-full blur-3xl opacity-30 animate-pulse delay-1000" />
+      <div className="absolute top-20 left-20 w-32 h-32 bg-[#E8F1FF] rounded-full blur-3xl opacity-30 animate-pulse" />
+      <div className="absolute bottom-20 right-20 w-40 h-40 bg-[#E8F1FF] rounded-full blur-3xl opacity-30 animate-pulse delay-1000" />
       
       <div className="w-full max-w-md relative z-10">
         {/* Login Card */}
@@ -89,7 +89,7 @@ export default function LoginPage() {
                     type="text"
                     required
                     onChange={handleChange}
-                    className="block w-full pl-10 pr-3 py-3 border-2 border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all bg-slate-50/50"
+                    className="block w-full pl-10 pr-3 py-3 border-2 border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:border-[#0066F5] focus:outline-none focus:ring-2 focus:ring-[#0066F5]/20 transition-all bg-slate-50/50"
                     placeholder="Enter your username"
                   />
                 </div>
@@ -109,7 +109,7 @@ export default function LoginPage() {
                     type={showPassword ? "text" : "password"}
                     required
                     onChange={handleChange}
-                    className="block w-full pl-10 pr-12 py-3 border-2 border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all bg-slate-50/50"
+                    className="block w-full pl-10 pr-12 py-3 border-2 border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:border-[#0066F5] focus:outline-none focus:ring-2 focus:ring-[#0066F5]/20 transition-all bg-slate-50/50"
                     placeholder="Enter your password"
                   />
                   <button
@@ -131,7 +131,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="group relative w-full flex justify-center items-center gap-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 px-4 py-4 text-sm font-black text-white hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 disabled:from-slate-400 disabled:to-slate-500 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+              className="group relative w-full flex justify-center items-center gap-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 px-4 py-4 text-sm font-black text-white hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-[#0066F5]/20 disabled:from-slate-400 disabled:to-slate-500 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
             >
               {loading ? (
                 <>

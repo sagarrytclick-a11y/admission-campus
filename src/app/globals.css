@@ -5,6 +5,11 @@
 
 /* eslint-disable-next-line css/at-rule-no-unknown */
 @theme inline {
+  /* Single brand font everywhere — Poppins from next/font */
+  --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+  --font-family-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+  --default-font-family: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -45,8 +50,13 @@
   --radius-4xl: calc(var(--radius) + 16px);
 }
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+html,
+body,
+button,
+input,
+select,
+textarea {
+  font-family: var(--font-poppins), ui-sans-serif, system-ui, sans-serif !important;
 }
 
 /* eslint-disable-next-line css/at-rule-no-unknown */
@@ -61,71 +71,80 @@ body {
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: #12141D;
-  --foreground: #F8FAFC;
-  --card: #1E212B;
-  --card-foreground: #F8FAFC;
-  --popover: #1E212B;
-  --popover-foreground: #F8FAFC;
+  --radius: 0.75rem;
+  /* 60% — light canvas */
+  --background: #FFFFFF;
+  --foreground: #0F172A;
+  --card: #FFFFFF;
+  --card-foreground: #0F172A;
+  --popover: #FFFFFF;
+  --popover-foreground: #0F172A;
+  /* 30% — logo blue */
   --primary: #0066F5;
-  --primary-foreground: #F8FAFC;
-  --secondary: #00D4FF;
-  --secondary-foreground: #F8FAFC;
-  --muted: #94A3B8;
-  --muted-foreground: #F8FAFC;
-  --accent: #00D4FF;
-  --accent-foreground: #F8FAFC;
+  --primary-foreground: #FFFFFF;
+  /* Secondary blue */
+  --secondary: #0047B3;
+  --secondary-foreground: #FFFFFF;
+  --muted: #F4F7FC;
+  --muted-foreground: #64748B;
+  --accent: #0066F5;
+  --accent-foreground: #FFFFFF;
   --destructive: #EF4444;
-  --border: #94A3B8;
-  --input: #F8FAFC;
+  --border: #E2E8F0;
+  --input: #E2E8F0;
   --ring: #0066F5;
   --chart-1: #0066F5;
-  --chart-2: #00D4FF;
-  --chart-3: #94A3B8;
-  --chart-4: #F8FAFC;
-  --chart-5: #00D4FF;
-  --sidebar: #1E212B;
+  --chart-2: #0066F5;
+  --chart-3: #0066F5;
+  --chart-4: #0047B3;
+  --chart-5: #94A3B8;
+  --sidebar: #0B1220;
   --sidebar-foreground: #F8FAFC;
   --sidebar-primary: #0066F5;
-  --sidebar-primary-foreground: #F8FAFC;
-  --sidebar-accent: #00D4FF;
-  --sidebar-accent-foreground: #F8FAFC;
-  --sidebar-border: #94A3B8;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #0066F5;
+  --sidebar-accent-foreground: #FFFFFF;
+  --sidebar-border: #1E293B;
   --sidebar-ring: #0066F5;
+
+  --brand-blue: #0066F5;
+  --brand-blue-deep: #0047B3;
+  --brand-blue-mid: #0066F5;
+  
+  --brand-surface: #F4F7FC;
 }
 
 .dark {
-  --background: #12141D;
+  --background: #0B1220;
   --foreground: #F8FAFC;
-  --card: #1E212B;
+  --card: #121A2B;
   --card-foreground: #F8FAFC;
-  --popover: #1E212B;
+  --popover: #121A2B;
   --popover-foreground: #F8FAFC;
   --primary: #0066F5;
-  --primary-foreground: #F8FAFC;
-  --secondary: #00D4FF;
-  --secondary-foreground: #F8FAFC;
-  --muted: #94A3B8;
-  --muted-foreground: #F8FAFC;
-  --accent: #00D4FF;
-  --accent-foreground: #F8FAFC;
+  --primary-foreground: #FFFFFF;
+  --secondary: #0047B3;
+  --secondary-foreground: #FFFFFF;
+  --muted: #1E293B;
+  --muted-foreground: #94A3B8;
+  --accent: #0066F5;
+  --accent-foreground: #FFFFFF;
   --destructive: #EF4444;
-  --border: #94A3B8;
-  --input: #F8FAFC;
+  --border: #1E293B;
+  --input: #1E293B;
   --ring: #0066F5;
   --chart-1: #0066F5;
-  --chart-2: #00D4FF;
-  --chart-3: #94A3B8;
-  --chart-4: #F8FAFC;
-  --chart-5: #00D4FF;
-  --sidebar: #1E212B;
+  --chart-2: #0066F5;
+  --chart-3: #0066F5;
+  --chart-4: #38BDF8;
+  --chart-5: #94A3B8;
+  --sidebar: #0B1220;
   --sidebar-foreground: #F8FAFC;
   --sidebar-primary: #0066F5;
-  --sidebar-primary-foreground: #F8FAFC;
-  --sidebar-accent: #00D4FF;
-  --sidebar-accent-foreground: #F8FAFC;
-  --sidebar-border: #94A3B8;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #0066F5;
+  --sidebar-accent-foreground: #FFFFFF;
+  --sidebar-border: #1E293B;
   --sidebar-ring: #0066F5;
 }
 
@@ -147,6 +166,38 @@ body {
   }
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+
+  .brand-section {
+    @apply py-12 md:py-16;
+  }
+
+  .brand-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-10;
+  }
+
+  .brand-eyebrow {
+    @apply inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.16em] text-[#0066F5];
+  }
+
+  .brand-title {
+    @apply text-3xl md:text-4xl font-bold tracking-tight text-[#0F172A];
+  }
+
+  .brand-subtitle {
+    @apply text-sm md:text-base text-[#64748B] leading-relaxed max-w-2xl;
+  }
+
+  .brand-cta {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-[#0066F5] text-white font-bold px-6 py-3.5 text-sm hover:bg-[#0047B3] transition-colors shadow-sm;
+  }
+
+  .brand-cta-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-[#0066F5] text-white font-bold px-6 py-3.5 text-sm hover:bg-[#0047B3] transition-colors shadow-sm;
+  }
+
+  .brand-card {
+    @apply bg-white border border-[#E2E8F0] rounded-2xl shadow-sm hover:border-[#0066F5]/40 hover:shadow-md transition-all;
   }
 
   /* Hero Slider Animations */

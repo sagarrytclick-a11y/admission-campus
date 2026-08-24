@@ -208,7 +208,7 @@ export default function NeetScorePredictor({ compact = false, className = '' }: 
         <div className="flex flex-col sm:flex-row gap-2.5 pt-1">
           <button
             type="submit"
-            className="flex-1 sm:flex-[2] py-2.5 sm:py-3 bg-[#0066F5] hover:bg-[#004ED4] text-white rounded-lg font-semibold text-sm transition-colors flex items-center justify-center gap-2"
+            className="flex-1 sm:flex-[2] py-2.5 sm:py-3 bg-[#0066F5] hover:bg-[#0047B3] text-white rounded-lg font-semibold text-sm transition-colors flex items-center justify-center gap-2"
           >
             <Target size={16} />
             Predict Rank
@@ -264,7 +264,7 @@ export default function NeetScorePredictor({ compact = false, className = '' }: 
             </div>
           </div>
 
-          <div className="flex items-start gap-2.5 rounded-lg border border-[#BFDBFE] bg-[#EFF6FF] p-3">
+          <div className="flex items-start gap-2.5 rounded-lg border border-[#0066F5/20] bg-[#E8F1FF] p-3">
             <Info size={16} className="text-[#0066F5] shrink-0 mt-0.5" />
             <p className="text-xs text-[#1E293B] leading-relaxed">
               <span className="font-bold">Tip: </span>

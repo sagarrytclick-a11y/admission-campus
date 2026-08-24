@@ -36,11 +36,11 @@ export default function DestinationHighlights() {
   const getColorClasses = (color: string) => {
     const colorMap = {
       blue: {
-        bg: "bg-blue-50",
-        iconBg: "bg-blue-500",
-        text: "text-blue-600",
-        border: "border-blue-200",
-        lightBg: "bg-blue-100"
+        bg: "bg-[#E8F1FF]",
+        iconBg: "bg-[#0066F5]",
+        text: "text-[#0066F5]",
+        border: "border-[#0066F5]/20",
+        lightBg: "bg-[#E8F1FF]"
       },
       red: {
         bg: "bg-red-50",
@@ -57,11 +57,11 @@ export default function DestinationHighlights() {
         lightBg: "bg-green-100"
       },
       yellow: {
-        bg: "bg-yellow-50",
-        iconBg: "bg-yellow-500",
-        text: "text-yellow-600",
-        border: "border-yellow-200", 
-        lightBg: "bg-yellow-100"
+        bg: "bg-[#E8F1FF]",
+        iconBg: "bg-[#0066F5]",
+        text: "text-[#0066F5]",
+        border: "border-[#0066F5]/20", 
+        lightBg: "bg-[#E8F1FF]"
       }
     };
     return colorMap[color as keyof typeof colorMap] || colorMap.green;

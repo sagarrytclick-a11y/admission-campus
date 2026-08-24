@@ -94,7 +94,7 @@ const CollegeCard = memo(({ college }: { college: any }) => {
             
             {/* Rating Stars */}
             <div className="flex items-center gap-1">
-              <div className="flex text-yellow-400">
+              <div className="flex text-[#0066F5]">
                 {'★'.repeat(randomRating.fullStars)}
                 {randomRating.hasHalfStar && '★'}
                 {'☆'.repeat(5 - randomRating.fullStars - (randomRating.hasHalfStar ? 1 : 0))}
@@ -150,7 +150,7 @@ const CollegeCard = memo(({ college }: { college: any }) => {
             <div className="flex gap-2">
               <button 
                 onClick={() => router.push(`/colleges/${college.slug}`)}
-                className="bg-[#0066F5] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#004ED4] transition-colors"
+                className="bg-[#0066F5] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#0047B3] transition-colors"
               >
                 View Details
               </button>
@@ -240,7 +240,7 @@ const CollegeMapping = memo(({
         <h2 className="text-2xl font-bold text-slate-900 mb-2">Error Loading Colleges</h2>
         <p className="text-slate-600 mb-6">{error?.message || "Failed to load colleges"}</p>
         {onRefetch && (
-          <Button onClick={onRefetch} className="bg-[#0066F5] hover:bg-[#004ED4]">
+          <Button onClick={onRefetch} className="bg-[#0066F5] hover:bg-[#0047B3]">
             <RefreshCw className="w-4 h-4 mr-2" />
             Try Again
           </Button>
@@ -260,7 +260,7 @@ const CollegeMapping = memo(({
           Try adjusting your search terms or filters to find colleges.
         </p>
         {onRefetch && (
-          <Button onClick={onRefetch} className="bg-[#0066F5] hover:bg-[#004ED4]">
+          <Button onClick={onRefetch} className="bg-[#0066F5] hover:bg-[#0047B3]">
             <RefreshCw className="w-4 h-4 mr-2" />
             Refresh Results
           </Button>
@@ -325,7 +325,7 @@ const CollegeMapping = memo(({
               <button
                 onClick={() => onPageChange(Math.max(currentPage - 1, 1))}
                 disabled={currentPage === 1}
-                className="w-full sm:w-auto flex items-center justify-center gap-1 px-3 sm:px-4 py-2 text-sm font-medium rounded-lg border-2 border-slate-300 bg-white text-[#64748B] hover:border-[#0066F5] hover:text-[#0066F5] hover:bg-blue-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-slate-300 disabled:hover:text-[#64748B] disabled:hover:bg-white"
+                className="w-full sm:w-auto flex items-center justify-center gap-1 px-3 sm:px-4 py-2 text-sm font-medium rounded-lg border-2 border-slate-300 bg-white text-[#64748B] hover:border-[#0066F5] hover:text-[#0066F5] hover:bg-[#E8F1FF] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-slate-300 disabled:hover:text-[#64748B] disabled:hover:bg-white"
               >
                 <ChevronLeft className="h-4 w-4" />
                 <span className="hidden xs:inline">Previous</span>
@@ -364,7 +364,7 @@ const CollegeMapping = memo(({
               <button
                 onClick={() => onPageChange(Math.min(currentPage + 1, totalPages))}
                 disabled={currentPage === totalPages}
-                className="w-full sm:w-auto flex items-center justify-center gap-1 px-3 sm:px-4 py-2 text-sm font-medium rounded-lg border-2 border-slate-300 bg-white text-[#64748B] hover:border-[#0066F5] hover:text-[#0066F5] hover:bg-blue-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-slate-300 disabled:hover:text-[#64748B] disabled:hover:bg-white"
+                className="w-full sm:w-auto flex items-center justify-center gap-1 px-3 sm:px-4 py-2 text-sm font-medium rounded-lg border-2 border-slate-300 bg-white text-[#64748B] hover:border-[#0066F5] hover:text-[#0066F5] hover:bg-[#E8F1FF] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-slate-300 disabled:hover:text-[#64748B] disabled:hover:bg-white"
               >
                 <span className="hidden xs:inline">Next</span>
                 <ChevronRight className="h-4 w-4" />

@@ -124,7 +124,7 @@ export default function FeaturedColleges() {
                         title={rankLabel}
                         className="inline-flex items-start gap-1.5 max-w-full bg-black/60 backdrop-blur-md text-white px-2.5 py-1 rounded-md text-xs font-bold border border-white/20 leading-snug line-clamp-2"
                       >
-                        <Trophy size={12} className="text-yellow-400 shrink-0 mt-0.5" />
+                        <Trophy size={12} className="text-[#0066F5] shrink-0 mt-0.5" />
                         <span className="line-clamp-2">{rankLabel}</span>
                       </span>
                     </div>
@@ -158,7 +158,7 @@ export default function FeaturedColleges() {
                 {/* Stats Grid */}
                 <div className="grid grid-cols-2 gap-4 py-4 border-y-2 border-slate-200 mb-5">
                   <div className="flex items-center gap-2">
-                    <div className="p-2 bg-blue-50 rounded-lg border border-blue-200 text-blue-600">
+                    <div className="p-2 bg-[#E8F1FF] rounded-lg border border-[#0066F5]/20 text-[#0066F5]">
                       <BookOpen size={16} />
                     </div>
                     <div>

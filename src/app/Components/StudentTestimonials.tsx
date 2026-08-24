@@ -98,7 +98,7 @@ export default function StudentTestimonialSlider() {
                     {student.university}
                   </p>
                   <div className="flex gap-0.5 mt-1">
-                    {[...Array(5)].map((_, i) => <Star key={i} size={10} className="text-yellow-400 fill-yellow-400" />)}
+                    {[...Array(5)].map((_, i) => <Star key={i} size={10} className="text-[#0066F5] fill-[#0066F5]" />)}
                   </div>
                 </div>
                 <CheckCircle2 size={18} className="ml-auto text-green-500 opacity-50" />

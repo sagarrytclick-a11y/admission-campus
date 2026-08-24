@@ -28,7 +28,7 @@ export function FloatingIcons({ onNotificationClick }: FloatingIconsProps) {
       {/* Notification Icon */}
       <button
         onClick={onNotificationClick}
-        className="bg-blue-500 hover:bg-blue-600 text-white rounded-full p-4 shadow-lg transition-all duration-300 hover:scale-110"
+        className="bg-[#0066F5] hover:bg-[#0066F5] text-white rounded-full p-4 shadow-lg transition-all duration-300 hover:scale-110"
         aria-label="Show notifications"
       >
         <Bell className="w-6 h-6" />

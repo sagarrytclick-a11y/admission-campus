@@ -64,7 +64,7 @@ export default function SuccessStories() {
   ];
 
   return (
-    <section className="py-[32px] bg-gradient-to-br from-green-50 via-white to-blue-50">
+    <section className="py-[32px] bg-gradient-to-br from-green-50 via-white to-[#E8F1FF]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-8">
@@ -87,7 +87,7 @@ export default function SuccessStories() {
               {/* Student Header */}
               <div className="p-6 border-b border-slate-100">
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center text-white text-xl font-black">
+                  <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-[#E8F1FF]0 rounded-full flex items-center justify-center text-white text-xl font-black">
                     {story.name.split(' ').map(n => n[0]).join('')}
                   </div>
                   <div className="flex-grow">
@@ -117,7 +117,7 @@ export default function SuccessStories() {
               {/* Story Content */}
               <div className="p-6">
                 <div className="mb-4">
-                  <div className="inline-flex items-center gap-1 bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-bold mb-3">
+                  <div className="inline-flex items-center gap-1 bg-[#E8F1FF] text-[#0047B3] px-2 py-1 rounded text-xs font-bold mb-3">
                     <FileText size={12} />
                     {story.program}
                   </div>
@@ -152,7 +152,7 @@ export default function SuccessStories() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {achievements.map((achievement, index) => (
               <div key={index} className="text-center p-4">
-                <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-blue-500 rounded-2xl flex items-center justify-center text-white mb-4 mx-auto">
+                <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-[#E8F1FF]0 rounded-2xl flex items-center justify-center text-white mb-4 mx-auto">
                   <achievement.icon size={32} />
                 </div>
                 <div className="text-2xl md:text-3xl font-black text-slate-900 mb-2">

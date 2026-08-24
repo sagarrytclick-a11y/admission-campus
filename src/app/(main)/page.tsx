@@ -20,7 +20,7 @@ import MdMsHomeSection from "@/app/Components/MdMsHomeSection";
 
 const page = () => {
   return (
-    <div className="w-full bg-white text-black overflow-x-hidden">
+    <div className="w-full bg-[#F4F7FC] text-[#0F172A] overflow-x-hidden">
       <Hero />
       <MdMsHomeSection />
       <MedicalSection />
@@ -36,7 +36,6 @@ const page = () => {
       <AdvantageCard />
       <StudentTestimonials />
       <FAQ />
-      {/* <InfiniteMovingCardsDemo /> */}
       <CtaSection />
     </div>
   );

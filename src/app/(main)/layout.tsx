@@ -8,6 +8,20 @@ export const metadata: Metadata = {
     template: `%s | ${SITE_IDENTITY.name}`,
   },
   description: SITE_IDENTITY.meta.description,
+  alternates: { canonical: "/" },
+  openGraph: {
+    title: SITE_IDENTITY.meta.title,
+    description: SITE_IDENTITY.meta.description,
+    url: "/",
+    siteName: SITE_IDENTITY.name,
+    type: "website",
+    locale: "en_IN",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_IDENTITY.meta.title,
+    description: SITE_IDENTITY.meta.description,
+  },
 };
 
 export default function MainLayout({

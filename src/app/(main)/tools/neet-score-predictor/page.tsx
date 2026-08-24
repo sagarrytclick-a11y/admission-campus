@@ -20,7 +20,7 @@ export default function NeetScorePredictorPage() {
   return (
     <div className="min-h-screen bg-white">
       <section className="bg-[#0066F5] text-white py-[32px] px-4 sm:px-6">
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-3xl mx-auto text-center">
           <Link
             href="/"
             className="inline-flex items-center gap-1.5 text-sm text-white/80 hover:text-white mb-4 transition-colors"
@@ -35,7 +35,7 @@ export default function NeetScorePredictorPage() {
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight mb-2">
             NEET Score Predictor
           </h1>
-          <p className="text-sm sm:text-base text-white/85 max-w-xl leading-relaxed">
+          <p className="text-sm sm:text-base text-white/85 max-w-xl mx-auto leading-relaxed">
             Enter your subject scores to get an estimated rank range and college admission chances.
           </p>
         </div>

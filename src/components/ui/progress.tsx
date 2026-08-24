@@ -18,7 +18,7 @@ const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
       {...props}
     >
       <div
-        className="h-full bg-blue-600 transition-all duration-300 ease-in-out"
+        className="h-full bg-[#0066F5] transition-all duration-300 ease-in-out"
         style={{ width: `${value || 0}%` }}
       />
     </div>

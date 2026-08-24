@@ -163,7 +163,7 @@ export default function ExamModePage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0066F5] mx-auto mb-4"></div>
           <p className="text-gray-600">Loading exam...</p>
         </div>
       </div>
@@ -201,7 +201,7 @@ export default function ExamModePage() {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="text-center">
-                <h2 className="text-3xl font-bold text-blue-600 mb-2">{results.percentage}%</h2>
+                <h2 className="text-3xl font-bold text-[#0066F5] mb-2">{results.percentage}%</h2>
                 <p className="text-gray-600">
                   You scored {results.total_score} out of {results.total_possible_marks}
                 </p>
@@ -282,7 +282,7 @@ export default function ExamModePage() {
           <div className="flex items-center justify-between mb-4">
             <h1 className="text-2xl font-bold">{examData.exam_name}</h1>
             <div className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
-              timeRemaining < 300 ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'
+              timeRemaining < 300 ? 'bg-red-100 text-red-700' : 'bg-[#E8F1FF] text-[#0047B3]'
             }`}>
               <Clock className="h-4 w-4" />
               <span className="font-mono font-medium">{formatTime(timeRemaining)}</span>
@@ -307,7 +307,7 @@ export default function ExamModePage() {
               </CardTitle>
               <div className="flex items-center gap-4 text-sm">
                 <span className="px-2 py-1 bg-gray-100 rounded">{currentQuestion.section}</span>
-                <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded">{currentQuestion.difficulty}</span>
+                <span className="px-2 py-1 bg-[#E8F1FF] text-[#0047B3] rounded">{currentQuestion.difficulty}</span>
                 <span className="px-2 py-1 bg-green-100 text-green-700 rounded">{currentQuestion.marks} marks</span>
               </div>
             </div>
@@ -378,7 +378,7 @@ export default function ExamModePage() {
                   onClick={() => setCurrentQuestionIndex(index)}
                   className={`p-2 text-sm rounded-lg border transition-colors ${
                     index === currentQuestionIndex
-                      ? 'bg-blue-600 text-white border-blue-600'
+                      ? 'bg-[#0066F5] text-white border-[#0066F5]'
                       : hasAnswer
                       ? 'bg-green-100 text-green-700 border-green-300 hover:bg-green-200'
                       : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'

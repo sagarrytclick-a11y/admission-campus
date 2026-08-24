@@ -42,7 +42,7 @@ const CollegeFilters = memo(({
           <button
             type="button"
             onClick={handleReset}
-            className="flex items-center gap-1 text-sm text-[#0066F5] hover:text-[#004ED4] transition-colors"
+            className="flex items-center gap-1 text-sm text-[#0066F5] hover:text-[#0047B3] transition-colors"
           >
             <X className="w-4 h-4" />
             Clear All

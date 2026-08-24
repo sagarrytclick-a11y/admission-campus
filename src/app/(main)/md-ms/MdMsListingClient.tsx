@@ -9,8 +9,6 @@ import {
   Search,
   ChevronLeft,
   ChevronRight,
-  Building2,
-  Users,
   Award,
   Stethoscope,
   Filter,
@@ -28,7 +26,7 @@ function CollegeCard({ college }: { college: MdMsCollege }) {
   return (
     <Link
       href={`/md-ms/${college.slug}`}
-      className="group flex flex-col md:flex-row bg-white rounded-xl border-2 border-slate-200 hover:border-[#0066F5] hover:shadow-lg hover:shadow-[#0066F5]/15 transition-all duration-300 overflow-hidden"
+      className="group flex flex-col md:flex-row bg-white rounded-xl border border-[#E2E8F0] hover:border-[#0066F5] hover:shadow-lg hover:shadow-[#0066F5]/15 transition-all duration-300 overflow-hidden"
     >
       <div className="relative w-full md:w-52 h-48 md:h-auto shrink-0 bg-slate-100 overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -66,7 +64,7 @@ function CollegeCard({ college }: { college: MdMsCollege }) {
           </div>
         </div>
 
-        <p className="text-xs font-semibold text-[#0066F5] bg-blue-50 self-start px-2.5 py-1 rounded-md line-clamp-1">
+        <p className="text-xs font-semibold text-[#0066F5] bg-[#E8F1FF] self-start px-2.5 py-1 rounded-md line-clamp-1">
           {college.ranking}
         </p>
 
@@ -86,7 +84,7 @@ function CollegeCard({ college }: { college: MdMsCollege }) {
             <p className="text-sm font-bold text-slate-800">{college.seats}</p>
           </div>
           <div className="col-span-2 sm:col-span-1 flex items-end justify-end sm:justify-start">
-            <span className="inline-flex items-center gap-1 text-sm font-semibold text-[#0066F5]">
+            <span className="inline-flex items-center gap-1.5 rounded-lg bg-[#0066F5] text-white text-xs font-bold px-3 py-2 group-hover:bg-[#0047B3] transition-colors">
               View Details
               <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
             </span>
@@ -148,262 +146,344 @@ export default function MdMsListingClient() {
   const resetPage = () => setPage(1);
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <section className="relative bg-linear-to-br from-[#0066F5] to-[#004ED4] text-white overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.35)_1px,transparent_0)] bg-size-[20px_20px]" />
-        </div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-24 py-10 md:py-14">
-          <div className="inline-flex items-center gap-2 text-white/90 mb-4 text-sm font-bold uppercase tracking-wider">
-            <Stethoscope className="w-4 h-4" />
-            NEET PG · MD / MS Colleges
-          </div>
-          <h1 className="text-3xl md:text-5xl font-bold leading-tight mb-4">
-            Explore MD / MS Colleges
-            <span className="block text-yellow-300">Across India</span>
-          </h1>
-          <p className="text-lg text-white/90 max-w-2xl mb-8">
-            Curated postgraduate medical colleges with fees, seats, counselling
-            info and placements — separate from the regular colleges directory.
-          </p>
+    <div className="min-h-screen bg-[#F4F7FC]">
+      {/* Hero */}
+      <section className="relative overflow-hidden text-white">
+        {/* Layered backdrop */}
+        <div className="absolute inset-0 bg-[#0B1220]" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?auto=format&fit=crop&w=1800&q=80"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover opacity-40 scale-105"
+        />
+        <div className="absolute inset-0 bg-linear-to-b from-[#0B1220]/70 via-[#0B1220]/55 to-[#0B1220]" />
+        <div className="absolute inset-0 bg-linear-to-r from-[#0066F5]/35 via-transparent to-[#0047B3]/25" />
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-3xl mb-8">
-            {[
-              { icon: Building2, label: "Colleges", value: String(stats.colleges) },
-              { icon: MapPin, label: "States", value: String(stats.states) },
-              {
-                icon: Users,
-                label: "PG Seats",
-                value: `${Math.round(stats.seats / 100) * 100}+`,
-              },
-              {
-                icon: GraduationCap,
-                label: "Govt Colleges",
-                value: String(stats.government),
-              },
-            ].map((s) => (
-              <div
-                key={s.label}
-                className="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20 text-center"
-              >
-                <s.icon className="w-6 h-6 text-yellow-300 mx-auto mb-1" />
-                <div className="text-xl font-bold">{s.value}</div>
-                <div className="text-xs text-white/80">{s.label}</div>
-              </div>
-            ))}
-          </div>
+        {/* Soft glow orbs */}
+        <div
+          className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 h-72 w-[36rem] rounded-full blur-3xl opacity-40"
+          style={{ background: "radial-gradient(circle, rgba(0,102,245,0.55), transparent 70%)" }}
+        />
+        <div
+          className="pointer-events-none absolute bottom-0 right-0 h-56 w-56 rounded-full blur-3xl opacity-30"
+          style={{ background: "radial-gradient(circle, rgba(0,71,179,0.6), transparent 70%)" }}
+        />
 
-          <div className="relative max-w-xl">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-            <input
-              type="search"
-              value={search}
-              onChange={(e) => {
-                setSearch(e.target.value);
-                resetPage();
-              }}
-              placeholder="Search college, city or state..."
-              className="w-full pl-12 pr-4 py-3.5 rounded-xl bg-white text-slate-900 placeholder:text-slate-400 shadow-xl border-0 focus:outline-none focus:ring-2 focus:ring-yellow-300"
-            />
-          </div>
-        </div>
-      </section>
+        {/* Grid texture */}
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.07]"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)",
+            backgroundSize: "48px 48px",
+          }}
+        />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-24 py-8 lg:py-10">
-        <div className="lg:flex lg:gap-8">
-          <aside className="lg:w-72 shrink-0 mb-6 lg:mb-0">
-            <div className="lg:sticky lg:top-28 space-y-4">
-              {/* State filter — one item per line + vertical scroll */}
-              <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-                <div className="flex items-center justify-between gap-2 px-4 py-3.5 border-b border-slate-100 bg-slate-50/80">
-                  <div className="flex items-center gap-2">
-                    <Filter className="w-4 h-4 text-[#0066F5]" />
-                    <h2 className="font-bold text-slate-900 text-sm">States</h2>
-                  </div>
-                  <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wide">
-                    Scroll
-                  </span>
-                </div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pt-12 md:pt-16 pb-16 md:pb-20 text-center">
+          <div className="max-w-3xl mx-auto">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 backdrop-blur-md px-3.5 py-1.5 mb-6">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#0066F5]">
+                <Stethoscope size={13} className="text-white" />
+              </span>
+              <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/90">
+                NEET PG · Postgraduate Medicine
+              </span>
+            </div>
 
-                <div className="flex flex-col max-h-[min(420px,55vh)] overflow-y-auto overscroll-contain [scrollbar-width:thin] [scrollbar-color:#93C5FD_#F1F5F9]">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSelectedState("all");
+            <div className="inline-flex items-stretch justify-center gap-3 mb-4">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-[1.08]">
+                Find your{" "}
+                <span className="relative inline-block">
+                  <span className="relative z-10 text-white">MD / MS</span>
+                  <span className="absolute inset-x-0 bottom-1 h-2.5 bg-[#0066F5]/45 -z-0 rounded-sm" />
+                </span>{" "}
+                seat
+              </h1>
+              <span
+                className="hidden sm:block w-1.5 rounded-full bg-[#0066F5] shrink-0 self-stretch"
+                aria-hidden
+              />
+            </div>
+
+            <p className="text-sm sm:text-base text-white/75 leading-relaxed max-w-xl mx-auto mb-8">
+              Compare fees, seats & counselling paths across India&apos;s top
+              postgraduate medical colleges — built for NEET PG aspirants.
+            </p>
+
+            {/* Stats strip */}
+            <div className="mb-8 inline-flex flex-wrap items-center justify-center gap-x-5 gap-y-2 rounded-2xl border border-white/15 bg-white/10 backdrop-blur-md px-5 py-3 text-sm font-semibold">
+              <span className="inline-flex items-center gap-2 text-white">
+                <GraduationCap size={16} className="text-[#0066F5]" />
+                {stats.colleges} Colleges
+              </span>
+              <span className="hidden sm:inline w-px h-4 bg-white/25" />
+              <span className="inline-flex items-center gap-2 text-white">
+                <MapPin size={16} className="text-[#0066F5]" />
+                {stats.states} States
+              </span>
+              <span className="hidden sm:inline w-px h-4 bg-white/25" />
+              <span className="inline-flex items-center gap-2 text-white">
+                <Award size={16} className="text-[#0066F5]" />
+                {stats.government}+ Government
+              </span>
+            </div>
+
+            {/* Search */}
+            <div className="max-w-xl mx-auto">
+              <div className="flex items-center gap-2 rounded-2xl bg-white p-1.5 sm:p-2 shadow-2xl shadow-black/25 border border-white/40">
+                <div className="flex flex-1 items-center gap-2 pl-3 min-w-0">
+                  <Search className="w-5 h-5 text-[#0066F5] shrink-0" />
+                  <input
+                    type="search"
+                    value={search}
+                    onChange={(e) => {
+                      setSearch(e.target.value);
                       resetPage();
                     }}
-                    className={`w-full text-left px-4 py-2.5 text-sm font-medium border-b border-slate-100 transition-colors ${
-                      selectedState === "all"
-                        ? "bg-[#0066F5] text-white"
-                        : "text-slate-700 hover:bg-blue-50 hover:text-[#0066F5]"
-                    }`}
-                  >
-                    <span className="flex items-center justify-between gap-2">
-                      <span>All States</span>
-                      <span
-                        className={`text-xs font-bold tabular-nums ${
-                          selectedState === "all" ? "text-white/80" : "text-slate-400"
-                        }`}
-                      >
-                        {allColleges.length}
-                      </span>
-                    </span>
-                  </button>
-                  {states.map((state) => (
+                    placeholder="Search college, city or state..."
+                    className="w-full min-w-0 bg-transparent text-[#0F172A] placeholder:text-slate-400 outline-none text-sm sm:text-base font-medium py-2.5"
+                  />
+                </div>
+                <span className="hidden sm:inline-flex shrink-0 items-center rounded-xl bg-[#0066F5] text-white text-sm font-bold px-5 py-2.5">
+                  Search
+                </span>
+              </div>
+              <p className="mt-3 text-[11px] text-white/50 font-medium tracking-wide">
+                Tip: try “Delhi”, “AIIMS” or a state name
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom wave into page */}
+        <div className="absolute bottom-0 inset-x-0 h-8 bg-[#F4F7FC] rounded-t-[2rem]" />
+      </section>
+
+      {/* Main — same shell as category */}
+      <section className="py-8 sm:py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
+          <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
+            <aside className="w-full lg:w-80 shrink-0">
+              <div className="bg-white rounded-2xl shadow-sm border border-[#E2E8F0] p-4 sm:p-6 lg:sticky lg:top-28 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto lg:overscroll-contain space-y-4">
+                {/* States */}
+                <div className="overflow-hidden rounded-xl border border-[#E2E8F0]">
+                  <div className="flex items-center justify-between gap-2 px-4 py-3 border-b border-[#E2E8F0] bg-[#F8FAFC]">
+                    <div className="flex items-center gap-2">
+                      <Filter className="w-4 h-4 text-[#0066F5]" />
+                      <h2 className="font-bold text-[#0F172A] text-sm">States</h2>
+                    </div>
+                  </div>
+                  <div className="flex flex-col max-h-[min(360px,45vh)] overflow-y-auto overscroll-contain [scrollbar-width:thin] [scrollbar-color:#0066F5_#F1F5F9]">
                     <button
-                      key={state.slug}
                       type="button"
                       onClick={() => {
-                        setSelectedState(state.slug);
+                        setSelectedState("all");
                         resetPage();
                       }}
-                      className={`w-full text-left px-4 py-2.5 text-sm font-medium border-b border-slate-100 last:border-b-0 transition-colors ${
-                        selectedState === state.slug
+                      className={`w-full text-left px-4 py-2.5 text-sm font-medium border-b border-[#E2E8F0] transition-colors ${
+                        selectedState === "all"
                           ? "bg-[#0066F5] text-white"
-                          : "text-slate-700 hover:bg-blue-50 hover:text-[#0066F5]"
+                          : "text-slate-700 hover:bg-[#E8F1FF] hover:text-[#0066F5]"
                       }`}
                     >
                       <span className="flex items-center justify-between gap-2">
-                        <span className="truncate">{state.name}</span>
+                        <span>All States</span>
                         <span
-                          className={`text-xs font-bold tabular-nums shrink-0 ${
-                            selectedState === state.slug
-                              ? "text-white/80"
-                              : "text-slate-400"
+                          className={`text-xs font-bold tabular-nums ${
+                            selectedState === "all" ? "text-white/80" : "text-slate-400"
                           }`}
                         >
-                          {state.collegeCount}
+                          {allColleges.length}
                         </span>
                       </span>
                     </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-                <div className="px-4 py-3.5 border-b border-slate-100 bg-slate-50/80">
-                  <h2 className="font-bold text-slate-900 text-sm">College Type</h2>
-                </div>
-                <div className="flex flex-col">
-                  {[
-                    { id: "all", label: "All" },
-                    { id: "government", label: "Government" },
-                    { id: "private", label: "Private" },
-                  ].map((t) => (
-                    <button
-                      key={t.id}
-                      type="button"
-                      onClick={() => {
-                        setSelectedType(t.id);
-                        resetPage();
-                      }}
-                      className={`w-full text-left px-4 py-2.5 text-sm font-medium border-b border-slate-100 last:border-b-0 transition-colors ${
-                        selectedType === t.id
-                          ? "bg-[#0066F5] text-white"
-                          : "text-slate-700 hover:bg-blue-50 hover:text-[#0066F5]"
-                      }`}
-                    >
-                      {t.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </aside>
-
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center justify-between mb-4">
-              <p className="text-sm text-slate-600">
-                Showing{" "}
-                <span className="font-bold text-slate-900">{filtered.length}</span>{" "}
-                MD/MS colleges
-                {selectedState !== "all" && (
-                  <>
-                    {" "}
-                    in{" "}
-                    <span className="font-bold text-[#0066F5]">
-                      {states.find((s) => s.slug === selectedState)?.name}
-                    </span>
-                  </>
-                )}
-              </p>
-            </div>
-
-            {pageItems.length === 0 ? (
-              <div className="bg-white border border-slate-200 rounded-xl p-12 text-center">
-                <GraduationCap className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-                <p className="text-slate-700 font-semibold">No colleges found</p>
-                <p className="text-sm text-slate-500 mt-1">
-                  Try another state or clear your search.
-                </p>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {pageItems.map((college) => (
-                  <CollegeCard key={college.id} college={college} />
-                ))}
-              </div>
-            )}
-
-            {totalPages > 1 && (
-              <div className="mt-8 flex items-center justify-center gap-2 flex-wrap">
-                <button
-                  type="button"
-                  disabled={currentPage <= 1}
-                  onClick={() => setPage((p) => Math.max(1, p - 1))}
-                  className="inline-flex items-center gap-1 px-3 py-2 rounded-lg border border-slate-200 bg-white text-sm font-medium disabled:opacity-40 hover:border-[#0066F5]"
-                >
-                  <ChevronLeft className="w-4 h-4" /> Prev
-                </button>
-                {Array.from({ length: totalPages }, (_, i) => i + 1)
-                  .filter((n) => {
-                    if (totalPages <= 7) return true;
-                    return (
-                      n === 1 ||
-                      n === totalPages ||
-                      Math.abs(n - currentPage) <= 1
-                    );
-                  })
-                  .reduce<(number | "…")[]>((acc, n, idx, arr) => {
-                    if (idx > 0 && n - (arr[idx - 1] as number) > 1) {
-                      acc.push("…");
-                    }
-                    acc.push(n);
-                    return acc;
-                  }, [])
-                  .map((n, idx) =>
-                    n === "…" ? (
-                      <span key={`e-${idx}`} className="px-2 text-slate-400">
-                        …
-                      </span>
-                    ) : (
+                    {states.map((state) => (
                       <button
-                        key={n}
+                        key={state.slug}
                         type="button"
-                        onClick={() => setPage(n)}
-                        className={`w-10 h-10 rounded-lg text-sm font-bold ${
-                          currentPage === n
+                        onClick={() => {
+                          setSelectedState(state.slug);
+                          resetPage();
+                        }}
+                        className={`w-full text-left px-4 py-2.5 text-sm font-medium border-b border-[#E2E8F0] last:border-b-0 transition-colors ${
+                          selectedState === state.slug
                             ? "bg-[#0066F5] text-white"
-                            : "bg-white border border-slate-200 text-slate-700 hover:border-[#0066F5]"
+                            : "text-slate-700 hover:bg-[#E8F1FF] hover:text-[#0066F5]"
                         }`}
                       >
-                        {n}
+                        <span className="flex items-center justify-between gap-2">
+                          <span className="truncate">{state.name}</span>
+                          <span
+                            className={`text-xs font-bold tabular-nums shrink-0 ${
+                              selectedState === state.slug
+                                ? "text-white/80"
+                                : "text-slate-400"
+                            }`}
+                          >
+                            {state.collegeCount}
+                          </span>
+                        </span>
                       </button>
-                    )
-                  )}
-                <button
-                  type="button"
-                  disabled={currentPage >= totalPages}
-                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                  className="inline-flex items-center gap-1 px-3 py-2 rounded-lg border border-slate-200 bg-white text-sm font-medium disabled:opacity-40 hover:border-[#0066F5]"
-                >
-                  Next <ChevronRight className="w-4 h-4" />
-                </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Type */}
+                <div className="overflow-hidden rounded-xl border border-[#E2E8F0]">
+                  <div className="px-4 py-3 border-b border-[#E2E8F0] bg-[#F8FAFC]">
+                    <h2 className="font-bold text-[#0F172A] text-sm">College Type</h2>
+                  </div>
+                  <div className="flex flex-col">
+                    {[
+                      { id: "all", label: "All" },
+                      { id: "government", label: "Government" },
+                      { id: "private", label: "Private" },
+                    ].map((t) => (
+                      <button
+                        key={t.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedType(t.id);
+                          resetPage();
+                        }}
+                        className={`w-full text-left px-4 py-2.5 text-sm font-medium border-b border-[#E2E8F0] last:border-b-0 transition-colors ${
+                          selectedType === t.id
+                            ? "bg-[#0066F5] text-white"
+                            : "text-slate-700 hover:bg-[#E8F1FF] hover:text-[#0066F5]"
+                        }`}
+                      >
+                        {t.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Overview card — like category */}
+                <div className="rounded-xl bg-[#E8F1FF] border border-[#0066F5]/15 p-4">
+                  <h4 className="font-semibold text-[#0F172A] mb-3 flex items-center gap-2 text-sm">
+                    <Award className="w-4 h-4 text-[#0066F5]" />
+                    Category Overview
+                  </h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between gap-3">
+                      <span className="text-[#64748B]">Total Colleges</span>
+                      <span className="font-semibold text-[#0066F5]">{stats.colleges}</span>
+                    </div>
+                    <div className="flex justify-between gap-3">
+                      <span className="text-[#64748B]">States</span>
+                      <span className="font-semibold text-[#0066F5]">{stats.states}</span>
+                    </div>
+                    <div className="flex justify-between gap-3">
+                      <span className="text-[#64748B]">PG Seats</span>
+                      <span className="font-semibold text-[#0066F5]">
+                        {Math.round(stats.seats / 100) * 100}+
+                      </span>
+                    </div>
+                    <div className="flex justify-between gap-3">
+                      <span className="text-[#64748B]">Govt Colleges</span>
+                      <span className="font-semibold text-[#0066F5]">{stats.government}</span>
+                    </div>
+                  </div>
+                </div>
               </div>
-            )}
+            </aside>
+
+            <div className="flex-1 min-w-0">
+              <div className="mb-4">
+                <h2 className="text-xl font-bold text-[#0F172A]">MD / MS Colleges</h2>
+                <p className="text-sm text-[#64748B] mt-1">
+                  Showing {filtered.length} institution{filtered.length === 1 ? "" : "s"}
+                  {selectedState !== "all" && (
+                    <>
+                      {" "}
+                      in{" "}
+                      <span className="font-semibold text-[#0066F5]">
+                        {states.find((s) => s.slug === selectedState)?.name}
+                      </span>
+                    </>
+                  )}
+                </p>
+              </div>
+
+              <div className="bg-white rounded-2xl shadow-sm border border-[#E2E8F0] p-4 sm:p-6">
+                {pageItems.length === 0 ? (
+                  <div className="py-12 text-center">
+                    <GraduationCap className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+                    <p className="text-slate-700 font-semibold">No colleges found</p>
+                    <p className="text-sm text-slate-500 mt-1">
+                      Try another state or clear your search.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {pageItems.map((college) => (
+                      <CollegeCard key={college.id} college={college} />
+                    ))}
+                  </div>
+                )}
+
+                {totalPages > 1 && (
+                  <div className="mt-8 flex items-center justify-center gap-2 flex-wrap">
+                    <button
+                      type="button"
+                      disabled={currentPage <= 1}
+                      onClick={() => setPage((p) => Math.max(1, p - 1))}
+                      className="inline-flex items-center gap-1 px-3 py-2 rounded-lg border border-[#E2E8F0] bg-white text-sm font-medium disabled:opacity-40 hover:border-[#0066F5]"
+                    >
+                      <ChevronLeft className="w-4 h-4" /> Prev
+                    </button>
+                    {Array.from({ length: totalPages }, (_, i) => i + 1)
+                      .filter((n) => {
+                        if (totalPages <= 7) return true;
+                        return (
+                          n === 1 ||
+                          n === totalPages ||
+                          Math.abs(n - currentPage) <= 1
+                        );
+                      })
+                      .reduce<(number | "…")[]>((acc, n, idx, arr) => {
+                        if (idx > 0 && n - (arr[idx - 1] as number) > 1) {
+                          acc.push("…");
+                        }
+                        acc.push(n);
+                        return acc;
+                      }, [])
+                      .map((n, idx) =>
+                        n === "…" ? (
+                          <span key={`e-${idx}`} className="px-2 text-slate-400">
+                            …
+                          </span>
+                        ) : (
+                          <button
+                            key={n}
+                            type="button"
+                            onClick={() => setPage(n)}
+                            className={`w-10 h-10 rounded-lg text-sm font-bold ${
+                              currentPage === n
+                                ? "bg-[#0066F5] text-white"
+                                : "bg-white border border-[#E2E8F0] text-slate-700 hover:border-[#0066F5]"
+                            }`}
+                          >
+                            {n}
+                          </button>
+                        )
+                      )}
+                    <button
+                      type="button"
+                      disabled={currentPage >= totalPages}
+                      onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                      className="inline-flex items-center gap-1 px-3 py-2 rounded-lg border border-[#E2E8F0] bg-white text-sm font-medium disabled:opacity-40 hover:border-[#0066F5]"
+                    >
+                      Next <ChevronRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
-      </main>
+      </section>
     </div>
   );
 }

@@ -130,34 +130,6 @@ export default function FAQ() {
           ))}
         </div>
 
-        {/* CTA Section - Minimal Box */}
-        <div className="mt-16 bg-[#F8FAFC] border border-slate-100 rounded-lg p-10 text-center">
-          <div className="w-12 h-12 bg-white border border-slate-200 rounded-full flex items-center justify-center text-[#0066F5] mx-auto mb-6 shadow-sm">
-            <MessageSquare size={22} />
-          </div>
-          <h3 className="text-xl font-bold text-[#1E293B] mb-2">
-            Still have questions?
-          </h3>
-          <p className="text-[#64748B] text-xs font-medium mb-8">
-            Speak with our expert counselors and get a personalized roadmap for your career.
-          </p>
-
-          <div className="flex flex-col sm:flex-row justify-center gap-3">
-            <button
-              onClick={openModal}
-              className="px-6 py-3 bg-[#1E293B] text-white rounded-md font-bold text-[10px] uppercase tracking-wider hover:bg-[#0066F5] transition-colors flex items-center justify-center gap-2"
-            >
-              <Phone size={14} /> Free Counselling
-            </button>
-            <button
-              onClick={openModal}
-              className="px-6 py-3 bg-white border border-slate-200 text-[#1E293B] rounded-md font-bold text-[10px] uppercase tracking-wider hover:border-[#0066F5] hover:text-[#0066F5] transition-all flex items-center justify-center gap-2"
-            >
-              <Mail size={14} /> Contact Support
-            </button>
-          </div>
-        </div>
-
       </div>
     </section>
   );

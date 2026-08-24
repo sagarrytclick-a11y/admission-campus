@@ -40,4 +40,6 @@ const BlogSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+BlogSchema.index({ slug: 1, is_active: 1 });
+
 export default mongoose.models.Blog || mongoose.model("Blog", BlogSchema);

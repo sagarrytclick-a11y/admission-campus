@@ -54,8 +54,8 @@ export default function BlogsPage() {
     <div className="min-h-screen bg-white font-sans text-slate-900">
       {/* HEADER SECTION */}
       <header className="bg-[#F8FAFC] border-b border-slate-100 pt-28 pb-12">
-        <div className="max-w-7xl mx-auto px-6 lg:px-24">
-          <div className="flex items-center gap-2 text-[#0066F5] mb-4">
+        <div className="max-w-7xl mx-auto px-6 lg:px-24 text-center">
+          <div className="inline-flex items-center justify-center gap-2 text-[#0066F5] mb-4">
             <Sparkles size={16} />
             <span className="text-[10px] font-bold uppercase tracking-widest">Resources & Insights</span>
           </div>
@@ -65,7 +65,7 @@ export default function BlogsPage() {
           </h1>
 
           {/* INLINE FILTERS BAR */}
-          <div className="flex flex-col lg:flex-row gap-3">
+          <div className="flex flex-col lg:flex-row gap-3 text-left">
             {/* Search - Text set to Slate-900 for visibility */}
             <div className="relative flex-2 bg-white border border-slate-200 rounded-lg flex items-center px-3 shadow-sm focus-within:border-[#0066F5] transition-colors">
               <Search className="text-slate-400" size={18} />
