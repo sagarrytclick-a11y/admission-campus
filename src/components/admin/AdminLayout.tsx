@@ -12,16 +12,12 @@ interface AdminLayoutProps {
 
 export function AdminLayout({ children, title, subtitle }: AdminLayoutProps) {
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-[#F4F7FC] text-slate-900">
       <AdminSidebar />
-      
-      {/* Main content */}
+
       <div className="lg:pl-64">
         <AdminHeader title={title} subtitle={subtitle} />
-        
-        <main className="p-4 sm:p-6 lg:p-8">
-          {children}
-        </main>
+        <main className="p-4 sm:p-6 lg:p-8 text-slate-900">{children}</main>
       </div>
     </div>
   )

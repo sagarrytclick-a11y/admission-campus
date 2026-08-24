@@ -281,14 +281,14 @@ function AdminCollegesPageContent() {
                 </div>
               )}
               {rankingData?.accreditation && Array.isArray(rankingData.accreditation) && rankingData.accreditation.length > 0 && (
-                <div className="text-xs text-gray-400">
+                <div className="text-xs text-slate-500">
                   {rankingData.accreditation.length} accreditation(s)
                 </div>
               )}
             </div>
           )
         } catch (error) {
-          return <span className="text-xs text-gray-400">Invalid data</span>
+          return <span className="text-xs text-slate-500">Invalid data</span>
         }
       }
     },
@@ -718,7 +718,7 @@ function AdminCollegesPageContent() {
       {/* Filters and Add button */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h2 className="text-lg font-semibold text-white">All Colleges</h2>
+            <h2 className="text-lg font-semibold text-slate-900">All Colleges</h2>
             <p className="text-sm text-gray-500">
               {filteredAdminColleges.length} of {colleges.length} colleges
             </p>
@@ -733,7 +733,7 @@ function AdminCollegesPageContent() {
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500 h-4 w-4" />
               <Input
                 placeholder="Search by college name..."
                 value={searchTerm}

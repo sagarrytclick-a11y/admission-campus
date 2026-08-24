@@ -3,18 +3,17 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
-import { 
-  LayoutDashboard, 
-  Globe, 
-  GraduationCap, 
+import {
+  LayoutDashboard,
+  Globe,
+  GraduationCap,
   FileText,
   FileCheck,
   MessageSquare,
   Menu,
-  ShieldCheck,
   Tags,
   MapPin,
-  X
+  X,
 } from 'lucide-react'
 import { useState } from 'react'
 import Image from 'next/image'
@@ -28,7 +27,6 @@ const navigation = [
   { name: 'Exams', href: '/admin/exams', icon: FileCheck },
   { name: 'Blogs', href: '/admin/blogs', icon: FileText },
   { name: 'Enquiries', href: '/admin/enquiries', icon: MessageSquare },
-  // { name: 'RBAC', href: '/admin/rbac', icon: ShieldCheck },
 ]
 
 export function AdminSidebar() {
@@ -37,32 +35,39 @@ export function AdminSidebar() {
 
   return (
     <>
-      {/* Mobile menu button */}
       <div className="lg:hidden fixed top-4 left-4 z-50">
         <button
+          type="button"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="p-2 rounded-lg bg-gray-800 shadow-md border border-gray-700"
+          className="p-2.5 rounded-xl bg-white shadow-md border border-slate-200 text-slate-700"
+          aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
         >
-          {isMobileMenuOpen ? <X className="h-6 w-6 text-white" /> : <Menu className="h-6 w-6 text-white" />}
+          {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </div>
 
-      {/* Sidebar */}
-      <div className={cn(
-        "fixed inset-y-0 left-0 z-40 w-64 bg-gray-800 shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 border-r border-gray-700",
-        isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-      )}>
-        <div className="flex flex-col h-full">
-          {/* Header */}
-          <div className="p-6 border-b flex items-center  gap-3 border-gray-700">
-            {/* <p className="text-lg font-bold text-white">Admission Campus</p>
-            <p className="text-sm text-center text-gray-400">Admin CMS</p> */}
-            <Image src="/logo.jpg" className='bg-white rounded-full p-1' alt="Admission Campus" width={60} height={60} />
-            <p className='text-white text-[14px] whitespace-nowrap font-bold'>Admission Campus</p>
+      <aside
+        className={cn(
+          'fixed inset-y-0 left-0 z-40 w-64 bg-[#0B1220] shadow-xl transform transition-transform duration-300 ease-in-out lg:translate-x-0',
+          isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+        )}
+      >
+        <div className="flex h-full flex-col">
+          <div className="flex items-center gap-3 border-b border-white/10 px-5 py-5">
+            <Image
+              src="/logo.jpg"
+              className="rounded-xl bg-white p-1 object-contain"
+              alt="Admission Campus"
+              width={44}
+              height={44}
+            />
+            <div className="min-w-0">
+              <p className="truncate text-sm font-bold text-white">Admission Campus</p>
+              <p className="text-[11px] font-medium text-slate-400">Admin Panel</p>
+            </div>
           </div>
 
-          {/* Navigation */}
-          <nav className="flex-1 p-4 space-y-2">
+          <nav className="flex-1 space-y-1 overflow-y-auto p-3">
             {navigation.map((item) => {
               const isActive = pathname === item.href
               return (
@@ -70,33 +75,31 @@ export function AdminSidebar() {
                   key={item.name}
                   href={item.href}
                   className={cn(
-                    "flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors",
+                    'flex items-center rounded-xl px-3.5 py-2.5 text-sm font-medium transition-colors',
                     isActive
-                      ? "bg-blue-600 text-white border-r-2 border-blue-400"
-                      : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                      ? 'bg-[#0066F5] text-white shadow-md shadow-[#0066F5]/25'
+                      : 'text-slate-300 hover:bg-white/5 hover:text-white'
                   )}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  <item.icon className="mr-3 h-5 w-5" />
+                  <item.icon className="mr-3 h-4 w-4 shrink-0 opacity-90" />
                   {item.name}
                 </Link>
               )
             })}
           </nav>
 
-          {/* Footer */}
-          <div className="p-4 border-t border-gray-700">
-            <div className="text-xs text-gray-400 text-center">
-              © 2026 Admission Campus 
-            </div>
+          <div className="border-t border-white/10 p-4">
+            <p className="text-center text-[11px] text-slate-500">
+              © {new Date().getFullYear()} Admission Campus
+            </p>
           </div>
         </div>
-      </div>
+      </aside>
 
-      {/* Mobile backdrop */}
       {isMobileMenuOpen && (
-        <div 
-          className="fixed inset-0 z-30 bg-black bg-opacity-50 lg:hidden"
+        <div
+          className="fixed inset-0 z-30 bg-black/40 lg:hidden"
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}

@@ -115,10 +115,10 @@ function EnquiriesPageContent() {
       title: 'Contact',
       render: (value: string, record: Enquiry) => (
         <div className="max-w-md">
-          <div className="font-medium text-white">{value}</div>
-          <div className="text-sm text-white">{record.email}</div>
-          <div className="text-sm text-white">{record.phone}</div>
-          <div className="text-sm text-white">{record.city}</div>
+          <div className="font-medium text-slate-900">{value}</div>
+          <div className="text-sm text-slate-900">{record.email}</div>
+          <div className="text-sm text-slate-900">{record.phone}</div>
+          <div className="text-sm text-slate-900">{record.city}</div>
         </div>
       )
     },
@@ -131,7 +131,7 @@ function EnquiriesPageContent() {
             value === 'undefined' || value === 'null' || value === '') {
           return (
             <div className="max-w-xs">
-              <span className="text-gray-400 text-sm">Not specified</span>
+              <span className="text-slate-500 text-sm">Not specified</span>
             </div>
           );
         }
@@ -150,7 +150,7 @@ function EnquiriesPageContent() {
       title: 'Subject',
       render: (value: string) => (
         <div className="max-w-xs">
-          <div className="font-medium text-white line-clamp-2">{value}</div>
+          <div className="font-medium text-slate-900 line-clamp-2">{value}</div>
         </div>
       )
     },
@@ -228,8 +228,8 @@ function EnquiriesPageContent() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">Enquiries</h1>
-          <p className="text-white">Manage student enquiries and support requests</p>
+          <h1 className="text-2xl font-bold text-slate-900">Enquiries</h1>
+          <p className="text-slate-900">Manage student enquiries and support requests</p>
         </div>
       </div>
 
@@ -237,7 +237,7 @@ function EnquiriesPageContent() {
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="flex-1">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500 h-4 w-4" />
             <Input
               placeholder="Search enquiries..."
               value={searchTerm}
@@ -300,7 +300,7 @@ function EnquiriesPageContent() {
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center justify-between mt-12">
-          <div className="text-sm text-white">
+          <div className="text-sm text-slate-900">
             Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, filteredEnquiries.length)} of {filteredEnquiries.length} enquiries
           </div>
           <div className="flex items-center space-x-2">
@@ -369,58 +369,58 @@ function EnquiriesPageContent() {
             {/* Contact Information */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-white">Name</label>
+                <label className="text-sm font-medium text-slate-900">Name</label>
                 <div className="flex items-center gap-2">
-                  <MessageSquare className="h-4 w-4 text-white" />
+                  <MessageSquare className="h-4 w-4 text-slate-900" />
                   <span>{selectedEnquiry.name}</span>
                 </div>
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-white">Email</label>
+                <label className="text-sm font-medium text-slate-900">Email</label>
                 <div className="flex items-center gap-2">
-                  <Mail className="h-4 w-4 text-white" />
+                  <Mail className="h-4 w-4 text-slate-900" />
                   <span>{selectedEnquiry.email}</span>
                 </div>
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-white">Phone</label>
+                <label className="text-sm font-medium text-slate-900">Phone</label>
                 <div className="flex items-center gap-2">
-                  <Phone className="h-4 w-4 text-white" />
-                  <span className="text-white">{selectedEnquiry.phone}</span>
+                  <Phone className="h-4 w-4 text-slate-900" />
+                  <span className="text-slate-900">{selectedEnquiry.phone}</span>
                 </div>
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-white">City</label>
+                <label className="text-sm font-medium text-slate-900">City</label>
                 <div className="flex items-center gap-2">
-                  <MapPin className="h-4 w-4 text-white" />
-                  <span className="text-white">{selectedEnquiry.city}</span>
+                  <MapPin className="h-4 w-4 text-slate-900" />
+                  <span className="text-slate-900">{selectedEnquiry.city}</span>
                 </div>
               </div>
               {selectedEnquiry.course_category && selectedEnquiry.course_category !== 'undefined' && selectedEnquiry.course_category !== 'null' ? (
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-white">Course Category</label>
+                  <label className="text-sm font-medium text-slate-900">Course Category</label>
                   <Badge variant="outline" className="text-blue-300 border-blue-300/50">
                     {selectedEnquiry.course_category}
                   </Badge>
                 </div>
               ) : null}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-white">Source</label>
-                <Badge variant="outline" className="text-white border-white/50">{selectedEnquiry.source}</Badge>
+                <label className="text-sm font-medium text-slate-900">Source</label>
+                <Badge variant="outline" className="text-slate-900 border-white/50">{selectedEnquiry.source}</Badge>
               </div>
             </div>
 
             {/* Enquiry Details */}
             <div className="space-y-4">
               <div>
-                <label className="text-sm font-medium text-white">Subject</label>
+                <label className="text-sm font-medium text-slate-900">Subject</label>
                 <div className="mt-1 p-3 rounded-lg">
                   {selectedEnquiry.subject}
                 </div>
               </div>
 
               <div>
-                <label className="text-sm font-medium text-white">Message</label>
+                <label className="text-sm font-medium text-slate-900">Message</label>
                 <div className="mt-1 p-3  rounded-lg whitespace-pre-wrap">
                   {selectedEnquiry.message}
                 </div>
@@ -430,7 +430,7 @@ function EnquiriesPageContent() {
             {/* Status and Priority */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-white">Status</label>
+                <label className="text-sm font-medium text-slate-900">Status</label>
                 <Select
                   value={selectedEnquiry.status}
                   onValueChange={(value) => handleStatusUpdate(selectedEnquiry._id, value)}
@@ -447,7 +447,7 @@ function EnquiriesPageContent() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-white">Priority</label>
+                <label className="text-sm font-medium text-slate-900">Priority</label>
                 <Badge className={
                   selectedEnquiry.priority === 'urgent' ? 'bg-red-100 text-red-800 border-red-200' :
                     selectedEnquiry.priority === 'high' ? 'bg-orange-100 text-orange-800 border-orange-200' :
@@ -458,13 +458,13 @@ function EnquiriesPageContent() {
                 </Badge>
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-white">Assigned To</label>
+                <label className="text-sm font-medium text-slate-900">Assigned To</label>
                 <div>{selectedEnquiry.assignedTo || 'Unassigned'}</div>
               </div>
             </div>
 
             {/* Timestamps */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-white">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-slate-900">
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
                 <span>Created: {new Date(selectedEnquiry.createdAt).toLocaleString()}</span>
@@ -487,13 +487,13 @@ function EnquiriesPageContent() {
         showFooter={false}
       >
         <div className="space-y-4">
-          <p className="text-white">
+          <p className="text-slate-900">
             Are you sure you want to delete this enquiry? This action cannot be undone.
           </p>
           {enquiryToDelete && (
             <div className="p-3 bg-gray-50 rounded-lg">
               <div className="font-medium">{enquiryToDelete.name}</div>
-              <div className="text-sm text-white">{enquiryToDelete.subject}</div>
+              <div className="text-sm text-slate-900">{enquiryToDelete.subject}</div>
             </div>
           )}
           <div className="flex gap-3 justify-end">

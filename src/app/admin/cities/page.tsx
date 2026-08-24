@@ -260,13 +260,13 @@ function CitiesPageContent() {
       {/* Search Bar */}
       <div className="flex items-center space-x-4 mt-6">
         <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500 h-4 w-4" />
           <Input
             type="text"
             placeholder="Search cities by name or slug..."
             value={searchTerm}
             onChange={(e) => actions.setSearchTerm(e.target.value)}
-            className="pl-10 bg-gray-700 border-gray-600 text-white placeholder-gray-400"
+            className="pl-10 bg-white border-slate-200 text-slate-900 placeholder:text-slate-400"
           />
         </div>
         {(searchTerm || citiesLoading) && (
@@ -304,14 +304,14 @@ function CitiesPageContent() {
                   actions.setCurrentPage(1)
                 }}
               >
-                <SelectTrigger className="w-20 bg-gray-700 border-gray-600 text-white">
+                <SelectTrigger className="w-20 bg-white border-slate-200 text-slate-900">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-gray-700 border-gray-600">
-                  <SelectItem value="5" className="text-white hover:bg-gray-600">5</SelectItem>
-                  <SelectItem value="10" className="text-white hover:bg-gray-600">10</SelectItem>
-                  <SelectItem value="20" className="text-white hover:bg-gray-600">20</SelectItem>
-                  <SelectItem value="50" className="text-white hover:bg-gray-600">50</SelectItem>
+                <SelectContent className="bg-white border-slate-200">
+                  <SelectItem value="5" className="text-slate-900 hover:bg-slate-100">5</SelectItem>
+                  <SelectItem value="10" className="text-slate-900 hover:bg-slate-100">10</SelectItem>
+                  <SelectItem value="20" className="text-slate-900 hover:bg-slate-100">20</SelectItem>
+                  <SelectItem value="50" className="text-slate-900 hover:bg-slate-100">50</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -323,12 +323,12 @@ function CitiesPageContent() {
                 size="sm"
                 onClick={() => actions.setCurrentPage(currentPage - 1)}
                 disabled={!pagination.hasPrevPage || citiesLoading}
-                className="bg-gray-700 border-gray-600 text-white hover:bg-gray-600 disabled:opacity-50"
+                className="bg-white border-slate-200 text-slate-900 hover:bg-slate-100 disabled:opacity-50"
               >
                 Previous
               </Button>
 
-              <span className="text-sm text-white">
+              <span className="text-sm text-slate-900">
                 Page {currentPage} of {pagination.totalPages}
               </span>
 
@@ -337,7 +337,7 @@ function CitiesPageContent() {
                 size="sm"
                 onClick={() => actions.setCurrentPage(currentPage + 1)}
                 disabled={!pagination.hasNextPage || citiesLoading}
-                className="bg-gray-700 border-gray-600 text-white hover:bg-gray-600 disabled:opacity-50"
+                className="bg-white border-slate-200 text-slate-900 hover:bg-slate-100 disabled:opacity-50"
               >
                 Next
               </Button>

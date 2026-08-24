@@ -67,7 +67,7 @@ function CategoriesPageContent() {
               }}
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">
+            <div className="w-full h-full flex items-center justify-center text-slate-500 text-xs">
               No Image
             </div>
           )}
@@ -94,7 +94,7 @@ function CategoriesPageContent() {
       key: 'description',
       title: 'Description',
       render: (value: string, record: Category, index: number) => (
-        <span className="text-sm text-white max-w-xs truncate block">
+        <span className="text-sm text-slate-900 max-w-xs truncate block">
           {value}
         </span>
       )
@@ -112,7 +112,7 @@ function CategoriesPageContent() {
       key: 'createdAt',
       title: 'Created',
       render: (value: string, record: Category, index: number) => (
-        <span className="text-sm text-white">
+        <span className="text-sm text-slate-900">
           {new Date(value).toLocaleDateString()}
         </span>
       )
