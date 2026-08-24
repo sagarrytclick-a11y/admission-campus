@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useMemo, useCallback } from 'react'
+import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useAllColleges } from '@/hooks/useColleges'
 import { useCategories } from '@/hooks/useCategories'
@@ -95,10 +96,10 @@ export default function CategoryCollegesPage() {
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold text-[#1E293B] mb-4">Category Not Found</h1>
           <p className="text-[#64748B] mb-6 sm:mb-8">The category you're looking for doesn't exist.</p>
-          <a href="/colleges" className="inline-flex items-center gap-2 bg-[#0066F5] text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg hover:bg-[#0047B3] transition-colors text-sm sm:text-base">
+          <Link href="/colleges" className="inline-flex items-center gap-2 bg-[#0066F5] text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg hover:bg-[#0047B3] transition-colors text-sm sm:text-base">
             <GraduationCap size={18} />
             View All Colleges
-          </a>
+          </Link>
         </div>
       </div>
     )

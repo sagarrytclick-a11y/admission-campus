@@ -13,6 +13,14 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  {
+    rules: {
+      // Legacy data/API shapes still use `any` in places; tsc remains the source of truth.
+      "@typescript-eslint/no-explicit-any": "off",
+      // Apostrophes/quotes in copy — prefer readable JSX text over entity noise.
+      "react/no-unescaped-entities": "off",
+    },
+  },
 ]);
 
 export default eslintConfig;

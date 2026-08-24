@@ -6,7 +6,6 @@ import EducationStats from "@/app/Components/EducationStats";
 import FAQ from "@/app/Components/FAQ";
 import FeaturedSection from "@/app/Components/FeaturedExams";
 import Hero from "@/app/Components/Hero";
-// import { InfiniteMovingCardsDemo } from "@/app/Components/InfiniteMovingCardsDemo";
 import LatestBlogs from "@/app/Components/LatestBlogs";
 import Services from "@/app/Components/Services";
 import StudentTestimonials from "@/app/Components/StudentTestimonials";

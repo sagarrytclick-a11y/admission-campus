@@ -1,14 +1,11 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useFormModal } from '@/context/FormModalContext'
 import FAQ from "@/app/Components/FAQ"
-import { SITE_CONTACT } from '@/config/site-config'
 import { useContactInfo } from "@/hooks/useContactInfo";
 import { useCollege } from '@/hooks/useColleges'
 
@@ -131,13 +128,8 @@ interface CollegeDetailPageProps {
 
 const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug, initialCollege }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
   const { openModal } = useFormModal()
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   // Scroll spy effect to track active section
   useEffect(() => {

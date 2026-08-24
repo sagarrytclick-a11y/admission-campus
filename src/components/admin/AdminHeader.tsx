@@ -49,15 +49,16 @@ export function AdminHeader({ title, subtitle }: AdminHeaderProps) {
   }
 
   return (
-    <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur-md">
+    <header className="sticky top-0 z-20 border-b border-white/10 bg-[#0A1628]/95 backdrop-blur-md">
+      <div className="h-1 w-full bg-[#0066F5]" />
       <div className="px-4 sm:px-6 lg:px-8">
-        <div className="flex min-h-[72px] items-center justify-between gap-4 py-3">
+        <div className="flex min-h-[68px] items-center justify-between gap-4 py-3">
           <div className="min-w-0 flex-1 pl-12 lg:pl-0">
-            <h1 className="truncate text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
+            <h1 className="truncate text-xl font-bold tracking-tight text-white sm:text-2xl">
               {title}
             </h1>
             {subtitle && (
-              <p className="mt-0.5 truncate text-sm text-slate-500">{subtitle}</p>
+              <p className="mt-0.5 truncate text-sm text-slate-400">{subtitle}</p>
             )}
           </div>
 
@@ -65,11 +66,11 @@ export function AdminHeader({ title, subtitle }: AdminHeaderProps) {
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
-                className="relative h-10 gap-2 rounded-xl px-2 text-slate-700 hover:bg-slate-100"
+                className="relative h-10 gap-2 rounded-xl border border-white/10 bg-white/5 px-2 text-white hover:bg-white/10"
               >
                 <Avatar className="h-8 w-8">
                   <AvatarImage src="/avatars/01.png" alt="Admin" />
-                  <AvatarFallback className="bg-[#E8F1FF] text-[#0066F5] text-xs font-bold">
+                  <AvatarFallback className="bg-[#0066F5] text-xs font-bold text-white">
                     AD
                   </AvatarFallback>
                 </Avatar>
@@ -77,19 +78,19 @@ export function AdminHeader({ title, subtitle }: AdminHeaderProps) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
-              className="w-56 border-slate-200 bg-white"
+              className="w-56 border-white/10 bg-[#0B1B33] text-white"
               align="end"
               forceMount
             >
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-semibold text-slate-900">Super Admin</p>
-                  <p className="text-xs text-slate-500">Admission Campus</p>
+                  <p className="text-sm font-semibold text-white">Super Admin</p>
+                  <p className="text-xs text-slate-400">Admission Campus</p>
                 </div>
               </DropdownMenuLabel>
-              <DropdownMenuSeparator />
+              <DropdownMenuSeparator className="bg-white/10" />
               <DropdownMenuItem
-                className="cursor-pointer text-slate-700 focus:bg-slate-100"
+                className="cursor-pointer text-slate-200 focus:bg-[#0066F5] focus:text-white"
                 onClick={handleLogout}
                 disabled={isLoggingOut}
               >

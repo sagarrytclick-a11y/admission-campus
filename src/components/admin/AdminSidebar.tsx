@@ -39,7 +39,7 @@ export function AdminSidebar() {
         <button
           type="button"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="p-2.5 rounded-xl bg-white shadow-md border border-slate-200 text-slate-700"
+          className="rounded-xl border border-white/10 bg-[#0B1B33] p-2.5 text-[#0066F5] shadow-md"
           aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
         >
           {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -48,7 +48,7 @@ export function AdminSidebar() {
 
       <aside
         className={cn(
-          'fixed inset-y-0 left-0 z-40 w-64 bg-[#0B1220] shadow-xl transform transition-transform duration-300 ease-in-out lg:translate-x-0',
+          'fixed inset-y-0 left-0 z-40 w-64 transform border-r border-white/5 bg-[#0A1628] shadow-xl transition-transform duration-300 ease-in-out lg:translate-x-0',
           isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >
@@ -63,11 +63,11 @@ export function AdminSidebar() {
             />
             <div className="min-w-0">
               <p className="truncate text-sm font-bold text-white">Admission Campus</p>
-              <p className="text-[11px] font-medium text-slate-400">Admin Panel</p>
+              <p className="text-[11px] font-medium text-[#0066F5]">Admin Panel</p>
             </div>
           </div>
 
-          <nav className="flex-1 space-y-1 overflow-y-auto p-3">
+          <nav className="admin-scroll flex-1 space-y-1 overflow-y-auto p-3">
             {navigation.map((item) => {
               const isActive = pathname === item.href
               return (
@@ -77,12 +77,12 @@ export function AdminSidebar() {
                   className={cn(
                     'flex items-center rounded-xl px-3.5 py-2.5 text-sm font-medium transition-colors',
                     isActive
-                      ? 'bg-[#0066F5] text-white shadow-md shadow-[#0066F5]/25'
+                      ? 'bg-[#0066F5] text-white shadow-lg shadow-[#0066F5]/30'
                       : 'text-slate-300 hover:bg-white/5 hover:text-white'
                   )}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  <item.icon className="mr-3 h-4 w-4 shrink-0 opacity-90" />
+                  <item.icon className="mr-3 h-4 w-4 shrink-0" />
                   {item.name}
                 </Link>
               )
@@ -99,7 +99,7 @@ export function AdminSidebar() {
 
       {isMobileMenuOpen && (
         <div
-          className="fixed inset-0 z-30 bg-black/40 lg:hidden"
+          className="fixed inset-0 z-30 bg-black/50 lg:hidden"
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}

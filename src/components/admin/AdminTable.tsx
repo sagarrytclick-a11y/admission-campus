@@ -47,14 +47,13 @@ export function AdminTable<T = Record<string, unknown>>({
 }: AdminTableProps<T>) {
   if (loading) {
     return (
-      <div className="space-y-3 rounded-xl border border-slate-200 bg-white p-4">
+      <div className="space-y-3 rounded-xl border border-white/10 bg-[#0E1C33] p-4">
         {Array.from({ length: 5 }).map((_, index) => (
           <div key={index} className="flex items-center space-x-4">
-            <Skeleton className="h-4 w-4" />
-            <Skeleton className="h-4 flex-1" />
-            <Skeleton className="h-4 w-20" />
-            <Skeleton className="h-4 w-20" />
-            <Skeleton className="h-8 w-8" />
+            <Skeleton className="h-4 w-4 bg-white/10" />
+            <Skeleton className="h-4 flex-1 bg-white/10" />
+            <Skeleton className="h-4 w-20 bg-white/10" />
+            <Skeleton className="h-8 w-8 bg-white/10" />
           </div>
         ))}
       </div>
@@ -63,32 +62,32 @@ export function AdminTable<T = Record<string, unknown>>({
 
   if (data.length === 0) {
     return (
-      <div className="rounded-xl border border-dashed border-slate-200 bg-white py-12 text-center">
-        <div className="text-base font-semibold text-slate-800 mb-1">{emptyMessage}</div>
-        <div className="text-sm text-slate-500">No records found</div>
+      <div className="rounded-xl border border-dashed border-white/15 bg-[#0E1C33] py-12 text-center">
+        <div className="mb-1 text-base font-semibold text-white">{emptyMessage}</div>
+        <div className="text-sm text-slate-400">No records found</div>
       </div>
     )
   }
 
   return (
     <div
-      className={`overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm ${className}`}
+      className={`overflow-hidden rounded-xl border border-white/10 bg-[#0E1C33] shadow-sm ${className}`}
     >
-      <div className="overflow-x-auto">
+      <div className="admin-scroll overflow-x-auto">
         <Table>
           <TableHeader>
-            <TableRow className="border-slate-200 bg-slate-50 hover:bg-slate-50">
+            <TableRow className="border-white/10 bg-[#0066F5]/10 hover:bg-[#0066F5]/10">
               {columns.map((column) => (
                 <TableHead
                   key={String(column.key)}
                   style={{ width: column.width }}
-                  className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-slate-600"
+                  className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-[#66A3FF]"
                 >
                   {column.title}
                 </TableHead>
               ))}
               {actions && actions.length > 0 && (
-                <TableHead className="w-28 px-4 py-3 text-xs font-bold uppercase tracking-wider text-slate-600">
+                <TableHead className="w-28 px-4 py-3 text-xs font-bold uppercase tracking-wider text-[#66A3FF]">
                   Actions
                 </TableHead>
               )}
@@ -98,12 +97,12 @@ export function AdminTable<T = Record<string, unknown>>({
             {data.map((record, index) => (
               <TableRow
                 key={index}
-                className="border-slate-100 hover:bg-[#F8FAFC]"
+                className="border-white/5 hover:bg-[#0066F5]/10"
               >
                 {columns.map((column) => (
                   <TableCell
                     key={String(column.key)}
-                    className="px-4 py-3 text-sm text-slate-800"
+                    className="px-4 py-3 text-sm text-white"
                   >
                     {(() => {
                       try {
@@ -120,7 +119,7 @@ export function AdminTable<T = Record<string, unknown>>({
                         }
 
                         if (value === undefined || value === null) {
-                          return <span className="text-slate-400">N/A</span>
+                          return <span className="text-slate-500">N/A</span>
                         }
 
                         if (value instanceof Date) {
@@ -134,7 +133,7 @@ export function AdminTable<T = Record<string, unknown>>({
                             return displayValue
                           }
                           return (
-                            <span className="font-mono text-xs text-slate-500">
+                            <span className="font-mono text-xs text-slate-400">
                               {JSON.stringify(value)}
                             </span>
                           )
@@ -142,7 +141,7 @@ export function AdminTable<T = Record<string, unknown>>({
 
                         return String(value)
                       } catch {
-                        return <span className="text-red-500">Render Error</span>
+                        return <span className="text-red-400">Render Error</span>
                       }
                     })()}
                   </TableCell>
@@ -157,7 +156,7 @@ export function AdminTable<T = Record<string, unknown>>({
                           size="sm"
                           onClick={() => action.onClick(record, index)}
                           disabled={action.disabled}
-                          className="h-8 w-8 text-slate-600 hover:bg-[#E8F1FF] hover:text-[#0066F5]"
+                          className="h-8 w-8 text-slate-300 hover:bg-[#0066F5]/20 hover:text-[#66A3FF]"
                         >
                           {action.icon || action.label}
                         </Button>

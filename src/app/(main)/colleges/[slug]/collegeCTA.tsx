@@ -1,7 +1,6 @@
 'use client'
 
 import { Button } from "@/components/ui/button"
-import { Phone, Mail } from "lucide-react"
 import { useFormModal } from "@/context/FormModalContext"
 
 export default function CollegeCTA() {

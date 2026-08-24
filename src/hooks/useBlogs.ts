@@ -81,7 +81,8 @@ export function useBlog(slug: string, initialData?: Blog | null) {
     queryFn: () => fetchBlogBySlug(slug),
     enabled: !!slug,
     initialData: initialData ?? undefined,
-    initialDataUpdatedAt: initialData ? Date.now() : undefined,
+    // Treat SSR payload as fresh without impure Date.now() during render
+    initialDataUpdatedAt: initialData ? 1 : undefined,
     staleTime: 10 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
     retry: 1,

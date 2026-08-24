@@ -48,36 +48,36 @@ export function AdminModal({
   if (!open) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
       <div
-        className={`w-full ${sizeClasses[size]} max-h-[90vh] overflow-y-auto rounded-2xl border border-slate-200 bg-white shadow-2xl`}
+        className={`admin-scroll w-full ${sizeClasses[size]} max-h-[90vh] overflow-y-auto rounded-2xl border border-white/10 bg-[#0E1C33] text-white shadow-2xl`}
       >
-        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white px-6 py-4">
+        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-white/10 bg-[#0E1C33] px-6 py-4">
           <div>
-            <h2 className="text-lg font-bold text-slate-900">{title}</h2>
+            <h2 className="text-lg font-bold text-white">{title}</h2>
             {description && (
-              <p className="mt-1 text-sm text-slate-500">{description}</p>
+              <p className="mt-1 text-sm text-slate-400">{description}</p>
             )}
           </div>
           <Button
             variant="ghost"
             size="sm"
             onClick={handleCancel}
-            className="h-9 w-9 p-0 text-slate-500 hover:bg-slate-100 hover:text-slate-900"
+            className="h-9 w-9 p-0 text-slate-400 hover:bg-white/5 hover:text-white"
           >
             <X className="h-4 w-4" />
           </Button>
         </div>
 
-        <div className="p-6 text-slate-900">{children}</div>
+        <div className="p-6 text-white">{children}</div>
 
         {showFooter && (
-          <div className="sticky bottom-0 flex justify-end gap-3 border-t border-slate-200 bg-slate-50 px-6 py-4">
+          <div className="sticky bottom-0 flex justify-end gap-3 border-t border-white/10 bg-[#0A1628] px-6 py-4">
             <Button
               variant="outline"
               onClick={handleCancel}
               disabled={loading}
-              className="border-slate-200 text-slate-700"
+              className="border-white/15 bg-transparent text-slate-200 hover:bg-white/5 hover:text-white"
             >
               {cancelText}
             </Button>

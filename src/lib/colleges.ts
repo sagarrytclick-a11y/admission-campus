@@ -31,7 +31,7 @@ export async function getCollegeBySlug(slug: string): Promise<any | null> {
           }
         : null,
     };
-  } catch (error) {
+  } catch {
     
     throw new Error("Failed to fetch college data");
   }

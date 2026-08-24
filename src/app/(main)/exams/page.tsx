@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Search, Building, FileText, ArrowRight, AlertCircle, RefreshCw, Sparkles, Calendar, Layers, Monitor, X } from 'lucide-react'
+import { Search, Building, FileText, ArrowRight, Sparkles, Calendar, Layers, Monitor, X } from 'lucide-react'
 import FAQ from "@/app/Components/FAQ"
 import { useExams } from '@/hooks/useExams'
 
@@ -20,7 +20,7 @@ export default function ExamsPage() {
   const observerRef = useRef<IntersectionObserver | null>(null)
   const loadMoreRef = useRef<HTMLDivElement | null>(null)
 
-  const { data: examsData = [], isLoading, error, refetch, isFetching } = useExams()
+  const { data: examsData = [], isLoading, isFetching } = useExams()
   const exams = useMemo(() => Array.isArray(examsData) ? examsData : [], [examsData])
 
   // Simple Filtering Logic

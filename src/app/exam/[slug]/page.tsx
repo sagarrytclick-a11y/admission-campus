@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -8,7 +8,6 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group-simple'
 import { Label } from '@/components/ui/label'
 import { Progress } from '@/components/ui/progress'
 import { Clock, ChevronRight, ChevronLeft, AlertCircle } from 'lucide-react'
-import { Alert, AlertDescription } from '@/components/ui/alert'
 
 interface Question {
   question: string
@@ -27,6 +26,23 @@ interface ExamData {
   questions: Question[]
 }
 
+interface ExamResultItem {
+  question: string
+  selected_option: number
+  is_correct: boolean
+  correct_option?: number
+}
+
+interface ExamResults {
+  percentage: number
+  total_score: number
+  total_possible_marks: number
+  correct_answers: number
+  total_questions: number
+  time_taken_seconds: number
+  results: ExamResultItem[]
+}
+
 export default function ExamModePage() {
   const params = useParams()
   const router = useRouter()
@@ -38,34 +54,48 @@ export default function ExamModePage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [examStarted, setExamStarted] = useState(false)
   const [showResults, setShowResults] = useState(false)
-  const [results, setResults] = useState<any>(null)
+  const [results, setResults] = useState<ExamResults | null>(null)
   const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    if (params.slug) {
-      startExam()
-    }
-  }, [params.slug])
+  const submitExam = useCallback(async () => {
+    if (!examData) return
 
-  useEffect(() => {
-    if (examStarted && timeRemaining > 0) {
-      const timer = setTimeout(() => {
-        setTimeRemaining(timeRemaining - 1)
-      }, 1000)
-      return () => clearTimeout(timer)
-    } else if (timeRemaining === 0 && examStarted) {
-      submitExam()
-    }
-  }, [timeRemaining, examStarted])
+    setIsSubmitting(true)
+    try {
+      const response = await fetch(`/api/admin/exams/exam-mode/${examData.exam_id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          answers,
+          time_taken_seconds: (examData.total_duration_mins * 60) - timeRemaining
+        })
+      })
 
-  const startExam = async () => {
+      const result = await response.json()
+
+      if (result.success) {
+        setResults(result.data)
+        setShowResults(true)
+      } else {
+        setError('Failed to submit exam')
+      }
+    } catch {
+      setError('Error submitting exam')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }, [examData, answers, timeRemaining])
+
+  const startExam = useCallback(async () => {
     try {
       setIsLoading(true)
       setError(null)
-      
+
       const response = await fetch(`/api/admin/exams/exam-mode/${params.slug}`)
       const result = await response.json()
-      
+
       if (result.success) {
         setExamData(result.data)
         setTimeRemaining(result.data.total_duration_mins * 60)
@@ -73,12 +103,34 @@ export default function ExamModePage() {
       } else {
         setError(result.message || 'Failed to start exam')
       }
-    } catch (error) {
+    } catch {
       setError('Error starting exam')
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [params.slug])
+
+  useEffect(() => {
+    if (params.slug) {
+      /* eslint-disable react-hooks/set-state-in-effect -- load exam on mount */
+      void startExam()
+      /* eslint-enable react-hooks/set-state-in-effect */
+    }
+  }, [params.slug, startExam])
+
+  useEffect(() => {
+    if (examStarted && timeRemaining > 0) {
+      const timer = setTimeout(() => {
+        setTimeRemaining((t) => t - 1)
+      }, 1000)
+      return () => clearTimeout(timer)
+    }
+    if (timeRemaining === 0 && examStarted) {
+      /* eslint-disable react-hooks/set-state-in-effect -- auto-submit on timeout */
+      void submitExam()
+      /* eslint-enable react-hooks/set-state-in-effect */
+    }
+  }, [timeRemaining, examStarted, submitExam])
 
   const handleAnswerChange = (questionIndex: number, selectedOption: number) => {
     const question = examData!.questions[questionIndex]
@@ -109,37 +161,6 @@ export default function ExamModePage() {
   const goToPreviousQuestion = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1)
-    }
-  }
-
-  const submitExam = async () => {
-    if (!examData) return
-    
-    setIsSubmitting(true)
-    try {
-      const response = await fetch(`/api/admin/exams/exam-mode/${examData.exam_id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          answers,
-          time_taken_seconds: (examData.total_duration_mins * 60) - timeRemaining
-        })
-      })
-      
-      const result = await response.json()
-      
-      if (result.success) {
-        setResults(result.data)
-        setShowResults(true)
-      } else {
-        setError('Failed to submit exam')
-      }
-    } catch (error) {
-      setError('Error submitting exam')
-    } finally {
-      setIsSubmitting(false)
     }
   }
 

@@ -15,22 +15,9 @@ export const SITE_ASSETS = {
     icon512: "/logo.png",
   },
 
-  // Hero images
+  // Hero images (files in /public/Hero)
   hero: {
-    main: "/Hero/hero.jpg",
-  },
-
-  // Utility icons (not part of brand identity but used in components)
-  utility: {
-    globe: "/globe.svg",
-    file: "/file.svg",
-    window: "/window.svg",
-  },
-
-  // Framework assets
-  framework: {
-    next: "/next.svg",
-    vercel: "/vercel.svg",
+    main: "/Hero/hero-1.jpg",
   },
 } as const;
 
@@ -45,22 +32,3 @@ export const getLogoUrl = (variant: keyof typeof SITE_ASSETS.logo = 'main') =>
 
 export const getIconUrl = (size: keyof typeof SITE_ASSETS.icons) =>
   SITE_ASSETS.icons[size];
-
-// Asset validation (for development)
-export const validateAssets = () => {
-  const requiredAssets = [
-    SITE_ASSETS.logo.main,
-    SITE_ASSETS.logo.favicon,
-    SITE_ASSETS.logo.appleTouchIcon,
-    SITE_ASSETS.icons.icon192,
-    SITE_ASSETS.icons.icon512,
-  ];
-
-  const missingAssets = requiredAssets.filter(asset => {
-    // In a real implementation, you might check if files exist
-    return false; // Placeholder - would need file system access
-  });
-
-  if (missingAssets.length > 0) {
-  }
-};

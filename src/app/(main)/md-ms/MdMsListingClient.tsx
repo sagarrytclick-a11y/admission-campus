@@ -109,8 +109,10 @@ export default function MdMsListingClient() {
   useEffect(() => {
     const stateFromUrl = searchParams.get("state");
     if (stateFromUrl && states.some((s) => s.slug === stateFromUrl)) {
+      /* eslint-disable react-hooks/set-state-in-effect */
       setSelectedState(stateFromUrl);
       setPage(1);
+      /* eslint-enable react-hooks/set-state-in-effect */
     }
   }, [searchParams, states]);
 

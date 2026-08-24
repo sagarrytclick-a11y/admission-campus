@@ -79,7 +79,7 @@ export default function MedicalSection() {
   const { openModal } = useFormModal()
 
   // Fetch medical colleges using React Query
-  const { data: colleges = [], isLoading, error } = useQuery<College[]>({
+  const { data: colleges = [], isLoading } = useQuery<College[]>({
     queryKey: ['medicalColleges'],
     queryFn: async () => {
       try {
@@ -106,7 +106,7 @@ export default function MedicalSection() {
         } else {
           throw new Error(`API request failed with status: ${response.status}`)
         }
-      } catch (error) {
+      } catch {
         
         // Fallback to hardcoded medical college data
         const fallbackData = [

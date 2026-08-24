@@ -1,5 +1,5 @@
 import { SITE_IDENTITY } from '@/site-identity'
-import { ShieldCheck, Lock, Eye, FileText, Mail, Phone } from 'lucide-react'
+import { Lock, Eye, FileText, Mail, Phone } from 'lucide-react'
 
 export default function PrivacyPolicyPage() {
   const { name, contact } = SITE_IDENTITY

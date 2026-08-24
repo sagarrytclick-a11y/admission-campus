@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Mail, Phone, Send, CheckCircle, User, MapPin, MessageCircle } from "lucide-react";
-import { useContactInfo } from "@/hooks/useContactInfo";
+import { Mail, Phone, Send, CheckCircle, User, MapPin } from "lucide-react";
+import { useContactInfo, createMailtoLink } from "@/hooks/useContactInfo";
 
 interface ContactFormData {
   name: string;
@@ -20,7 +20,7 @@ interface ContactFormProps {
 }
 
 export default function ContactForm({ onClose, isModal = false, collegeName, hideHeader = false }: ContactFormProps) {
-  const { emails, phones, socials } = useContactInfo();
+  const { emails } = useContactInfo();
   const [formData, setFormData] = useState<ContactFormData>({
     name: "",
     email: "",

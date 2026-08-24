@@ -1,16 +1,12 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import Image from 'next/image'
+import React from 'react'
 import Link from 'next/link'
-import { Card, CardContent } from '@/components/ui/card'
 import { getCountryName } from "@/lib/normalize"
 import { formatRankingLabel } from "@/lib/formatRanking"
 
 import { Button } from '@/components/ui/button'
 import {
-  MapPin,
-  DollarSign,
   Clock,
   GraduationCap,
   ArrowRight
@@ -75,7 +71,7 @@ const fetchRelatedColleges = async (slug: string): Promise<College[]> => {
   };
   
   export default function RelatedColleges({ currentCollegeSlug }: RelatedCollegesProps) {
-  const { data: colleges = [], isLoading, isError, error } = useQuery({
+  const { data: colleges = [], isLoading, isError } = useQuery({
     queryKey: ['related-colleges', currentCollegeSlug],
     queryFn: () => fetchRelatedColleges(currentCollegeSlug),
     staleTime: 10 * 60 * 1000,

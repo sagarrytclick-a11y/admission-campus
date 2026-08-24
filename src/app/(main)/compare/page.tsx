@@ -67,7 +67,7 @@ interface College {
 export default function CompareColleges() {
   const [selectedColleges, setSelectedColleges] = useState<College[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [showAddModal, setShowAddModal] = useState(false);
+  const [, setShowAddModal] = useState(false);
 
   // Real API data fetching
   const { data: colleges = [], isLoading, error } = useQuery({

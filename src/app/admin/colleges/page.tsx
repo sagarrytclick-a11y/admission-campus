@@ -4,6 +4,7 @@ import React, { useMemo, useEffect } from 'react'
 import { AdminTable, createEditAction, createDeleteAction } from '@/components/admin/AdminTable'
 import { AdminModal } from '@/components/admin/AdminModal'
 import { ComprehensiveCollegeForm } from '@/components/admin/ComprehensiveCollegeForm'
+import { AdminPagination } from '@/components/admin/AdminPagination'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
@@ -14,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Plus, GraduationCap, Search, Filter, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Plus, GraduationCap, Search, Filter } from 'lucide-react'
 import { dummyCountries } from '@/data/dummyData'
 import { generateSlug } from '@/lib/slug'
 import { useAdminColleges, useAdminCountries, useSaveCollege, useDeleteCollege, AdminCollege } from '@/hooks/useAdminColleges'
@@ -39,6 +40,7 @@ function AdminCollegesPageContent() {
     setSearchTerm,
     setFilter,
     setCurrentPage,
+    setItemsPerPage,
     updateFormField,
     setFormData
   } = useCollegesAdminActions()
@@ -160,9 +162,7 @@ function AdminCollegesPageContent() {
     const startIndex = (currentPage - 1) * itemsPerPage
     const endIndex = startIndex + itemsPerPage
     return filteredAdminColleges.slice(startIndex, endIndex)
-  }, [filteredAdminColleges, currentPage])
-
-  const totalPages = Math.ceil(filteredAdminColleges.length / itemsPerPage)
+  }, [filteredAdminColleges, currentPage, itemsPerPage])
 
   // Reset to page 1 when filters change
   useEffect(() => {
@@ -184,7 +184,7 @@ function AdminCollegesPageContent() {
         return (
           <div>
             <div className="font-medium">{value || 'Unnamed college'}</div>
-            <div className="text-sm text-gray-500">{countryName}</div>
+            <div className="text-sm text-slate-400">{countryName}</div>
             {cityLabel && (
               <div className="text-xs text-blue-600">{cityLabel}</div>
             )}
@@ -198,12 +198,12 @@ function AdminCollegesPageContent() {
       render: (value: string[]) => (
         <div className="flex flex-wrap gap-1">
           {value?.slice(0, 2).map((exam, index) => (
-            <Badge key={index} variant="outline" className="text-xs">
+            <Badge key={index} variant="outline" className="text-xs !text-white !border-white/20 !bg-[#0066F5]/20">
               {exam}
             </Badge>
           ))}
           {value?.length > 2 && (
-            <Badge variant="outline" className="text-xs">
+            <Badge variant="outline" className="text-xs !text-white !border-white/20 !bg-[#0066F5]/20">
               +{value.length - 2}
             </Badge>
           )}
@@ -272,12 +272,12 @@ function AdminCollegesPageContent() {
             <div className="space-y-1">
               {rankingData.country_ranking && (
                 <div className="text-sm">
-                  <span className="text-gray-500">Country:</span> #{rankingData.country_ranking}
+                  <span className="text-slate-400">Country:</span> #{rankingData.country_ranking}
                 </div>
               )}
               {rankingData.world_ranking && (
                 <div className="text-sm">
-                  <span className="text-gray-500">World:</span> #{rankingData.world_ranking}
+                  <span className="text-slate-400">World:</span> #{rankingData.world_ranking}
                 </div>
               )}
               {rankingData?.accreditation && Array.isArray(rankingData.accreditation) && rankingData.accreditation.length > 0 && (
@@ -287,7 +287,7 @@ function AdminCollegesPageContent() {
               )}
             </div>
           )
-        } catch (error) {
+        } catch {
           return <span className="text-xs text-slate-500">Invalid data</span>
         }
       }
@@ -296,7 +296,7 @@ function AdminCollegesPageContent() {
       key: 'is_active',
       title: 'Status',
       render: (value: boolean) => (
-        <Badge variant={value ? 'default' : 'secondary'}>
+        <Badge variant={value ? 'default' : 'secondary'} className="!text-white">
           {value ? 'active' : 'inactive'}
         </Badge>
       )
@@ -707,7 +707,7 @@ function AdminCollegesPageContent() {
       await deleteCollegeMutation.mutateAsync(collegeToDelete._id)
       toast.success('AdminCollege deleted successfully!')
       closeDeleteModal()
-    } catch (error) {
+    } catch {
       toast.error('Error deleting college')
     }
   }
@@ -718,8 +718,8 @@ function AdminCollegesPageContent() {
       {/* Filters and Add button */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h2 className="text-lg font-semibold text-slate-900">All Colleges</h2>
-            <p className="text-sm text-gray-500">
+            <h2 className="text-lg font-semibold text-white">All Colleges</h2>
+            <p className="text-sm text-slate-400">
               {filteredAdminColleges.length} of {colleges.length} colleges
             </p>
           </div>
@@ -769,64 +769,14 @@ function AdminCollegesPageContent() {
           emptyMessage="No colleges found. Add your first college to get started."
         />
 
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="flex items-center justify-between">
-            <div className="text-sm text-gray-500">
-              Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, filteredAdminColleges.length)} of {filteredAdminColleges.length} colleges
-            </div>
-            <div className="flex items-center space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))}
-                disabled={currentPage === 1}
-                className="flex items-center space-x-1"
-              >
-                <ChevronLeft className="h-4 w-4" />
-                <span>Previous</span>
-              </Button>
-              
-              <div className="flex items-center space-x-1">
-                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                  let pageNum
-                  if (totalPages <= 5) {
-                    pageNum = i + 1
-                  } else if (currentPage <= 3) {
-                    pageNum = i + 1
-                  } else if (currentPage >= totalPages - 2) {
-                    pageNum = totalPages - 4 + i
-                  } else {
-                    pageNum = currentPage - 2 + i
-                  }
-                  
-                  return (
-                    <Button
-                      key={pageNum}
-                      variant={currentPage === pageNum ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setCurrentPage(pageNum)}
-                      className="w-8 h-8 p-0"
-                    >
-                      {pageNum}
-                    </Button>
-                  )
-                })}
-              </div>
-              
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setCurrentPage(Math.min(currentPage + 1, totalPages))}
-                disabled={currentPage === totalPages}
-                className="flex items-center space-x-1"
-              >
-                <span>Next</span>
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-        )}
+        <AdminPagination
+          currentPage={currentPage}
+          totalItems={filteredAdminColleges.length}
+          itemsPerPage={itemsPerPage}
+          onPageChange={setCurrentPage}
+          onItemsPerPageChange={setItemsPerPage}
+          itemLabel="colleges"
+        />
 
         {/* Add/Edit Modal */}
         <AdminModal
@@ -868,7 +818,7 @@ function AdminCollegesPageContent() {
           loading={deleteCollegeMutation.isPending}
           size="sm"
         >
-          <div className="flex items-center space-x-2 text-sm text-gray-600">
+          <div className="flex items-center space-x-2 text-sm text-slate-300">
             <GraduationCap className="h-4 w-4" />
             <span>{collegeToDelete?.name}</span>
           </div>

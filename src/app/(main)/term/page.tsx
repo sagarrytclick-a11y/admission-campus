@@ -1,5 +1,5 @@
 import { SITE_IDENTITY } from '@/site-identity'
-import { FileText, Scale, Globe, AlertCircle, ShieldCheck, Mail, Phone } from 'lucide-react'
+import { FileText, Globe, AlertCircle, ShieldCheck, Mail, Phone } from 'lucide-react'
 
 export default function TermsAndConditionsPage() {
   const { name, contact } = SITE_IDENTITY
