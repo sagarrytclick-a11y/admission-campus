@@ -82,7 +82,7 @@ function DashboardPageContent() {
 
   if (loading) {
     return (
-      <div className="flex h-[400px] w-full items-center justify-center">
+      <div className="flex h-100 w-full items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-[#0066F5]" />
       </div>
     )
