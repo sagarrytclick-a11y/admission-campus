@@ -1,9 +1,8 @@
 'use client'
 
 import React, { useMemo, memo, useState, useEffect } from 'react'
-import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { ChevronLeft, ChevronRight, ArrowRight, AlertCircle, MapPin, GraduationCap, RefreshCw, Search } from 'lucide-react'
+import { ChevronLeft, ChevronRight, AlertCircle, MapPin, GraduationCap, RefreshCw, Search } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { formatRankingLabel } from '@/lib/formatRanking'
 

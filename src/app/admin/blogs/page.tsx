@@ -4,6 +4,7 @@ import React, { useMemo, useEffect } from 'react'
 import { AdminTable, createEditAction, createDeleteAction, createViewAction } from '@/components/admin/AdminTable'
 import { AdminModal } from '@/components/admin/AdminModal'
 import { AdminForm } from '@/components/admin/AdminForm'
+import { AdminPagination } from '@/components/admin/AdminPagination'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
@@ -14,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Plus, FileText, Search, Eye, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Plus, Search } from 'lucide-react'
 import { generateSlug } from '@/lib/slug'
 import { useAdminBlogs, useSaveBlog, useDeleteBlog } from '@/hooks/useAdminBlogs'
 import { useBlogsAdminContext, useBlogsAdminActions, BlogsAdminProvider } from '@/context/BlogsAdminContext'
@@ -37,7 +38,7 @@ export interface Blog {
 
 // Main BlogsPage component wrapped with provider
 function BlogsPageContent() {
-  const { state, dispatch } = useBlogsAdminContext()
+  const { state } = useBlogsAdminContext()
   const actions = useBlogsAdminActions()
 
   // TanStack Query hooks
@@ -55,8 +56,7 @@ function BlogsPageContent() {
     selectedFilters,
     currentPage,
     itemsPerPage,
-    formData,
-    selectedItems
+    formData
   } = state
 
   // Auto-generate slug when title changes
@@ -89,12 +89,10 @@ function BlogsPageContent() {
   }, [blogs, searchTerm, selectedFilters])
 
   // Pagination logic
-  const { paginatedBlogs, totalPages } = useMemo(() => {
+  const paginatedBlogs = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage
     const endIndex = startIndex + itemsPerPage
-    const paginated = filteredBlogs.slice(startIndex, endIndex)
-    const pages = Math.ceil(filteredBlogs.length / itemsPerPage)
-    return { paginatedBlogs: paginated, totalPages: pages }
+    return filteredBlogs.slice(startIndex, endIndex)
   }, [filteredBlogs, currentPage, itemsPerPage])
 
   const columns = [
@@ -104,7 +102,7 @@ function BlogsPageContent() {
       render: (value: string, record: Blog) => (
         <div className="max-w-md">
           <div className="font-medium truncate">{value}</div>
-          <div className="text-sm text-gray-500 truncate">
+          <div className="text-sm text-slate-400 truncate">
             {record.content.substring(0, 100)}...
           </div>
         </div>
@@ -114,7 +112,7 @@ function BlogsPageContent() {
       key: 'category' as keyof Blog,
       title: 'Category',
       render: (value: string) => (
-        <Badge variant="secondary">{value || 'Uncategorized'}</Badge>
+        <Badge variant="secondary" className="!text-white !bg-[#0066F5]/25 !border-transparent">{value || 'Uncategorized'}</Badge>
       )
     },
     {
@@ -123,12 +121,12 @@ function BlogsPageContent() {
       render: (value: string[]) => (
         <div className="flex flex-wrap gap-1">
           {value?.slice(0, 2).map((tag, index) => (
-            <Badge key={index} variant="outline" className="text-xs">
+            <Badge key={index} variant="outline" className="text-xs !text-white !border-white/20 !bg-[#0066F5]/20">
               {tag}
             </Badge>
           ))}
           {value && value.length > 2 && (
-            <Badge variant="outline" className="text-xs">
+            <Badge variant="outline" className="text-xs !text-white !border-white/20 !bg-[#0066F5]/20">
               +{value.length - 2} more
             </Badge>
           )}
@@ -139,7 +137,7 @@ function BlogsPageContent() {
       key: 'is_active' as keyof Blog,
       title: 'Status',
       render: (value: boolean) => (
-        <Badge variant={value ? 'default' : 'secondary'}>
+        <Badge variant={value ? 'default' : 'secondary'} className="!text-white">
           {value ? 'Published' : 'Draft'}
         </Badge>
       )
@@ -285,7 +283,7 @@ function BlogsPageContent() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold">Blogs Management</h1>
-          <p className="text-gray-600">Manage blog posts and content</p>
+          <p className="text-slate-300">Manage blog posts and content</p>
         </div>
         <Button onClick={actions.openCreateModal} className="flex items-center gap-2">
           <Plus size={16} />
@@ -296,7 +294,7 @@ function BlogsPageContent() {
       {/* Search and Filters */}
       <div className="flex items-center space-x-4">
         <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500 h-4 w-4" />
           <Input
             type="text"
             placeholder="Search blogs..."
@@ -346,40 +344,14 @@ function BlogsPageContent() {
         emptyMessage="No blogs found"
       />
 
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-between">
-          <div className="text-sm text-gray-600">
-            Showing {paginatedBlogs.length} of {filteredBlogs.length} blogs
-          </div>
-
-          <div className="flex items-center space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => actions.setCurrentPage(currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              <ChevronLeft size={16} />
-              Previous
-            </Button>
-
-            <span className="text-sm">
-              Page {currentPage} of {totalPages}
-            </span>
-
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => actions.setCurrentPage(currentPage + 1)}
-              disabled={currentPage === totalPages}
-            >
-              Next
-              <ChevronRight size={16} />
-            </Button>
-          </div>
-        </div>
-      )}
+      <AdminPagination
+        currentPage={currentPage}
+        totalItems={filteredBlogs.length}
+        itemsPerPage={itemsPerPage}
+        onPageChange={actions.setCurrentPage}
+        onItemsPerPageChange={actions.setItemsPerPage}
+        itemLabel="blogs"
+      />
 
       {/* Create/Edit Modal */}
       <AdminModal
@@ -406,7 +378,7 @@ function BlogsPageContent() {
       >
         <div className="space-y-4">
           <p>Are you sure you want to delete the blog "{blogToDelete?.title}"?</p>
-          <p className="text-sm text-gray-600">This action cannot be undone.</p>
+          <p className="text-sm text-slate-300">This action cannot be undone.</p>
           <div className="flex justify-end space-x-2">
             <Button variant="outline" onClick={actions.closeDeleteModal}>
               Cancel

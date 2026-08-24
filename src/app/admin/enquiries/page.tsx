@@ -3,6 +3,7 @@
 import React, { useMemo, useEffect } from 'react'
 import { AdminTable, createViewAction, createDeleteAction } from '@/components/admin/AdminTable'
 import { AdminModal } from '@/components/admin/AdminModal'
+import { AdminPagination } from '@/components/admin/AdminPagination'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
@@ -13,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { MessageSquare, Search, Eye, Mail, Phone, Calendar, ChevronLeft, ChevronRight, MapPin } from 'lucide-react'
+import { MessageSquare, Search, Mail, Phone, Calendar, MapPin } from 'lucide-react'
 import { useAdminEnquiries, useDeleteEnquiry, useUpdateEnquiry } from '@/hooks/useAdminEnquiries'
 import { useEnquiriesAdminContext, useEnquiriesAdminActions, EnquiriesAdminProvider } from '@/context/EnquiriesAdminContext'
 import { Enquiry } from '@/context/EnquiriesAdminContext'
@@ -28,7 +29,8 @@ function EnquiriesPageContent() {
     closeDeleteModal,
     setSearchTerm,
     setFilter,
-    setCurrentPage
+    setCurrentPage,
+    setItemsPerPage,
   } = useEnquiriesAdminActions()
   
   const {
@@ -96,13 +98,11 @@ function EnquiriesPageContent() {
   }, [enquiries, searchTerm, selectedStatus, selectedPriority, selectedCourseCategory])
 
   // Pagination logic
-  const { paginatedEnquiries, totalPages } = useMemo(() => {
+  const paginatedEnquiries = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage
     const endIndex = startIndex + itemsPerPage
-    const paginated = filteredEnquiries.slice(startIndex, endIndex)
-    const pages = Math.ceil(filteredEnquiries.length / itemsPerPage)
-    return { paginatedEnquiries: paginated, totalPages: pages }
-  }, [filteredEnquiries, currentPage])
+    return filteredEnquiries.slice(startIndex, endIndex)
+  }, [filteredEnquiries, currentPage, itemsPerPage])
 
   // Reset to page 1 when filters change
   useEffect(() => {
@@ -131,7 +131,7 @@ function EnquiriesPageContent() {
             value === 'undefined' || value === 'null' || value === '') {
           return (
             <div className="max-w-xs">
-              <span className="text-gray-400 text-sm">Not specified</span>
+              <span className="text-slate-500 text-sm">Not specified</span>
             </div>
           );
         }
@@ -176,10 +176,10 @@ function EnquiriesPageContent() {
       title: 'Status',
       render: (value: string) => {
         const colors = {
-          pending: 'bg-gray-100 text-gray-800 border-gray-200',
-          contacted: 'bg-blue-100 text-blue-800 border-blue-200',
-          resolved: 'bg-green-100 text-green-800 border-green-200',
-          closed: 'bg-slate-100 text-slate-800 border-slate-200'
+          pending: 'border-white/20 !bg-white/10 !text-slate-200',
+          contacted: 'border-[#0066F5]/40 !bg-[#0066F5]/20 !text-[#66A3FF]',
+          resolved: 'border-emerald-500/40 !bg-emerald-500/20 !text-emerald-300',
+          closed: 'border-white/15 !bg-white/5 !text-slate-400',
         }
         return (
           <Badge className={`border ${colors[value as keyof typeof colors] || colors.pending}`}>
@@ -196,7 +196,7 @@ function EnquiriesPageContent() {
         return (
           <div className="text-sm">
             <div>{date.toLocaleDateString('en-US')}</div>
-            <div className="text-gray-500">{date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</div>
+            <div className="text-slate-400">{date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</div>
           </div>
         )
       }
@@ -237,7 +237,7 @@ function EnquiriesPageContent() {
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="flex-1">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500 h-4 w-4" />
             <Input
               placeholder="Search enquiries..."
               value={searchTerm}
@@ -297,64 +297,14 @@ function EnquiriesPageContent() {
         loading={false}
       />
 
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-between mt-12">
-          <div className="text-sm text-white">
-            Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, filteredEnquiries.length)} of {filteredEnquiries.length} enquiries
-          </div>
-          <div className="flex items-center space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))}
-              disabled={currentPage === 1}
-              className="flex items-center space-x-1"
-            >
-              <ChevronLeft className="h-4 w-4" />
-              <span>Previous</span>
-            </Button>
-
-            <div className="flex items-center space-x-1">
-              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                let pageNum
-                if (totalPages <= 5) {
-                  pageNum = i + 1
-                } else if (currentPage <= 3) {
-                  pageNum = i + 1
-                } else if (currentPage >= totalPages - 2) {
-                  pageNum = totalPages - 4 + i
-                } else {
-                  pageNum = currentPage - 2 + i
-                }
-
-                return (
-                  <Button
-                    key={pageNum}
-                    variant={currentPage === pageNum ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setCurrentPage(pageNum)}
-                    className="w-8 h-8 p-0"
-                  >
-                    {pageNum}
-                  </Button>
-                )
-              })}
-            </div>
-
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setCurrentPage(Math.min(currentPage + 1, totalPages))}
-              disabled={currentPage === totalPages}
-              className="flex items-center space-x-1"
-            >
-              <span>Next</span>
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
-      )}
+      <AdminPagination
+        currentPage={currentPage}
+        totalItems={filteredEnquiries.length}
+        itemsPerPage={itemsPerPage}
+        onPageChange={setCurrentPage}
+        onItemsPerPageChange={setItemsPerPage}
+        itemLabel="enquiries"
+      />
 
       {/* View Enquiry Modal */}
       <AdminModal

@@ -16,7 +16,7 @@ const badgeVariants = cva(
         destructive:
           "border-transparent bg-destructive text-white [a&]:hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
         outline:
-          "text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
+          "border-border bg-transparent text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
       },
     },
     defaultVariants: {
@@ -27,7 +27,7 @@ const badgeVariants = cva(
 
 function Badge({
   className,
-  variant,
+  variant = "default",
   asChild = false,
   ...props
 }: React.ComponentProps<"span"> &
@@ -37,6 +37,7 @@ function Badge({
   return (
     <Comp
       data-slot="badge"
+      data-variant={variant ?? "default"}
       className={cn(badgeVariants({ variant }), className)}
       {...props}
     />
@@ -44,3 +45,7 @@ function Badge({
 }
 
 export { Badge, badgeVariants }
+
+/** Readable pills for dark admin panels */
+export const adminBadgeClass =
+  "!border-white/20 !bg-[#0066F5]/20 !text-white"

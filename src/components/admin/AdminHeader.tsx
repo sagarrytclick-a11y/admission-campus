@@ -1,8 +1,7 @@
 'use client'
 
-import { Bell, Search, User, LogOut } from 'lucide-react'
+import { LogOut } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,9 +30,7 @@ export function AdminHeader({ title, subtitle }: AdminHeaderProps) {
     try {
       const response = await fetch('/api/logout', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
       })
 
       if (response.ok) {
@@ -44,7 +41,7 @@ export function AdminHeader({ title, subtitle }: AdminHeaderProps) {
         const data = await response.json()
         toast.error(data.message || 'Failed to logout')
       }
-    } catch (error) {
+    } catch {
       toast.error('Something went wrong during logout')
     } finally {
       setIsLoggingOut(false)
@@ -52,69 +49,56 @@ export function AdminHeader({ title, subtitle }: AdminHeaderProps) {
   }
 
   return (
-    <header className="bg-gray-800 py-3 shadow-sm border-b border-gray-700">
+    <header className="sticky top-0 z-20 border-b border-white/10 bg-[#0A1628]/95 backdrop-blur-md">
+      <div className="h-1 w-full bg-[#0066F5]" />
       <div className="px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Page Title */}
-          <div className="flex-1">
-            <h1 className="text-2xl font-bold text-white">{title}</h1>
+        <div className="flex min-h-[68px] items-center justify-between gap-4 py-3">
+          <div className="min-w-0 flex-1 pl-12 lg:pl-0">
+            <h1 className="truncate text-xl font-bold tracking-tight text-white sm:text-2xl">
+              {title}
+            </h1>
             {subtitle && (
-              <p className="text-sm text-gray-400 mt-1">{subtitle}</p>
+              <p className="mt-0.5 truncate text-sm text-slate-400">{subtitle}</p>
             )}
           </div>
 
-          {/* Right side actions */}
-          <div className="flex items-center space-x-4">
-            {/* Search */}
-            {/* <div className="hidden md:block">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                <Input
-                  placeholder="Search..."
-                  className="pl-10 w-64 bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500"
-                />
-              </div>
-            </div> */}
-
-            {/* Notifications */}
-            {/* <Button variant="ghost" size="sm" className="relative text-gray-300 hover:text-white hover:bg-gray-700">
-              <Bell className="h-5 w-5" />
-              <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 rounded-full text-xs text-white flex items-center justify-center">
-                3
-              </span>
-            </Button> */}
-
-            {/* User Menu */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-8 w-8 rounded-full text-gray-300 hover:text-white hover:bg-gray-700">
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src="/avatars/01.png" alt="Admin" />
-                    <AvatarFallback className="bg-gray-600 text-white">AD</AvatarFallback>
-                  </Avatar>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56 bg-gray-800 border-gray-700" align="end" forceMount>
-                <DropdownMenuLabel className="font-normal text-white">
-                  <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none text-white">Super Admin</p>
-                    {/* <p className="text-xs leading-none text-gray-400">
-                      admin@admissioncampus.com
-                    </p> */}
-                  </div>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator className="bg-gray-700" />
-                <DropdownMenuItem
-                  className="text-gray-300 hover:text-white hover:bg-gray-700 cursor-pointer"
-                  onClick={handleLogout}
-                  disabled={isLoggingOut}
-                >
-                  <LogOut className="mr-2 h-4 w-4" />
-                  {isLoggingOut ? 'Logging out...' : 'Log out'}
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                className="relative h-10 gap-2 rounded-xl border border-white/10 bg-white/5 px-2 text-white hover:bg-white/10"
+              >
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src="/avatars/01.png" alt="Admin" />
+                  <AvatarFallback className="bg-[#0066F5] text-xs font-bold text-white">
+                    AD
+                  </AvatarFallback>
+                </Avatar>
+                <span className="hidden text-sm font-semibold sm:inline">Admin</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              className="w-56 border-white/10 bg-[#0B1B33] text-white"
+              align="end"
+              forceMount
+            >
+              <DropdownMenuLabel className="font-normal">
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-semibold text-white">Super Admin</p>
+                  <p className="text-xs text-slate-400">Admission Campus</p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator className="bg-white/10" />
+              <DropdownMenuItem
+                className="cursor-pointer text-slate-200 focus:bg-[#0066F5] focus:text-white"
+                onClick={handleLogout}
+                disabled={isLoggingOut}
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                {isLoggingOut ? 'Logging out...' : 'Log out'}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>

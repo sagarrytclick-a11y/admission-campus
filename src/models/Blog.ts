@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { generateSlug } from "@/lib/slug";
 
 const BlogSchema = new mongoose.Schema(
   {

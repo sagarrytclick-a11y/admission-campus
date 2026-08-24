@@ -10,7 +10,7 @@ export async function getCountryBySlug(slug: string) {
     
     const result = await response.json()
     return result.success ? result.data : null
-  } catch (error) {
+  } catch {
     return null
   }
 }
@@ -27,7 +27,7 @@ export async function getAllCountries() {
     
     const result = await response.json()
     return result.success ? result.data : []
-  } catch (error) {
+  } catch {
     return []
   }
 }

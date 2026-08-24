@@ -231,3 +231,35 @@ textarea {
     animation: slideUp 1s ease-out forwards;
   }
 }
+
+/* Admin panel — custom dark vertical scrollbars (no white OS sliders) */
+.admin-panel,
+.admin-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 102, 245, 0.55) transparent;
+}
+
+.admin-panel::-webkit-scrollbar,
+.admin-scroll::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.admin-panel::-webkit-scrollbar-track,
+.admin-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.admin-panel::-webkit-scrollbar-thumb,
+.admin-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0, 102, 245, 0.45);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.admin-panel::-webkit-scrollbar-thumb:hover,
+.admin-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 102, 245, 0.7);
+  background-clip: padding-box;
+}

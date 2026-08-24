@@ -21,8 +21,7 @@ interface SearchSectionProps {
 
 const SearchSection = memo(({
   onSearch,
-  exams = [],
-  categories = [], // Will be ignored, using API instead
+  exams = [] = [], // Will be ignored, using API instead
   placeholder = "Search colleges...",
   showCategoryFilter = false,
   showFilters = true,

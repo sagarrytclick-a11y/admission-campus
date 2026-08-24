@@ -4,11 +4,11 @@ import React, { useMemo, useEffect } from 'react'
 import { AdminTable, createEditAction, createDeleteAction } from '@/components/admin/AdminTable'
 import { AdminModal } from '@/components/admin/AdminModal'
 import { AdminForm } from '@/components/admin/AdminForm'
+import { AdminPagination } from '@/components/admin/AdminPagination'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Plus, MapPin, Search, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Plus, MapPin, Search } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { generateSlug } from '@/lib/slug'
 import { useAdminCities, useSaveCity, useDeleteCity } from '@/hooks/useAdminCities'
 import { useAdminCountries } from '@/hooks/useAdminCountries'
@@ -56,7 +56,6 @@ function CitiesPageContent() {
     deleteModalOpen,
     itemToDelete: cityToDelete,
     searchTerm,
-    selectedFilters,
     currentPage,
     itemsPerPage,
     formData
@@ -89,7 +88,7 @@ function CitiesPageContent() {
       key: 'country_ref' as keyof City,
       title: 'Country',
       render: (value: any) => (
-        <Badge variant="secondary">{value?.name || 'Unknown'}</Badge>
+        <Badge variant="secondary" className="!text-white !bg-[#0066F5]/25 !border-transparent">{value?.name || 'Unknown'}</Badge>
       )
     },
     {
@@ -98,12 +97,12 @@ function CitiesPageContent() {
       render: (value: string[]) => (
         <div className="flex flex-wrap gap-1">
           {value?.slice(0, 2).map((feature, index) => (
-            <Badge key={index} variant="outline" className="text-xs">
+            <Badge key={index} variant="outline" className="text-xs !text-white !border-white/20 !bg-[#0066F5]/20">
               {feature}
             </Badge>
           ))}
           {value && value.length > 2 && (
-            <Badge variant="outline" className="text-xs">
+            <Badge variant="outline" className="text-xs !text-white !border-white/20 !bg-[#0066F5]/20">
               +{value.length - 2} more
             </Badge>
           )}
@@ -114,7 +113,7 @@ function CitiesPageContent() {
       key: 'is_active' as keyof City,
       title: 'Status',
       render: (value: boolean) => (
-        <Badge variant={value ? 'default' : 'secondary'}>
+        <Badge variant={value ? 'default' : 'secondary'} className="!text-white">
           {value ? 'Active' : 'Inactive'}
         </Badge>
       )
@@ -249,7 +248,7 @@ function CitiesPageContent() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold">Cities Management</h1>
-          <p className="text-gray-600">Manage cities and their configurations</p>
+          <p className="text-slate-300">Manage cities and their configurations</p>
         </div>
         <Button onClick={actions.openCreateModal} className="flex items-center gap-2">
           <Plus size={16} />
@@ -260,17 +259,17 @@ function CitiesPageContent() {
       {/* Search Bar */}
       <div className="flex items-center space-x-4 mt-6">
         <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500 h-4 w-4" />
           <Input
             type="text"
             placeholder="Search cities by name or slug..."
             value={searchTerm}
             onChange={(e) => actions.setSearchTerm(e.target.value)}
-            className="pl-10 bg-gray-700 border-gray-600 text-white placeholder-gray-400"
+            className="pl-10 bg-[#0E1C33] border-white/10 text-white placeholder:text-slate-500"
           />
         </div>
         {(searchTerm || citiesLoading) && (
-          <div className="text-sm text-gray-600">
+          <div className="text-sm text-slate-300">
             {citiesLoading ? 'Searching...' : `Found ${pagination?.totalCities || 0} cities`}
           </div>
         )}
@@ -284,67 +283,16 @@ function CitiesPageContent() {
         emptyMessage="No cities found"
       />
 
-      {/* Pagination Controls */}
-      {pagination && pagination.totalPages > 1 && (
-        <div className="flex items-center justify-between mt-6">
-          <div className="flex items-center space-x-2">
-            <span className="text-sm text-gray-600">
-              Showing {cities.length} of {pagination.totalCities} cities
-            </span>
-          </div>
-
-          <div className="flex items-center space-x-4">
-            {/* Page Size Selector */}
-            <div className="flex items-center space-x-2">
-              <span className="text-sm text-gray-600">Items per page:</span>
-              <Select
-                value={itemsPerPage.toString()}
-                onValueChange={(value: string) => {
-                  actions.setItemsPerPage(parseInt(value))
-                  actions.setCurrentPage(1)
-                }}
-              >
-                <SelectTrigger className="w-20 bg-gray-700 border-gray-600 text-white">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent className="bg-gray-700 border-gray-600">
-                  <SelectItem value="5" className="text-white hover:bg-gray-600">5</SelectItem>
-                  <SelectItem value="10" className="text-white hover:bg-gray-600">10</SelectItem>
-                  <SelectItem value="20" className="text-white hover:bg-gray-600">20</SelectItem>
-                  <SelectItem value="50" className="text-white hover:bg-gray-600">50</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Page Navigation */}
-            <div className="flex items-center space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => actions.setCurrentPage(currentPage - 1)}
-                disabled={!pagination.hasPrevPage || citiesLoading}
-                className="bg-gray-700 border-gray-600 text-white hover:bg-gray-600 disabled:opacity-50"
-              >
-                Previous
-              </Button>
-
-              <span className="text-sm text-white">
-                Page {currentPage} of {pagination.totalPages}
-              </span>
-
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => actions.setCurrentPage(currentPage + 1)}
-                disabled={!pagination.hasNextPage || citiesLoading}
-                className="bg-gray-700 border-gray-600 text-white hover:bg-gray-600 disabled:opacity-50"
-              >
-                Next
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
+      <AdminPagination
+        currentPage={currentPage}
+        totalItems={pagination?.totalCities ?? cities.length}
+        itemsPerPage={itemsPerPage}
+        onPageChange={actions.setCurrentPage}
+        onItemsPerPageChange={actions.setItemsPerPage}
+        itemLabel="cities"
+        disabled={citiesLoading}
+        alwaysShow
+      />
 
       {/* Create/Edit Modal */}
       <AdminModal
@@ -371,7 +319,7 @@ function CitiesPageContent() {
       >
         <div className="space-y-4">
           <p>Are you sure you want to delete the city "{cityToDelete?.name}"?</p>
-          <p className="text-sm text-gray-600">This action cannot be undone.</p>
+          <p className="text-sm text-slate-300">This action cannot be undone.</p>
           <div className="flex justify-end space-x-2">
             <Button variant="outline" onClick={actions.closeDeleteModal}>
               Cancel

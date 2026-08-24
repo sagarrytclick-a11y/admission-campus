@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { Plus } from "lucide-react"
 import EditPermissionModal from "@/components/EditPermissionModal"
 import AddRoleModal from "@/components/AddRoleModal"
 import AddUserModal from "@/components/AddUserModal"
@@ -19,18 +18,18 @@ const [isAddUserOpen, setIsAddUserOpen] = useState(false)
 
           {/* Header */}
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">
+            <h1 className="text-3xl font-bold text-white">
               Administrators
             </h1>
-            <p className="text-gray-500 mt-2">
+            <p className="text-slate-400 mt-2">
               Manage administrator roles and accounts with defined permissions.
             </p>
           </div>
 
           {/* Roles Section */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="bg-[#0E1C33] rounded-xl shadow-sm border border-gray-200 p-6">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-lg font-semibold text-gray-800">
+              <h2 className="text-lg font-semibold text-slate-100">
                 Administrator Roles
               </h2>
 
@@ -75,11 +74,11 @@ const [isAddUserOpen, setIsAddUserOpen] = useState(false)
           </div>
 
           {/* Accounts Section */}
-<div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+<div className="bg-[#0E1C33] rounded-xl shadow-sm border border-gray-200 p-6">
 
   {/* Header Row */}
   <div className="flex items-center justify-between mb-6">
-    <h2 className="text-lg font-semibold text-gray-800">
+    <h2 className="text-lg font-semibold text-slate-100">
       Administrator Accounts
     </h2>
 
@@ -133,13 +132,13 @@ function RoleCard({
 }) {
   return (
     <div className="border border-gray-200 rounded-xl p-6 hover:shadow-md transition">
-      <div className="text-sm text-gray-500 mb-2">{accounts}</div>
+      <div className="text-sm text-slate-400 mb-2">{accounts}</div>
 
-      <h3 className="text-xl font-semibold text-gray-900 mb-2">
+      <h3 className="text-xl font-semibold text-white mb-2">
         {title}
       </h3>
 
-      <p className="text-gray-600 text-sm mb-4">
+      <p className="text-slate-300 text-sm mb-4">
         {description}
       </p>
 
@@ -160,7 +159,7 @@ function AdminTable() {
     <div className="overflow-x-auto">
       <table className="w-full border-collapse">
         <thead>
-          <tr className="text-left text-sm text-gray-500 border-b">
+          <tr className="text-left text-sm text-slate-400 border-b">
             <th className="py-3">Account</th>
             <th>Email</th>
             <th>Role</th>
@@ -170,7 +169,7 @@ function AdminTable() {
           </tr>
         </thead>
 
-        <tbody className="text-sm text-gray-700">
+        <tbody className="text-sm text-slate-200">
           <TableRow
             name="John Carter"
             email="john@example.com"
@@ -218,7 +217,7 @@ function TableRow({
   return (
     <tr className="border-b hover:bg-gray-50 transition">
       <td className="py-4 font-medium">{name}</td>
-      <td className="text-gray-600">{email}</td>
+      <td className="text-slate-300">{email}</td>
 
       <td>
         <span

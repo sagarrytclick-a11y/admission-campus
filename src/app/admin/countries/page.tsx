@@ -1,12 +1,13 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { AdminTable, createEditAction, createDeleteAction } from '@/components/admin/AdminTable'
 import { AdminModal } from '@/components/admin/AdminModal'
 import { AdminForm } from '@/components/admin/AdminForm'
+import { AdminPagination } from '@/components/admin/AdminPagination'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Plus, Globe, Search } from 'lucide-react'
+import { Plus, Search } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { generateSlug } from '@/lib/slug'
 import { useAdminCountries, useSaveCountry, useDeleteCountry } from '@/hooks/useAdminCountries'
@@ -29,7 +30,7 @@ export interface Country {
 
 // Main CountriesPage component wrapped with provider
 function CountriesPageContent() {
-  const { state, dispatch } = useCountriesAdminContext()
+  const { state } = useCountriesAdminContext()
   const actions = useCountriesAdminActions()
 
   // TanStack Query hooks
@@ -44,7 +45,6 @@ function CountriesPageContent() {
     deleteModalOpen,
     itemToDelete: countryToDelete,
     searchTerm,
-    selectedFilters,
     currentPage,
     itemsPerPage,
     formData
@@ -56,6 +56,21 @@ function CountriesPageContent() {
       actions.updateFormField('slug', generateSlug(formData.name))
     }
   }, [formData.name, editingCountry, actions])
+
+  const filteredCountries = useMemo(() => {
+    if (!searchTerm.trim()) return countries
+    const q = searchTerm.toLowerCase()
+    return countries.filter(
+      (c) =>
+        c.name?.toLowerCase().includes(q) ||
+        c.slug?.toLowerCase().includes(q)
+    )
+  }, [countries, searchTerm])
+
+  const paginatedCountries = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage
+    return filteredCountries.slice(start, start + itemsPerPage)
+  }, [filteredCountries, currentPage, itemsPerPage])
 
   const columns = [
     {
@@ -76,7 +91,7 @@ function CountriesPageContent() {
       key: 'is_active' as keyof Country,
       title: 'Status',
       render: (value: boolean) => (
-        <Badge variant={value ? 'default' : 'secondary'}>
+        <Badge variant={value ? 'default' : 'secondary'} className="!text-white">
           {value ? 'active' : 'inactive'}
         </Badge>
       )
@@ -202,7 +217,7 @@ function CountriesPageContent() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold">Countries Management</h1>
-          <p className="text-gray-600">Manage countries and their configurations</p>
+          <p className="text-slate-300">Manage countries and their configurations</p>
         </div>
         <Button onClick={actions.openCreateModal} className="flex items-center gap-2">
           <Plus size={16} />
@@ -213,7 +228,7 @@ function CountriesPageContent() {
       {/* Search Bar */}
       <div className="flex items-center space-x-4 mt-6">
         <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500 h-4 w-4" />
           <Input
             type="text"
             placeholder="Search countries..."
@@ -226,10 +241,19 @@ function CountriesPageContent() {
 
       <AdminTable
         columns={columns}
-        data={countries}
+        data={paginatedCountries}
         actions={tableActions}
         loading={dataLoading}
         emptyMessage="No countries found"
+      />
+
+      <AdminPagination
+        currentPage={currentPage}
+        totalItems={filteredCountries.length}
+        itemsPerPage={itemsPerPage}
+        onPageChange={actions.setCurrentPage}
+        onItemsPerPageChange={actions.setItemsPerPage}
+        itemLabel="countries"
       />
 
       {/* Create/Edit Modal */}
@@ -257,7 +281,7 @@ function CountriesPageContent() {
       >
         <div className="space-y-4">
           <p>Are you sure you want to delete the country "{countryToDelete?.name}"?</p>
-          <p className="text-sm text-gray-600">This action cannot be undone.</p>
+          <p className="text-sm text-slate-300">This action cannot be undone.</p>
           <div className="flex justify-end space-x-2">
             <Button variant="outline" onClick={actions.closeDeleteModal}>
               Cancel

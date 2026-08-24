@@ -1,5 +1,5 @@
 import React from 'react';
-import { GraduationCap, FileText, DollarSign, BookOpen, TrendingUp, Home, ArrowRight, Star, ShieldCheck } from 'lucide-react';
+import { GraduationCap, FileText, DollarSign, TrendingUp, Home, ArrowRight, Star, ShieldCheck } from 'lucide-react';
 import Link from 'next/link';
 import FAQ from "@/app/Components/FAQ";
 import FreeAssessmentButton from "@/components/FreeAssessmentButton";

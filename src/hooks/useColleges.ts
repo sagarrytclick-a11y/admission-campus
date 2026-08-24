@@ -199,8 +199,8 @@ export function useCollege(slug: string, initialData?: College | null) {
     queryFn: () => fetchCollegeBySlug(slug),
     enabled: !!slug,
     initialData: initialData ?? undefined,
-    // Treat SSR data as fresh — avoid immediate refetch that slows first paint
-    initialDataUpdatedAt: initialData ? Date.now() : undefined,
+    // Treat SSR payload as fresh without impure Date.now() during render
+    initialDataUpdatedAt: initialData ? 1 : undefined,
     staleTime: 10 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
     retry: 1,

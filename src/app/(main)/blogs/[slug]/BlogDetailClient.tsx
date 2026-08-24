@@ -4,19 +4,12 @@ import React from 'react'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
 import { 
   Calendar, 
   User, 
   Clock, 
-  Eye, 
-  MessageCircle, 
   ArrowLeft, 
-  Share2,
-  Tag,
   FileText,
-  AlertCircle,
-  RefreshCw
 } from 'lucide-react'
 import { useBlog } from '@/hooks/useBlogs'
 import { plainTextToSafeHtml } from '@/lib/security'
@@ -50,8 +43,7 @@ export default function BlogDetailClient({
   const { 
     data: blog, 
     isLoading, 
-    error, 
-    refetch 
+    error 
   } = useBlog(slug, initialBlog)
 
   if (isLoading && !blog) {

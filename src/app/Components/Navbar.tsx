@@ -26,6 +26,7 @@ import {
   createMailtoLink,
   createTelLink,
 } from "@/hooks/useContactInfo";
+import SearchOverlay from "@/app/Components/SearchOverlay";
 
 const navLinkBase =
   "relative px-3.5 py-2 text-[13px] font-semibold tracking-wide text-slate-600 transition-colors duration-200 rounded-lg hover:text-[#0066F5] hover:bg-[#E8F1FF]/70";
@@ -40,6 +41,7 @@ export default function SimpleNavbar() {
   const [mobileCollegesOpen, setMobileCollegesOpen] = useState(false);
   const [mobileCitiesOpen, setMobileCitiesOpen] = useState(false);
   const [toolsOpen, setToolsOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const pathname = usePathname();
   const { openModal } = useFormModal();
   const { emails, phones, address } = useContactInfo();
@@ -53,9 +55,12 @@ export default function SimpleNavbar() {
   }, []);
 
   useEffect(() => {
+    // Close menus when navigating to a new route
+    /* eslint-disable react-hooks/set-state-in-effect */
     setIsOpen(false);
     setCollegeTypeOpen(false);
     setToolsOpen(false);
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, [pathname]);
 
   useEffect(() => {
@@ -354,13 +359,17 @@ export default function SimpleNavbar() {
 
           {/* Actions */}
           <div className="flex items-center gap-2 sm:gap-3">
-            <Link
-              href="/colleges"
-              className="hidden h-10 w-10 items-center justify-center rounded-xl border border-[#E2E8F0] text-slate-600 transition hover:border-[#0066F5]/30 hover:bg-[#E8F1FF] hover:text-[#0066F5] md:flex"
-              aria-label="Search colleges"
+            <button
+              type="button"
+              onClick={() => {
+                setSearchOpen(true);
+                setIsOpen(false);
+              }}
+              className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#E2E8F0] text-slate-600 transition hover:border-[#0066F5]/30 hover:bg-[#E8F1FF] hover:text-[#0066F5]"
+              aria-label="Open search"
             >
               <Search size={16} />
-            </Link>
+            </button>
 
             <button
               type="button"
@@ -579,6 +588,8 @@ export default function SimpleNavbar() {
           </div>
         </div>
       </nav>
+
+      <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   );
 }

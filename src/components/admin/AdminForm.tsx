@@ -62,7 +62,7 @@ export function AdminForm({
             placeholder={field.placeholder}
             disabled={loading || field.disabled}
             required={field.required}
-            className="bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500"
+            className="bg-white/5 border-white/15 text-white placeholder:text-slate-500 focus:border-blue-500"
           />
         )
         
@@ -75,7 +75,7 @@ export function AdminForm({
             placeholder={field.placeholder}
             disabled={loading || field.disabled}
             required={field.required}
-            className="bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500"
+            className="bg-white/5 border-white/15 text-white placeholder:text-slate-500 focus:border-blue-500"
           />
         )
         
@@ -88,7 +88,7 @@ export function AdminForm({
             disabled={loading || field.disabled}
             required={field.required}
             rows={4}
-            className="bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500"
+            className="bg-white/5 border-white/15 text-white placeholder:text-slate-500 focus:border-blue-500"
           />
         )
         
@@ -99,12 +99,16 @@ export function AdminForm({
             onValueChange={(newValue) => onChange(field.name, newValue)}
             disabled={loading || field.disabled}
           >
-            <SelectTrigger className="bg-gray-700 border-gray-600 text-white">
+            <SelectTrigger className="bg-white/5 border-white/15 !text-white data-[placeholder]:text-slate-500">
               <SelectValue placeholder={field.placeholder || 'Select an option'} />
             </SelectTrigger>
-            <SelectContent className="bg-gray-700 border-gray-600">
+            <SelectContent className="border-white/10 bg-[#0E1C33] text-white">
               {field.options?.map((option) => (
-                <SelectItem key={option.value} value={option.value} className="text-white hover:bg-gray-600">
+                <SelectItem
+                  key={option.value}
+                  value={option.value}
+                  className="!text-white focus:!bg-[#0066F5] focus:!text-white"
+                >
                   {option.label}
                 </SelectItem>
               ))}
@@ -121,7 +125,7 @@ export function AdminForm({
               onCheckedChange={(checked) => onChange(field.name, checked)}
               disabled={loading || field.disabled}
             />
-            <Label htmlFor={field.name} className="text-sm font-normal text-gray-300">
+            <Label htmlFor={field.name} className="text-sm font-normal text-slate-300">
               {field.label}
             </Label>
           </div>
@@ -140,10 +144,10 @@ export function AdminForm({
               }}
               disabled={loading || field.disabled}
               accept="image/*"
-              className="bg-gray-700 border-gray-600 text-white file:text-gray-300"
+              className="bg-white/5 border-white/15 text-white file:text-slate-300"
             />
             {value && typeof value === 'string' && (
-              <div className="text-sm text-gray-400">
+              <div className="text-sm text-slate-500">
                 Current: {value}
               </div>
             )}
@@ -158,12 +162,12 @@ export function AdminForm({
           <div className="space-y-3">
             <div className="flex flex-wrap gap-2">
               {tags.map((tag: string, index: number) => (
-                <div className='flex items-center bg-gray-700 rounded-lg px-3 py-1 gap-3 border border-gray-600' key={index}>
-                  <Badge variant="secondary" className="flex items-center gap-1 bg-gray-600 text-white">
+                <div className='flex items-center bg-[#0E1C33] rounded-lg px-3 py-1 gap-3 border border-white/10' key={index}>
+                  <Badge variant="secondary" className="flex items-center gap-1 bg-white/10 text-white">
                     {tag}
                   </Badge>
                   <X
-                    className="h-3 w-3 cursor-pointer text-gray-400 hover:text-white"
+                    className="h-3 w-3 cursor-pointer text-slate-500 hover:text-white"
                     onClick={() => {
                       const newTags = tags.filter((_: string, i: number) => i !== index)
                       onChange(field.name, newTags)
@@ -184,7 +188,7 @@ export function AdminForm({
                   }
                 }}
                 disabled={loading || field.disabled}
-                className="bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500"
+                className="bg-white/5 border-white/15 text-white placeholder:text-slate-500 focus:border-blue-500"
               />
               <Button
                 type="button"
@@ -196,7 +200,7 @@ export function AdminForm({
                   }
                 }}
                 disabled={loading || field.disabled}
-                className="border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white"
+                className="border-white/10 text-slate-300 hover:bg-[#0E1C33] hover:text-white"
               >
                 Add
               </Button>
@@ -217,14 +221,14 @@ export function AdminForm({
       {fields.map((field) => (
         <div key={field.name} className="space-y-3">
           {field.type !== 'checkbox' && (
-            <Label htmlFor={field.name} className="text-sm font-medium mb-3 block text-gray-200">
+            <Label htmlFor={field.name} className="text-sm font-medium mb-3 block text-slate-100">
               {field.label}
               {field.required && <span className="text-red-400 ml-1">*</span>}
             </Label>
           )}
           {renderField(field)}
           {field.description && (
-            <p className="text-xs text-gray-400">{field.description}</p>
+            <p className="text-xs text-slate-500">{field.description}</p>
           )}
         </div>
       ))}
@@ -233,7 +237,7 @@ export function AdminForm({
           <Button
             type="submit"
             disabled={loading}
-            className="bg-blue-600 hover:bg-blue-700"
+            className="bg-[#0066F5] hover:bg-[#0047B3] text-white"
           >
             {loading ? 'Saving...' : submitLabel}
           </Button>

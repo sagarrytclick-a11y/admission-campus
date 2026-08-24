@@ -57,7 +57,9 @@ export default function SearchOverlay({
 
   useEffect(() => {
     if (!open) return;
+    /* eslint-disable react-hooks/set-state-in-effect */
     setQuery(initialQuery);
+    /* eslint-enable react-hooks/set-state-in-effect */
     const t = setTimeout(() => inputRef.current?.focus(), 50);
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";

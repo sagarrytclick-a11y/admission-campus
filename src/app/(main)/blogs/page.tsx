@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useMemo } from 'react'
 import Link from 'next/link'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -24,11 +24,7 @@ export default function BlogsPage() {
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 9
 
-  const { data: blogs = [], isLoading, error, refetch } = useBlogs()
-
-  useEffect(() => {
-    setCurrentPage(1)
-  }, [searchTerm, selectedCategory])
+  const { data: blogs = [], isLoading } = useBlogs()
 
   const filteredBlogs = useMemo(() => {
     return blogs.filter(blog => {
@@ -48,6 +44,15 @@ export default function BlogsPage() {
 
   const categories = useMemo(() => [...new Set(blogs.map(b => b.category).filter(Boolean))], [blogs])
 
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value)
+    setCurrentPage(1)
+  }
+
+  const handleCategoryChange = (value: string) => {
+    setSelectedCategory(value)
+    setCurrentPage(1)
+  }
   if (isLoading) return <div className="min-h-screen flex items-center justify-center bg-white"><div className="w-8 h-8 border-2 border-[#0066F5] border-t-transparent rounded-full animate-spin" /></div>
 
   return (
@@ -72,14 +77,14 @@ export default function BlogsPage() {
               <Input
                 placeholder="Search articles..."
                 value={searchTerm}
-                onChange={e => setSearchTerm(e.target.value)}
+                onChange={e => handleSearchChange(e.target.value)}
                 className="border-none shadow-none focus-visible:ring-0 text-sm font-medium text-slate-900 placeholder:text-slate-400"
               />
-              {searchTerm && <X size={14} className="text-slate-400 cursor-pointer hover:text-red-500" onClick={() => setSearchTerm('')} />}
+              {searchTerm && <X size={14} className="text-slate-400 cursor-pointer hover:text-red-500" onClick={() => handleSearchChange('')} />}
             </div>
 
             {/* Category */}
-            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+            <Select value={selectedCategory} onValueChange={handleCategoryChange}>
               <SelectTrigger className="flex-1 bg-white border-slate-200 h-11 text-[11px] font-bold uppercase tracking-wider rounded-lg text-slate-700">
                 <FileText size={14} className="mr-2 text-slate-400" />
                 <SelectValue placeholder="Topic" />

@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { SITE_IDENTITY } from "@/site-identity";
-import { GraduationCap, Eye, EyeOff, Shield, Mail, Lock } from "lucide-react";
+import { Eye, EyeOff, Shield, Mail, Lock } from "lucide-react";
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({ username: "", password: "" });
@@ -34,7 +34,7 @@ export default function LoginPage() {
         const data = await res.json();
         setError(data.message || "Invalid credentials. Try again.");
       }
-    } catch (err) {
+    } catch {
       setError("Something went wrong. Please check your connection.");
     } finally {
       setLoading(false);

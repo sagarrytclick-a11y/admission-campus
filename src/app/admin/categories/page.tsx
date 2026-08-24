@@ -1,11 +1,12 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { AdminTable, createEditAction, createDeleteAction } from '@/components/admin/AdminTable'
 import { AdminModal } from '@/components/admin/AdminModal'
 import { AdminForm } from '@/components/admin/AdminForm'
+import { AdminPagination } from '@/components/admin/AdminPagination'
 import { Button } from '@/components/ui/button'
-import { Plus, Tags } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { generateSlug } from '@/lib/slug'
 import { useAdminCategories, useCreateCategory, useUpdateCategory, useDeleteCategory } from '@/hooks/useAdminCategories'
@@ -26,7 +27,7 @@ export interface Category {
 
 // Main CategoriesPage component wrapped with provider
 function CategoriesPageContent() {
-  const { state, dispatch } = useCategoriesAdminContext()
+  const { state } = useCategoriesAdminContext()
   const actions = useCategoriesAdminActions()
 
   // TanStack Query hooks
@@ -41,7 +42,9 @@ function CategoriesPageContent() {
     editingItem: editingCategory,
     deleteModalOpen,
     itemToDelete: categoryToDelete,
-    formData
+    formData,
+    currentPage,
+    itemsPerPage,
   } = state
 
   // Auto-generate slug from name
@@ -51,23 +54,28 @@ function CategoriesPageContent() {
     }
   }, [formData.name, editingCategory, actions])
 
+  const paginatedCategories = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage
+    return categories.slice(start, start + itemsPerPage)
+  }, [categories, currentPage, itemsPerPage])
+
   const columns = [
     {
       key: 'image',
       title: 'Image',
       render: (value: string, record: Category, index: number) => (
-        <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 border border-gray-300">
+        <div className="h-12 w-12 overflow-hidden rounded-lg border border-white/10 bg-white/5">
           {value ? (
             <img 
               src={value} 
               alt={record.name} 
-              className="w-full h-full object-cover"
+              className="h-full w-full object-cover"
               onError={(e) => {
-                e.currentTarget.src = 'https://via.placeholder.com/48x48/f3f4f6/6b7280?text=No+Image'
+                e.currentTarget.src = 'https://via.placeholder.com/48x48/0E1C33/94a3b8?text=No+Image'
               }}
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">
+            <div className="flex h-full w-full items-center justify-center text-xs text-slate-500">
               No Image
             </div>
           )}
@@ -85,7 +93,7 @@ function CategoriesPageContent() {
       key: 'slug',
       title: 'Slug',
       render: (value: string, record: Category, index: number) => (
-        <code className="bg-gray-100 px-2 py-1 rounded text-sm font-mono text-gray-900">
+        <code className="rounded border border-white/10 bg-[#0066F5]/15 px-2 py-1 font-mono text-sm text-[#66A3FF]">
           {value}
         </code>
       )
@@ -103,7 +111,7 @@ function CategoriesPageContent() {
       key: 'is_active',
       title: 'Status',
       render: (value: boolean, record: Category, index: number) => (
-        <Badge variant={value ? 'default' : 'secondary'}>
+        <Badge variant={value ? 'default' : 'secondary'} className="!text-white">
           {value ? 'Active' : 'Inactive'}
         </Badge>
       )
@@ -232,7 +240,7 @@ function CategoriesPageContent() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold">Categories Management</h1>
-          <p className="text-gray-600">Manage blog categories and their configurations</p>
+          <p className="text-slate-300">Manage blog categories and their configurations</p>
         </div>
         <Button onClick={actions.openCreateModal} className="flex items-center gap-2">
           <Plus size={16} />
@@ -242,10 +250,19 @@ function CategoriesPageContent() {
 
       <AdminTable
         columns={columns}
-        data={categories}
+        data={paginatedCategories}
         actions={tableActions}
         loading={dataLoading}
         emptyMessage="No categories found"
+      />
+
+      <AdminPagination
+        currentPage={currentPage}
+        totalItems={categories.length}
+        itemsPerPage={itemsPerPage}
+        onPageChange={actions.setCurrentPage}
+        onItemsPerPageChange={actions.setItemsPerPage}
+        itemLabel="categories"
       />
 
       {/* Create/Edit Modal */}
@@ -273,7 +290,7 @@ function CategoriesPageContent() {
       >
         <div className="space-y-4">
           <p>Are you sure you want to delete the category "{categoryToDelete?.name}"?</p>
-          <p className="text-sm text-gray-600">This action cannot be undone.</p>
+          <p className="text-sm text-slate-300">This action cannot be undone.</p>
           <div className="flex justify-end space-x-2">
             <Button variant="outline" onClick={actions.closeDeleteModal}>
               Cancel

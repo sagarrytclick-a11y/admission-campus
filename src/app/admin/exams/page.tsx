@@ -1,9 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { AdminTable } from '@/components/admin/AdminTable'
 import { AdminModal } from '@/components/admin/AdminModal'
 import { AdminForm } from '@/components/admin/AdminForm'
+import { AdminPagination } from '@/components/admin/AdminPagination'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
@@ -107,6 +108,8 @@ export default function SimpleExamsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingExam, setEditingExam] = useState<Exam | null>(null)
   const [activeTab, setActiveTab] = useState('basic')
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage, setItemsPerPage] = useState(10)
 
   const [formData, setFormData] = useState<Exam>({
     name: '',
@@ -158,6 +161,11 @@ export default function SimpleExamsPage() {
   const { data: exams = [], isLoading: dataLoading } = useAdminExams()
   const saveExamMutation = useSaveExam()
   const deleteExamMutation = useDeleteExam()
+
+  const paginatedExams = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage
+    return exams.slice(start, start + itemsPerPage)
+  }, [exams, currentPage, itemsPerPage])
 
   const handleSaveExam = async () => {
     
@@ -448,15 +456,22 @@ export default function SimpleExamsPage() {
       title: 'Exam Name',
       render: (value: string, record: Exam) => (
         <div>
-          <div className="font-medium">{value}</div>
-          <div className="text-sm text-gray-500">{record.short_name}</div>
+          <div className="font-medium text-white">{value}</div>
+          <div className="text-sm text-slate-400">{record.short_name}</div>
         </div>
       )
     },
     {
       key: 'exam_type' as keyof Exam,
       title: 'Type',
-      render: (value: string) => <Badge variant="outline">{value}</Badge>
+      render: (value: string) => (
+        <Badge
+          variant="outline"
+          className="!border-white/20 !bg-[#0066F5]/20 !text-white"
+        >
+          {value}
+        </Badge>
+      )
     },
     {
       key: 'conducting_body' as keyof Exam,
@@ -466,7 +481,10 @@ export default function SimpleExamsPage() {
       key: 'is_active' as keyof Exam,
       title: 'Status',
       render: (value: boolean) => (
-        <Badge variant={value ? "default" : "secondary"}>
+        <Badge
+          variant={value ? 'default' : 'secondary'}
+          className="!text-white"
+        >
           {value ? 'Active' : 'Inactive'}
         </Badge>
       )
@@ -474,16 +492,23 @@ export default function SimpleExamsPage() {
     {
       key: 'actions' as keyof Exam,
       title: 'Actions',
-      render: (value: any, record: Exam) => (
+      render: (_value: any, record: Exam) => (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="h-8 w-8 p-0">
+          <Button
+            variant="ghost"
+            className="h-8 w-8 p-0 text-slate-300 hover:bg-[#0066F5]/20 hover:text-white"
+          >
             <MoreHorizontal className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
-        
-        <DropdownMenuContent align="end">
+
+        <DropdownMenuContent
+          align="end"
+          className="border-white/10 bg-[#0E1C33] text-white"
+        >
           <DropdownMenuItem
+            className="cursor-pointer focus:bg-[#0066F5] focus:text-white"
             onClick={() => {
               alert(`Viewing exam: ${record.name}`)
             }}
@@ -493,6 +518,7 @@ export default function SimpleExamsPage() {
           </DropdownMenuItem>
 
           <DropdownMenuItem
+            className="cursor-pointer focus:bg-[#0066F5] focus:text-white"
             onClick={() => {
               handleEditExam(record)
             }}
@@ -501,7 +527,7 @@ export default function SimpleExamsPage() {
             Edit
           </DropdownMenuItem>
 
-          <DropdownMenuSeparator />
+          <DropdownMenuSeparator className="bg-white/10" />
 
           <DropdownMenuItem
             onClick={async () => {
@@ -509,12 +535,12 @@ export default function SimpleExamsPage() {
                 try {
                   await deleteExamMutation.mutateAsync(record._id!)
                   toast.success('Exam deleted successfully!')
-                } catch (error) {
+                } catch {
                   toast.error('Error deleting exam')
                 }
               }
             }}
-            className="text-red-600"
+            className="cursor-pointer text-red-400 focus:bg-red-500/20 focus:text-red-300"
           >
             <Trash2 className="mr-2 h-4 w-4" />
             Delete
@@ -525,129 +551,184 @@ export default function SimpleExamsPage() {
     }
   ]
 
+  const fieldClass =
+    'scheme-dark bg-white/5 border-white/15 text-white placeholder:text-slate-500 focus-visible:border-[#0066F5] focus-visible:ring-[#0066F5]/30'
+  const labelClass = 'mb-2 block text-sm font-medium text-slate-200'
+  const outlineBtn =
+    'border-white/20 bg-transparent !text-white hover:bg-white/10 hover:!text-white'
+  const tabsListClass =
+    '!grid h-auto w-full !grid-cols-2 gap-1 rounded-xl border border-white/10 !bg-[#0A1628] p-1 sm:!grid-cols-3 lg:!grid-cols-6'
+  const tabsTriggerClass =
+    'rounded-lg px-2 py-2 text-xs !text-slate-300 data-[state=active]:!bg-[#0066F5] data-[state=active]:!text-white data-[state=active]:shadow-none sm:text-sm'
+
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-lg font-semibold">Simple Exams Management</h2>
-        <Button onClick={handleAddExam}>
-          <Plus className="h-4 w-4 mr-2" />
+    <div className="space-y-6 text-white">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h2 className="text-lg font-semibold text-white">Exams Management</h2>
+          <p className="mt-1 text-sm text-slate-400">
+            {dataLoading ? 'Loading…' : `${exams.length} exams`}
+          </p>
+        </div>
+        <Button
+          onClick={handleAddExam}
+          className="bg-[#0066F5] text-white hover:bg-[#0047B3]"
+        >
+          <Plus className="mr-2 h-4 w-4" />
           Add Exam
         </Button>
       </div>
 
-      <AdminTable
-        data={exams}
-        columns={columns}
-        loading={false}
+      <AdminTable data={paginatedExams} columns={columns} loading={dataLoading} />
+
+      <AdminPagination
+        currentPage={currentPage}
+        totalItems={exams.length}
+        itemsPerPage={itemsPerPage}
+        onPageChange={setCurrentPage}
+        onItemsPerPageChange={(n) => {
+          setItemsPerPage(n)
+          setCurrentPage(1)
+        }}
+        itemLabel="exams"
       />
 
-      <AdminModal 
-        open={isModalOpen} 
-        onOpenChange={setIsModalOpen} 
-        title="Manage Exam"
+      <AdminModal
+        open={isModalOpen}
+        onOpenChange={setIsModalOpen}
+        title={editingExam ? 'Edit Exam' : 'Add Exam'}
         showFooter={false}
         size="xl"
       >
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-6">
-            <TabsTrigger value="basic">Basic Info</TabsTrigger>
-            <TabsTrigger value="content">Content</TabsTrigger>
-            <TabsTrigger value="registration">Registration</TabsTrigger>
-            <TabsTrigger value="pattern">Pattern</TabsTrigger>
-            <TabsTrigger value="dates">Dates</TabsTrigger>
-            <TabsTrigger value="results">Results</TabsTrigger>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="gap-4">
+          <TabsList className={tabsListClass}>
+            <TabsTrigger value="basic" className={tabsTriggerClass}>
+              Basic Info
+            </TabsTrigger>
+            <TabsTrigger value="content" className={tabsTriggerClass}>
+              Content
+            </TabsTrigger>
+            <TabsTrigger value="registration" className={tabsTriggerClass}>
+              Registration
+            </TabsTrigger>
+            <TabsTrigger value="pattern" className={tabsTriggerClass}>
+              Pattern
+            </TabsTrigger>
+            <TabsTrigger value="dates" className={tabsTriggerClass}>
+              Dates
+            </TabsTrigger>
+            <TabsTrigger value="results" className={tabsTriggerClass}>
+              Results
+            </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="basic">
+          <TabsContent value="basic" className="mt-4">
             <AdminForm
               fields={basicFields}
               data={formData as unknown as Record<string, unknown>}
               onChange={(name, value) => {
-                setFormData(prev => ({ ...prev, [name]: value }))
-                // Auto-generate sensible slug when name changes
+                setFormData((prev) => ({ ...prev, [name]: value }))
                 if (name === 'name') {
                   const slug = generateSensibleSlug(value as string)
-                  setFormData(prev => ({ ...prev, slug: slug }))
+                  setFormData((prev) => ({ ...prev, slug }))
                 }
               }}
             />
           </TabsContent>
 
-          <TabsContent value="content" className="space-y-4">
+          <TabsContent value="content" className="mt-4 space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Hero Title</label>
+              <label className={labelClass}>Hero Title</label>
               <Input
+                className={fieldClass}
                 value={formData.hero_section.title}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  hero_section: { ...prev.hero_section, title: e.target.value }
-                }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    hero_section: { ...prev.hero_section, title: e.target.value },
+                  }))
+                }
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Hero Subtitle</label>
+              <label className={labelClass}>Hero Subtitle</label>
               <Input
+                className={fieldClass}
                 value={formData.hero_section.subtitle}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  hero_section: { ...prev.hero_section, subtitle: e.target.value }
-                }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    hero_section: { ...prev.hero_section, subtitle: e.target.value },
+                  }))
+                }
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Hero Image</label>
+              <label className={labelClass}>Hero Image</label>
               <Input
+                className={fieldClass}
                 value={formData.hero_section.image}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  hero_section: { ...prev.hero_section, image: e.target.value }
-                }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    hero_section: { ...prev.hero_section, image: e.target.value },
+                  }))
+                }
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Overview Title</label>
+              <label className={labelClass}>Overview Title</label>
               <Input
+                className={fieldClass}
                 value={formData.overview.title}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  overview: { ...prev.overview, title: e.target.value }
-                }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    overview: { ...prev.overview, title: e.target.value },
+                  }))
+                }
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Overview Content</label>
+              <label className={labelClass}>Overview Content</label>
               <textarea
-                className="w-full px-3 py-2 border rounded-md"
+                className={`w-full rounded-md border px-3 py-2 ${fieldClass}`}
                 rows={4}
                 value={formData.overview.content}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  overview: { ...prev.overview, content: e.target.value }
-                }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    overview: { ...prev.overview, content: e.target.value },
+                  }))
+                }
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Key Highlights</label>
+              <label className={labelClass}>Key Highlights</label>
               {formData.overview.key_highlights.map((highlight, index) => (
-                <div key={index} className="flex gap-2 mb-2">
+                <div key={index} className="mb-2 flex gap-2">
                   <Input
+                    className={fieldClass}
                     value={highlight}
                     onChange={(e) => {
                       const newHighlights = [...formData.overview.key_highlights]
                       newHighlights[index] = e.target.value
-                      setFormData(prev => ({
+                      setFormData((prev) => ({
                         ...prev,
-                        overview: { ...prev.overview, key_highlights: newHighlights }
+                        overview: { ...prev.overview, key_highlights: newHighlights },
                       }))
                     }}
                   />
                   <Button
                     variant="outline"
+                    className={outlineBtn}
                     onClick={() => {
-                      const newHighlights = formData.overview.key_highlights.filter((_, i) => i !== index)
-                      setFormData(prev => ({
+                      const newHighlights = formData.overview.key_highlights.filter(
+                        (_, i) => i !== index
+                      )
+                      setFormData((prev) => ({
                         ...prev,
-                        overview: { ...prev.overview, key_highlights: newHighlights }
+                        overview: { ...prev.overview, key_highlights: newHighlights },
                       }))
                     }}
                   >
@@ -657,61 +738,85 @@ export default function SimpleExamsPage() {
               ))}
               <Button
                 variant="outline"
-                onClick={() => setFormData(prev => ({
-                  ...prev,
-                  overview: { ...prev.overview, key_highlights: [...prev.overview.key_highlights, ''] }
-                }))}
+                className={outlineBtn}
+                onClick={() =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    overview: {
+                      ...prev.overview,
+                      key_highlights: [...prev.overview.key_highlights, ''],
+                    },
+                  }))
+                }
               >
                 Add Highlight
               </Button>
             </div>
           </TabsContent>
 
-          <TabsContent value="registration" className="space-y-4">
+          <TabsContent value="registration" className="mt-4 space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Registration Title</label>
+              <label className={labelClass}>Registration Title</label>
               <Input
+                className={fieldClass}
                 value={formData.registration.title}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  registration: { ...prev.registration, title: e.target.value }
-                }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    registration: { ...prev.registration, title: e.target.value },
+                  }))
+                }
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Registration Description</label>
+              <label className={labelClass}>Registration Description</label>
               <textarea
-                className="w-full px-3 py-2 border rounded-md"
+                className={`w-full rounded-md border px-3 py-2 ${fieldClass}`}
                 rows={3}
                 value={formData.registration.description}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  registration: { ...prev.registration, description: e.target.value }
-                }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    registration: {
+                      ...prev.registration,
+                      description: e.target.value,
+                    },
+                  }))
+                }
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Bullet Points</label>
+              <label className={labelClass}>Bullet Points</label>
               {formData.registration.bullet_points.map((point, index) => (
-                <div key={index} className="flex gap-2 mb-2">
+                <div key={index} className="mb-2 flex gap-2">
                   <Input
+                    className={fieldClass}
                     value={point}
                     onChange={(e) => {
                       const newPoints = [...formData.registration.bullet_points]
                       newPoints[index] = e.target.value
-                      setFormData(prev => ({
+                      setFormData((prev) => ({
                         ...prev,
-                        registration: { ...prev.registration, bullet_points: newPoints }
+                        registration: {
+                          ...prev.registration,
+                          bullet_points: newPoints,
+                        },
                       }))
                     }}
                   />
                   <Button
                     variant="outline"
+                    className={outlineBtn}
                     onClick={() => {
-                      const newPoints = formData.registration.bullet_points.filter((_, i) => i !== index)
-                      setFormData(prev => ({
+                      const newPoints = formData.registration.bullet_points.filter(
+                        (_, i) => i !== index
+                      )
+                      setFormData((prev) => ({
                         ...prev,
-                        registration: { ...prev.registration, bullet_points: newPoints }
+                        registration: {
+                          ...prev.registration,
+                          bullet_points: newPoints,
+                        },
                       }))
                     }}
                   >
@@ -721,110 +826,160 @@ export default function SimpleExamsPage() {
               ))}
               <Button
                 variant="outline"
-                onClick={() => setFormData(prev => ({
-                  ...prev,
-                  registration: { ...prev.registration, bullet_points: [...prev.registration.bullet_points, ''] }
-                }))}
+                className={outlineBtn}
+                onClick={() =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    registration: {
+                      ...prev.registration,
+                      bullet_points: [...prev.registration.bullet_points, ''],
+                    },
+                  }))
+                }
               >
                 Add Bullet Point
               </Button>
             </div>
           </TabsContent>
 
-          <TabsContent value="pattern" className="space-y-4">
+          <TabsContent value="pattern" className="mt-4 space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Pattern Title</label>
+              <label className={labelClass}>Pattern Title</label>
               <Input
+                className={fieldClass}
                 value={formData.exam_pattern.title}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  exam_pattern: { ...prev.exam_pattern, title: e.target.value }
-                }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    exam_pattern: { ...prev.exam_pattern, title: e.target.value },
+                  }))
+                }
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Pattern Description</label>
+              <label className={labelClass}>Pattern Description</label>
               <textarea
-                className="w-full px-3 py-2 border rounded-md"
+                className={`w-full rounded-md border px-3 py-2 ${fieldClass}`}
                 rows={3}
                 value={formData.exam_pattern.description}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  exam_pattern: { ...prev.exam_pattern, description: e.target.value }
-                }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    exam_pattern: {
+                      ...prev.exam_pattern,
+                      description: e.target.value,
+                    },
+                  }))
+                }
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Total Duration (Minutes)</label>
+              <label className={labelClass}>Total Duration (Minutes)</label>
               <Input
+                className={fieldClass}
                 type="number"
                 value={formData.exam_pattern.total_duration_mins}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  exam_pattern: { ...prev.exam_pattern, total_duration_mins: parseInt(e.target.value) || 120 }
-                }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    exam_pattern: {
+                      ...prev.exam_pattern,
+                      total_duration_mins: parseInt(e.target.value) || 120,
+                    },
+                  }))
+                }
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Score Range</label>
+              <label className={labelClass}>Score Range</label>
               <Input
+                className={fieldClass}
                 value={formData.exam_pattern.score_range}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  exam_pattern: { ...prev.exam_pattern, score_range: e.target.value }
-                }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    exam_pattern: {
+                      ...prev.exam_pattern,
+                      score_range: e.target.value,
+                    },
+                  }))
+                }
                 placeholder="e.g., 0-100"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Table Data</label>
+              <label className={labelClass}>Table Data</label>
               {formData.exam_pattern.table_data.map((row, index) => (
-                <div key={index} className="flex gap-2 mb-2">
+                <div key={index} className="mb-2 flex flex-col gap-2 sm:flex-row">
                   <Input
+                    className={fieldClass}
                     placeholder="Section"
                     value={row.section}
                     onChange={(e) => {
                       const newTableData = [...formData.exam_pattern.table_data]
                       newTableData[index] = { ...row, section: e.target.value }
-                      setFormData(prev => ({
+                      setFormData((prev) => ({
                         ...prev,
-                        exam_pattern: { ...prev.exam_pattern, table_data: newTableData }
+                        exam_pattern: {
+                          ...prev.exam_pattern,
+                          table_data: newTableData,
+                        },
                       }))
                     }}
                   />
                   <Input
+                    className={fieldClass}
                     type="number"
                     placeholder="Questions"
                     value={row.questions}
                     onChange={(e) => {
                       const newTableData = [...formData.exam_pattern.table_data]
-                      newTableData[index] = { ...row, questions: parseInt(e.target.value) || 0 }
-                      setFormData(prev => ({
+                      newTableData[index] = {
+                        ...row,
+                        questions: parseInt(e.target.value) || 0,
+                      }
+                      setFormData((prev) => ({
                         ...prev,
-                        exam_pattern: { ...prev.exam_pattern, table_data: newTableData }
+                        exam_pattern: {
+                          ...prev.exam_pattern,
+                          table_data: newTableData,
+                        },
                       }))
                     }}
                   />
                   <Input
+                    className={fieldClass}
                     type="number"
                     placeholder="Duration (mins)"
                     value={row.duration_mins}
                     onChange={(e) => {
                       const newTableData = [...formData.exam_pattern.table_data]
-                      newTableData[index] = { ...row, duration_mins: parseInt(e.target.value) || 0 }
-                      setFormData(prev => ({
+                      newTableData[index] = {
+                        ...row,
+                        duration_mins: parseInt(e.target.value) || 0,
+                      }
+                      setFormData((prev) => ({
                         ...prev,
-                        exam_pattern: { ...prev.exam_pattern, table_data: newTableData }
+                        exam_pattern: {
+                          ...prev.exam_pattern,
+                          table_data: newTableData,
+                        },
                       }))
                     }}
                   />
                   <Button
                     variant="outline"
+                    className={outlineBtn}
                     onClick={() => {
-                      const newTableData = formData.exam_pattern.table_data.filter((_, i) => i !== index)
-                      setFormData(prev => ({
+                      const newTableData = formData.exam_pattern.table_data.filter(
+                        (_, i) => i !== index
+                      )
+                      setFormData((prev) => ({
                         ...prev,
-                        exam_pattern: { ...prev.exam_pattern, table_data: newTableData }
+                        exam_pattern: {
+                          ...prev.exam_pattern,
+                          table_data: newTableData,
+                        },
                       }))
                     }}
                   >
@@ -834,62 +989,92 @@ export default function SimpleExamsPage() {
               ))}
               <Button
                 variant="outline"
-                onClick={() => setFormData(prev => ({
-                  ...prev,
-                  exam_pattern: { ...prev.exam_pattern, table_data: [...prev.exam_pattern.table_data, { section: '', questions: 0, duration_mins: 0 }] }
-                }))}
+                className={outlineBtn}
+                onClick={() =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    exam_pattern: {
+                      ...prev.exam_pattern,
+                      table_data: [
+                        ...prev.exam_pattern.table_data,
+                        { section: '', questions: 0, duration_mins: 0 },
+                      ],
+                    },
+                  }))
+                }
               >
                 Add Row
               </Button>
             </div>
           </TabsContent>
 
-          <TabsContent value="dates" className="space-y-4">
+          <TabsContent value="dates" className="mt-4 space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Dates Title</label>
+              <label className={labelClass}>Dates Title</label>
               <Input
+                className={fieldClass}
                 value={formData.exam_dates.title}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  exam_dates: { ...prev.exam_dates, title: e.target.value }
-                }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    exam_dates: { ...prev.exam_dates, title: e.target.value },
+                  }))
+                }
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Important Dates</label>
+              <label className={labelClass}>Important Dates</label>
               {formData.exam_dates.important_dates.map((date, index) => (
-                <div key={index} className="flex gap-2 mb-2">
+                <div key={index} className="mb-2 flex flex-col gap-2 sm:flex-row">
                   <Input
+                    className={fieldClass}
                     placeholder="Event"
                     value={date.event}
                     onChange={(e) => {
                       const newDates = [...formData.exam_dates.important_dates]
                       newDates[index] = { ...date, event: e.target.value }
-                      setFormData(prev => ({
+                      setFormData((prev) => ({
                         ...prev,
-                        exam_dates: { ...prev.exam_dates, important_dates: newDates }
+                        exam_dates: {
+                          ...prev.exam_dates,
+                          important_dates: newDates,
+                        },
                       }))
                     }}
                   />
                   <Input
+                    className={fieldClass}
                     type="date"
-                    value={date.date ? new Date(date.date).toISOString().split('T')[0] : ''}
+                    value={
+                      date.date
+                        ? new Date(date.date).toISOString().split('T')[0]
+                        : ''
+                    }
                     onChange={(e) => {
                       const newDates = [...formData.exam_dates.important_dates]
                       newDates[index] = { ...date, date: new Date(e.target.value) }
-                      setFormData(prev => ({
+                      setFormData((prev) => ({
                         ...prev,
-                        exam_dates: { ...prev.exam_dates, important_dates: newDates }
+                        exam_dates: {
+                          ...prev.exam_dates,
+                          important_dates: newDates,
+                        },
                       }))
                     }}
                   />
                   <Button
                     variant="outline"
+                    className={outlineBtn}
                     onClick={() => {
-                      const newDates = formData.exam_dates.important_dates.filter((_, i) => i !== index)
-                      setFormData(prev => ({
+                      const newDates = formData.exam_dates.important_dates.filter(
+                        (_, i) => i !== index
+                      )
+                      setFormData((prev) => ({
                         ...prev,
-                        exam_dates: { ...prev.exam_dates, important_dates: newDates }
+                        exam_dates: {
+                          ...prev.exam_dates,
+                          important_dates: newDates,
+                        },
                       }))
                     }}
                   >
@@ -899,80 +1084,126 @@ export default function SimpleExamsPage() {
               ))}
               <Button
                 variant="outline"
-                onClick={() => setFormData(prev => ({
-                  ...prev,
-                  exam_dates: { ...prev.exam_dates, important_dates: [...prev.exam_dates.important_dates, { event: '', date: new Date() }] }
-                }))}
+                className={outlineBtn}
+                onClick={() =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    exam_dates: {
+                      ...prev.exam_dates,
+                      important_dates: [
+                        ...prev.exam_dates.important_dates,
+                        { event: '', date: new Date() },
+                      ],
+                    },
+                  }))
+                }
               >
                 Add Date
               </Button>
             </div>
           </TabsContent>
 
-          <TabsContent value="results" className="space-y-4">
+          <TabsContent value="results" className="mt-4 space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Results Title</label>
+              <label className={labelClass}>Results Title</label>
               <Input
+                className={fieldClass}
                 value={formData.result_statistics.title}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  result_statistics: { ...prev.result_statistics, title: e.target.value }
-                }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    result_statistics: {
+                      ...prev.result_statistics,
+                      title: e.target.value,
+                    },
+                  }))
+                }
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Results Description</label>
+              <label className={labelClass}>Results Description</label>
               <textarea
-                className="w-full px-3 py-2 border rounded-md"
+                className={`w-full rounded-md border px-3 py-2 ${fieldClass}`}
                 rows={3}
                 value={formData.result_statistics.description}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  result_statistics: { ...prev.result_statistics, description: e.target.value }
-                }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    result_statistics: {
+                      ...prev.result_statistics,
+                      description: e.target.value,
+                    },
+                  }))
+                }
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Passing Criteria</label>
+              <label className={labelClass}>Passing Criteria</label>
               <Input
+                className={fieldClass}
                 value={formData.result_statistics.passing_criteria}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  result_statistics: { ...prev.result_statistics, passing_criteria: e.target.value }
-                }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    result_statistics: {
+                      ...prev.result_statistics,
+                      passing_criteria: e.target.value,
+                    },
+                  }))
+                }
                 placeholder="e.g., 40% or 160/400"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Total Marks</label>
+              <label className={labelClass}>Total Marks</label>
               <Input
+                className={fieldClass}
                 type="number"
                 value={formData.result_statistics.total_marks}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  result_statistics: { ...prev.result_statistics, total_marks: parseInt(e.target.value) || 100 }
-                }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    result_statistics: {
+                      ...prev.result_statistics,
+                      total_marks: parseInt(e.target.value) || 100,
+                    },
+                  }))
+                }
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Passing Marks</label>
+              <label className={labelClass}>Passing Marks</label>
               <Input
+                className={fieldClass}
                 type="number"
                 value={formData.result_statistics.passing_marks}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  result_statistics: { ...prev.result_statistics, passing_marks: parseInt(e.target.value) || 40 }
-                }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    result_statistics: {
+                      ...prev.result_statistics,
+                      passing_marks: parseInt(e.target.value) || 40,
+                    },
+                  }))
+                }
               />
             </div>
           </TabsContent>
         </Tabs>
 
-        <div className="flex justify-end gap-2 mt-6">
-          <Button variant="outline" onClick={() => setIsModalOpen(false)}>
+        <div className="mt-6 flex justify-end gap-2 border-t border-white/10 pt-4">
+          <Button
+            variant="outline"
+            className={outlineBtn}
+            onClick={() => setIsModalOpen(false)}
+          >
             Cancel
           </Button>
-          <Button onClick={handleSaveExam} disabled={saveExamMutation.isPending}>
+          <Button
+            onClick={handleSaveExam}
+            disabled={saveExamMutation.isPending}
+            className="bg-[#0066F5] text-white hover:bg-[#0047B3]"
+          >
             {saveExamMutation.isPending ? 'Saving...' : 'Save Exam'}
           </Button>
         </div>

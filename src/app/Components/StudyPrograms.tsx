@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import Link from "next/link";
 import { BookOpen, Target, BrainCircuit, Globe, ArrowRight, MessageCircle, Sparkles, PencilRuler, Microscope, Landmark, Palette } from "lucide-react";
 import { useFormModal } from "@/context/FormModalContext";
 

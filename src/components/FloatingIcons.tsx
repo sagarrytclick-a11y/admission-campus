@@ -1,6 +1,6 @@
 'use client'
 
-import { MessageCircle, Bell, Phone } from 'lucide-react'
+import { Bell, Phone } from 'lucide-react'
 
 interface FloatingIconsProps {
   onNotificationClick: () => void
