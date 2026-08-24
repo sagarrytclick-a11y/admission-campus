@@ -137,29 +137,29 @@ export default function MedicalSection() {
           </p>
         </div>
 
-        <div className="flex justify-center mb-8">
-          <div className="bg-white rounded-xl border border-[#E2E8F0] p-1 inline-flex">
+        <div className="flex justify-center mb-8 px-1">
+          <div className="flex w-full max-w-md bg-white rounded-xl border border-[#E2E8F0] p-1">
             <button
               type="button"
               onClick={() => setActiveTab('specialties')}
-              className={`px-6 py-2 rounded-lg text-sm font-semibold transition-colors ${
+              className={`flex-1 px-2.5 sm:px-6 py-2.5 rounded-lg text-xs sm:text-sm font-semibold leading-snug transition-colors ${
                 activeTab === 'specialties'
                   ? 'bg-[#0066F5] text-white'
                   : 'text-[#64748B] hover:text-[#0066F5]'
               }`}
             >
-              Medical Specialties
+              Specialties
             </button>
             <button
               type="button"
               onClick={() => setActiveTab('colleges')}
-              className={`px-6 py-2 rounded-lg text-sm font-semibold transition-colors ${
+              className={`flex-1 px-2.5 sm:px-6 py-2.5 rounded-lg text-xs sm:text-sm font-semibold leading-snug transition-colors ${
                 activeTab === 'colleges'
                   ? 'bg-[#0066F5] text-white'
                   : 'text-[#64748B] hover:text-[#0066F5]'
               }`}
             >
-              Top Medical Colleges
+              Top Colleges
             </button>
           </div>
         </div>
@@ -263,8 +263,8 @@ export default function MedicalSection() {
           </div>
         )}
 
-        <div className="mt-12 text-center bg-[#0066F5] rounded-2xl p-8 text-white">
-          <h3 className="text-2xl font-bold mb-4">Start Your Medical Journey Today</h3>
+        <div className="mt-12 text-center bg-[#0066F5] rounded-2xl p-5 sm:p-8 text-white">
+          <h3 className="text-xl sm:text-2xl font-bold mb-4">Start Your Medical Journey Today</h3>
           <p className="mb-6 text-white/85">
             Get expert guidance for NEET preparation and medical college admissions
           </p>

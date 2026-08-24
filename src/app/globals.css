@@ -155,7 +155,7 @@ textarea {
   }
   body {
     /* eslint-disable-next-line css/at-rule-no-unknown */
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground overflow-x-hidden;
   }
 }
 

@@ -129,7 +129,7 @@ const UpcomingExamsSection = ({
 }) => {
   return (
     <section className="py-10 md:py-12 bg-slate-50 border-t border-slate-100">
-      <div className="max-w-7xl mx-auto px-6 lg:px-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
         <div className="mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 text-[#0066F5] mb-2">
@@ -295,7 +295,7 @@ export default function FeaturedSection() {
 
   return (
     <div className="bg-white font-sans text-[#1E293B]">
-      <section className="max-w-7xl mx-auto py-[32px] px-6 lg:px-24">
+      <section className="max-w-7xl mx-auto py-8 sm:py-[32px] px-4 sm:px-6 lg:px-10">
         <div className="mb-12">
           <div className="flex items-center gap-2 text-[#0066F5] mb-3">
             <Sparkles size={16} />

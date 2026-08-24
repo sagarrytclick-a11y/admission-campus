@@ -20,7 +20,7 @@ export default function StudyPrograms() {
 
   return (
     <section className="py-[32px] bg-white font-sans text-[#1E293B]">
-      <div className="max-w-7xl mx-auto px-6 lg:px-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
         
         {/* Simple Header - Consistent with previous sections */}
         <div className="mb-12">

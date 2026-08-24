@@ -25,7 +25,7 @@ const CtaSection: React.FC = () => {
           Start Your Future Today
         </div>
 
-        <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-[#0F172A] mb-5 leading-tight">
+        <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight text-[#0F172A] mb-5 leading-tight">
           Ready to Step Into Your{" "}
           <span className="text-[#0066F5]">Dream College?</span>
         </h2>
@@ -55,7 +55,7 @@ const CtaSection: React.FC = () => {
           ].map((item) => (
             <div
               key={item.title}
-              className="brand-card p-7 text-center group"
+              className="brand-card p-5 sm:p-7 text-center group"
             >
               <div className="w-12 h-12 bg-[#E8F1FF] rounded-xl flex items-center justify-center text-[#0066F5] mb-5 mx-auto group-hover:bg-[#0066F5] group-hover:text-white transition-all">
                 <item.icon size={22} />

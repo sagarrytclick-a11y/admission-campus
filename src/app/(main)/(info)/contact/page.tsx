@@ -106,7 +106,7 @@ export default function ContactPage() {
               <h3 className="text-sm font-bold text-[#0F172A] mb-1">
                 {card.title}
               </h3>
-              <p className="text-sm text-[#64748B] line-clamp-2 mb-2">
+              <p className="text-sm text-[#64748B] line-clamp-2 mb-2 break-all">
                 {card.value}
               </p>
               <p className="text-[11px] font-semibold uppercase tracking-wide text-[#0066F5]">

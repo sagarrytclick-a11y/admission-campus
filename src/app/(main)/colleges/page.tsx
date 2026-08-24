@@ -61,7 +61,7 @@ export default function CollegesPage() {
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.3)_1px,transparent_0)] bg-[length:20px_20px]"></div>
         </div>
-        <div className="relative max-w-7xl mx-auto px-6 lg:px-24 py-[32px]">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-[32px]">
           <div className="text-center">
             <div className="inline-flex items-center gap-2 text-white/90 mb-6">
               <Sparkles size={20} />
@@ -108,7 +108,7 @@ export default function CollegesPage() {
       </section>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-24 py-8 lg:py-[32px]">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-8 lg:py-[32px]">
         {/* Mobile: Filters at top, Desktop: Sidebar layout */}
         <div className="lg:flex lg:gap-8">
 

@@ -50,7 +50,7 @@ const CitySection = () => {
   ]
 
   return (
-    <div className="bg-white py-[32px] px-6 sm:px-12 lg:px-24 font-sans">
+    <div className="bg-white py-[32px] px-4 sm:px-6 lg:px-10 font-sans">
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
         <div className="mb-8 text-center">

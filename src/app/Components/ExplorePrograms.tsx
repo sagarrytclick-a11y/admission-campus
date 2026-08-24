@@ -41,8 +41,8 @@ const ExplorePrograms = () => {
   ];
 
   return (
-    <div className="bg-white py-8 px-4 sm:px-6 lg:px-24 max-w-7xl mx-auto font-sans text-[#0F172A]">
-      <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-4">
+    <div className="bg-white py-8 px-4 sm:px-6 lg:px-10 max-w-7xl mx-auto font-sans text-[#0F172A]">
+      <div className="mb-8 md:mb-12 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <h2 className="text-3xl font-bold tracking-tight text-[#0F172A] mb-2">Campus Resources</h2>
           <p className="text-[#64748B] text-sm">Expert guidance and data-driven insights for your education journey.</p>
@@ -52,7 +52,7 @@ const ExplorePrograms = () => {
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-8">
         {cards.map((card) => {
           const Icon = card.icon;
           return (
@@ -69,7 +69,7 @@ const ExplorePrograms = () => {
                 />
               </div>
 
-              <div className="p-6 flex flex-col grow">
+              <div className="p-4 sm:p-6 flex flex-col grow">
                 <div className="flex items-center gap-3 mb-3">
                   <div className="p-2 bg-[#E8F1FF] rounded-lg border border-[#0066F5]/15 text-[#0066F5]">
                     <Icon size={18} />

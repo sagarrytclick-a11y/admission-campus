@@ -245,7 +245,7 @@ const Footer = () => {
           type="button"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           aria-label="Back to top"
-          className="fixed bottom-6 left-6 z-50 flex h-11 w-11 items-center justify-center rounded-xl bg-[#0066F5] text-white shadow-[0_10px_30px_rgba(0,102,245,0.4)] transition hover:-translate-y-0.5 hover:bg-[#0047B3] active:scale-95"
+          className="fixed bottom-20 left-4 z-[1100] flex h-11 w-11 items-center justify-center rounded-xl bg-[#0066F5] text-white shadow-[0_10px_30px_rgba(0,102,245,0.4)] transition hover:-translate-y-0.5 hover:bg-[#0047B3] active:scale-95"
         >
           <ChevronUp size={20} />
         </button>

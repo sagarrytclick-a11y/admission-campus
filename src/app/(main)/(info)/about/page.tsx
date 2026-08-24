@@ -160,7 +160,7 @@ export default function AboutPage() {
             {pillars.map((item) => (
               <div
                 key={item.title}
-                className="group bg-white rounded-2xl border border-[#E2E8F0] p-7 hover:border-[#0066F5] hover:shadow-lg hover:shadow-[#0066F5]/10 transition-all"
+                className="group bg-white rounded-2xl border border-[#E2E8F0] p-5 sm:p-7 hover:border-[#0066F5] hover:shadow-lg hover:shadow-[#0066F5]/10 transition-all"
               >
                 <div className="w-12 h-12 rounded-xl bg-[#E8F1FF] text-[#0066F5] flex items-center justify-center mb-5 group-hover:bg-[#0066F5] group-hover:text-white transition-colors">
                   <item.icon size={22} />

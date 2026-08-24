@@ -188,7 +188,7 @@ export default function MdMsHomeSection() {
           <button
             type="button"
             onClick={handleExplore}
-            className="inline-flex items-center gap-2 rounded-xl bg-[#0066F5] px-8 py-3.5 text-base font-bold text-white shadow-md shadow-[#0066F5]/25 transition-colors hover:bg-[#0047B3]"
+            className="inline-flex w-full max-w-sm sm:w-auto items-center justify-center gap-2 rounded-xl bg-[#0066F5] px-6 sm:px-8 py-3.5 text-sm sm:text-base font-bold text-white shadow-md shadow-[#0066F5]/25 transition-colors hover:bg-[#0047B3]"
           >
             Explore MD / MS Colleges
             <ArrowRight className="h-5 w-5" />

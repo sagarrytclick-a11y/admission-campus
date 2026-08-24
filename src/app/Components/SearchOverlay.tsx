@@ -166,7 +166,7 @@ export default function SearchOverlay({
             type="button"
             aria-label="Close search"
             onClick={onClose}
-            className="absolute right-4 sm:right-6 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full text-slate-500 hover:bg-slate-100 hover:text-[#0F172A] transition-colors"
+            className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center rounded-full text-slate-500 hover:bg-slate-100 hover:text-[#0F172A] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>

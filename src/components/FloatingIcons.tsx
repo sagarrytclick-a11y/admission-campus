@@ -15,23 +15,23 @@ export function FloatingIcons({ onNotificationClick }: FloatingIconsProps) {
   }
 
   return (
-    <div className="fixed bottom-10 right-6 flex flex-col gap-4 z-2000">
+    <div className="fixed bottom-20 right-3 sm:right-6 flex flex-col gap-3 sm:gap-4 z-[2000]">
       {/* WhatsApp Icon */}
       <button
         onClick={handleWhatsAppClick}
-        className="bg-green-500 hover:bg-green-600 text-white rounded-full p-4 shadow-lg transition-all duration-300 hover:scale-110"
+        className="bg-green-500 hover:bg-green-600 text-white rounded-full p-3.5 sm:p-4 shadow-lg transition-all duration-300 hover:scale-110"
         aria-label="Contact on WhatsApp"
       >
-        <Phone className="w-6 h-6" />
+        <Phone className="w-5 h-5 sm:w-6 sm:h-6" />
       </button>
 
       {/* Notification Icon */}
       <button
         onClick={onNotificationClick}
-        className="bg-[#0066F5] hover:bg-[#0066F5] text-white rounded-full p-4 shadow-lg transition-all duration-300 hover:scale-110"
+        className="bg-[#0066F5] hover:bg-[#0066F5] text-white rounded-full p-3.5 sm:p-4 shadow-lg transition-all duration-300 hover:scale-110"
         aria-label="Show notifications"
       >
-        <Bell className="w-6 h-6" />
+        <Bell className="w-5 h-5 sm:w-6 sm:h-6" />
       </button>
     </div>
   )

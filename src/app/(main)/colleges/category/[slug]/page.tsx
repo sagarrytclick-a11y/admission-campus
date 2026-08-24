@@ -218,7 +218,7 @@ export default function CategoryCollegesPage() {
             </div>
 
             {/* Colleges List */}
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
               <div className="mb-4">
                 <h2 className="text-xl font-bold text-[#0F172A]">
                   {currentCategory?.name || categorySlug} Colleges

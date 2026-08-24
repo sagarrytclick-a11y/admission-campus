@@ -58,6 +58,15 @@ export default function SimpleNavbar() {
     setToolsOpen(false);
   }, [pathname]);
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [isOpen]);
+
   const clearHoverTimeout = () => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
   };
@@ -397,7 +406,7 @@ export default function SimpleNavbar() {
                   openModal();
                   setIsOpen(false);
                 }}
-                className="mt-3 inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2 text-xs font-bold uppercase tracking-wide text-[#0066F5]"
+                className="mt-3 inline-flex min-h-11 items-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-bold uppercase tracking-wide text-[#0066F5]"
               >
                 Talk to us <ArrowRight size={14} />
               </button>

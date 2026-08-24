@@ -74,7 +74,7 @@ export default function Hero() {
   const goNext = () => setSlideIndex((prev) => (prev + 1) % SLIDES.length);
 
   return (
-    <section className="relative min-h-[52vh] md:min-h-[58vh] overflow-hidden flex items-center justify-center">
+    <section className="relative min-h-[48vh] sm:min-h-[52vh] md:min-h-[58vh] overflow-hidden flex items-center justify-center pb-12 sm:pb-14">
       {/* Background slides */}
       {SLIDES.map((s, i) => (
         <div
@@ -95,11 +95,11 @@ export default function Hero() {
       <div className="absolute inset-0 bg-black/45" />
       <div className="absolute inset-0 bg-linear-to-b from-black/30 via-transparent to-black/50" />
 
-      <div className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 py-10 md:py-12 text-center">
-        <div className="inline-flex items-stretch gap-3 mb-8 md:mb-10">
+      <div className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-10 md:py-12 text-center">
+        <div className="inline-flex items-stretch gap-3 mb-4 sm:mb-8 md:mb-10">
           <h1
             key={slide.title}
-            className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.5rem] font-bold text-white tracking-tight leading-none"
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.5rem] font-bold text-white tracking-tight leading-tight"
           >
             {slide.title}
           </h1>
@@ -132,7 +132,7 @@ export default function Hero() {
             <span className="flex-1 min-w-0 text-slate-400 text-sm sm:text-base font-medium py-2.5 truncate">
               {slide.searchPlaceholder}
             </span>
-            <span className="shrink-0 rounded-full bg-[#0066F5] hover:bg-[#0047B3] text-white font-bold text-sm sm:text-base px-5 sm:px-7 py-2.5 sm:py-3 transition-colors">
+            <span className="shrink-0 rounded-full bg-[#0066F5] hover:bg-[#0047B3] text-white font-bold text-xs sm:text-base px-3.5 sm:px-7 py-2.5 sm:py-3 transition-colors">
               Search
             </span>
           </button>
@@ -164,7 +164,7 @@ export default function Hero() {
         <ChevronRight className="w-5 h-5" />
       </button>
 
-      <div className="absolute bottom-4 left-4 z-20 rounded-full bg-white/85 backdrop-blur-sm px-3.5 py-1.5 text-xs sm:text-sm font-medium text-slate-700 shadow-sm max-w-[min(90vw,28rem)] truncate">
+      <div className="absolute bottom-3 left-3 right-16 sm:right-auto z-20 rounded-full bg-white/85 backdrop-blur-sm px-3 py-1.5 text-[11px] sm:text-sm font-medium text-slate-700 shadow-sm max-w-[min(78vw,28rem)] truncate">
         {slide.caption}
       </div>
 

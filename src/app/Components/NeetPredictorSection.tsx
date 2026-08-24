@@ -7,7 +7,7 @@ import NeetScorePredictor from '@/components/NeetScorePredictor'
 export default function NeetPredictorSection() {
   return (
     <section className="py-[32px] bg-[#F8FAFC] border-y border-slate-100 font-sans">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
           {/* Left copy */}
           <div className="lg:sticky lg:top-28">

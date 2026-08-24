@@ -54,7 +54,7 @@ export default function BlogsPage() {
     <div className="min-h-screen bg-white font-sans text-slate-900">
       {/* HEADER SECTION */}
       <header className="bg-[#F8FAFC] border-b border-slate-100 pt-28 pb-12">
-        <div className="max-w-7xl mx-auto px-6 lg:px-24 text-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 text-center">
           <div className="inline-flex items-center justify-center gap-2 text-[#0066F5] mb-4">
             <Sparkles size={16} />
             <span className="text-[10px] font-bold uppercase tracking-widest">Resources & Insights</span>
@@ -94,7 +94,7 @@ export default function BlogsPage() {
       </header>
 
       {/* BLOG GRID */}
-      <main className="max-w-7xl mx-auto px-6 lg:px-24 py-[32px]">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-[32px]">
         {filteredBlogs.length === 0 ? (
           <div className="text-center py-[32px] bg-[#F8FAFC] rounded-lg border border-dashed border-slate-200">
             <p className="text-sm font-bold text-slate-400 uppercase">No matches found</p>

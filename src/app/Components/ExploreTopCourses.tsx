@@ -43,7 +43,7 @@ const ExploreTopCourses = () => {
   })) || fallbackCategories;
 
   return (
-    <div className="bg-white py-8 px-4 sm:px-6 lg:px-24 max-w-7xl mx-auto font-sans text-[#0F172A]">
+    <div className="bg-white py-8 px-4 sm:px-6 lg:px-10 max-w-7xl mx-auto font-sans text-[#0F172A]">
       <div className="mb-12">
         <div className="flex items-center gap-2 text-[#0066F5] mb-3">
           <Sparkles size={16} />

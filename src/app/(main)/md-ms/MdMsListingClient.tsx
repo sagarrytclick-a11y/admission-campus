@@ -186,7 +186,7 @@ export default function MdMsListingClient() {
               <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#0066F5]">
                 <Stethoscope size={13} className="text-white" />
               </span>
-              <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/90">
+              <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.14em] sm:tracking-[0.18em] text-white/90 text-center max-w-[16rem] sm:max-w-none leading-snug">
                 NEET PG · Postgraduate Medicine
               </span>
             </div>
