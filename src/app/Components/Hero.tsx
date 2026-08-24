@@ -52,12 +52,18 @@ const STATS = [
   { icon: BookOpen, label: "200+ Courses" },
 ];
 
+const TYPING_SPEED_MS = 55;
+
 export default function Hero() {
   const [slideIndex, setSlideIndex] = useState(0);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [typing, setTyping] = useState({ slide: 0, count: 0 });
   const { openModal } = useFormModal();
 
   const slide = SLIDES[slideIndex];
+  // Reset per slide without touching state during the effect body.
+  const typedCount = typing.slide === slideIndex ? typing.count : 0;
+  const typedTitle = slide.title.slice(0, typedCount);
 
   const onAutoAdvance = useEffectEvent(() => {
     setSlideIndex((prev) => (prev + 1) % SLIDES.length);
@@ -68,6 +74,17 @@ export default function Hero() {
     const interval = setInterval(() => onAutoAdvance(), 6500);
     return () => clearInterval(interval);
   }, [searchOpen]);
+
+  useEffect(() => {
+    const length = SLIDES[slideIndex].title.length;
+    let count = 0;
+    const interval = setInterval(() => {
+      count += 1;
+      setTyping({ slide: slideIndex, count });
+      if (count >= length) clearInterval(interval);
+    }, TYPING_SPEED_MS);
+    return () => clearInterval(interval);
+  }, [slideIndex]);
 
   const goPrev = () =>
     setSlideIndex((prev) => (prev - 1 + SLIDES.length) % SLIDES.length);
@@ -97,11 +114,20 @@ export default function Hero() {
 
       <div className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-10 md:py-12 text-center">
         <div className="inline-flex items-stretch gap-3 mb-4 sm:mb-8 md:mb-10">
-          <h1
-            key={slide.title}
-            className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.5rem] font-bold text-white tracking-tight leading-tight"
-          >
-            {slide.title}
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.5rem] font-bold text-white tracking-tight leading-tight">
+            <span className="relative inline-block">
+              {/* Reserves the final width so the accent bar doesn't jump while typing */}
+              <span className="invisible" aria-hidden>
+                {slide.title}
+              </span>
+              <span className="absolute inset-0 flex items-center whitespace-nowrap">
+                {typedTitle}
+                <span
+                  className="ml-1 inline-block w-0.5 sm:w-0.75 h-[1em] bg-[#0066F5] animate-pulse"
+                  aria-hidden
+                />
+              </span>
+            </span>
           </h1>
           <span
             className="hidden sm:block w-1.5 md:w-2 rounded-full shrink-0 self-stretch bg-[#0066F5]"
