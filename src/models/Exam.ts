@@ -108,4 +108,7 @@ const ExamSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+ExamSchema.index({ slug: 1, is_active: 1 });
+ExamSchema.index({ is_active: 1, display_order: 1 });
+
 export default mongoose.models.Exam || mongoose.model("Exam", ExamSchema);

@@ -16,9 +16,10 @@ interface ContactFormProps {
   onClose?: () => void;
   isModal?: boolean;
   collegeName?: string;
+  hideHeader?: boolean;
 }
 
-export default function ContactForm({ onClose, isModal = false, collegeName }: ContactFormProps) {
+export default function ContactForm({ onClose, isModal = false, collegeName, hideHeader = false }: ContactFormProps) {
   const { emails, phones, socials } = useContactInfo();
   const [formData, setFormData] = useState<ContactFormData>({
     name: "",
@@ -128,8 +129,8 @@ const handleSubmit = async (e: React.FormEvent) => {
   if (isSubmitted) {
     return (
       <div className="text-center py-8">
-        <div className="bg-green-50 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-          <CheckCircle className="w-8 h-8 text-green-600" />
+        <div className="bg-[#E8F1FF] rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+          <CheckCircle className="w-8 h-8 text-[#0066F5]" />
         </div>
         <h3 className="text-xl font-bold text-slate-900 mb-2">Thank You!</h3>
         <p className="text-slate-600">
@@ -141,6 +142,7 @@ const handleSubmit = async (e: React.FormEvent) => {
 
   return (
     <div className={`${isModal ? 'max-h-[70vh] overflow-y-auto' : ''}`}>
+      {!hideHeader && (
       <div className="mb-6">
         <h3 className="text-xl font-bold text-slate-900 mb-2">
           Get In Touch
@@ -149,6 +151,7 @@ const handleSubmit = async (e: React.FormEvent) => {
           Fill out form below and we\'ll get back to you soon.
         </p>
       </div>
+      )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Name Field */}
@@ -164,7 +167,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all ${
+              className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#0066F5] focus:border-[#0066F5] transition-all ${
                 errors.name ? 'border-red-300 bg-red-50' : 'border-slate-300'
               }`}
               placeholder="Enter your full name"
@@ -186,7 +189,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all ${
+              className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#0066F5] focus:border-[#0066F5] transition-all ${
                 errors.email ? 'border-red-300 bg-red-50' : 'border-slate-300'
               }`}
               placeholder="your.email@example.com"
@@ -208,7 +211,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               name="phone"
               value={formData.phone}
               onChange={handleChange}
-              className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all ${
+              className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#0066F5] focus:border-[#0066F5] transition-all ${
                 errors.phone ? 'border-red-300 bg-red-50' : 'border-slate-300'
               }`}
               placeholder="+91-XXX-XXXXXXX"
@@ -228,7 +231,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               name="course_category"
               value={formData.course_category}
               onChange={handleChange}
-              className={`w-full pl-4 pr-10 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all appearance-none bg-white ${
+              className={`w-full pl-4 pr-10 py-3 border rounded-lg focus:ring-2 focus:ring-[#0066F5] focus:border-[#0066F5] transition-all appearance-none bg-white ${
                 errors.course_category ? 'border-red-300 bg-red-50' : 'border-slate-300'
               }`}
             >
@@ -262,7 +265,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               name="city"
               value={formData.city}
               onChange={handleChange}
-              className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all ${
+              className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#0066F5] focus:border-[#0066F5] transition-all ${
                 errors.city ? 'border-red-300 bg-red-50' : 'border-slate-300'
               }`}
               placeholder="Enter your city"
@@ -275,7 +278,7 @@ const handleSubmit = async (e: React.FormEvent) => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-linear-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 disabled:from-slate-400 disabled:to-slate-500 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 disabled:hover:scale-100 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="w-full bg-[#0066F5] hover:bg-[#0047B3] disabled:bg-slate-400 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 disabled:hover:scale-100 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
           {isSubmitting ? (
             <>
@@ -301,27 +304,27 @@ const handleSubmit = async (e: React.FormEvent) => {
         <div className="space-y-2">
           <div className="flex items-center gap-2 text-sm text-slate-600">
             <Phone size={14} />
-            <a href={createTelLink(phones.primary)} className="hover:text-green-600 transition-colors">
+            <a href={createTelLink(phones.primary)} className="hover:text-[#0066F5] transition-colors">
               {phones.primary}
             </a>
           </div>
           {phones.additional.length > 0 && (
             <div className="flex items-center gap-2 text-sm text-slate-600">
               <Phone size={14} />
-              <a href={createTelLink(phones.additional[0])} className="hover:text-green-600 transition-colors">
+              <a href={createTelLink(phones.additional[0])} className="hover:text-[#0066F5] transition-colors">
                 {phones.additional[0]}
               </a>
             </div>
           )}
           <div className="flex items-center gap-2 text-sm text-slate-600">
             <Mail size={14} />
-            <a href={createMailtoLink(emails.info)} className="hover:text-green-600 transition-colors">
+            <a href={createMailtoLink(emails.info)} className="hover:text-[#0066F5] transition-colors">
               {emails.info}
             </a>
           </div>
           <div className="flex items-center gap-2 text-sm text-slate-600">
             <MessageCircle size={14} />
-            <a href={createWhatsAppLink(phones.primaryRaw)} className="hover:text-green-600 transition-colors">
+            <a href={createWhatsAppLink(phones.primaryRaw)} className="hover:text-[#0066F5] transition-colors">
               Chat on WhatsApp
             </a>
           </div>

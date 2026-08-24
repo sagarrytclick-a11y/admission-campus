@@ -78,7 +78,7 @@ const UniversityCard = ({ name, image, location, ranking, fees, duration, establ
               title={rankLabel}
               className="inline-flex items-start gap-1.5 max-w-full backdrop-blur-md bg-white/85 border border-white/50 text-slate-800 px-2.5 py-1 rounded-md text-[10px] font-bold shadow-sm leading-snug"
             >
-              <Trophy size={11} className="text-orange-500 shrink-0 mt-0.5" />
+              <Trophy size={11} className="text-[#0066F5] shrink-0 mt-0.5" />
               <span className="line-clamp-2">{rankLabel}</span>
             </span>
           </div>
@@ -101,7 +101,7 @@ const UniversityCard = ({ name, image, location, ranking, fees, duration, establ
             <p className="text-[9px] text-slate-400 uppercase font-black mb-1">Entrance Exams</p>
             <div className="flex flex-wrap gap-1">
               {exams.slice(0, 3).map((exam, index) => (
-                <span key={index} className="bg-blue-50 text-blue-600 text-[9px] px-2 py-1 rounded-lg font-medium">
+                <span key={index} className="bg-[#E8F1FF] text-[#0066F5] text-[9px] px-2 py-1 rounded-lg font-medium">
                   {exam}
                 </span>
               ))}
@@ -147,7 +147,7 @@ const ExamCard = ({ name, short_name, exam_type, conducting_body, exam_mode, fre
     <div className="relative h-full bg-white rounded-xl border-2 border-slate-200 shadow-[0_4px_20px_rgb(0,0,0,0.04)] hover:shadow-[0_12px_30px_rgba(22,163,74,0.12)] hover:border-green-400 transition-all duration-500 flex flex-col p-6 overflow-hidden hover:-translate-y-1">
       
       {/* Decorative Background Pattern */}
-      <div className="absolute top-0 right-0 w-24 h-24 bg-blue-50/30 rounded-bl-full -mr-12 -mt-12 group-hover:bg-blue-100/50 transition-colors duration-500" />
+      <div className="absolute top-0 right-0 w-24 h-24 bg-[#E8F1FF]/30 rounded-bl-full -mr-12 -mt-12 group-hover:bg-[#E8F1FF]/50 transition-colors duration-500" />
 
       {/* Header Section */}
       <div className="flex items-start justify-between mb-4 relative">
@@ -156,10 +156,10 @@ const ExamCard = ({ name, short_name, exam_type, conducting_body, exam_mode, fre
           <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-green-600 shadow-lg border border-slate-50 group-hover:scale-105 group-hover:rotate-2 transition-transform duration-500 relative z-10">
             <FileText size={24} />
           </div>
-          <div className="absolute inset-0 bg-blue-200 blur-xl opacity-15 group-hover:opacity-30 transition-opacity" />
+          <div className="absolute inset-0 bg-[#E8F1FF] blur-xl opacity-15 group-hover:opacity-30 transition-opacity" />
         </div>
         
-        <div className="bg-blue-50 p-1.5 rounded-lg text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all duration-500">
+        <div className="bg-[#E8F1FF] p-1.5 rounded-lg text-[#0066F5] group-hover:bg-[#0066F5] group-hover:text-white transition-all duration-500">
           <Award size={16} className={slug ? "animate-spin-slow" : ""} />
         </div>
       </div>
@@ -169,7 +169,7 @@ const ExamCard = ({ name, short_name, exam_type, conducting_body, exam_mode, fre
           {short_name || name}
         </h3>
         <div className="flex items-center gap-1.5 text-slate-400 text-xs font-bold uppercase mb-3">
-          <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+          <span className="w-1.5 h-1.5 rounded-full bg-[#0066F5] animate-pulse" />
           <span>{exam_type}</span>
         </div>
         
@@ -185,7 +185,7 @@ const ExamCard = ({ name, short_name, exam_type, conducting_body, exam_mode, fre
         {/* Dynamic Tags */}
         <div className="flex flex-wrap gap-1.5 mb-4">
           <div className="flex items-center gap-1 bg-slate-50 px-2 py-1 rounded-lg border border-slate-100">
-            <Calendar size={12} className="text-blue-600" />
+            <Calendar size={12} className="text-[#0066F5]" />
             <span className="text-[9px] font-black text-slate-600 uppercase">{exam_mode}</span>
           </div>
           <div className="flex items-center gap-1 bg-slate-50 px-2 py-1 rounded-lg border border-slate-100">

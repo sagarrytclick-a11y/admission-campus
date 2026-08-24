@@ -53,7 +53,7 @@ export default function LatestBlogs() {
 
   return (
     <section className="py-[32px] bg-white font-sans text-[#1E293B]">
-      <div className="max-w-7xl mx-auto px-6 lg:px-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
         
         {/* Simple Header */}
         <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -119,14 +119,17 @@ export default function LatestBlogs() {
                     {extractDescription(blog.content)}
                   </p>
 
-                  <div className="mt-auto pt-4 border-t border-slate-200/50 flex items-center justify-between">
+                  <div className="mt-auto pt-4 border-t border-[#E2E8F0] flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-full bg-white border border-slate-200 flex items-center justify-center text-[#0066F5]">
+                      <div className="w-7 h-7 rounded-full bg-[#E8F1FF] border border-[#0066F5]/15 flex items-center justify-center text-[#0066F5]">
                         <User size={14} />
                       </div>
-                      <span className="text-[10px] font-bold text-[#1E293B] uppercase tracking-wider">Expert Team</span>
+                      <span className="text-[10px] font-bold text-[#0F172A] uppercase tracking-wider">Expert Team</span>
                     </div>
-                    <ArrowRight size={16} className="text-[#0066F5] group-hover:translate-x-1 transition-transform" />
+                    <span className="inline-flex items-center gap-1 text-xs font-bold text-[#0066F5]">
+                      View Details
+                      <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                    </span>
                   </div>
                 </div>
               </Link>
@@ -147,7 +150,7 @@ export default function LatestBlogs() {
             
             <Link
               href="/blogs"
-              className="w-full md:w-auto bg-[#1E293B] text-white px-8 py-3 rounded-md text-sm font-bold hover:bg-[#0066F5] transition-colors flex items-center justify-center gap-2 active:scale-95 shadow-sm"
+              className="w-full md:w-auto bg-[#0066F5] text-white px-8 py-3 rounded-xl text-sm font-bold hover:bg-[#0047B3] transition-colors flex items-center justify-center gap-2 active:scale-95 shadow-sm"
             >
               View Full Library
               <ArrowRight size={16} />

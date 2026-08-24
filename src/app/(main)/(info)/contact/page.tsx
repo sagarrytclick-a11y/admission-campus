@@ -1,11 +1,28 @@
-"use client"
+"use client";
+
 import React from "react";
-import { Mail, Phone, MapPin, MessageCircle, Instagram, Linkedin } from "lucide-react";
-import { useContactInfo, createMailtoLink, createTelLink, createWhatsAppLink } from "@/hooks/useContactInfo";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  MessageCircle,
+  Instagram,
+  Linkedin,
+  Clock,
+  ArrowRight,
+} from "lucide-react";
+import {
+  useContactInfo,
+  createMailtoLink,
+  createTelLink,
+  createWhatsAppLink,
+} from "@/hooks/useContactInfo";
+import ContactForm from "@/app/Components/ContactForm";
+import { useFormModal } from "@/context/FormModalContext";
 
 export default function ContactPage() {
-
   const { emails, phones, address, socials } = useContactInfo();
+  const { openModal } = useFormModal();
 
   const contactCards = [
     {
@@ -13,106 +30,156 @@ export default function ContactPage() {
       title: "Call Us",
       value: phones.primary,
       link: createTelLink(phones.primary),
-      color: "from-blue-500 to-blue-600"
+      hint: "Mon–Sat · 10am–7pm",
     },
     {
       icon: MessageCircle,
       title: "WhatsApp",
-      value: "Chat with us",
+      value: "Chat with counsellors",
       link: createWhatsAppLink(phones.primaryRaw),
-      color: "from-green-500 to-green-600"
+      hint: "Quick replies",
     },
     {
       icon: Mail,
       title: "Email",
       value: emails.info,
       link: createMailtoLink(emails.info),
-      color: "from-purple-500 to-purple-600"
+      hint: "We reply within 24 hrs",
     },
     {
       icon: MapPin,
-      title: "Office",
+      title: "Visit Office",
       value: `${address.office}, ${address.city}`,
       link: "#",
-      color: "from-orange-500 to-orange-600"
-    }
+      hint: "Noida & Lucknow",
+    },
   ];
 
   return (
+    <div className="min-h-screen bg-[#F4F7FC]">
+      {/* Hero band */}
+      <section className="relative overflow-hidden bg-[#0066F5] text-white">
+        <div
+          className="absolute inset-0 opacity-40"
+          style={{
+            background:
+              "radial-gradient(ellipse 70% 80% at 90% 20%, rgba(0,102,245,0.35), transparent 50%), linear-gradient(135deg, #0047B3, #0066F5 55%, #0047B3)",
+          }}
+        />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-14 md:py-20 text-center">
+          <p className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.16em] text-white/85 mb-4">
+            <Clock className="w-3.5 h-3.5" />
+            We&apos;re here to help
+          </p>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight max-w-2xl mx-auto mb-4">
+            Contact{" "}
+            <span className="text-white">Admission Campus</span>
+          </h1>
+          <p className="text-white/90 text-sm md:text-base max-w-xl mx-auto leading-relaxed mb-8">
+            Talk to our counsellors for MD/MS, Management, Engineering and
+            medical admissions — counselling, shortlisting and documentation
+            support.
+          </p>
+          <button
+            type="button"
+            onClick={() => openModal()}
+            className="inline-flex items-center gap-2 rounded-xl bg-white text-[#0066F5] font-bold px-6 py-3.5 text-sm hover:bg-[#E8F1FF] transition-colors"
+          >
+            Get Free Counselling
+            <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
+      </section>
 
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center">
-
-      <div className="max-w-7xl mx-auto mt-24 px-6 lg:px-20 w-full">
-
-        {/* Title */}
-
-        <h1 className="text-4xl md:text-5xl font-bold text-center text-white mb-8">
-          Contact Us
-        </h1>
-
-        {/* Cards */}
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-
-          {contactCards.map((card, i) => (
-
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 -mt-8 pb-16 relative z-10">
+        {/* Contact cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+          {contactCards.map((card) => (
             <a
-              key={i}
+              key={card.title}
               href={card.link}
-              className="group relative backdrop-blur-lg bg-white/5 border border-white/10 p-8 rounded-2xl hover:border-white/30 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
+              className="group bg-white border border-[#E2E8F0] rounded-2xl p-5 shadow-sm hover:border-[#0066F5]/40 hover:shadow-md transition-all"
             >
-
-              <div className="flex flex-col items-center text-center">
-
-                <div className={`bg-gradient-to-r ${card.color} w-16 h-16 rounded-full flex items-center justify-center mb-5 shadow-lg group-hover:scale-110 transition`}>
-                  <card.icon className="text-white" size={28} />
-                </div>
-
-                <h3 className="text-lg font-semibold text-white mb-1">
-                  {card.title}
-                </h3>
-
-                <p className="text-slate-400 text-sm">
-                  {card.value}
-                </p>
-
+              <div className="w-11 h-11 rounded-xl bg-[#E8F1FF] text-[#0066F5] flex items-center justify-center mb-4 group-hover:bg-[#0066F5] group-hover:text-white transition-colors">
+                <card.icon size={20} />
               </div>
-
+              <h3 className="text-sm font-bold text-[#0F172A] mb-1">
+                {card.title}
+              </h3>
+              <p className="text-sm text-[#64748B] line-clamp-2 mb-2 break-all">
+                {card.value}
+              </p>
+              <p className="text-[11px] font-semibold uppercase tracking-wide text-[#0066F5]">
+                {card.hint}
+              </p>
             </a>
-
           ))}
-
         </div>
 
-        {/* Social */}
+        {/* Form + info */}
+        <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-8 items-start">
+          <div className="bg-white border border-[#E2E8F0] rounded-2xl p-6 md:p-8 shadow-sm">
+            <p className="brand-eyebrow mb-2">Send a message</p>
+            <h2 className="text-2xl font-bold text-[#0F172A] mb-2">
+              Tell us how we can help
+            </h2>
+            <p className="text-sm text-[#64748B] mb-6">
+              Share your details and our team will get back with the right
+              guidance for your course.
+            </p>
+            <ContactForm hideHeader />
+          </div>
 
-        <div className="flex justify-center gap-6 mt-20">
+          <aside className="space-y-4">
+            <div className="rounded-2xl bg-[#0B1220] text-white p-6 md:p-8 overflow-hidden relative">
+              <div className="absolute inset-x-0 top-0 h-1 bg-linear-to-r from-[#0066F5] via-[#0066F5] to-[#0047B3]" />
+              <h3 className="text-lg font-bold mb-3">Why students choose us</h3>
+              <ul className="space-y-3 text-sm text-white/85">
+                {[
+                  "Personalised college shortlisting",
+                  "NEET / entrance counselling support",
+                  "Transparent fee & documentation help",
+                  "MD/MS, Management & Engineering focus",
+                ].map((item) => (
+                  <li key={item} className="flex gap-2.5">
+                    <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#0066F5] shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-          <a
-            href={socials?.instagram}
-            className="w-12 h-12 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-slate-300 hover:text-pink-500 hover:bg-white/20 transition"
-          >
-            <Instagram size={20} />
-          </a>
-
-          <a
-            href={socials?.linkedin}
-            className="w-12 h-12 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-slate-300 hover:text-blue-500 hover:bg-white/20 transition"
-          >
-            <Linkedin size={20} />
-          </a>
-
-          <a
-            href={createWhatsAppLink(phones.primaryRaw)}
-            className="w-12 h-12 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-slate-300 hover:text-green-500 hover:bg-white/20 transition"
-          >
-            <MessageCircle size={20} />
-          </a>
-
+            <div className="bg-white border border-[#E2E8F0] rounded-2xl p-6 shadow-sm">
+              <h3 className="text-sm font-bold text-[#0F172A] mb-4">
+                Follow Admission Campus
+              </h3>
+              <div className="flex gap-3">
+                <a
+                  href={socials?.instagram || "#"}
+                  className="w-11 h-11 rounded-xl bg-[#E8F1FF] text-[#0066F5] flex items-center justify-center hover:bg-[#0066F5] hover:text-white transition-colors"
+                  aria-label="Instagram"
+                >
+                  <Instagram size={18} />
+                </a>
+                <a
+                  href={socials?.linkedin || "#"}
+                  className="w-11 h-11 rounded-xl bg-[#E8F1FF] text-[#0066F5] flex items-center justify-center hover:bg-[#0066F5] hover:text-white transition-colors"
+                  aria-label="LinkedIn"
+                >
+                  <Linkedin size={18} />
+                </a>
+                <a
+                  href={createWhatsAppLink(phones.primaryRaw)}
+                  className="w-11 h-11 rounded-xl bg-[#E8F1FF] text-[#0066F5] flex items-center justify-center hover:bg-[#0066F5] hover:text-white transition-colors"
+                  aria-label="WhatsApp"
+                >
+                  <MessageCircle size={18} />
+                </a>
+              </div>
+            </div>
+          </aside>
         </div>
-
       </div>
-
     </div>
   );
 }

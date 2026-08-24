@@ -8,6 +8,7 @@ export async function GET() {
   try {
     await connectDB();
     const categories = await Category.find({ is_active: true })
+      .select("name slug description image is_active createdAt")
       .sort({ createdAt: -1 })
       .lean();
 

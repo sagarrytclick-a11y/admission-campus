@@ -15,8 +15,8 @@ export default function MdMsEnquireButton({
 
   const className =
     variant === "light"
-      ? "w-full inline-flex items-center justify-center px-4 py-2.5 rounded-lg bg-white text-[#0066F5] text-sm font-bold hover:bg-yellow-300 hover:text-slate-900 transition-colors"
-      : "w-full inline-flex items-center justify-center px-4 py-2.5 rounded-lg bg-[#0066F5] text-white text-sm font-bold hover:bg-[#004ED4] transition-colors";
+      ? "w-full inline-flex items-center justify-center px-4 py-2.5 rounded-lg bg-white text-[#0066F5] text-sm font-bold hover:bg-[#E8F1FF] hover:text-slate-900 transition-colors"
+      : "w-full inline-flex items-center justify-center px-4 py-2.5 rounded-lg bg-[#0066F5] text-white text-sm font-bold hover:bg-[#0047B3] transition-colors";
 
   return (
     <button

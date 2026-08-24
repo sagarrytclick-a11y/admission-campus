@@ -75,15 +75,18 @@ export function useBlogs() {
 }
  
 // Hook for single blog details
-export function useBlog(slug: string) {
+export function useBlog(slug: string, initialData?: Blog | null) {
   return useQuery({
     queryKey: ['blog', slug],
     queryFn: () => fetchBlogBySlug(slug),
     enabled: !!slug,
-    staleTime: 10 * 60 * 1000, // 10 minutes
-    gcTime: 30 * 60 * 1000, // 30 minutes
-    retry: 2,
+    initialData: initialData ?? undefined,
+    initialDataUpdatedAt: initialData ? Date.now() : undefined,
+    staleTime: 10 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+    retry: 1,
     refetchOnWindowFocus: false,
+    refetchOnMount: false,
   })
 }
 

@@ -43,7 +43,7 @@ export default function StudentTestimonialSlider() {
 
   return (
     <section className="py-[32px] bg-white overflow-hidden relative font-sans">
-      <div className="max-w-7xl mx-auto px-6 lg:px-24 mb-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 mb-12">
         <div className="flex items-center gap-2 text-[#0066F5] mb-3">
           <Sparkles size={16} />
           <span className="text-[10px] font-bold uppercase tracking-widest">Success Stories</span>
@@ -98,7 +98,7 @@ export default function StudentTestimonialSlider() {
                     {student.university}
                   </p>
                   <div className="flex gap-0.5 mt-1">
-                    {[...Array(5)].map((_, i) => <Star key={i} size={10} className="text-yellow-400 fill-yellow-400" />)}
+                    {[...Array(5)].map((_, i) => <Star key={i} size={10} className="text-[#0066F5] fill-[#0066F5]" />)}
                   </div>
                 </div>
                 <CheckCircle2 size={18} className="ml-auto text-green-500 opacity-50" />

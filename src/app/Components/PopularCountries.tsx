@@ -35,22 +35,22 @@ const countries = [
 
 export default function PopularCountries() {
   return (
-    <section className="py-[32px] bg-gradient-to-br from-white via-slate-50 to-blue-50 relative overflow-hidden">
+    <section className="py-[32px] bg-gradient-to-br from-white via-slate-50 to-[#E8F1FF] relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-20 right-20 w-72 h-72 bg-blue-200 rounded-full blur-[120px]" />
-        <div className="absolute bottom-20 left-20 w-96 h-96 bg-blue-100 rounded-full blur-[140px]" />
+        <div className="absolute top-20 right-20 w-72 h-72 bg-[#E8F1FF] rounded-full blur-[120px]" />
+        <div className="absolute bottom-20 left-20 w-96 h-96 bg-[#E8F1FF] rounded-full blur-[140px]" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-semibold mb-6">
+          <div className="inline-flex items-center gap-2 bg-[#0066F5] text-white px-4 py-2 rounded-full text-sm font-semibold mb-6">
             � Study Abroad
           </div>
           <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-4">
-            Popular <span className="text-blue-600">Destinations</span>
+            Popular <span className="text-[#0066F5]">Destinations</span>
           </h2>
           <p className="text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
             Explore top study destinations with world-class universities, 
@@ -63,7 +63,7 @@ export default function PopularCountries() {
           {countries.map((country, index) => (
             <div
               key={index}
-              className="group bg-white border-2 border-slate-100 rounded-3xl p-8 hover:border-blue-500 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+              className="group bg-white border-2 border-slate-100 rounded-3xl p-8 hover:border-[#0066F5] hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
             >
               <div className="text-center mb-6">
                 <div className="text-5xl mb-4 group-hover:scale-110 transition-transform">
@@ -84,14 +84,14 @@ export default function PopularCountries() {
                   <span>High Visa Success</span>
                 </div>
                 <div className="flex items-center justify-center gap-2 text-xs text-slate-500">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <div className="w-2 h-2 bg-[#0066F5] rounded-full"></div>
                   <span>Top Universities</span>
                 </div>
               </div>
 
               <Link
                 href={`/countries/${country.slug}`}
-                className="mt-6 block w-full bg-blue-600 text-white text-center py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors"
+                className="mt-6 block w-full bg-[#0066F5] text-white text-center py-3 rounded-xl font-semibold hover:bg-[#0047B3] transition-colors"
               >
                 Explore Universities
               </Link>
@@ -108,7 +108,7 @@ export default function PopularCountries() {
             </div>
             <Link
               href="/countries"
-              className="bg-blue-600 text-white px-6 py-2 rounded-xl font-semibold hover:bg-blue-700 transition-colors"
+              className="bg-[#0066F5] text-white px-6 py-2 rounded-xl font-semibold hover:bg-[#0047B3] transition-colors"
             >
               View All Countries
             </Link>

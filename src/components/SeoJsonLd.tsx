@@ -124,3 +124,55 @@ export function BreadcrumbJsonLd({
     />
   );
 }
+
+export function ArticleJsonLd({
+  title,
+  description,
+  url,
+  image,
+  datePublished,
+  dateModified,
+}: {
+  title: string;
+  description: string;
+  url: string;
+  image?: string;
+  datePublished?: string | Date;
+  dateModified?: string | Date;
+}) {
+  const data = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: title,
+    description: description.slice(0, 300),
+    url: url.startsWith("http") ? url : `${SITE_URL}${url}`,
+    ...(image
+      ? { image: image.startsWith("http") ? image : `${SITE_URL}${image}` }
+      : {}),
+    ...(datePublished
+      ? { datePublished: new Date(datePublished).toISOString() }
+      : {}),
+    ...(dateModified
+      ? { dateModified: new Date(dateModified).toISOString() }
+      : {}),
+    author: {
+      "@type": "Organization",
+      name: SITE_IDENTITY.name,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: SITE_IDENTITY.name,
+      logo: {
+        "@type": "ImageObject",
+        url: `${SITE_URL}${SITE_IDENTITY.assets.logo.main}`,
+      },
+    },
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: safeJsonLd(data) }}
+    />
+  );
+}

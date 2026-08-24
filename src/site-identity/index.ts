@@ -71,7 +71,7 @@ export const SITE_IDENTITY: SiteIdentity = {
   brand: {
     primaryColor: "#0066F5",
     secondaryColor: "#ffffff",
-    accentColor: "#1f2937",
+    accentColor: "#0047B3",
   },
   contact: {
     phone: {

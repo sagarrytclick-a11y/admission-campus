@@ -20,7 +20,7 @@ export default function StudyPrograms() {
 
   return (
     <section className="py-[32px] bg-white font-sans text-[#1E293B]">
-      <div className="max-w-7xl mx-auto px-6 lg:px-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
         
         {/* Simple Header - Consistent with previous sections */}
         <div className="mb-12">
@@ -59,8 +59,8 @@ export default function StudyPrograms() {
 
               {/* Action Link */}
               <div className="pt-4 border-t border-slate-200/50">
-                <span className="text-xs font-bold text-[#0066F5] flex items-center gap-1 group-hover:gap-2 transition-all cursor-pointer">
-                  Explore Now
+                <span className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#0066F5] text-white text-xs font-bold py-2.5 group-hover:bg-[#0047B3] transition-colors">
+                  View Details
                   <ArrowRight size={14} />
                 </span>
               </div>
@@ -83,7 +83,7 @@ export default function StudyPrograms() {
 
             <button 
               onClick={() => openModal()} 
-              className="w-full md:w-auto bg-[#1E293B] text-white px-8 py-3 rounded-md text-sm font-bold hover:bg-[#0066F5] transition-colors active:scale-95"
+              className="w-full md:w-auto bg-[#0066F5] text-white px-8 py-3 rounded-xl text-sm font-bold hover:bg-[#0047B3] transition-colors active:scale-95"
             >
               Get Free Consultation
             </button>

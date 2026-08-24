@@ -33,7 +33,7 @@ export default function AdvantageCard() {
 
   return (
     <section id="about" className="py-[32px] bg-white font-sans text-[#1E293B]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           
@@ -69,7 +69,7 @@ export default function AdvantageCard() {
 
             <button 
               onClick={() => openModal()} 
-              className="bg-[#1E293B] text-white px-6 sm:px-8 py-3 rounded-md font-bold text-sm hover:bg-[#0066F5] transition-colors flex items-center gap-2 active:scale-95 group shadow-sm w-full sm:w-auto justify-center"
+              className="bg-[#0066F5] text-white px-6 sm:px-8 py-3 rounded-xl font-bold text-sm hover:bg-[#0047B3] transition-colors flex items-center gap-2 active:scale-95 group shadow-sm shadow-[#0066F5]/25 w-full sm:w-auto justify-center"
             >
               Get Started Now
               <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />

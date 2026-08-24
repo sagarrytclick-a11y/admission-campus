@@ -1,72 +1,127 @@
 "use client";
-import React from 'react';
-import Link from 'next/link';
-import { Mail, Phone, MapPin, MessageCircle, ArrowRight, Instagram, Linkedin, Twitter, ChevronUp, Sparkles } from 'lucide-react';
+
+import React from "react";
+import Link from "next/link";
+import Image from "next/image";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  MessageCircle,
+  Instagram,
+  Linkedin,
+  ChevronUp,
+} from "lucide-react";
 import { SITE_IDENTITY } from "@/site-identity";
-import { useContactInfo, createMailtoLink, createTelLink, createWhatsAppLink } from "@/hooks/useContactInfo";
-import { useFormModal } from '@/context/FormModalContext';
-import Image from 'next/image';
+import {
+  useContactInfo,
+  createMailtoLink,
+  createTelLink,
+  createWhatsAppLink,
+} from "@/hooks/useContactInfo";
+
+const exploreLinks = [
+  { name: "Colleges", href: "/colleges" },
+  { name: "MD / MS", href: "/md-ms" },
+  { name: "Entrance Exams", href: "/exams" },
+  { name: "Blogs & Updates", href: "/blogs" },
+  { name: "Compare Colleges", href: "/compare" },
+];
+
+const companyLinks = [
+  { name: "About Us", href: "/about" },
+  { name: "Contact", href: "/contact" },
+  { name: "NEET Predictor", href: "/tools/neet-score-predictor" },
+  { name: "Privacy Policy", href: "/privacy" },
+  { name: "Terms & Conditions", href: "/term" },
+];
 
 const Footer = () => {
-  const { emails, phones, address } = useContactInfo();
-  const { openModal } = useFormModal();
+  const { emails, phones, address, socials } = useContactInfo();
   const [isScrolled, setIsScrolled] = React.useState(false);
 
   React.useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 300);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const onScroll = () => setIsScrolled(window.scrollY > 300);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
-    <footer className="bg-[#12141D] text-[#94A3B8] pt-[32px] pb-8 px-6 font-sans relative overflow-hidden">
-      {/* Subtle Glow Effect */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-linear-to-r from-transparent via-[#0066F5]/30 to-transparent" />
+    <footer className="relative overflow-hidden bg-[#0B1220] font-sans text-slate-400">
+      {/* Atmosphere */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-40"
+        style={{
+          backgroundImage:
+            "radial-gradient(ellipse 80% 50% at 10% -10%, rgba(0,102,245,0.35), transparent), radial-gradient(ellipse 60% 40% at 90% 0%, rgba(0,71,179,0.25), transparent)",
+        }}
+      />
+      <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-[#0066F5]/50 to-transparent" />
 
-      <div className="max-w-7xl mx-auto">
-        {/* Main Grid: 4 Columns */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-8">
-          
-          {/* 1. Brand Identity */}
-          <div className="space-y-6">
-            <Link href="/" className="flex items-center gap-3 group">
-              <div className="p-1.5 bg-white rounded-lg border border-white group-hover:border-[#0066F5]/50 transition-colors">
-                <Image src="/logo.png" alt={SITE_IDENTITY.name} width={42} height={42} className="rounded-md" />
-              </div>
-              <span className="text-xl font-bold text-[#F8FAFC] tracking-tight">{SITE_IDENTITY.name}</span>
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Main columns */}
+        <div className="grid grid-cols-1 gap-10 py-14 sm:grid-cols-2 lg:grid-cols-12 lg:gap-8">
+          {/* Brand */}
+          <div className="lg:col-span-4">
+            <Link href="/" className="group inline-flex items-center gap-3">
+              <span className="rounded-xl bg-white p-1.5 shadow-lg shadow-black/20 transition group-hover:ring-2 group-hover:ring-[#0066F5]/40">
+                <Image
+                  src="/logo.jpg"
+                  alt={SITE_IDENTITY.name}
+                  width={44}
+                  height={44}
+                  className="rounded-lg object-contain"
+                />
+              </span>
+              <span className="text-lg font-bold tracking-tight text-white">
+                {SITE_IDENTITY.name}
+              </span>
             </Link>
-            <p className="text-sm leading-relaxed text-[#94A3B8]">
-              {SITE_IDENTITY.description} Leading the way in strategic education consulting for global leaders.
+            <p className="mt-4 max-w-sm text-sm leading-relaxed text-slate-400">
+              {SITE_IDENTITY.tagline || SITE_IDENTITY.description}. Expert
+              counselling for Indian universities, exams &amp; career paths.
             </p>
-            <div className="flex gap-3">
+            <div className="mt-6 flex gap-2.5">
               {[
-                { icon: Instagram, href: "#" },
-                { icon: Linkedin, href: "#" },
-                { icon: Twitter, href: "#" },
-                { icon: MessageCircle, href: createWhatsAppLink(phones.primary) }
-              ].map((social, i) => (
-                <a key={i} href={social.href} className="w-9 h-9 rounded-md bg-[#1E212B] border border-white/5 flex items-center justify-center text-[#94A3B8] hover:text-[#0066F5] hover:border-[#0066F5] transition-all">
+                {
+                  icon: Instagram,
+                  href: socials.instagram,
+                  label: "Instagram",
+                },
+                { icon: Linkedin, href: socials.linkedin, label: "LinkedIn" },
+                {
+                  icon: MessageCircle,
+                  href: socials.whatsapp || createWhatsAppLink(phones.primary),
+                  label: "WhatsApp",
+                },
+              ].map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={social.label}
+                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-400 transition hover:border-[#0066F5]/50 hover:bg-[#0066F5] hover:text-white"
+                >
                   <social.icon size={16} />
                 </a>
               ))}
             </div>
           </div>
 
-          {/* 2. Quick Navigation */}
-          <div>
-            <h4 className="text-[#F8FAFC] font-semibold text-sm mb-6 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#0066F5]" /> Explore
+          {/* Explore */}
+          <div className="lg:col-span-2">
+            <h4 className="mb-5 text-[11px] font-bold uppercase tracking-[0.16em] text-white">
+              Explore
             </h4>
-            <ul className="space-y-4 text-sm font-medium">
-              {[
-                { name: "Top Colleges", href: "/colleges" },
-                { name: "Entrance Exams", href: "/exams" },
-                { name: "Success Stories", href: "/testimonials" },
-                { name: "Resource Hub", href: "/blogs" }
-              ].map((link) => (
+            <ul className="space-y-3 text-sm">
+              {exploreLinks.map((link) => (
                 <li key={link.name}>
-                  <Link href={link.href} className="hover:text-[#0066F5] transition-colors flex items-center group">
-                    <ArrowRight size={12} className="opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all mr-2 text-[#0066F5]" />
+                  <Link
+                    href={link.href}
+                    className="group inline-flex items-center gap-1.5 text-slate-400 transition hover:text-white"
+                  >
+                    <span className="h-px w-0 bg-[#0066F5] transition-all group-hover:w-3" />
                     {link.name}
                   </Link>
                 </li>
@@ -74,99 +129,123 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* 3. Contact Details */}
-          <div>
-            <h4 className="text-[#F8FAFC] font-semibold text-sm mb-6 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#0066F5]" /> Contact
+          {/* Company */}
+          <div className="lg:col-span-2">
+            <h4 className="mb-5 text-[11px] font-bold uppercase tracking-[0.16em] text-white">
+              Company
+            </h4>
+            <ul className="space-y-3 text-sm">
+              {companyLinks.map((link) => (
+                <li key={link.name}>
+                  <Link
+                    href={link.href}
+                    className="group inline-flex items-center gap-1.5 text-slate-400 transition hover:text-white"
+                  >
+                    <span className="h-px w-0 bg-[#0066F5] transition-all group-hover:w-3" />
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Contact */}
+          <div className="lg:col-span-4">
+            <h4 className="mb-5 text-[11px] font-bold uppercase tracking-[0.16em] text-white">
+              Get in touch
             </h4>
             <div className="space-y-4 text-sm">
-              <a href={createTelLink(phones.primary)} className="flex items-center gap-3 hover:text-[#F8FAFC] transition-colors group">
-                <Phone size={16} className="text-[#0066F5]" />
-                <span>{phones.primary}</span>
+              <a
+                href={createTelLink(phones.primary)}
+                className="flex items-center gap-3 rounded-xl border border-white/5 bg-white/[0.03] px-3.5 py-3 transition hover:border-[#0066F5]/30 hover:bg-white/[0.06]"
+              >
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#0066F5]/15 text-[#0066F5]">
+                  <Phone size={15} />
+                </span>
+                <span className="font-medium text-slate-200">
+                  {phones.primary}
+                </span>
               </a>
-              <a href={createMailtoLink(emails.info)} className="flex items-center gap-3 hover:text-[#F8FAFC] transition-colors group">
-                <Mail size={16} className="text-[#0066F5]" />
-                <span className="lowercase">{emails.info}</span>
+              <a
+                href={createMailtoLink(emails.info)}
+                className="flex items-center gap-3 rounded-xl border border-white/5 bg-white/[0.03] px-3.5 py-3 transition hover:border-[#0066F5]/30 hover:bg-white/[0.06]"
+              >
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#0066F5]/15 text-[#0066F5]">
+                  <Mail size={15} />
+                </span>
+                <span className="font-medium lowercase text-slate-200">
+                  {emails.info}
+                </span>
               </a>
-              <div className="space-y-3">
-                <div className="flex items-start gap-3">
-                  <MapPin size={16} className="text-[#0066F5] shrink-0 mt-1" />
-                  <div className="space-y-1">
-                    <span className="leading-snug block">{address.office}</span>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <MapPin size={16} className="text-[#0066F5] shrink-0 mt-1" />
-                  <div className="space-y-1">
-                    <span className="leading-snug block">Admission Campus 2nd floor opposite Hotel Golden tulip 4 station road Hussainganj, lucknow 226001.</span>
-                  </div>
+              <div className="flex items-start gap-3 rounded-xl border border-white/5 bg-white/[0.03] px-3.5 py-3">
+                <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#0066F5]/15 text-[#0066F5]">
+                  <MapPin size={15} />
+                </span>
+                <div className="space-y-2 text-[13px] leading-snug text-slate-400">
+                  <p>
+                    <span className="mb-0.5 block text-[10px] font-bold uppercase tracking-wider text-[#0066F5]">
+                      Noida
+                    </span>
+                    {address.office}
+                  </p>
+                  <p className="border-t border-white/5 pt-2">
+                    <span className="mb-0.5 block text-[10px] font-bold uppercase tracking-wider text-[#0066F5]">
+                      Lucknow
+                    </span>
+                    Admission Campus, 2nd floor, opposite Hotel Golden Tulip,
+                    4 Station Road, Hussainganj, Lucknow 226001
+                  </p>
                 </div>
               </div>
             </div>
-          </div>
-
-          {/* 4. CTA Card */}
-          <div className="bg-[#1E212B] p-6 rounded-xl border border-white/5 shadow-2xl relative group">
-            <Sparkles className="absolute top-4 right-4 text-[#0066F5]/20 group-hover:text-[#0066F5] transition-colors" size={20} />
-            <h4 className="text-[#F8FAFC] font-bold text-sm mb-2">Ready to Start?</h4>
-            <p className="text-xs text-[#94A3B8] mb-6 leading-relaxed">Book a 1-on-1 session with our expert academic advisors today.</p>
-            <button 
-              onClick={openModal}
-              className="w-full bg-[#0066F5] hover:bg-[#004ED4] text-white py-3 rounded-lg text-xs font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-2 shadow-lg shadow-[#0066F5]/10 active:scale-95"
-            >
-              Consult Now <ArrowRight size={14} />
-            </button>
           </div>
         </div>
 
-        {/* Bottom Bar: Single Line Style */}
-        <div className="pt-8 border-t border-white/5 space-y-6">
-          {/* Main Footer Links */}
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
-              <p className="text-[11px] font-medium tracking-wide">
-                © {new Date().getFullYear()} <span className="text-[#F8FAFC]">{SITE_IDENTITY.name}</span>
-              </p>
-              <div className="h-4 w-px bg-white/10 hidden md:block" />
-              <div className="flex gap-6 text-[10px] uppercase tracking-widest font-bold">
-                <Link href="/privacy" className="hover:text-[#0066F5]">Privacy</Link>
-                <Link href="/term" className="hover:text-[#0066F5]">Terms and Condition</Link>
-                <Link href="/contact" className="hover:text-[#0066F5]">Sitemap</Link>
-              </div>
-            </div>
+        {/* Disclaimer + bottom */}
+        <div className="border-t border-white/8 pb-8 pt-8">
+          <div className="mb-6 rounded-xl border border-white/5 bg-white/[0.03] px-4 py-4 sm:px-5">
+            <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.14em] text-slate-300">
+              Important disclaimer
+            </p>
+            <p className="text-[11px] leading-relaxed text-slate-500">
+              Admission Campus provides educational consulting and guidance
+              only. We do not guarantee admissions, placements, or visa
+              approvals. College details are sourced from public institutional
+              data — please verify directly with the institution. We are not
+              affiliated with any government board or university. Academic and
+              financial decisions remain solely your responsibility.
+            </p>
           </div>
-          
-          {/* Enhanced Disclaimer Section */}
-          <div className="bg-[#1E212B]/50 rounded-lg p-4 border border-white/5">
-            <div className="flex items-start gap-2 mb-3">
-              <div className="w-4 h-4 rounded-full bg-[#0066F5]/20 flex items-center justify-center shrink-0 mt-0.5">
-                <div className="w-2 h-2 rounded-full bg-[#0066F5]"></div>
-              </div>
-              <h5 className="text-[#F8FAFC] font-bold text-xs uppercase tracking-wider">Important Disclaimer</h5>
-            </div>
-            <div className="space-y-2 text-[10px] leading-relaxed text-[#94A3B8]">
-              <p>
-                <span className="text-[#F8FAFC] font-semibold">Educational Guidance Only:</span> Admission Campus provides educational consulting and guidance services. We do not guarantee admissions, placements, or visa approvals.
-              </p>
-              <p>
-                <span className="text-[#F8FAFC] font-semibold">Third-Party Institutions:</span> Information about colleges, courses, and fees is sourced from institutional websites and official publications. Users must verify all details directly with respective institutions.
-              </p>
-              <p>
-                <span className="text-[#F8FAFC] font-semibold">No Authority Claims:</span> We are not authorized by any government body, university, or educational board. Our role is limited to advisory and application assistance.
-              </p>
-              <p className="pt-2 border-t border-white/10">
-                <span className="text-[#00D4FF] font-semibold">Decision Responsibility:</span> All academic and financial decisions remain solely the user's responsibility. We recommend thorough research before commitments.
-              </p>
+
+          <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
+            <p className="text-center text-[12px] text-slate-500 sm:text-left">
+              © {new Date().getFullYear()}{" "}
+              <span className="font-semibold text-slate-300">
+                {SITE_IDENTITY.name}
+              </span>
+              . All rights reserved.
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+              <Link href="/privacy" className="hover:text-[#0066F5]">
+                Privacy
+              </Link>
+              <Link href="/term" className="hover:text-[#0066F5]">
+                Terms
+              </Link>
+              <Link href="/contact" className="hover:text-[#0066F5]">
+                Contact
+              </Link>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Back to Top */}
       {isScrolled && (
         <button
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="fixed bottom-13 left-8 w-11 h-11 bg-[#0066F5] text-white rounded-full flex items-center justify-center shadow-xl hover:bg-[#004ED4] hover:-translate-y-1 transition-all z-50 active:scale-90"
+          type="button"
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          aria-label="Back to top"
+          className="fixed bottom-20 left-4 z-[1100] flex h-11 w-11 items-center justify-center rounded-xl bg-[#0066F5] text-white shadow-[0_10px_30px_rgba(0,102,245,0.4)] transition hover:-translate-y-0.5 hover:bg-[#0047B3] active:scale-95"
         >
           <ChevronUp size={20} />
         </button>

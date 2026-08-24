@@ -44,6 +44,7 @@ export async function GET(request: NextRequest) {
     const [totalCities, cities] = await Promise.all([
       City.countDocuments(query),
       City.find(query)
+        .select("name slug cityImage features is_active country_ref")
         .populate("country_ref", "name slug")
         .sort({ name: 1 })
         .skip(skip)

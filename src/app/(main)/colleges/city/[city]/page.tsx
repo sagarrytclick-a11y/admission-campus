@@ -9,7 +9,7 @@ import BackgroundSlider from '@/components/BackgroundSlider'
 import { MapPin } from 'lucide-react'
 
 // Theme Constants
-const PRIMARY_BLUE = "#1A4AB2"
+const PRIMARY_BLUE = "#0066F5"
 
 export default function CityCollegesPage() {
   const params = useParams()
@@ -24,14 +24,14 @@ export default function CityCollegesPage() {
       return {
         name: cityData.name,
         color: PRIMARY_BLUE,
-        gradient: "from-[#1A4AB2] via-[#1A4AB2]/90 to-slate-900",
+        gradient: "from-[#0066F5] via-[#0066F5]/90 to-slate-900",
         description: cityData.description || "Explore educational institutions in this city",
         features: cityData.features || ["Top Colleges", "Research Centers", "Educational Hub"],
         stats: { colleges: "100+", students: "50K+", avgFees: "₹1-10L" },
         examName: "JEE",
-        examColor: "text-[#1A4AB2]",
-        borderColor: "border-[#1A4AB2]",
-        hoverBg: "hover:bg-[#1A4AB2]/5",
+        examColor: "text-[#0066F5]",
+        borderColor: "border-[#0066F5]",
+        hoverBg: "hover:bg-[#0066F5]/5",
         href: `/colleges/city/${citySlug}`,
         cityImage: cityData.cityImage
       }
@@ -40,14 +40,14 @@ export default function CityCollegesPage() {
       return {
         name: citySlug.charAt(0).toUpperCase() + citySlug.slice(1),
         color: PRIMARY_BLUE,
-        gradient: "from-[#1A4AB2] via-[#1A4AB2]/90 to-slate-900",
+        gradient: "from-[#0066F5] via-[#0066F5]/90 to-slate-900",
         description: "Explore educational institutions in this city",
         features: ["Top Colleges", "Research Centers", "Educational Hub"],
         stats: { colleges: "100+", students: "50K+", avgFees: "₹1-10L" },
         examName: "JEE",
-        examColor: "text-[#1A4AB2]",
-        borderColor: "border-[#1A4AB2]",
-        hoverBg: "hover:bg-[#1A4AB2]/5",
+        examColor: "text-[#0066F5]",
+        borderColor: "border-[#0066F5]",
+        hoverBg: "hover:bg-[#0066F5]/5",
         href: `/colleges/city/${citySlug}`
       }
     }

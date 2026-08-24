@@ -18,12 +18,12 @@ export default function GlobalReach() {
         {/* Header */}
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-14 gap-6">
           <div className="max-w-xl">
-            <div className="flex items-center gap-2 text-blue-600 font-bold text-xs uppercase tracking-widest mb-4">
+            <div className="flex items-center gap-2 text-[#0066F5] font-bold text-xs uppercase tracking-widest mb-4">
               <Globe size={14} /> Study Destinations
             </div>
             <h2 className="text-4xl md:text-6xl font-black text-[#0f172a] leading-tight">
               Countries We <br />
-              <span className="text-blue-600">Work With</span>
+              <span className="text-[#0066F5]">Work With</span>
             </h2>
           </div>
 
@@ -37,12 +37,12 @@ export default function GlobalReach() {
           {destinations.map((dest, idx) => (
             <div
               key={idx}
-              className="relative h-[360px] rounded-3xl bg-white border border-slate-200 p-7 flex flex-col justify-between transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-blue-500"
+              className="relative h-[360px] rounded-3xl bg-white border border-slate-200 p-7 flex flex-col justify-between transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-[#0066F5]"
             >
               {/* Top */}
               <div>
                 <div className="flex justify-between items-start mb-5">
-                  <span className="text-[10px] font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
+                  <span className="text-[10px] font-bold text-[#0066F5] bg-[#E8F1FF] px-3 py-1 rounded-full">
                     {dest.tag}
                   </span>
                   <ArrowUpRight size={18} className="text-slate-300" />
@@ -56,7 +56,7 @@ export default function GlobalReach() {
               {/* Stats */}
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
+                  <div className="w-9 h-9 rounded-xl bg-[#E8F1FF] flex items-center justify-center text-[#0066F5]">
                     <Users size={16} />
                   </div>
                   <div>
@@ -68,7 +68,7 @@ export default function GlobalReach() {
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
+                  <div className="w-9 h-9 rounded-xl bg-[#E8F1FF] flex items-center justify-center text-[#0066F5]">
                     <University size={16} />
                   </div>
                   <div>

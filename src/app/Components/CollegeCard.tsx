@@ -1,8 +1,5 @@
 import Link from "next/link";
-import {
-  MapPin,
-  ArrowRight,
-} from "lucide-react";
+import { MapPin, ArrowRight } from "lucide-react";
 
 type CollegeCardProps = {
   data: {
@@ -16,42 +13,30 @@ type CollegeCardProps = {
     establishment_year?: number;
     categories?: string[];
   };
-  category?: 'engineering' | 'medical' | 'management';
+  category?: "engineering" | "medical" | "management";
 };
 
-export default function CollegeCard({ data, category = 'engineering' }: CollegeCardProps) {
-  // Category-specific colors
-  const categoryColors = {
-    engineering: {
-      primary: '#4A90E2',
-      hover: 'hover:border-[#4A90E2]',
-      textHover: 'group-hover:text-[#4A90E2]',
-      program: 'B.Tech / M.Tech'
-    },
-    medical: {
-      primary: '#10B981',
-      hover: 'hover:border-[#10B981]',
-      textHover: 'group-hover:text-[#10B981]',
-      program: 'MBBS / BDS'
-    },
-    management: {
-      primary: '#8B5CF6',
-      hover: 'hover:border-[#8B5CF6]',
-      textHover: 'group-hover:text-[#8B5CF6]',
-      program: 'MBA / PGDM'
-    }
+const PROGRAM_LABEL: Record<NonNullable<CollegeCardProps["category"]>, string> =
+  {
+    engineering: "B.Tech / M.Tech",
+    medical: "MBBS / BDS",
+    management: "MBA / PGDM",
   };
 
-  const colors = categoryColors[category];
-  const imageUrl = data.banner_url || "https://images.unsplash.com/photo-1562774053-701939374585";
+export default function CollegeCard({
+  data,
+  category = "engineering",
+}: CollegeCardProps) {
+  const imageUrl =
+    data.banner_url ||
+    "https://images.unsplash.com/photo-1562774053-701939374585";
   const slug = data.slug || data._id;
 
   return (
-    <Link href={`/colleges/${slug}`} className="group">
-      <div className={`bg-white rounded-xl border-2 border-slate-300 overflow-hidden ${colors.hover} hover:shadow-lg hover:shadow-[#4A90E2]/20 transition-all duration-300 flex flex-col h-full`}>
-        
-        {/* Image Area */}
-        <div className="relative h-48 overflow-hidden border-b-2 border-slate-300 bg-slate-50">
+    <Link href={`/colleges/${slug}`} className="group block h-full">
+      <div className="bg-white rounded-xl border border-[#E2E8F0] overflow-hidden hover:border-[#0066F5] hover:shadow-lg hover:shadow-[#0066F5]/15 transition-all duration-300 flex flex-col h-full">
+        <div className="relative h-48 overflow-hidden border-b border-[#E2E8F0] bg-slate-50">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={imageUrl}
             alt={data.name || "College"}
@@ -59,51 +44,50 @@ export default function CollegeCard({ data, category = 'engineering' }: CollegeC
           />
         </div>
 
-        {/* Content Area */}
-        <div className="p-6 flex flex-col flex-1">
-          <h3 className={`text-xl font-bold text-[#1E293B] ${colors.textHover} transition-colors mb-3`}>
+        <div className="p-5 flex flex-col flex-1">
+          <h3 className="text-lg font-bold text-[#0F172A] group-hover:text-[#0066F5] transition-colors mb-2 line-clamp-2">
             {data.name}
           </h3>
-          
-          {/* Location */}
+
           {(data.city || data.country) && (
-            <div className="flex items-center gap-2 text-slate-600 text-sm mb-4">
-              <MapPin size={14} className={colors.primary.replace('#', 'text-[')} />
-              <span>{data.city}{data.city && data.country ? ', ' : ''}{data.country}</span>
+            <div className="flex items-center gap-1.5 text-[#64748B] text-sm mb-4">
+              <MapPin size={14} className="text-[#0066F5] shrink-0" />
+              <span className="truncate">
+                {data.city}
+                {data.city && data.country ? ", " : ""}
+                {data.country}
+              </span>
             </div>
           )}
 
-          {/* Fees and Program Information */}
-          <div className="space-y-2 mb-6">
-            {/* Annual Fees */}
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-slate-600">Annual Fees:</span>
-              <span className="text-lg font-bold text-[#1E293B]">
-                {data.fees ? `₹${data.fees.toLocaleString()}` : 'N/A'}
+          <div className="space-y-2 mb-5 text-sm">
+            <div className="flex justify-between items-center gap-2">
+              <span className="text-[#64748B]">Annual Fees</span>
+              <span className="font-bold text-[#0F172A]">
+                {data.fees ? `₹${data.fees.toLocaleString()}` : "Enquire"}
               </span>
             </div>
-            
-            {/* Program Type */}
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-slate-600">Program:</span>
-              <span className="text-sm font-medium text-[#1E293B]">{colors.program}</span>
+            <div className="flex justify-between items-center gap-2">
+              <span className="text-[#64748B]">Program</span>
+              <span className="font-medium text-[#0F172A]">
+                {PROGRAM_LABEL[category]}
+              </span>
             </div>
-
-            {/* Establishment Year */}
             {data.establishment_year && (
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-slate-600">Established:</span>
-                <span className="text-sm font-medium text-[#1E293B]">{data.establishment_year}</span>
+              <div className="flex justify-between items-center gap-2">
+                <span className="text-[#64748B]">Established</span>
+                <span className="font-medium text-[#0F172A]">
+                  {data.establishment_year}
+                </span>
               </div>
             )}
           </div>
 
-          {/* View Details Button */}
-          <div className="mt-auto flex items-center justify-between pt-4 border-t-2 border-slate-200">
-            <span className="text-xs text-slate-600 font-medium">View Details</span>
-            <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-white group-hover:bg-[#1E293B] transition-all`} style={{ backgroundColor: colors.primary }}>
-              <ArrowRight size={16} />
-            </div>
+          <div className="mt-auto pt-4 border-t border-[#E2E8F0]">
+            <span className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#0066F5] text-white text-sm font-bold py-2.5 group-hover:bg-[#0047B3] transition-colors">
+              View Details
+              <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
+            </span>
           </div>
         </div>
       </div>

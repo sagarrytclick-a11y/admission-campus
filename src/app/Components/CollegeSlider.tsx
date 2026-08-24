@@ -129,7 +129,7 @@ const CollegeCard = memo<CollegeCardProps>(({ college }) => {
           <div className="flex items-center justify-between">
             <span className="text-xs text-slate-600">Ranking</span>
             <div className="flex items-center gap-1">
-              <span className="text-xs font-bold text-blue-600">nirf</span>
+              <span className="text-xs font-bold text-[#0066F5]">nirf</span>
               <span className="text-sm font-bold text-slate-800">#{typeof college.ranking === 'string' ? college.ranking : college.ranking?.country_ranking || '45'}</span>
               <span className="text-xs text-slate-500">in {college.establishment_year || '2024'}</span>
             </div>
@@ -147,7 +147,7 @@ const CollegeCard = memo<CollegeCardProps>(({ college }) => {
               <Star
                 key={i}
                 size={12}
-                className={i < 4 ? "fill-yellow-400 text-yellow-400" : "text-slate-300"}
+                className={i < 4 ? "fill-[#0066F5] text-[#0066F5]" : "text-slate-300"}
               />
             ))}
             <span className="text-xs text-slate-600 ml-1">4.0</span>
@@ -157,7 +157,7 @@ const CollegeCard = memo<CollegeCardProps>(({ college }) => {
           <div className="flex items-center gap-2 pt-2">
             <Link 
               href={`/colleges/${college.slug}`}
-              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors text-center"
+              className="flex-1 bg-[#0066F5] hover:bg-[#0047B3] text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors text-center"
             >
               View Details
             </Link>
@@ -251,7 +251,7 @@ const CollegeSlider = () => {
               key={category}
               className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
                 index === 0
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-[#0066F5] text-white'
                   : 'bg-white border border-slate-300 text-slate-600 hover:bg-slate-50'
               }`}
             >
@@ -264,7 +264,7 @@ const CollegeSlider = () => {
         <div className="relative">
           {collegesLoading ? (
             <div className="flex justify-center items-center h-40">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0066F5]"></div>
             </div>
           ) : error ? (
             <div className="text-center py-10 text-red-600">Failed to load colleges</div>
@@ -288,13 +288,13 @@ const CollegeSlider = () => {
             <div className="absolute top-1/2 -translate-y-1/2 w-full flex justify-between px-2 pointer-events-none">
               <button
                 onClick={handlePrev}
-                className="w-10 h-10 rounded-full bg-white shadow-lg border border-slate-200 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all pointer-events-auto"
+                className="w-10 h-10 rounded-full bg-white shadow-lg border border-slate-200 flex items-center justify-center hover:bg-[#0066F5] hover:text-white transition-all pointer-events-auto"
               >
                 <ChevronLeft size={20} />
               </button>
               <button
                 onClick={handleNext}
-                className="w-10 h-10 rounded-full bg-white shadow-lg border border-slate-200 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all pointer-events-auto"
+                className="w-10 h-10 rounded-full bg-white shadow-lg border border-slate-200 flex items-center justify-center hover:bg-[#0066F5] hover:text-white transition-all pointer-events-auto"
               >
                 <ChevronRight size={20} />
               </button>

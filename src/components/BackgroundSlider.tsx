@@ -14,12 +14,12 @@ const BackgroundSlider: React.FC<BackgroundSliderProps> = ({ children }) => {
   const slides = [
     {
       id: 1,
-      gradient: 'from-admission-yellow/20 via-orange-400/20 to-yellow-500/20',
+      gradient: 'from-[#0066F5]/20 via-[#0066F5]/20 to-[#E8F1FF]0/20',
       pattern: 'bg-gradient-to-br'
     },
     {
       id: 2,
-      gradient: 'from-blue-600/10 via-indigo-500/10 to-purple-600/10',
+      gradient: 'from-[#0066F5]/10 via-[#0066F5]/10 to-[#0047B3]/10',
       pattern: 'bg-gradient-to-tr'
     },
     {

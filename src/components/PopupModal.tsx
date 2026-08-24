@@ -18,21 +18,19 @@ export function PopupModal({ isOpen, onClose }: PopupModalProps) {
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-6 bg-black/50" onClick={onClose}>
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-6 bg-[#12141D]/80 backdrop-blur-sm" onClick={onClose}>
       <div
         className="relative bg-transparent rounded-lg w-full max-w-[280px] sm:max-w-sm mx-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Close button at top right */}
         <button
           onClick={onClose}
-          className="absolute -top-2.5 -right-2.5 z-[10000] bg-white rounded-full p-1 hover:bg-gray-100 transition-colors shadow-md"
+          className="absolute -top-2.5 -right-2.5 z-[10000] bg-[#1E212B] border border-white/10 rounded-full p-1.5 hover:border-[#0066F5]/50 hover:text-[#0066F5] transition-all duration-300 shadow-lg shadow-black/40 text-[#F8FAFC]"
         >
-          <X className="w-3 h-3 text-gray-800" />
+          <X className="w-3 h-3" />
         </button>
 
-        {/* Popup content with image */}
-        <div className="p-1">
+        <div className="p-1 rounded-xl border border-white/5 bg-[#1E212B] shadow-lg shadow-black/40 overflow-hidden">
           <img
             src="/mbbs.png"
             alt="MBBS Admission"

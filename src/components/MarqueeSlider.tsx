@@ -15,18 +15,18 @@ export function MarqueeSlider() {
   ])
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-blue-900 text-white py-3 z-[1000] overflow-hidden">
+    <div className="fixed bottom-0 left-0 right-0 bg-[#0047B3] text-white py-3 z-[1000] overflow-hidden">
       <div className="flex whitespace-nowrap animate-marquee">
         {/* First set of items */}
         {institutions.map((institution, index) => (
           <div key={`first-${index}`} className="flex items-center mx-8">
             <a 
               href={institution.url} 
-              className="hover:text-yellow-300 transition-colors text-sm font-medium"
+              className="hover:text-white transition-colors text-sm font-medium"
             >
               {institution.name}
             </a>
-            <span className="mx-2 text-blue-300">|</span>
+            <span className="mx-2 text-white/70">|</span>
           </div>
         ))}
         
@@ -35,11 +35,11 @@ export function MarqueeSlider() {
           <div key={`second-${index}`} className="flex items-center mx-8">
             <a 
               href={institution.url} 
-              className="hover:text-yellow-300 transition-colors text-sm font-medium"
+              className="hover:text-white transition-colors text-sm font-medium"
             >
               {institution.name}
             </a>
-            <span className="mx-2 text-blue-300">|</span>
+            <span className="mx-2 text-white/70">|</span>
           </div>
         ))}
       </div>

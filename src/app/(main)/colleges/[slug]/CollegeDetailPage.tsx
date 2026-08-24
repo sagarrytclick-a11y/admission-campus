@@ -183,7 +183,9 @@ const CollegeDetailPage: React.FC<CollegeDetailPageProps> = ({ slug, initialColl
     error,
     refetch
   } = useCollege(slug, initialCollege);
-if (isLoading) {
+
+  // Never block UI when SSR already gave us the college
+  if (isLoading && !college) {
   return (
     <div className="min-h-screen bg-[#F8FAFC] p-8 space-y-6">
       {/* Header Skeleton */}
@@ -309,7 +311,7 @@ if (isLoading) {
               <div className="mt-8">
                 <Button
                   onClick={() => openModal()}
-                  className="bg-[#0066F5] hover:bg-[#004ED4] text-white font-bold px-6 py-3 rounded-xl"
+                  className="bg-[#0066F5] hover:bg-[#0047B3] text-white font-bold px-6 py-3 rounded-xl"
                 >
                   Get Free Counselling
                   <ArrowRight className="w-4 h-4 ml-2" />
@@ -361,7 +363,7 @@ if (isLoading) {
                 className={`px-3.5 py-2 text-xs sm:text-sm font-bold rounded-lg transition-all whitespace-nowrap ${
                   activeTab === tab.id
                     ? 'bg-[#0066F5] text-white shadow-sm'
-                    : 'text-slate-600 hover:text-[#0066F5] hover:bg-blue-50'
+                    : 'text-slate-600 hover:text-[#0066F5] hover:bg-[#E8F1FF]'
                 }`}
               >
                 {tab.name}
@@ -400,7 +402,7 @@ if (isLoading) {
                   220 && (
                   <button
                     onClick={() => setIsExpanded(!isExpanded)}
-                    className="text-[#0066F5] font-bold text-sm flex items-center gap-2 hover:text-[#004ED4]"
+                    className="text-[#0066F5] font-bold text-sm flex items-center gap-2 hover:text-[#0047B3]"
                   >
                     {isExpanded ? "Show Less" : "Show More"}
                     <ArrowRight
@@ -675,7 +677,7 @@ if (isLoading) {
                         </div>
                         <div>
                           <h5 className="font-semibold">Confused about the steps?</h5>
-                          <p className="text-blue-100 text-sm">Let our experts handle the paperwork for you.</p>
+                          <p className="text-white/85 text-sm">Let our experts handle the paperwork for you.</p>
                         </div>
                       </div>
                       <button
@@ -832,13 +834,13 @@ if (isLoading) {
                   <GraduationCap className="w-7 h-7 text-white" />
                 </div>
                 <h3 className="text-xl font-bold mb-2">Ready to Apply?</h3>
-                <p className="text-blue-100 text-sm mb-6 leading-relaxed">
+                <p className="text-white/85 text-sm mb-6 leading-relaxed">
                   Get expert guidance for your admission process
                 </p>
                 <div className="space-y-3">
                   <button
                     onClick={openModal}
-                    className="w-full bg-white text-[#0066F5] font-bold rounded-xl hover:bg-blue-50 transition-colors py-3 px-6 flex items-center justify-center gap-2"
+                    className="w-full bg-white text-[#0066F5] font-bold rounded-xl hover:bg-[#E8F1FF] transition-colors py-3 px-6 flex items-center justify-center gap-2"
                   >
                     <Bookmark className="w-4 h-4" />
                     Start Application

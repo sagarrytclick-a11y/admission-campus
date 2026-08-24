@@ -17,7 +17,7 @@ export default function MainShell({
   return (
     <>
       <Navbar />
-      <div>{children}</div>
+      <div className="pb-14 sm:pb-12">{children}</div>
       <Footer />
       <PopupModal isOpen={isPopupOpen} onClose={closePopup} />
       <MarqueeSlider />

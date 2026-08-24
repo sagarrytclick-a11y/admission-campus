@@ -80,7 +80,7 @@ export const FormModal: React.FC = () => {
         onSubmit={handleSubmit}
         className="relative z-10 w-full max-w-[calc(100vw-1.5rem)] sm:max-w-md md:max-w-lg flex flex-col max-h-[min(88dvh,640px)] sm:max-h-[90vh] bg-white rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.25)] border border-slate-100 overflow-hidden animate-in zoom-in-95 fade-in duration-200"
       >
-        <div className="h-1.5 w-full bg-[#0066F5] shrink-0" />
+        <div className="h-1.5 w-full bg-linear-to-r from-[#0066F5] via-[#0066F5] to-[#0047B3] shrink-0" />
 
         {/* Header */}
         <div className="shrink-0 px-4 sm:px-6 pt-4 sm:pt-5 pb-3 sm:pb-4 flex items-start justify-between gap-3 border-b border-slate-100">
@@ -103,7 +103,7 @@ export const FormModal: React.FC = () => {
           <button
             type="button"
             onClick={handleClose}
-            className="shrink-0 p-2 -mr-1 text-slate-400 hover:text-[#0066F5] hover:bg-[#BFDBFE]/60 rounded-lg transition-colors"
+            className="shrink-0 p-2 -mr-1 text-slate-400 hover:text-[#0066F5] hover:bg-[#E8F1FF]/60 rounded-lg transition-colors"
             aria-label="Close"
           >
             <X size={18} />
@@ -199,7 +199,7 @@ export const FormModal: React.FC = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex-[1.6] py-2.5 sm:py-3 bg-[#0066F5] hover:bg-[#004ED4] text-white rounded-lg font-semibold text-sm shadow-md shadow-[#0066F5]/25 transition-colors active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2"
+              className="flex-[1.6] py-2.5 sm:py-3 bg-[#0066F5] hover:bg-[#0047B3] text-white rounded-xl font-bold text-sm shadow-md shadow-[#0066F5]/25 transition-colors active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {isSubmitting ? (
                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />

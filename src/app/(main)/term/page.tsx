@@ -7,11 +7,11 @@ export default function TermsAndConditionsPage() {
   return (
     <div className="min-h-screen py-[32px] bg-white">
       <div className="max-w-4xl mx-auto px-6 py-[32px]">
-        <div className="mb-12">
+        <div className="mb-12 text-center">
           <h1 className="text-3xl font-bold text-[#1E293B] mb-4">
             Terms & <span className="text-[#0066F5]">Conditions</span>
           </h1>
-          <p className="text-[#64748B]">
+          <p className="text-[#64748B] max-w-2xl mx-auto">
             Please read these terms carefully before using our services. By accessing {name}, 
             you agree to be bound by the following guidelines.
           </p>

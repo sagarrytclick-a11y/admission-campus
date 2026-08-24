@@ -1,240 +1,174 @@
-import React, { useState, useEffect } from "react";
-import { ArrowRight, CheckCircle2, Star, GraduationCap, Building2, BookOpen, Search, ChevronLeft, ChevronRight, MapPin } from "lucide-react";
-import Link from "next/link";
-import { useFormModal } from "@/context/FormModalContext";
-import { useQuery } from "@tanstack/react-query";
+"use client";
 
-// Search result interfaces
-interface SearchResult {
-  id?: string;
-  _id?: string;
-  name: string;
-  slug: string;
-  type: 'college' | 'course' | 'exam';
-  city?: string;
-  location?: string;
-  banner_url?: string;
-  short_name?: string;
-  exam_type?: string;
-  next_date?: string;
-  [key: string]: any;
-}
+import React, { useState, useEffect, useEffectEvent } from "react";
+import {
+  Search,
+  ChevronLeft,
+  ChevronRight,
+  GraduationCap,
+  FileText,
+  Monitor,
+  BookOpen,
+} from "lucide-react";
+import { useFormModal } from "@/context/FormModalContext";
+import SearchOverlay from "@/app/Components/SearchOverlay";
+
+type Slide = {
+  id: string;
+  title: string;
+  caption: string;
+  image: string;
+  searchPlaceholder: string;
+};
+
+const SLIDES: Slide[] = [
+  {
+    id: "md-ms",
+    title: "MD / MS Admissions",
+    caption: "AIIMS Delhi & Top Medical Colleges",
+    image: "https://i.pinimg.com/1200x/43/d9/25/43d925ce787ec1b4d17c307254e88770.jpg",
+    searchPlaceholder: "Search Colleges, Courses, Exams...",
+  },
+  {
+    id: "management",
+    title: "Management Excellence",
+    caption: "IIMs & Leading Business Schools",
+    image: "https://i.pinimg.com/1200x/fa/bf/e3/fabfe396cfff23de88157d017ce43867.jpg",
+    searchPlaceholder: "Search Colleges, Courses, Exams...",
+  },
+  {
+    id: "engineering",
+    title: "Engineering Excellence",
+    caption: "IIT Delhi (Indian Institute of Technology)",
+    image: "https://i.pinimg.com/736x/2f/fd/d6/2ffdd6cbce2d30f433f03db90d6f353b.jpg",
+    searchPlaceholder: "Search Colleges, Courses, Exams...",
+  },
+];
+
+const STATS = [
+  { icon: GraduationCap, label: "6000+ Institutions" },
+  { icon: FileText, label: "200+ Exams" },
+  { icon: Monitor, label: "200+ Online Courses" },
+  { icon: BookOpen, label: "200+ Courses" },
+];
 
 export default function Hero() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [showSearchResults, setShowSearchResults] = useState(false);
+  const [slideIndex, setSlideIndex] = useState(0);
+  const [searchOpen, setSearchOpen] = useState(false);
   const { openModal } = useFormModal();
 
-  const { data: searchResults, isLoading: searchLoading } = useQuery({
-    queryKey: ["hero-search", searchQuery],
-    queryFn: async () => {
-      if (searchQuery.length < 2) return { results: [] };
-      const collegeRes = await fetch(`/api/colleges?search=${searchQuery}`);
-      const colleges = await collegeRes.json();
-      
-      const courseRes = await fetch(`/api/courses?search=${searchQuery}`);
-      const courses = courseRes.ok ? await courseRes.json() : { data: [] };
-      
-      const examRes = await fetch(`/api/exams?search=${searchQuery}`);
-      const exams = examRes.ok ? await examRes.json() : { data: [] };
-      
-      const allResults = [
-        ...(colleges.data?.colleges || []).map((item: any) => ({ ...item, type: 'college' })),
-        ...(courses.data || []).map((item: any) => ({ ...item, type: 'course' })),
-        ...(exams.data || []).map((item: any) => ({ ...item, type: 'exam' }))
-      ];
-      return { results: allResults };
-    },
-    enabled: searchQuery.length >= 2,
+  const slide = SLIDES[slideIndex];
+
+  const onAutoAdvance = useEffectEvent(() => {
+    setSlideIndex((prev) => (prev + 1) % SLIDES.length);
   });
 
-  const searchResultsData = searchResults?.results || [];
-
-  const backgroundImages = [
-    "https://i.pinimg.com/1200x/da/8f/47/da8f47cf9c6db275c88cca998391f085.jpg",
-    "https://images.unsplash.com/20/cambridge.JPG?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NHx8dW5pdmVyc2l0eXxlbnwwfHx8fDE3NzQzMjE3NjJ8MA&ixlib=rb-4.1.0",
-    "https://i.pinimg.com/1200x/87/0a/9f/870a9fd2c38d42373301bd563c4c055b.jpg",
-    "https://i.pinimg.com/1200x/65/6e/87/656e8757b34f7099081d51dbc94d71a1.jpg",
-    "https://i.pinimg.com/1200x/ed/21/1a/ed211af9cf3ac35dbf625c7042a36b4b.jpg"
-  ];
-
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % backgroundImages.length);
-    }, 5000);
+    if (searchOpen) return;
+    const interval = setInterval(() => onAutoAdvance(), 6500);
     return () => clearInterval(interval);
-  }, [backgroundImages.length]);
+  }, [searchOpen]);
 
-  const handlePreviousImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + backgroundImages.length) % backgroundImages.length);
-  };
-
-  const handleNextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % backgroundImages.length);
-  };
-
-  const statistics = [
-    { number: "6000+", label: "Institutions", icon: Building2 },
-    { number: "200+", label: "Exams", icon: BookOpen },
-    { number: "200+", label: "Online", icon: GraduationCap },
-    { number: "200+", label: "Courses", icon: Star }
-  ];
+  const goPrev = () =>
+    setSlideIndex((prev) => (prev - 1 + SLIDES.length) % SLIDES.length);
+  const goNext = () => setSlideIndex((prev) => (prev + 1) % SLIDES.length);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden py-12 md:py-0">
-      {/* Background Slider */}
-      <div className="absolute inset-0">
-        {backgroundImages.map((image, index) => (
+    <section className="relative min-h-[48vh] sm:min-h-[52vh] md:min-h-[58vh] overflow-hidden flex items-center justify-center pb-12 sm:pb-14">
+      {/* Background slides */}
+      {SLIDES.map((s, i) => (
+        <div
+          key={s.id}
+          className={`absolute inset-0 transition-opacity duration-700 ${
+            i === slideIndex ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            key={index}
-            src={image}
-            alt={`College Campus ${index + 1}`}
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
-              index === currentImageIndex ? "opacity-100" : "opacity-0"
-            }`}
+            src={s.image}
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover"
           />
-        ))}
-        <div className="absolute inset-0 bg-black/50" />
-      </div>
-
-      {/* Arrows - Hidden on mobile for better UX */}
-      <button
-        onClick={handlePreviousImage}
-        className="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur p-3 rounded-full text-white hover:bg-white/30 z-20"
-      >
-        <ChevronLeft size={22} />
-      </button>
-      <button
-        onClick={handleNextImage}
-        className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur p-3 rounded-full text-white hover:bg-white/30 z-20"
-      >
-        <ChevronRight size={22} />
-      </button>
-
-      {/* Center Glass Panel */}
-      <div className="relative z-10 w-full px-4">
-        <div className="max-w-4xl mx-auto bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-6 md:p-10 shadow-2xl">
-
-          {/* Heading */}
-          <h1 className="text-2xl md:text-4xl font-extrabold text-white text-center mb-3 leading-tight">
-            Explore Top Colleges, Exams, Results & More
-          </h1>
-
-          <p className="text-white/80 text-center mb-8 text-sm md:text-base max-w-2xl mx-auto">
-            Explore 200+ Complete admission guidance for Engineering, Management, and Medical across India
-          </p>
-
-          {/* Stat Pills - 2 columns on mobile, 4 on desktop */}
-          <div className="grid grid-cols-2 md:flex md:flex-wrap items-center justify-center gap-3 md:gap-4 mb-8">
-            {statistics.map((stat, i) => (
-              <div
-                key={i}
-                className="flex items-center gap-2 bg-white/10 border border-white/20 backdrop-blur-sm px-3 py-2 md:px-4 md:py-2.5 rounded-2xl text-white justify-center md:justify-start"
-              >
-                <stat.icon size={16} className="text-yellow-400" />
-                <div className="flex flex-col md:flex-row md:gap-1 items-center">
-                  <span className="font-bold text-sm md:text-base">{stat.number}</span>
-                  <span className="text-white/60 text-[10px] md:text-xs md:mt-0.5">{stat.label}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Wide Search Bar - Stacks on mobile */}
-          <div className="max-w-2xl mx-auto mb-8 relative">
-            <div className="flex flex-col md:flex-row items-stretch md:items-center bg-white rounded-2xl shadow-xl overflow-hidden p-1 md:p-0">
-              <div className="flex items-center flex-1 px-4 py-3 md:py-0">
-                <Search size={20} className="text-gray-400 shrink-0" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => {
-                    setSearchQuery(e.target.value);
-                    setShowSearchResults(e.target.value.length >= 2);
-                  }}
-                  onFocus={() => setShowSearchResults(searchQuery.length >= 2)}
-                  onBlur={() => setTimeout(() => setShowSearchResults(false), 200)}
-                  placeholder="Search Colleges, Courses, Exams..."
-                  className="flex-1 px-3 py-2 outline-none text-gray-700 text-sm md:text-base"
-                />
-              </div>
-              <button className="px-8 py-3.5 font-bold text-white transition-colors rounded-xl md:rounded-none" style={{ backgroundColor: '#0066F5' }}>
-                Search
-              </button>
-            </div>
-
-            {/* Dropdown - Mobile Responsive */}
-            {showSearchResults && (
-              <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-2xl shadow-2xl z-50 max-h-[60vh] overflow-y-auto">
-                {searchLoading ? (
-                  <div className="p-6 text-center text-slate-500 text-sm italic">Searching...</div>
-                ) : searchResultsData.length > 0 ? (
-                  searchResultsData.map((item: SearchResult) => (
-                    <Link
-                      key={`${item.type}-${item.id || item._id}`}
-                      href={item.type === 'college' ? `/colleges/${item.slug}` : item.type === 'course' ? `/courses/${item.slug}` : `/exams/${item.slug}`}
-                      className="block p-4 hover:bg-slate-50 border-b border-slate-100 last:border-none"
-                    >
-                      <div className="flex items-center gap-4">
-                        {item.type === 'college' && item.banner_url && (
-                          <img src={item.banner_url} alt={item.name} className="w-12 h-12 rounded-xl object-cover shrink-0" />
-                        )}
-                        <div className="flex-1 min-w-0">
-                          <span className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider ${item.type === 'college' ? 'bg-blue-100 text-blue-700' : item.type === 'course' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'}`}>
-                            {item.type}
-                          </span>
-                          <h4 className="text-sm font-semibold text-slate-800 truncate mt-1">{item.name}</h4>
-                        </div>
-                        <ArrowRight size={16} className="text-slate-300" />
-                      </div>
-                    </Link>
-                  ))
-                ) : (
-                  <div className="p-6 text-center text-slate-500 text-sm">No results found for "{searchQuery}"</div>
-                )}
-              </div>
-            )}
-          </div>
-
-          {/* Action Buttons - Full width on mobile */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-            <Link href="/colleges" className="w-full sm:w-auto">
-              <button
-                className="w-full text-white px-8 py-4 rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg transition-transform hover:scale-105"
-                style={{ backgroundColor: '#0066F5' }}
-              >
-                Find Top Colleges
-                <ArrowRight size={18} />
-              </button>
-            </Link>
-
-            <button
-              onClick={() => openModal()}
-              className="w-full sm:w-auto px-8 py-4 rounded-xl font-bold border-2 text-white transition-all hover:bg-white/10 active:scale-95"
-              style={{ borderColor: '#F6C21C' }}
-            >
-              Counseling 2026
-            </button>
-          </div>
-
-          {/* Value Props - Grid adjust */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-6 border-t border-white/20">
-            {["Entrance Support", "Rank Prediction", "Direct Admissions", "Placement Stats"].map((text) => (
-              <div key={text} className="flex items-center gap-2 text-[11px] md:text-xs text-white/90">
-                <CheckCircle2 size={14} className="shrink-0" style={{ color: '#F6C21C' }} />
-                <span>{text}</span>
-              </div>
-            ))}
-          </div>
         </div>
+      ))}
+
+      <div className="absolute inset-0 bg-black/45" />
+      <div className="absolute inset-0 bg-linear-to-b from-black/30 via-transparent to-black/50" />
+
+      <div className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-10 md:py-12 text-center">
+        <div className="inline-flex items-stretch gap-3 mb-4 sm:mb-8 md:mb-10">
+          <h1
+            key={slide.title}
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.5rem] font-bold text-white tracking-tight leading-tight"
+          >
+            {slide.title}
+          </h1>
+          <span
+            className="hidden sm:block w-1.5 md:w-2 rounded-full shrink-0 self-stretch bg-[#0066F5]"
+            aria-hidden
+          />
+        </div>
+
+        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-6 md:mb-8">
+          {STATS.map(({ icon: Icon, label }) => (
+            <div
+              key={label}
+              className="inline-flex items-center gap-2 rounded-full bg-black/45 backdrop-blur-sm border border-white/10 px-3.5 sm:px-4 py-2 text-white text-xs sm:text-sm font-medium"
+            >
+              <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 opacity-90" />
+              <span>{label}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Opens full search overlay */}
+        <div className="relative mx-auto max-w-2xl mb-6 md:mb-8">
+          <button
+            type="button"
+            onClick={() => setSearchOpen(true)}
+            className="w-full flex items-center gap-2 rounded-full bg-white shadow-xl pl-4 sm:pl-5 pr-1.5 py-1.5 text-left hover:shadow-2xl transition-shadow"
+          >
+            <Search className="w-5 h-5 text-slate-400 shrink-0" />
+            <span className="flex-1 min-w-0 text-slate-400 text-sm sm:text-base font-medium py-2.5 truncate">
+              {slide.searchPlaceholder}
+            </span>
+            <span className="shrink-0 rounded-full bg-[#0066F5] hover:bg-[#0047B3] text-white font-bold text-xs sm:text-base px-3.5 sm:px-7 py-2.5 sm:py-3 transition-colors">
+              Search
+            </span>
+          </button>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => openModal()}
+          className="inline-flex items-center justify-center rounded-full bg-[#0066F5] hover:bg-[#0047B3] text-white font-bold text-sm sm:text-base px-8 sm:px-10 py-3.5 sm:py-4 shadow-lg shadow-[#0066F5]/35 transition-colors"
+        >
+          Need Counselling
+        </button>
       </div>
 
-      {/* Bottom Location - Hidden on small mobile to avoid clutter */}
-      <div className="hidden sm:flex absolute bottom-6 left-6 text-white/70 text-xs items-center gap-2 z-20 bg-black/20 px-3 py-1.5 rounded-full backdrop-blur-sm">
-        <MapPin size={14} />
-        IIT Delhi - Indian Institute of Technology
+      <button
+        type="button"
+        aria-label="Previous slide"
+        onClick={goPrev}
+        className="hidden md:flex absolute left-4 lg:left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 items-center justify-center rounded-full bg-black/55 hover:bg-black/75 text-white transition-colors"
+      >
+        <ChevronLeft className="w-5 h-5" />
+      </button>
+      <button
+        type="button"
+        aria-label="Next slide"
+        onClick={goNext}
+        className="hidden md:flex absolute right-4 lg:right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 items-center justify-center rounded-full bg-black/55 hover:bg-black/75 text-white transition-colors"
+      >
+        <ChevronRight className="w-5 h-5" />
+      </button>
+
+      <div className="absolute bottom-3 left-3 right-16 sm:right-auto z-20 rounded-full bg-white/85 backdrop-blur-sm px-3 py-1.5 text-[11px] sm:text-sm font-medium text-slate-700 shadow-sm max-w-[min(78vw,28rem)] truncate">
+        {slide.caption}
       </div>
+
+      <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
     </section>
   );
 }

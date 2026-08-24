@@ -57,11 +57,11 @@ export default function CollegesPage() {
   return (
     <div className="min-h-screen bg-slate-50 font-sans">
       {/* Hero Banner */}
-      <section className="relative bg-linear-to-br from-[#0066F5] to-[#004ED4] text-white overflow-hidden">
+      <section className="relative bg-linear-to-br from-[#0066F5] to-[#0047B3] text-white overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.3)_1px,transparent_0)] bg-[length:20px_20px]"></div>
         </div>
-        <div className="relative max-w-7xl mx-auto px-6 lg:px-24 py-[32px]">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-[32px]">
           <div className="text-center">
             <div className="inline-flex items-center gap-2 text-white/90 mb-6">
               <Sparkles size={20} />
@@ -70,7 +70,7 @@ export default function CollegesPage() {
 
             <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
               Find Your Perfect
-              <span className="block text-yellow-300">Academic Destination</span>
+              <span className="block text-white/80">Academic Destination</span>
             </h1>
 
             <p className="text-xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">
@@ -87,7 +87,7 @@ export default function CollegesPage() {
                 { icon: Award, label: "Rankings", value: "2026" }
               ].map((stat, idx) => (
                 <div key={idx} className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
-                  <stat.icon className="w-8 h-8 text-yellow-300 mb-2 mx-auto" />
+                  <stat.icon className="w-8 h-8 text-white/80 mb-2 mx-auto" />
                   <div className="text-2xl font-bold mb-1">{stat.value}</div>
                   <div className="text-sm text-white/80">{stat.label}</div>
                 </div>
@@ -108,7 +108,7 @@ export default function CollegesPage() {
       </section>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-24 py-8 lg:py-[32px]">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-8 lg:py-[32px]">
         {/* Mobile: Filters at top, Desktop: Sidebar layout */}
         <div className="lg:flex lg:gap-8">
 
@@ -134,7 +134,7 @@ export default function CollegesPage() {
               </div>
 
               {/* Quick Tips */}
-              <div className="bg-blue-50 rounded-xl p-4 sm:p-6 border border-blue-100">
+              <div className="bg-[#E8F1FF] rounded-xl p-4 sm:p-6 border border-[#0066F5]/15">
                 <h4 className="font-bold text-[#0066F5] mb-3 flex items-center gap-2 text-sm sm:text-base">
                   <TrendingUp size={14} className="sm:w-4 sm:h-4" />
                   Pro Tips

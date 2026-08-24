@@ -58,8 +58,8 @@ export default function FAQ() {
       : faqs.filter(f => f.category === activeCategory);
 
   return (
-    <section className="py-[32px] bg-white font-sans text-[#1E293B]">
-      <div className="max-w-4xl mx-auto px-6 lg:px-24">
+    <section className="py-8 sm:py-[32px] bg-white font-sans text-[#1E293B]">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-10">
 
         {/* Header Section */}
         <div className="text-center mb-8">
@@ -67,7 +67,7 @@ export default function FAQ() {
             <Sparkles size={16} />
             <span className="text-[10px] font-bold uppercase tracking-widest">Support Center</span>
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4 text-[#1E293B]">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-4 text-[#1E293B]">
             Frequently Asked Questions
           </h2>
           <p className="text-[#64748B] text-sm max-w-xl mx-auto font-medium">
@@ -76,7 +76,7 @@ export default function FAQ() {
         </div>
 
         {/* Category Filter - Simple Pills */}
-        <div className="flex flex-wrap justify-center gap-2 mb-12">
+        <div className="flex flex-wrap justify-center gap-2 mb-8 md:mb-12">
           {categories.map(cat => (
             <button
               key={cat.id}
@@ -84,7 +84,7 @@ export default function FAQ() {
                 setActiveCategory(cat.id);
                 setOpenIndex(null);
               }}
-              className={`px-5 py-2 rounded-md text-[10px] font-bold uppercase tracking-wider transition-all border ${
+              className={`min-h-10 px-4 sm:px-5 py-2.5 rounded-md text-[11px] font-bold uppercase tracking-wider transition-all border ${
                 activeCategory === cat.id
                   ? "bg-[#0066F5] text-white border-[#0066F5] shadow-sm"
                   : "bg-[#F8FAFC] text-[#64748B] border-slate-100 hover:border-[#0066F5] hover:text-[#0066F5]"
@@ -108,54 +108,26 @@ export default function FAQ() {
             >
               <button
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                className="w-full px-6 py-5 flex justify-between items-center text-left"
+                className="w-full px-4 py-4 sm:px-6 sm:py-5 flex justify-between items-center gap-3 text-left"
               >
-                <div className="flex items-center gap-4">
-                  <HelpCircle size={18} className={`${openIndex === index ? "text-[#0066F5]" : "text-slate-300"}`} />
+                <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+                  <HelpCircle size={18} className={`shrink-0 ${openIndex === index ? "text-[#0066F5]" : "text-slate-300"}`} />
                   <span className="font-semibold text-sm md:text-base text-[#1E293B]">
                     {faq.question}
                   </span>
                 </div>
-                <ChevronDown size={18} className={`transition-transform text-[#64748B] ${openIndex === index ? "rotate-180 text-[#0066F5]" : ""}`} />
+                <ChevronDown size={18} className={`shrink-0 transition-transform text-[#64748B] ${openIndex === index ? "rotate-180 text-[#0066F5]" : ""}`} />
               </button>
 
               <div className={`overflow-hidden transition-all duration-300 ${
-                openIndex === index ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
+                openIndex === index ? "max-h-60 opacity-100" : "max-h-0 opacity-0"
               }`}>
-                <div className="px-6 pb-6 text-[#64748B] text-xs md:text-sm leading-relaxed font-medium ml-8">
+                <div className="px-4 pb-4 sm:px-6 sm:pb-6 text-[#64748B] text-xs md:text-sm leading-relaxed font-medium sm:ml-8">
                   {faq.answer}
                 </div>
               </div>
             </div>
           ))}
-        </div>
-
-        {/* CTA Section - Minimal Box */}
-        <div className="mt-16 bg-[#F8FAFC] border border-slate-100 rounded-lg p-10 text-center">
-          <div className="w-12 h-12 bg-white border border-slate-200 rounded-full flex items-center justify-center text-[#0066F5] mx-auto mb-6 shadow-sm">
-            <MessageSquare size={22} />
-          </div>
-          <h3 className="text-xl font-bold text-[#1E293B] mb-2">
-            Still have questions?
-          </h3>
-          <p className="text-[#64748B] text-xs font-medium mb-8">
-            Speak with our expert counselors and get a personalized roadmap for your career.
-          </p>
-
-          <div className="flex flex-col sm:flex-row justify-center gap-3">
-            <button
-              onClick={openModal}
-              className="px-6 py-3 bg-[#1E293B] text-white rounded-md font-bold text-[10px] uppercase tracking-wider hover:bg-[#0066F5] transition-colors flex items-center justify-center gap-2"
-            >
-              <Phone size={14} /> Free Counselling
-            </button>
-            <button
-              onClick={openModal}
-              className="px-6 py-3 bg-white border border-slate-200 text-[#1E293B] rounded-md font-bold text-[10px] uppercase tracking-wider hover:border-[#0066F5] hover:text-[#0066F5] transition-all flex items-center justify-center gap-2"
-            >
-              <Mail size={14} /> Contact Support
-            </button>
-          </div>
         </div>
 
       </div>

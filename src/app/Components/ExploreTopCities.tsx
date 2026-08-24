@@ -11,7 +11,7 @@
 
 // const ExploreTopCities = () => {
 //   // Theme Color Tokens
-//   const PRIMARY_BLUE = "#1A4AB2"
+//   const PRIMARY_BLUE = "#0066F5"
 //   const ACCENT_GOLD = "#FACC15"
 
 //   const cities = INDIAN_CITIES
@@ -21,12 +21,12 @@
 //       <div className="max-w-7xl mx-auto">
 //         {/* Header Section */}
 //         <div className="mb-8 text-center">
-//           <div className="inline-flex items-center gap-2 bg-[#1A4AB2]/10 border border-[#1A4AB2]/20 text-[#1A4AB2] px-4 py-2 rounded-full text-[11px] font-bold uppercase tracking-widest mb-4">
+//           <div className="inline-flex items-center gap-2 bg-[#0066F5]/10 border border-[#0066F5]/20 text-[#0066F5] px-4 py-2 rounded-full text-[11px] font-bold uppercase tracking-widest mb-4">
 //             <span className="w-2 h-2 bg-[#FACC15] rounded-full animate-pulse" />
 //             Explore Top Cities
 //           </div>
 //           <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-6">
-//             Find Your <span className="text-[#1A4AB2]">Dream</span> College by City
+//             Find Your <span className="text-[#0066F5]">Dream</span> College by City
 //           </h2>
 //           <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
 //             Explore premier educational institutions across India's top cities. 
@@ -61,7 +61,7 @@
 //               <div className="space-y-3 mb-6 relative z-10">
 //                 {city.features.map((feature, idx) => (
 //                   <div key={idx} className="flex items-center gap-3">
-//                     <div className={`w-2 h-2 ${city.examColor === 'text-[#1A4AB2]' ? 'bg-[#1A4AB2]' : city.examColor === 'text-[#DC2626]' ? 'bg-[#DC2626]' : city.examColor === 'text-[#059669]' ? 'bg-[#059669]' : city.examColor === 'text-[#7C3AED]' ? 'bg-[#7C3AED]' : city.examColor === 'text-[#EA580C]' ? 'bg-[#EA580C]' : 'bg-[#0891B2]'} rounded-full`} />
+//                     <div className={`w-2 h-2 ${city.examColor === 'text-[#0066F5]' ? 'bg-[#0066F5]' : city.examColor === 'text-[#DC2626]' ? 'bg-[#DC2626]' : city.examColor === 'text-[#059669]' ? 'bg-[#059669]' : city.examColor === 'text-[#7C3AED]' ? 'bg-[#7C3AED]' : city.examColor === 'text-[#EA580C]' ? 'bg-[#EA580C]' : 'bg-[#0891B2]'} rounded-full`} />
 //                     <span className="text-sm font-semibold text-slate-700">{feature}</span>
 //                   </div>
 //                 ))}
@@ -84,7 +84,7 @@
 //               {/* Action Buttons - Matching Image Design */}
 //               <div className="flex gap-3 relative z-10">
 //                 <Link href={city.href} className="flex-1">
-//                   <button className={`w-full ${city.examColor === 'text-[#1A4AB2]' ? 'bg-[#1A4AB2] hover:bg-[#1A4AB2]/90' : city.examColor === 'text-[#DC2626]' ? 'bg-[#DC2626] hover:bg-[#DC2626]/90' : city.examColor === 'text-[#059669]' ? 'bg-[#059669] hover:bg-[#059669]/90' : city.examColor === 'text-[#7C3AED]' ? 'bg-[#7C3AED] hover:bg-[#7C3AED]/90' : city.examColor === 'text-[#EA580C]' ? 'bg-[#EA580C] hover:bg-[#EA580C]/90' : 'bg-[#0891B2] hover:bg-[#0891B2]/90'} text-white font-bold py-3 px-4 rounded-xl text-sm flex items-center justify-center gap-2 transition-all duration-300 shadow-lg`}>
+//                   <button className={`w-full ${city.examColor === 'text-[#0066F5]' ? 'bg-[#0066F5] hover:bg-[#0066F5]/90' : city.examColor === 'text-[#DC2626]' ? 'bg-[#DC2626] hover:bg-[#DC2626]/90' : city.examColor === 'text-[#059669]' ? 'bg-[#059669] hover:bg-[#059669]/90' : city.examColor === 'text-[#7C3AED]' ? 'bg-[#7C3AED] hover:bg-[#7C3AED]/90' : city.examColor === 'text-[#EA580C]' ? 'bg-[#EA580C] hover:bg-[#EA580C]/90' : 'bg-[#0891B2] hover:bg-[#0891B2]/90'} text-white font-bold py-3 px-4 rounded-xl text-sm flex items-center justify-center gap-2 transition-all duration-300 shadow-lg`}>
 //                     Explore Exams
 //                     <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
 //                   </button>
@@ -98,7 +98,7 @@
 //         </div>
 
 //         {/* Bottom CTA Section */}
-//         <div className="text-center bg-gradient-to-r from-[#1A4AB2]/5 to-[#FACC15]/5 rounded-3xl p-12">
+//         <div className="text-center bg-gradient-to-r from-[#0066F5]/5 to-[#FACC15]/5 rounded-3xl p-12">
 //           <h3 className="text-2xl font-bold text-slate-900 mb-4">
 //             Explore More Cities
 //           </h3>
@@ -108,13 +108,13 @@
 //           </p>
 //           <div className="flex flex-col sm:flex-row gap-4 justify-center">
 //             <Link href="/colleges">
-//               <button className="bg-[#1A4AB2] hover:bg-[#1A4AB2]/90 text-white font-bold py-4 px-8 rounded-xl text-sm flex items-center justify-center gap-2 transition-all duration-300 shadow-lg">
+//               <button className="bg-[#0066F5] hover:bg-[#0066F5]/90 text-white font-bold py-4 px-8 rounded-xl text-sm flex items-center justify-center gap-2 transition-all duration-300 shadow-lg">
 //                 Browse All Cities
 //                 <MapPin size={16} />
 //               </button>
 //             </Link>
 //             <Link href="/colleges">
-//               <button className="bg-white hover:bg-slate-50 text-[#1A4AB2] border-2 border-[#1A4AB2] font-bold py-4 px-8 rounded-xl text-sm flex items-center justify-center gap-2 transition-all duration-300">
+//               <button className="bg-white hover:bg-slate-50 text-[#0066F5] border-2 border-[#0066F5] font-bold py-4 px-8 rounded-xl text-sm flex items-center justify-center gap-2 transition-all duration-300">
 //                 View All Colleges
 //                 <TrendingUp size={16} />
 //               </button>

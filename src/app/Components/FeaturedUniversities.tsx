@@ -42,7 +42,7 @@ const UniversityCard = ({ name, image, location, ranking, fees, duration, establ
                 title={rankLabel}
                 className="inline-flex items-start gap-1.5 max-w-full backdrop-blur-md bg-white/85 border border-white/50 text-slate-800 px-2.5 py-1 rounded-md text-xs font-bold shadow-sm leading-snug"
               >
-                <Trophy size={12} className="text-orange-500 shrink-0 mt-0.5" />
+                <Trophy size={12} className="text-[#0066F5] shrink-0 mt-0.5" />
                 <span className="line-clamp-2">{rankLabel}</span>
               </span>
             </div>

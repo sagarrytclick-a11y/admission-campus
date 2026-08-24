@@ -2,117 +2,125 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { Menu, X, Zap, ArrowRight, ChevronDown } from "lucide-react";
+import {
+  Menu,
+  X,
+  ArrowRight,
+  ChevronDown,
+  Phone,
+  Mail,
+  MapPin,
+  GraduationCap,
+  Stethoscope,
+  BookOpen,
+  Newspaper,
+  Wrench,
+  Search,
+} from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useFormModal } from "@/context/FormModalContext";
 import Image from "next/image";
 import { useCategories } from "@/hooks/useCategories";
-import { useContactInfo, createMailtoLink, createTelLink } from "@/hooks/useContactInfo";
+import {
+  useContactInfo,
+  createMailtoLink,
+  createTelLink,
+} from "@/hooks/useContactInfo";
 
-// Color Theme Definition
-const theme = {
-  primary: '#FFC107',      // Yellow from logo
-  secondary: '#0066F5',    // Blue from logo
-  accent: '#FF6B35',       // Orange accent
-  dark: '#12141D',         // Dark background
-  light: '#F8FAFC',        // Light text
-  muted: '#94A3B8',        // Muted text
-  cardBg: '#1E212B',       // Card background
-};
+const navLinkBase =
+  "relative px-3.5 py-2 text-[13px] font-semibold tracking-wide text-slate-600 transition-colors duration-200 rounded-lg hover:text-[#0066F5] hover:bg-[#E8F1FF]/70";
+
+const navLinkActive =
+  "text-[#0066F5] bg-[#E8F1FF] after:absolute after:left-3 after:right-3 after:-bottom-0.5 after:h-0.5 after:rounded-full after:bg-[#0066F5]";
 
 export default function SimpleNavbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [collegeTypeOpen, setCollegeTypeOpen] = useState(false);
-  const [allCollegesOpen, setAllCollegesOpen] = useState(false);
-  const [moreOpen, setMoreOpen] = useState(false);
   const [mobileCollegesOpen, setMobileCollegesOpen] = useState(false);
   const [mobileCitiesOpen, setMobileCitiesOpen] = useState(false);
   const [toolsOpen, setToolsOpen] = useState(false);
   const pathname = usePathname();
   const { openModal } = useFormModal();
-
-  // Get contact info dynamically
   const { emails, phones, address } = useContactInfo();
-
-  // Fetch categories from API
-  const { data: categories, isLoading: categoriesLoading } = useCategories();
-
-  // Ref to store timeout IDs
+  const { data: categories } = useCategories();
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll);
+    const handleScroll = () => setIsScrolled(window.scrollY > 12);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    setIsOpen(false);
+    setCollegeTypeOpen(false);
+    setToolsOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [isOpen]);
+
+  const clearHoverTimeout = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+  };
+
   const handleCollegeTypeMouseEnter = () => {
-    // Clear any existing timeout
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    // Set a small delay before opening
-    timeoutRef.current = setTimeout(() => {
-      setCollegeTypeOpen(true);
-    }, 100);
+    clearHoverTimeout();
+    timeoutRef.current = setTimeout(() => setCollegeTypeOpen(true), 80);
   };
 
   const handleCollegeTypeMouseLeave = () => {
-    // Clear any existing timeout
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    // Set a small delay before closing
-    timeoutRef.current = setTimeout(() => {
-      setCollegeTypeOpen(false);
-    }, 100);
+    clearHoverTimeout();
+    timeoutRef.current = setTimeout(() => setCollegeTypeOpen(false), 120);
   };
 
   const handleToolsMouseEnter = () => {
-    // Clear any existing timeout
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    // Set a small delay before opening
-    timeoutRef.current = setTimeout(() => {
-      setToolsOpen(true);
-    }, 100);
+    clearHoverTimeout();
+    timeoutRef.current = setTimeout(() => setToolsOpen(true), 80);
   };
 
   const handleToolsMouseLeave = () => {
-    // Clear any existing timeout
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    // Set a small delay before closing
-    timeoutRef.current = setTimeout(() => {
-      setToolsOpen(false);
-    }, 100);
+    clearHoverTimeout();
+    timeoutRef.current = setTimeout(() => setToolsOpen(false), 120);
   };
 
   const collegeTypes = [
-    ...(categories?.map(category => ({
+    ...(categories?.map((category) => ({
       name: `${category.name} Colleges`,
-      href: `/colleges/category/${category.slug}`
+      href: `/colleges/category/${category.slug}`,
     })) || []),
     { name: "MD / MS Colleges", href: "/md-ms" },
     { name: "All Colleges", href: "/colleges" },
   ];
 
   const collegeLocations = [
-    { name: "Mumbai Colleges", href: "/colleges/city/mumbai" },
-    { name: "Delhi Colleges", href: "/colleges/city/delhi" },
-    { name: "Bangalore Colleges", href: "/colleges/city/bangalore" },
-    { name: "Hyderabad Colleges", href: "/colleges/city/hyderabad" },
-    { name: "Chennai Colleges", href: "/colleges/city/chennai" },
-    { name: "Pune Colleges", href: "/colleges/city/pune" },
+    { name: "Mumbai", href: "/colleges/city/mumbai" },
+    { name: "Delhi", href: "/colleges/city/delhi" },
+    { name: "Bangalore", href: "/colleges/city/bangalore" },
+    { name: "Hyderabad", href: "/colleges/city/hyderabad" },
+    { name: "Chennai", href: "/colleges/city/chennai" },
+    { name: "Pune", href: "/colleges/city/pune" },
   ];
 
   const toolsOptions = [
-    { name: "NEET Score Predictor", href: "/tools/neet-score-predictor" },
-    { name: "Compare Colleges", href: "/compare" },
-    { name: "About Us", href: "/about" },
+    {
+      name: "NEET Score Predictor",
+      href: "/tools/neet-score-predictor",
+      desc: "Estimate your NEET score",
+    },
+    {
+      name: "Compare Colleges",
+      href: "/compare",
+      desc: "Side-by-side college match",
+    },
+    { name: "About Us", href: "/about", desc: "Who we are & how we help" },
   ];
 
   const isToolsActive =
@@ -122,318 +130,455 @@ export default function SimpleNavbar() {
 
   return (
     <>
-      {/* Top Strip with Contact Info */}
-      <div className="hidden sm:block bg-[#0066F5] text-white py-2">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center text-sm">
-            <div className="flex items-center gap-6">
-              <a href={createTelLink(phones.primary)} className="flex items-center gap-2 hover:text-yellow-300 transition-colors">
-                <span>{phones.primary}</span>
-              </a>
-              <span className="text-yellow-300">|</span>
-              <span className="flex items-center gap-2">
-                <span>{address.office}</span>
-              </span>
-            </div>
-            <div className="flex items-center gap-4">
-              <a href={createMailtoLink(emails.info)} className="hover:text-yellow-300 transition-colors">
-                {emails.info}
-              </a>
-            </div>
+      {/* Top utility strip */}
+      <div className="relative hidden overflow-hidden sm:block bg-gradient-to-r from-[#0047B3] via-[#0066F5] to-[#0047B3] text-white">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-30"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 20% 50%, rgba(255,255,255,0.25), transparent 45%), radial-gradient(circle at 80% 50%, rgba(255,255,255,0.15), transparent 40%)",
+          }}
+        />
+        <div className="relative mx-auto flex max-w-7xl items-center justify-between px-4 py-2 text-[12px] sm:px-6 lg:px-8">
+          <div className="flex items-center gap-5">
+            <a
+              href={createTelLink(phones.primary)}
+              className="flex items-center gap-1.5 font-medium text-white/95 transition hover:text-white"
+            >
+              <Phone size={12} className="opacity-80" />
+              {phones.primary}
+            </a>
+            <span className="hidden h-3 w-px bg-white/30 md:block" />
+            <span className="hidden items-center gap-1.5 text-white/85 md:flex">
+              <MapPin size={12} className="opacity-80" />
+              {address.office}
+            </span>
           </div>
+          <a
+            href={createMailtoLink(emails.info)}
+            className="flex items-center gap-1.5 font-medium text-white/95 transition hover:text-white"
+          >
+            <Mail size={12} className="opacity-80" />
+            {emails.info}
+          </a>
         </div>
       </div>
 
-      {/* Main Navigation */}
+      {/* Main navigation */}
       <nav
-        className={`sticky top-0 w-full z-50 transition-all duration-300 ${isScrolled
-          ? "bg-white/90 backdrop-blur-md border-b border-slate-100  shadow-sm"
-          : "bg-white "
-          }`}
+        className={`sticky top-0 z-50 w-full transition-all duration-300 ${
+          isScrolled
+            ? "border-b border-[#E2E8F0]/80 bg-white/85 shadow-[0_8px_30px_rgba(15,23,42,0.06)] backdrop-blur-xl"
+            : "border-b border-transparent bg-white"
+        }`}
       >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-
-        {/* LOGO AREA */}
-        <Link href="/" className="flex items-center gap-1 group">
-          <Image src="/logo.jpg" alt="Logo" width={70} height={70} />
-          
-        </Link>
-
-        {/* DESKTOP NAV - DROPDOWNS */}
-        <div className="hidden lg:flex items-center gap-1">
-
-          {/* Home Link */}
-          <Link
-            href="/"
-            className={`px-5 py-3 rounded-lg text-xs font-semibold uppercase tracking-wide transition-all ${
-              pathname === "/" ? "text-[#0066F5] bg-[#BFDBFE]" : "text-slate-700 hover:text-white hover:bg-[#0066F5]"
-            }`}
-          >
-            Home
-          </Link>
-
-          {/* Colleges Dropdown */}
-          <div
-            className="relative"
-            onMouseEnter={handleCollegeTypeMouseEnter}
-            onMouseLeave={handleCollegeTypeMouseLeave}
-          >
-            <button
-              className={`px-5 py-3 flex gap-2 items-center rounded-lg text-xs font-semibold uppercase tracking-wide transition-all ${pathname?.includes("/colleges/")
-                ? "text-[#0066F5] bg-[#BFDBFE]"
-                : "text-slate-700 hover:text-white hover:bg-[#0066F5]"
-                }`}
-            >
-              College
-              <ChevronDown size={14} className={`transition-transform ${collegeTypeOpen ? 'rotate-180' : ''}`} />
-            </button>
-
-            {collegeTypeOpen && (
-              <div className="absolute top-full left-0 mt-2 w-64 bg-white border-2 border-slate-300 rounded-xl shadow-xl z-50">
-                {collegeTypes.map((item, index) => (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className={`block px-5 py-4 text-sm text-slate-700 hover:bg-[#0066F5] hover:text-white hover:rounded-lg transition-colors ${index === 0 ? 'rounded-t-xl' : index === collegeTypes.length - 1 ? 'rounded-b-xl' : ''}`}
-                  >
-                    {item.name}
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* MD / MS — top-level */}
-          <Link
-            href="/md-ms"
-            className={`px-5 py-3 rounded-lg text-xs font-semibold uppercase tracking-wide transition-all ${
-              pathname?.includes("/md-ms")
-                ? "text-[#0066F5] bg-[#BFDBFE]"
-                : "text-slate-700 hover:text-white hover:bg-[#0066F5]"
-            }`}
-          >
-            MD / MS
-          </Link>
-
-          {/* Courses */}
-          {/* Exams */}
-          <Link
-            href="/exams"
-            className={`px-5 py-3 rounded-lg text-xs font-semibold uppercase tracking-wide transition-all ${pathname?.includes("/exams")
-              ? "text-[#0066F5] bg-[#BFDBFE]"
-              : "text-slate-700 hover:text-white hover:bg-[#0066F5]"
-              }`}
-          >
-            Exam
-          </Link>
-
-          <Link
-            href="/blogs"
-            className={`px-5 py-3 rounded-lg text-xs font-semibold uppercase tracking-wide transition-all ${pathname?.includes("/blogs")
-              ? "text-[#0066F5] bg-[#BFDBFE]"
-              : "text-slate-700 hover:text-white hover:bg-[#0066F5]"
-              }`}
-          >
-            Blogs
-          </Link>
-
-          {/* Contact Us */}
-          <Link
-            href="/contact"
-            className={`px-5 py-3 rounded-lg text-xs font-semibold uppercase tracking-wide transition-all ${
-              pathname?.includes("/contact") ? "text-[#0066F5] bg-[#BFDBFE]" : "text-slate-700 hover:text-white hover:bg-[#0066F5]"
-            }`}
-          >
-            Contact Us
-          </Link>
-
-          {/* Tools Dropdown */}
-          <div
-            className="relative"
-            onMouseEnter={handleToolsMouseEnter}
-            onMouseLeave={handleToolsMouseLeave}
-          >
-            <button
-              className={`px-5 py-3 rounded-lg text-xs font-semibold uppercase tracking-wide transition-all flex items-center gap-2 ${isToolsActive
-                ? "text-[#0066F5] bg-[#BFDBFE]"
-                : "text-slate-700 hover:text-[#0066F5] hover:bg-slate-50"
-                }`}
-            >
-              Tools
-              <ChevronDown size={14} className={`transition-transform ${toolsOpen ? 'rotate-180' : ''}`} />
-            </button>
-
-            {toolsOpen && (
-              <div className="absolute top-full left-0 mt-2 w-56 bg-white border-2 border-slate-300 rounded-xl shadow-xl z-50">
-                {toolsOptions.map((item, index) => (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className={`block px-5 py-4 text-sm text-slate-700 hover:bg-[#0066F5] hover:text-white hover:rounded-lg transition-colors ${index === 0 ? 'rounded-t-xl' : index === toolsOptions.length - 1 ? 'rounded-b-xl' : ''}`}
-                  >
-                    {item.name}
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-
-        </div>
-
-        {/* ACTION BUTTONS */}
-        <div className="flex items-center gap-2 sm:gap-4">
-          <button
-            onClick={openModal}
-            className="hidden md:flex items-center gap-2 bg-[#0066F5] text-white px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3 rounded-lg text-xs sm:text-sm font-semibold uppercase tracking-wide hover:bg-[#004ED4] transition-all active:scale-95 shadow-lg"
-          >
-            <span className="hidden sm:inline">Apply Now</span>
-            <span className="sm:hidden">Apply</span>
-            <ArrowRight size={14} className="hidden sm:block" />
-          </button>
-
-          {/* MOBILE TOGGLE */}
-          <button
-            className="lg:hidden p-2 sm:p-3 text-[#1E293B] hover:bg-slate-100 rounded-lg transition-colors"
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            {isOpen ? <X size={24} className="w-5 h-5 sm:w-6 sm:h-6" /> : <Menu size={24} className="w-5 h-5 sm:w-6 sm:h-6" />}
-          </button>
-        </div>
-      </div>
-
-      {/* MOBILE MENU - ENHANCED */}
-      <div
-        className={`lg:hidden fixed inset-x-0 top-16 bg-white border-b border-slate-100 transition-all duration-300 overflow-hidden shadow-xl ${isOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
+        <div
+          className={`mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8 transition-[height] duration-300 ${
+            isScrolled ? "h-[68px]" : "h-[76px]"
           }`}
-      >
-        <div className="p-4 sm:p-6 flex flex-col gap-2 sm:gap-4 max-h-[70vh] overflow-y-auto">
-          {/* Quick Links */}
-          <div className="flex flex-col gap-1">
+        >
+          {/* Logo */}
+          <Link href="/" className="flex shrink-0 items-center">
+            <Image
+              src="/logo.jpg"
+              alt="Admission Campus"
+              width={64}
+              height={64}
+              className={`object-contain transition-all duration-300 ${
+                isScrolled ? "h-12 w-12" : "h-14 w-14"
+              }`}
+            />
+          </Link>
+
+          {/* Desktop links */}
+          <div className="hidden items-center gap-0.5 lg:flex">
             <Link
               href="/"
-              onClick={() => setIsOpen(false)}
-              className={`text-base sm:text-lg font-bold tracking-tight py-3 px-4 rounded-lg transition-colors ${pathname === "/" ? "text-[#0066F5] bg-[#BFDBFE]" : "text-slate-700 hover:bg-[#0066F5] hover:text-white"
-                }`}
+              className={`${navLinkBase} ${pathname === "/" ? navLinkActive : ""}`}
             >
               Home
             </Link>
 
-            <Link
-              href="/exams"
-              onClick={() => setIsOpen(false)}
-              className={`text-base sm:text-lg font-bold tracking-tight py-3 px-4 rounded-lg transition-colors ${pathname?.includes("/exams") ? "text-[#0066F5] bg-[#BFDBFE]" : "text-slate-700 hover:bg-[#0066F5] hover:text-white"
-                }`}
+            {/* Colleges */}
+            <div
+              className="relative"
+              onMouseEnter={handleCollegeTypeMouseEnter}
+              onMouseLeave={handleCollegeTypeMouseLeave}
             >
-              Exams
-            </Link>
+              <button
+                type="button"
+                className={`${navLinkBase} inline-flex items-center gap-1.5 ${
+                  pathname?.startsWith("/colleges") ? navLinkActive : ""
+                }`}
+              >
+                <GraduationCap size={14} className="opacity-70" />
+                Colleges
+                <ChevronDown
+                  size={13}
+                  className={`transition-transform duration-200 ${
+                    collegeTypeOpen ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+
+              {collegeTypeOpen && (
+                <div className="absolute left-0 top-full z-50 mt-3 w-[280px] overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-[0_20px_50px_rgba(15,23,42,0.12)]">
+                  <div className="border-b border-[#E8F1FF] bg-gradient-to-r from-[#E8F1FF] to-white px-4 py-3">
+                    <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#0066F5]">
+                      Browse by type
+                    </p>
+                    <p className="mt-0.5 text-xs text-slate-500">
+                      Find the right campus path
+                    </p>
+                  </div>
+                  <div className="max-h-[360px] overflow-y-auto py-1.5">
+                    {collegeTypes.map((item) => (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        className={`mx-1.5 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors ${
+                          pathname === item.href
+                            ? "bg-[#E8F1FF] font-semibold text-[#0066F5]"
+                            : "text-slate-700 hover:bg-[#F4F7FC] hover:text-[#0066F5]"
+                        }`}
+                      >
+                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#E8F1FF] text-[#0066F5]">
+                          <GraduationCap size={14} />
+                        </span>
+                        <span className="leading-snug">{item.name}</span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
 
             <Link
               href="/md-ms"
-              onClick={() => setIsOpen(false)}
-              className={`text-base sm:text-lg font-bold tracking-tight py-3 px-4 rounded-lg transition-colors ${pathname?.includes("/md-ms") ? "text-[#0066F5] bg-[#BFDBFE]" : "text-slate-700 hover:bg-[#0066F5] hover:text-white"
-                }`}
+              className={`${navLinkBase} inline-flex items-center gap-1.5 ${
+                pathname?.startsWith("/md-ms") ? navLinkActive : ""
+              }`}
             >
+              <Stethoscope size={14} className="opacity-70" />
               MD / MS
             </Link>
 
             <Link
-              href="/blogs"
-              onClick={() => setIsOpen(false)}
-              className={`text-base sm:text-lg font-bold tracking-tight py-3 px-4 rounded-lg transition-colors ${pathname?.includes("/blogs") ? "text-[#0066F5] bg-[#BFDBFE]" : "text-slate-700 hover:bg-[#0066F5] hover:text-white"
-                }`}
+              href="/exams"
+              className={`${navLinkBase} inline-flex items-center gap-1.5 ${
+                pathname?.startsWith("/exams") ? navLinkActive : ""
+              }`}
             >
-              Updates
+              <BookOpen size={14} className="opacity-70" />
+              Exams
             </Link>
-          </div>
 
-          {/* Colleges Section */}
-          <div className="border-t border-slate-100 pt-4">
-            <button
-              onClick={() => setMobileCollegesOpen(!mobileCollegesOpen)}
-              className="flex items-center justify-between w-full px-4 py-3 rounded-lg hover:bg-slate-50 transition-colors"
+            <Link
+              href="/blogs"
+              className={`${navLinkBase} inline-flex items-center gap-1.5 ${
+                pathname?.startsWith("/blogs") ? navLinkActive : ""
+              }`}
             >
-              <h3 className="text-sm font-bold text-slate-500 uppercase tracking-wider">Colleges</h3>
-              <ChevronDown
-                size={16}
-                className={`text-slate-400 transition-transform duration-200 ${mobileCollegesOpen ? 'rotate-180' : ''}`}
-              />
-            </button>
-            <div className={`overflow-hidden transition-all duration-300 ${mobileCollegesOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-              <div className="flex flex-col gap-1 pt-2">
-                {collegeTypes.map((item) => (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    onClick={() => { setIsOpen(false); setMobileCollegesOpen(false); }}
-                    className={`text-sm sm:text-base font-medium tracking-tight py-2.5 px-4 pl-8 rounded-lg transition-colors ${pathname === item.href ? "text-[#0066F5] bg-[#F8FAFC]" : "text-[#64748B] hover:bg-blue-500 hover:text-white hover:rounded-lg"
-                      }`}
-                  >
-                    {item.name}
-                  </Link>
-                ))}
-              </div>
+              <Newspaper size={14} className="opacity-70" />
+              Blogs
+            </Link>
+
+            <Link
+              href="/contact"
+              className={`${navLinkBase} ${
+                pathname?.startsWith("/contact") ? navLinkActive : ""
+              }`}
+            >
+              Contact
+            </Link>
+
+            {/* Tools */}
+            <div
+              className="relative"
+              onMouseEnter={handleToolsMouseEnter}
+              onMouseLeave={handleToolsMouseLeave}
+            >
+              <button
+                type="button"
+                className={`${navLinkBase} inline-flex items-center gap-1.5 ${
+                  isToolsActive ? navLinkActive : ""
+                }`}
+              >
+                <Wrench size={14} className="opacity-70" />
+                Tools
+                <ChevronDown
+                  size={13}
+                  className={`transition-transform duration-200 ${
+                    toolsOpen ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+
+              {toolsOpen && (
+                <div className="absolute right-0 top-full z-50 mt-3 w-[300px] overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-[0_20px_50px_rgba(15,23,42,0.12)]">
+                  <div className="border-b border-[#E8F1FF] bg-gradient-to-r from-[#E8F1FF] to-white px-4 py-3">
+                    <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#0066F5]">
+                      Student tools
+                    </p>
+                  </div>
+                  <div className="p-1.5">
+                    {toolsOptions.map((item) => (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        className={`flex flex-col rounded-xl px-3.5 py-3 transition-colors ${
+                          pathname === item.href
+                            ? "bg-[#E8F1FF]"
+                            : "hover:bg-[#F4F7FC]"
+                        }`}
+                      >
+                        <span
+                          className={`text-sm font-semibold ${
+                            pathname === item.href
+                              ? "text-[#0066F5]"
+                              : "text-slate-800"
+                          }`}
+                        >
+                          {item.name}
+                        </span>
+                        <span className="mt-0.5 text-xs text-slate-500">
+                          {item.desc}
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Locations Section */}
-          <div className="border-t border-slate-100 pt-4">
-            <button
-              onClick={() => setMobileCitiesOpen(!mobileCitiesOpen)}
-              className="flex items-center justify-between w-full px-4 py-3 rounded-lg hover:bg-slate-50 transition-colors"
+          {/* Actions */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Link
+              href="/colleges"
+              className="hidden h-10 w-10 items-center justify-center rounded-xl border border-[#E2E8F0] text-slate-600 transition hover:border-[#0066F5]/30 hover:bg-[#E8F1FF] hover:text-[#0066F5] md:flex"
+              aria-label="Search colleges"
             >
-              <h3 className="text-sm font-bold text-slate-500 uppercase tracking-wider">Top Cities</h3>
-              <ChevronDown
-                size={16}
-                className={`text-slate-400 transition-transform duration-200 ${mobileCitiesOpen ? 'rotate-180' : ''}`}
+              <Search size={16} />
+            </Link>
+
+            <button
+              type="button"
+              onClick={openModal}
+              className="group relative hidden overflow-hidden rounded-xl bg-[#0066F5] px-5 py-2.5 text-xs font-bold uppercase tracking-wide text-white shadow-[0_8px_20px_rgba(0,102,245,0.28)] transition hover:bg-[#0047B3] active:scale-[0.98] md:inline-flex md:items-center md:gap-2"
+            >
+              <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition duration-500 group-hover:translate-x-full" />
+              <span className="relative">Apply Now</span>
+              <ArrowRight
+                size={14}
+                className="relative transition-transform group-hover:translate-x-0.5"
               />
             </button>
-            <div className={`overflow-hidden transition-all duration-300 ${mobileCitiesOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-              <div className="grid grid-cols-2 gap-2 px-4 pt-2">
-                {collegeLocations.slice(0, 6).map((item) => (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    onClick={() => { setIsOpen(false); setMobileCitiesOpen(false); }}
-                    className={`text-xs sm:text-sm font-medium tracking-tight py-2 px-3 rounded-lg text-center transition-colors ${pathname === item.href ? "text-[#0066F5] bg-[#BFDBFE]" : "text-slate-500 hover:bg-[#0066F5] hover:text-white hover:rounded-lg"
+
+            <button
+              type="button"
+              className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#E2E8F0] text-slate-700 transition hover:bg-[#E8F1FF] hover:text-[#0066F5] lg:hidden"
+              onClick={() => setIsOpen(!isOpen)}
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+            >
+              {isOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile menu */}
+        <div
+          className={`overflow-hidden border-t border-[#E2E8F0] bg-white transition-all duration-300 lg:hidden ${
+            isOpen
+              ? "max-h-[min(80vh,640px)] opacity-100 shadow-[0_16px_40px_rgba(15,23,42,0.1)]"
+              : "max-h-0 border-transparent opacity-0"
+          }`}
+        >
+          <div className="max-h-[min(80vh,640px)] overflow-y-auto px-4 py-4 sm:px-6">
+            <div className="mb-3 rounded-2xl bg-gradient-to-br from-[#0066F5] to-[#0047B3] p-4 text-white">
+              <p className="text-sm font-semibold">Need guidance?</p>
+              <p className="mt-1 text-xs text-white/80">
+                Free counselling for admissions &amp; counselling paths
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  openModal();
+                  setIsOpen(false);
+                }}
+                className="mt-3 inline-flex min-h-11 items-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-bold uppercase tracking-wide text-[#0066F5]"
+              >
+                Talk to us <ArrowRight size={14} />
+              </button>
+            </div>
+
+            <div className="flex flex-col gap-0.5">
+              {[
+                { href: "/", label: "Home", match: pathname === "/" },
+                {
+                  href: "/md-ms",
+                  label: "MD / MS",
+                  match: pathname?.startsWith("/md-ms"),
+                },
+                {
+                  href: "/exams",
+                  label: "Exams",
+                  match: pathname?.startsWith("/exams"),
+                },
+                {
+                  href: "/blogs",
+                  label: "Blogs",
+                  match: pathname?.startsWith("/blogs"),
+                },
+                {
+                  href: "/contact",
+                  label: "Contact",
+                  match: pathname?.startsWith("/contact"),
+                },
+              ].map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setIsOpen(false)}
+                  className={`rounded-xl px-4 py-3 text-[15px] font-semibold transition ${
+                    item.match
+                      ? "bg-[#E8F1FF] text-[#0066F5]"
+                      : "text-slate-700 hover:bg-[#F4F7FC]"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+
+            {/* Colleges accordion */}
+            <div className="mt-3 border-t border-[#E2E8F0] pt-3">
+              <button
+                type="button"
+                onClick={() => setMobileCollegesOpen(!mobileCollegesOpen)}
+                className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-left hover:bg-[#F4F7FC]"
+              >
+                <span className="text-sm font-bold uppercase tracking-wider text-slate-500">
+                  Colleges
+                </span>
+                <ChevronDown
+                  size={16}
+                  className={`text-slate-400 transition-transform ${
+                    mobileCollegesOpen ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+              <div
+                className={`overflow-hidden transition-all duration-300 ${
+                  mobileCollegesOpen
+                    ? "max-h-96 opacity-100"
+                    : "max-h-0 opacity-0"
+                }`}
+              >
+                <div className="flex flex-col gap-0.5 pb-2 pl-2">
+                  {collegeTypes.map((item) => (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      onClick={() => {
+                        setIsOpen(false);
+                        setMobileCollegesOpen(false);
+                      }}
+                      className={`rounded-lg px-4 py-2.5 text-sm ${
+                        pathname === item.href
+                          ? "bg-[#E8F1FF] font-semibold text-[#0066F5]"
+                          : "text-slate-600 hover:bg-[#F4F7FC]"
                       }`}
-                  >
-                    {item.name.replace(' Colleges', '')}
-                  </Link>
-                ))}
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Tools Section */}
-          <div className="border-t border-slate-100 pt-4">
-            <h3 className="text-sm font-bold text-slate-500 uppercase tracking-wider px-4 mb-2">Tools</h3>
-            <div className="flex flex-col gap-1">
+            {/* Cities */}
+            <div className="border-t border-[#E2E8F0] pt-3">
+              <button
+                type="button"
+                onClick={() => setMobileCitiesOpen(!mobileCitiesOpen)}
+                className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-left hover:bg-[#F4F7FC]"
+              >
+                <span className="text-sm font-bold uppercase tracking-wider text-slate-500">
+                  Top Cities
+                </span>
+                <ChevronDown
+                  size={16}
+                  className={`text-slate-400 transition-transform ${
+                    mobileCitiesOpen ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+              <div
+                className={`overflow-hidden transition-all duration-300 ${
+                  mobileCitiesOpen
+                    ? "max-h-96 opacity-100"
+                    : "max-h-0 opacity-0"
+                }`}
+              >
+                <div className="grid grid-cols-2 gap-2 px-3 pb-3">
+                  {collegeLocations.map((item) => (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      onClick={() => {
+                        setIsOpen(false);
+                        setMobileCitiesOpen(false);
+                      }}
+                      className={`rounded-xl px-3 py-2.5 text-center text-sm font-medium ${
+                        pathname === item.href
+                          ? "bg-[#E8F1FF] text-[#0066F5]"
+                          : "bg-[#F4F7FC] text-slate-600 hover:bg-[#E8F1FF] hover:text-[#0066F5]"
+                      }`}
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Tools */}
+            <div className="border-t border-[#E2E8F0] pt-3">
+              <p className="mb-1 px-4 text-sm font-bold uppercase tracking-wider text-slate-500">
+                Tools
+              </p>
               {toolsOptions.map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
                   onClick={() => setIsOpen(false)}
-                  className={`text-sm sm:text-base font-medium tracking-tight py-2.5 px-4 rounded-lg transition-colors ${pathname === item.href ? "text-[#0066F5] bg-[#BFDBFE]" : "text-[#64748B] hover:bg-[#0066F5] hover:text-white"
-                    }`}
+                  className={`block rounded-xl px-4 py-2.5 text-sm ${
+                    pathname === item.href
+                      ? "bg-[#E8F1FF] font-semibold text-[#0066F5]"
+                      : "text-slate-600 hover:bg-[#F4F7FC]"
+                  }`}
                 >
                   {item.name}
                 </Link>
               ))}
             </div>
-          </div>
 
-          {/* Mobile CTA Button */}
-          <div className="border-t border-slate-100 pt-4 mt-2">
-            <button
-              onClick={() => { openModal(); setIsOpen(false); }}
-              className="w-full bg-[#0066F5] text-white py-3 sm:py-3.5 rounded-lg font-bold uppercase text-xs sm:text-sm tracking-widest flex items-center justify-center gap-2 hover:bg-[#004ED4] transition-all active:scale-95"
-            >
-              Start Application <ArrowRight size={16} />
-            </button>
+            <div className="mt-4 border-t border-[#E2E8F0] pt-4">
+              <button
+                type="button"
+                onClick={() => {
+                  openModal();
+                  setIsOpen(false);
+                }}
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#0066F5] py-3.5 text-sm font-bold uppercase tracking-wide text-white hover:bg-[#0047B3]"
+              >
+                Start Application <ArrowRight size={16} />
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    </nav>
+      </nav>
     </>
   );
-};
+}

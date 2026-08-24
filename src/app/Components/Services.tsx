@@ -52,7 +52,7 @@ export default function ComprehensiveServices() {
 
   return (
     <section className="py-[32px] bg-white">
-      <div className="max-w-6xl mx-auto px-6">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
         
         {/* Header */}
         <div className="text-center mb-8">
@@ -60,20 +60,20 @@ export default function ComprehensiveServices() {
             <Sparkles size={16} />
             <span className="text-sm font-bold uppercase tracking-widest">Our Services</span>
           </div>
-          <h2 className="text-4xl font-bold text-[#1E293B] mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#1E293B] mb-4">
             Complete Support for Your <span className="text-[#0066F5]">Journey</span>
           </h2>
-          <p className="text-[#64748B] text-lg max-w-3xl mx-auto">
+          <p className="text-[#64748B] text-base sm:text-lg max-w-3xl mx-auto">
             From initial counseling to post-arrival support, we ensure your study abroad success.
           </p>
         </div>
 
         {/* Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8 mb-8">
           {services.map((service, index) => (
             <div
               key={index}
-              className="group p-8 bg-white border border-slate-200 rounded-xl hover:border-[#0066F5] hover:shadow-lg transition-all"
+              className="group p-5 sm:p-8 bg-white border border-slate-200 rounded-xl hover:border-[#0066F5] hover:shadow-lg transition-all"
             >
               <div className="w-14 h-14 rounded-xl bg-[#0066F5]/10 text-[#0066F5] flex items-center justify-center mb-6 group-hover:bg-[#0066F5] group-hover:text-white transition-all">
                 <service.icon size={24} />
@@ -100,7 +100,7 @@ export default function ComprehensiveServices() {
           <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/service"
-              className="bg-[#0066F5] hover:bg-[#004ED4] text-white px-8 py-3 rounded-xl font-semibold transition-colors flex items-center gap-2"
+              className="bg-[#0066F5] hover:bg-[#0047B3] text-white px-8 py-3 rounded-xl font-bold transition-colors flex items-center gap-2"
             >
               Explore All Services
               <ArrowRight size={18} />
@@ -108,7 +108,7 @@ export default function ComprehensiveServices() {
             
             <button 
               onClick={() => openModal()} 
-              className="bg-white border border-slate-200 text-[#1E293B] px-8 py-3 rounded-xl font-semibold hover:border-[#0066F5] hover:text-[#0066F5] transition-all"
+              className="bg-[#0066F5] hover:bg-[#0047B3] text-white px-8 py-3 rounded-xl font-bold transition-all"
             >
               Free Consultation
             </button>

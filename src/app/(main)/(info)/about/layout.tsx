@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
+import { pageSeo } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageSeo({
   title: "About Us",
   description:
     "Learn about Admission Campus — expert admission counselling for Indian universities, colleges, and entrance exams.",
-  alternates: { canonical: "/about" },
-};
+  path: "/about",
+});
 
 export default function AboutLayout({ children }: { children: React.ReactNode }) {
   return children;
