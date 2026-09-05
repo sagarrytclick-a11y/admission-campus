@@ -93,8 +93,8 @@ export const SITE_IDENTITY: SiteIdentity = {
     },
     socials: {
       whatsapp: "https://wa.me/9999616911",
-      instagram: "https://instagram.com/admissioncampus",
-      linkedin: "https://linkedin.com/company/admissioncampus",
+      instagram: "https://www.instagram.com/admissioncampusofficial/?hl=en",
+      linkedin: "https://in.linkedin.com/company/admission-campus",
     },
   },
   assets: SITE_ASSETS,
