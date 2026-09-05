@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import {
@@ -21,8 +20,9 @@ import {
   getMdMsCollegeBySlug,
   getRelatedMdMsColleges,
 } from "@/lib/mdMsData";
-import MdMsEnquireButton from "./MdMsEnquireButton";
+import MdMsEnquireButton from "@/app/Components/CollegeEnquireButton";
 import { CollegeJsonLd, BreadcrumbJsonLd } from "@/components/SeoJsonLd";
+import { collegePageSeo } from "@/lib/seo";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -32,31 +32,26 @@ export function generateStaticParams() {
   return getAllMdMsColleges().map((c) => ({ slug: c.slug }));
 }
 
-export async function generateMetadata({
-  params,
-}: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params;
   const college = getMdMsCollegeBySlug(slug);
   if (!college) return { title: "MD/MS College" };
 
   const description =
-    `${college.name} in ${college.city}, ${college.stateName} — ${college.type} MD/MS college. Fees: ${college.fees}. Seats: ${college.seats}. ${college.recognition} recognised.`.slice(
-      0,
-      160
-    );
+    `${college.name} in ${college.city}, ${college.stateName} — ${college.type} MD/MS college. Fees: ${college.fees}. Seats: ${college.seats}. ${college.recognition} recognised.`;
 
-  return {
-    title: `${college.name} | MD/MS College`,
+  return collegePageSeo({
+    name: college.name,
     description,
-    alternates: { canonical: `/md-ms/${college.slug}` },
-    openGraph: {
-      title: `${college.name} | MD/MS`,
-      description,
-      url: `/md-ms/${college.slug}`,
-      images: college.image ? [{ url: college.image }] : undefined,
-    },
-    robots: { index: true, follow: true },
-  };
+    path: `/md-ms/${college.slug}`,
+    image: college.image,
+    keywords: [
+      college.name,
+      `MD MS ${college.stateName}`,
+      "NEET PG",
+      college.type || "Medical College",
+    ],
+  });
 }
 
 function Section({

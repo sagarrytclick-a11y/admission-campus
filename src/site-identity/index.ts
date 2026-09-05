@@ -65,8 +65,9 @@ export interface SiteIdentity {
 export const SITE_IDENTITY: SiteIdentity = {
   name: "Admission Campus",
   shortName: "Admission Campus",
-  description: "Comprehensive admission guidance for Indian universities and colleges",
-  tagline: "Your Gateway to Top Indian Universities",
+  description:
+    "Expert guidance for MBBS India, MBBS abroad, MD/MS, engineering and management admissions across top colleges.",
+  tagline: "Your Gateway to Top Colleges in India & Abroad",
   domain: "admissioncampus.in",
   brand: {
     primaryColor: "#0066F5",
@@ -98,20 +99,21 @@ export const SITE_IDENTITY: SiteIdentity = {
   },
   assets: SITE_ASSETS,
   meta: {
-    title: "Admission Campus - Your Gateway to Top Indian Universities",
-    description: "Comprehensive admission guidance for Indian universities and colleges. Expert counseling, entrance exam preparation, and career guidance for Indian students.",
+    title: "Admission Campus - MBBS, MD/MS, Engineering & Management Admissions",
+    description:
+      "Admission Campus helps students with MBBS India, MBBS abroad, MD/MS, engineering and management college admissions — fees, seats, NEET counselling and expert guidance.",
     keywords: [
-      "admission guidance",
-      "Indian universities",
-      "college admissions",
-      "entrance exams",
-      "JEE preparation",
-      "NEET guidance",
-      "IIT admissions",
-      "medical colleges",
+      "admission campus",
+      "MBBS colleges in India",
+      "MBBS abroad",
+      "MD MS colleges",
+      "NEET UG counselling",
+      "NEET PG counselling",
       "engineering colleges",
-      "career counseling",
-      "admission campus"
+      "management colleges",
+      "medical college admissions",
+      "college counselling India",
+      "NMC recognised universities",
     ],
     author: "Admission Campus",
     ogImage: "/logo.png",
@@ -120,12 +122,13 @@ export const SITE_IDENTITY: SiteIdentity = {
     established: 2020,
     type: "Education Services",
     services: [
-      "College Guidance",
-      "University Admissions",
-      "Entrance Exam Preparation",
+      "MBBS India Guidance",
+      "MBBS Abroad Admissions",
+      "MD/MS Counselling",
+      "Engineering Admissions",
+      "Management Admissions",
+      "Entrance Exam Guidance",
       "Career Counseling",
-      "Indian Education Support",
-      "Admission Consulting"
     ],
   },
 };

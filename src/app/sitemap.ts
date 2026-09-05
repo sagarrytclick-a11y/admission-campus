@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
 import { SITE_IDENTITY } from "@/site-identity";
 import { getAllMdMsColleges } from "@/lib/mdMsData";
+import { getAllMbbsIndiaColleges } from "@/lib/mbbsIndiaData";
+import { getAllMbbsAbroadColleges } from "@/lib/mbbsAbroadData";
 import { connectDB } from "@/lib/db";
 import College from "@/models/College";
 import Exam from "@/models/Exam";
@@ -12,40 +14,61 @@ const SITE_URL = `https://${SITE_IDENTITY.domain}`;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
-    "",
-    "/colleges",
-    "/exams",
-    "/md-ms",
-    "/blogs",
-    "/compare",
-    "/about",
-    "/contact",
-    "/service",
-    "/privacy",
-    "/term",
-    "/tools/neet-score-predictor",
-  ].map((path) => ({
+    { path: "", priority: 1, changeFrequency: "daily" as const },
+    { path: "/mbbs-india", priority: 0.95, changeFrequency: "daily" as const },
+    { path: "/mbbs-abroad", priority: 0.95, changeFrequency: "daily" as const },
+    { path: "/md-ms", priority: 0.95, changeFrequency: "daily" as const },
+    { path: "/colleges", priority: 0.9, changeFrequency: "weekly" as const },
+    {
+      path: "/colleges/category/engineering",
+      priority: 0.85,
+      changeFrequency: "weekly" as const,
+    },
+    {
+      path: "/colleges/category/management",
+      priority: 0.85,
+      changeFrequency: "weekly" as const,
+    },
+    { path: "/exams", priority: 0.8, changeFrequency: "weekly" as const },
+    { path: "/blogs", priority: 0.7, changeFrequency: "weekly" as const },
+    { path: "/compare", priority: 0.7, changeFrequency: "monthly" as const },
+    { path: "/about", priority: 0.6, changeFrequency: "monthly" as const },
+    { path: "/contact", priority: 0.6, changeFrequency: "monthly" as const },
+    { path: "/service", priority: 0.6, changeFrequency: "monthly" as const },
+    { path: "/privacy", priority: 0.3, changeFrequency: "yearly" as const },
+    { path: "/term", priority: 0.3, changeFrequency: "yearly" as const },
+    {
+      path: "/tools/neet-score-predictor",
+      priority: 0.75,
+      changeFrequency: "monthly" as const,
+    },
+  ].map(({ path, priority, changeFrequency }) => ({
     url: `${SITE_URL}${path || "/"}`,
     lastModified: new Date(),
-    changeFrequency: path === "" ? "daily" : "weekly",
-    priority:
-      path === ""
-        ? 1
-        : path === "/colleges" || path === "/exams" || path === "/md-ms"
-          ? 0.9
-          : 0.7,
+    changeFrequency,
+    priority,
   }));
 
-  const dynamicRoutes: MetadataRoute.Sitemap = [];
-
-  dynamicRoutes.push(
+  const dynamicRoutes: MetadataRoute.Sitemap = [
     ...getAllMdMsColleges().map((c) => ({
       url: `${SITE_URL}/md-ms/${c.slug}`,
       lastModified: new Date(),
       changeFrequency: "weekly" as const,
       priority: 0.8,
-    }))
-  );
+    })),
+    ...getAllMbbsIndiaColleges().map((c) => ({
+      url: `${SITE_URL}/mbbs-india/${c.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
+    })),
+    ...getAllMbbsAbroadColleges().map((c) => ({
+      url: `${SITE_URL}/mbbs-abroad/${c.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
+    })),
+  ];
 
   try {
     await connectDB();
@@ -101,7 +124,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         }))
     );
   } catch {
-    // Keep static + MD/MS routes if DB is unavailable
+    // Keep static + medical catalogue routes if DB is unavailable
   }
 
   return [...staticRoutes, ...dynamicRoutes];

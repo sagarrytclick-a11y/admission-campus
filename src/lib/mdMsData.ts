@@ -1,5 +1,5 @@
 import mdMsJson from "@/data/md-ms.json";
-import { generateSlug } from "@/lib/slug";
+import { makeRegionSlug, makeUniqueEntitySlug } from "@/lib/slug";
 
 export type MdMsCollege = {
   id: number;
@@ -47,37 +47,37 @@ export type MdMsStateSummary = {
 type RawState = {
   id: number;
   name: string;
-  slug: string;
+  slug?: string;
   image: string;
   description: string;
-  colleges: Array<Omit<MdMsCollege, "slug" | "stateName" | "stateSlug" | "stateImage" | "stateDescription">>;
+  colleges: Array<
+    Omit<
+      MdMsCollege,
+      "slug" | "stateName" | "stateSlug" | "stateImage" | "stateDescription"
+    >
+  >;
 };
 
 const data = mdMsJson as { states: RawState[] };
 const usedSlugs = new Set<string>();
 
-function makeSlug(name: string, id: number): string {
-  let slug = generateSlug(name) || `college-${id}`;
-  if (usedSlugs.has(slug)) slug = `${slug}-${id}`;
-  usedSlugs.add(slug);
-  return slug;
-}
-
-export const MD_MS_COLLEGES: MdMsCollege[] = data.states.flatMap((state) =>
-  state.colleges.map((college) => ({
+export const MD_MS_COLLEGES: MdMsCollege[] = data.states.flatMap((state) => {
+  const stateSlug = makeRegionSlug(state.name, state.id);
+  return state.colleges.map((college) => ({
     ...college,
-    slug: makeSlug(college.name, college.id),
+    type: college.type || "Private",
+    slug: makeUniqueEntitySlug(college.name, college.id, usedSlugs),
     stateName: state.name,
-    stateSlug: state.slug,
+    stateSlug,
     stateImage: state.image,
     stateDescription: state.description,
-  }))
-);
+  }));
+});
 
 export const MD_MS_STATES: MdMsStateSummary[] = data.states.map((state) => ({
   id: state.id,
   name: state.name,
-  slug: state.slug,
+  slug: makeRegionSlug(state.name, state.id),
   image: state.image,
   description: state.description,
   collegeCount: state.colleges.length,
@@ -102,7 +102,7 @@ export function getRelatedMdMsColleges(college: MdMsCollege, limit = 4) {
 export function getMdMsStats() {
   const seats = MD_MS_COLLEGES.reduce((s, c) => s + (c.seats || 0), 0);
   const government = MD_MS_COLLEGES.filter((c) =>
-    c.type.toLowerCase().includes("government")
+    (c.type || "").toLowerCase().includes("government")
   ).length;
   return {
     states: MD_MS_STATES.length,

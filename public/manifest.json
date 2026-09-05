@@ -1,12 +1,12 @@
 {
   "name": "Admission Campus",
   "short_name": "Admission Campus",
-  "description": "Comprehensive admission guidance for Indian universities, colleges, and entrance exams.",
+  "description": "MBBS India, MBBS abroad, MD/MS, engineering and management admission guidance.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#0066F5",
-  "lang": "en",
+  "lang": "en-IN",
   "icons": [
     {
       "src": "/logo.png",

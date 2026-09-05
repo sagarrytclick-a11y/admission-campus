@@ -1,439 +1,421 @@
 "use client";
 
-import React, { useState } from 'react';
-import { Search, Plus, X, ArrowUpDown, Star, MapPin, GraduationCap, Award, TrendingUp, CheckCircle2 } from 'lucide-react';
-import { useQuery } from '@tanstack/react-query';
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import {
+  Search,
+  Plus,
+  X,
+  ArrowUpDown,
+  Star,
+  MapPin,
+  GraduationCap,
+  Award,
+  TrendingUp,
+  CheckCircle2,
+  Loader2,
+} from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import compareCatalog from "@/data/compare-catalog.json";
 
-interface College {
-  _id: string
-  name: string
-  slug: string
-  country_ref: any
-  city?: string
-  exams: string[]
-  fees?: number
-  duration?: string
-  establishment_year?: string
-  ranking?: string | {
-    title: string
-    description: string
-    country_ranking: string
-    world_ranking: string
-    accreditation: string[]
-  }
-  banner_url?: string
-  about_content?: string
-  is_active: boolean
-  createdAt: string
-  updatedAt: string
+type CollegeSource = "api" | "md-ms" | "mbbs-india" | "mbbs-abroad";
 
-  // Comprehensive structure fields
-  overview?: {
-    title: string
-    description: string
-  }
-  key_highlights?: {
-    title: string
-    description: string
-    features: string[]
-  }
-  why_choose_us?: {
-    title: string
-    description: string
-    features: { title: string; description: string }[]
-  }
-  admission_process?: {
-    title: string
-    description: string
-    steps: string[]
-  }
-  documents_required?: {
-    title: string
-    description: string
-    documents: string[]
-  }
-  fees_structure?: {
-    title: string
-    description: string
-    courses: { course_name: string; duration: string; annual_tuition_fee: string }[]
-  }
-  campus_highlights?: {
-    title: string
-    description: string
-    highlights: string[]
-  }
+type CompareCollege = {
+  id: string;
+  name: string;
+  slug: string;
+  city: string;
+  locationLabel: string;
+  image?: string;
+  source: CollegeSource;
+  sourceLabel: string;
+  href: string;
+  fees: string;
+  ranking: string;
+  type: string;
+  exams: string;
+  established: string;
+  recognition: string;
+  seats: string;
+  about: string;
+};
+
+const STATIC_CATALOGUE = compareCatalog as CompareCollege[];
+
+function useDebouncedValue<T>(value: T, delay = 300): T {
+  const [debounced, setDebounced] = useState(value);
+  useEffect(() => {
+    const t = setTimeout(() => setDebounced(value), delay);
+    return () => clearTimeout(t);
+  }, [value, delay]);
+  return debounced;
 }
 
-export default function CompareColleges() {
-  const [selectedColleges, setSelectedColleges] = useState<College[]>([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [, setShowAddModal] = useState(false);
+function normalizeApiCollege(c: Record<string, unknown>): CompareCollege {
+  const ranking = c.ranking;
+  let rankingText = "N/A";
+  if (typeof ranking === "object" && ranking && "country_ranking" in ranking) {
+    rankingText = `#${(ranking as { country_ranking?: string }).country_ranking || "N/A"}`;
+  } else if (ranking != null && ranking !== "") {
+    rankingText = `#${ranking}`;
+  }
 
-  // Real API data fetching
-  const { data: colleges = [], isLoading, error } = useQuery({
-    queryKey: ['colleges'],
-    queryFn: async () => {
-      try {
-        const res = await fetch('/api/colleges');
-        if (!res.ok) {
-          throw new Error('Failed to fetch colleges');
-        }
-        const data = await res.json();
-        return data.data?.colleges || [];
-      } catch (error) {
-        throw error;
-      }
-    }
+  const feesStructure = c.fees_structure as
+    | { courses?: { annual_tuition_fee?: string; course_name?: string }[] }
+    | undefined;
+  const feesFromCourse = feesStructure?.courses?.[0]?.annual_tuition_fee;
+  const fees =
+    (feesFromCourse && String(feesFromCourse).replace(/^:\s*/, "")) ||
+    (c.fees != null ? `₹${c.fees}` : "N/A");
+
+  const country = c.country_ref as { name?: string } | undefined;
+  const city = String(c.city || "");
+
+  return {
+    id: `api-${c._id || c.slug}`,
+    name: String(c.name || ""),
+    slug: String(c.slug || ""),
+    city,
+    locationLabel: [city, country?.name].filter(Boolean).join(", "),
+    image: typeof c.banner_url === "string" ? c.banner_url : undefined,
+    source: "api",
+    sourceLabel: "College",
+    href: `/colleges/${c.slug}`,
+    fees,
+    ranking: rankingText,
+    type: Array.isArray(c.categories)
+      ? (c.categories as string[]).join(", ") || "—"
+      : "—",
+    exams: Array.isArray(c.exams)
+      ? (c.exams as string[]).join(", ") || "N/A"
+      : "N/A",
+    established: String(c.establishment_year || "N/A"),
+    recognition: "N/A",
+    seats: "N/A",
+    about: String(
+      (c.overview as { description?: string } | undefined)?.description ||
+        c.about_content ||
+        "No description available"
+    ),
+  };
+}
+
+function filterStatic(term: string): CompareCollege[] {
+  const q = term.trim().toLowerCase();
+  if (!q) return STATIC_CATALOGUE.slice(0, 12);
+  return STATIC_CATALOGUE.filter(
+    (c) =>
+      c.name.toLowerCase().includes(q) ||
+      c.city.toLowerCase().includes(q) ||
+      c.locationLabel.toLowerCase().includes(q) ||
+      c.sourceLabel.toLowerCase().includes(q) ||
+      c.type.toLowerCase().includes(q)
+  ).slice(0, 24);
+}
+
+async function fetchApiColleges(search: string): Promise<CompareCollege[]> {
+  const params = new URLSearchParams({
+    limit: "30",
+    ...(search.trim() ? { search: search.trim() } : {}),
+  });
+  const res = await fetch(`/api/colleges?${params}`);
+  if (!res.ok) throw new Error("Failed to fetch colleges");
+  const json = await res.json();
+  if (!json.success) throw new Error(json.message || "Failed to fetch colleges");
+  return (json.data?.colleges || []).map(normalizeApiCollege);
+}
+
+const METRICS: {
+  key: string;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  get: (c: CompareCollege) => string;
+}[] = [
+  { key: "ranking", label: "Ranking", icon: Star, get: (c) => c.ranking },
+  { key: "fees", label: "Fees", icon: TrendingUp, get: (c) => c.fees },
+  { key: "type", label: "Type / Category", icon: Award, get: (c) => c.type },
+  { key: "seats", label: "Seats", icon: GraduationCap, get: (c) => c.seats },
+  { key: "exams", label: "Entrance Exams", icon: CheckCircle2, get: (c) => c.exams },
+  {
+    key: "recognition",
+    label: "Recognition",
+    icon: CheckCircle2,
+    get: (c) => c.recognition,
+  },
+  {
+    key: "established",
+    label: "Established",
+    icon: GraduationCap,
+    get: (c) => c.established,
+  },
+];
+
+export default function CompareColleges() {
+  const [selected, setSelected] = useState<CompareCollege[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [open, setOpen] = useState(false);
+  const debounced = useDebouncedValue(searchTerm, 280);
+  const boxRef = useRef<HTMLDivElement>(null);
+
+  const { data: apiColleges = [], isFetching, isError, refetch } = useQuery({
+    queryKey: ["compare-colleges", debounced],
+    queryFn: () => fetchApiColleges(debounced),
+    staleTime: 60_000,
   });
 
-  const filteredColleges = Array.isArray(colleges) ? colleges.filter((college: College) =>
-    college.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    college.city?.toLowerCase().includes(searchTerm.toLowerCase())
-  ) : [];
+  const results = useMemo(() => {
+    const staticHits = filterStatic(debounced);
+    const selectedIds = new Set(selected.map((s) => s.id));
+    const merged = [...staticHits, ...apiColleges].filter(
+      (c, i, arr) =>
+        !selectedIds.has(c.id) &&
+        arr.findIndex((x) => x.id === c.id) === i
+    );
+    return merged.slice(0, 18);
+  }, [apiColleges, debounced, selected]);
 
-  const availableColleges = filteredColleges.filter(
-    (college: College) => !selectedColleges.some(selected => selected._id === college._id)
-  );
+  useEffect(() => {
+    const onDoc = (e: MouseEvent) => {
+      if (!boxRef.current?.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", onDoc);
+    return () => document.removeEventListener("mousedown", onDoc);
+  }, []);
 
-  const addCollege = (college: College) => {
-    if (selectedColleges.length < 3) {
-      setSelectedColleges([...selectedColleges, college]);
-      setShowAddModal(false);
-    }
+  const addCollege = (college: CompareCollege) => {
+    if (selected.length >= 3) return;
+    if (selected.some((s) => s.id === college.id)) return;
+    setSelected((prev) => [...prev, college]);
+    setSearchTerm("");
+    setOpen(false);
   };
 
-  const removeCollege = (collegeId: string) => {
-    setSelectedColleges(selectedColleges.filter(college => college._id !== collegeId));
+  const removeCollege = (id: string) => {
+    setSelected((prev) => prev.filter((c) => c.id !== id));
   };
-
-  const clearAll = () => {
-    setSelectedColleges([]);
-  };
-
-  const comparisonMetrics = [
-    { key: 'ranking', label: 'Country Ranking', icon: Star, format: (college: College) => {
-      if (typeof college.ranking === 'object' && college.ranking?.country_ranking) {
-        return `#${college.ranking.country_ranking}`;
-      }
-      return college.ranking ? `#${college.ranking}` : 'N/A';
-    }},
-    { key: 'world_ranking', label: 'World Ranking', icon: Award, format: (college: College) => {
-      if (typeof college.ranking === 'object' && college.ranking?.world_ranking) {
-        return `#${college.ranking.world_ranking}`;
-      }
-      return 'N/A';
-    }},
-    { key: 'fees', label: 'Annual Fees', icon: TrendingUp, format: (college: College) => {
-      if (college.fees_structure?.courses && college.fees_structure.courses.length > 0) {
-        const course = college.fees_structure.courses[0];
-        return course.annual_tuition_fee.replace(/^:\s*/, '') || 'N/A';
-      }
-      return college.fees ? `₹${college.fees.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "-")}` : 'N/A';
-    }},
-    { key: 'establishment_year', label: 'Established', icon: GraduationCap, format: (college: College) => college.establishment_year || 'N/A' },
-    { key: 'exams', label: 'Entrance Exams', icon: CheckCircle2, format: (college: College) => college.exams?.join(', ') || 'N/A' },
-    { key: 'accreditation', label: 'Accreditation', icon: CheckCircle2, format: (college: College) => {
-      if (typeof college.ranking === 'object' && college.ranking?.accreditation?.length > 0) {
-        return college.ranking.accreditation.join(', ');
-      }
-      return 'N/A';
-    }}
-  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-[#E8F1FF]">
-      {/* Header */}
-      <div className="bg-white border-b border-slate-200 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-4">
-              <h1 className="text-xl font-bold text-slate-900">College Comparison</h1>
-              <span className="text-sm text-slate-500">
-                Compare up to 3 colleges side by side
-              </span>
-            </div>
-            {selectedColleges.length > 0 && (
-              <button
-                onClick={clearAll}
-                className="text-sm text-red-600 hover:text-red-700 font-medium"
-              >
-                Clear All
-              </button>
-            )}
+    <div className="min-h-screen bg-[#F4F7FC]">
+      <div className="border-b border-slate-200 bg-white">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-5 sm:px-6 lg:px-8">
+          <div>
+            <h1 className="text-xl font-bold text-slate-900 sm:text-2xl">
+              Compare Colleges
+            </h1>
+            <p className="mt-1 text-sm text-slate-500">
+              Search MBBS, MD/MS and other colleges — compare up to 3 side by side
+            </p>
           </div>
+          {selected.length > 0 && (
+            <button
+              type="button"
+              onClick={() => setSelected([])}
+              className="text-sm font-semibold text-red-600 hover:text-red-700"
+            >
+              Clear all
+            </button>
+          )}
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Loading State */}
-        {isLoading && (
-          <div className="text-center py-[32px]">
-            <div className="w-8 h-8 border-2 border-[#0066F5] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <h2 className="text-lg font-semibold text-slate-900">Loading Colleges...</h2>
-            <p className="text-slate-600">Fetching college data for comparison</p>
-          </div>
-        )}
-
-        {/* Error State */}
-        {error && (
-          <div className="text-center py-[32px]">
-            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <X className="w-8 h-8 text-red-600" />
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        {selected.length < 3 && (
+          <div className="mb-8 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <h2 className="text-lg font-semibold text-slate-900">
+                Add colleges to compare
+              </h2>
+              <span className="rounded-full bg-[#E8F1FF] px-3 py-1 text-xs font-bold text-[#0066F5]">
+                {selected.length}/3 selected
+              </span>
             </div>
-            <h2 className="text-lg font-semibold text-slate-900 mb-2">Error Loading Data</h2>
-            <p className="text-slate-600 mb-4">Failed to fetch college data. Please try again.</p>
-            <button
-              onClick={() => window.location.reload()}
-              className="px-4 py-2 bg-[#0066F5] text-white rounded-lg hover:bg-[#0047B3]"
-            >
-              Retry
-            </button>
-          </div>
-        )}
 
-        {/* Main Content */}
-        {!isLoading && !error && (
-          <>
-        {/* Add College Section */}
-        {selectedColleges.length < 3 && (
-          <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-8">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-slate-900">Add Colleges to Compare</h2>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-[#0066F5] rounded-full"></div>
-                <span className="text-sm text-slate-600">
-                  {selectedColleges.length}/3 colleges selected
-                </span>
-              </div>
-            </div>
-            
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4" />
+            <div ref={boxRef} className="relative">
+              <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-slate-400" />
               <input
-                type="text"
-                placeholder="Search colleges..."
+                type="search"
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#0066F5] text-black focus:border-transparent"
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setOpen(true);
+                }}
+                onFocus={() => setOpen(true)}
+                placeholder="Search by college, city, state or country…"
+                className="w-full rounded-xl border border-slate-300 bg-white py-3.5 pr-11 pl-10 text-sm text-slate-900 outline-none placeholder:text-slate-400 focus:border-[#0066F5] focus:ring-2 focus:ring-[#0066F5]/20"
+                autoComplete="off"
               />
+              {isFetching && (
+                <Loader2 className="absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 animate-spin text-[#0066F5]" />
+              )}
+
+              {open && (
+                <div className="absolute z-30 mt-2 max-h-[min(420px,55vh)] w-full overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-xl [scrollbar-width:thin]">
+                  {isError && (
+                    <div className="p-4 text-center text-sm text-red-600">
+                      Couldn’t load API colleges.{" "}
+                      <button
+                        type="button"
+                        onClick={() => refetch()}
+                        className="font-semibold underline"
+                      >
+                        Retry
+                      </button>
+                    </div>
+                  )}
+
+                  {results.length === 0 && !isFetching ? (
+                    <div className="p-6 text-center text-sm text-slate-500">
+                      No colleges found for “{searchTerm.trim() || "…"}”
+                    </div>
+                  ) : (
+                    <ul className="divide-y divide-slate-100">
+                      {results.map((college) => (
+                        <li key={college.id}>
+                          <button
+                            type="button"
+                            onClick={() => addCollege(college)}
+                            className="flex w-full items-start gap-3 px-4 py-3 text-left transition hover:bg-[#E8F1FF]/70"
+                          >
+                            <div className="h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-slate-100">
+                              {college.image ? (
+                                // eslint-disable-next-line @next/next/no-img-element
+                                <img
+                                  src={college.image}
+                                  alt=""
+                                  className="h-full w-full object-cover"
+                                  loading="lazy"
+                                />
+                              ) : (
+                                <div className="flex h-full w-full items-center justify-center">
+                                  <GraduationCap className="h-5 w-5 text-[#0066F5]" />
+                                </div>
+                              )}
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <div className="flex flex-wrap items-center gap-2">
+                                <p className="truncate text-sm font-semibold text-slate-900">
+                                  {college.name}
+                                </p>
+                                <span className="rounded-full bg-[#E8F1FF] px-2 py-0.5 text-[10px] font-bold tracking-wide text-[#0066F5] uppercase">
+                                  {college.sourceLabel}
+                                </span>
+                              </div>
+                              <p className="mt-0.5 flex items-center gap-1 text-xs text-slate-500">
+                                <MapPin className="h-3 w-3" />
+                                {college.locationLabel || "—"}
+                              </p>
+                            </div>
+                            <Plus className="mt-1 h-4 w-4 shrink-0 text-[#0066F5]" />
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              )}
             </div>
 
-            {availableColleges.length > 0 && (
-              <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {availableColleges.slice(0, 6).map((college : College) => (
-                  <div
-                    key={college._id}
-                    className="border border-slate-200 rounded-lg p-4 hover:border-[#0066F5] hover:shadow-md transition-all cursor-pointer"
-                    onClick={() => addCollege(college)}
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className="w-16 h-16 bg-slate-100 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
-                        {college.banner_url ? (
-                          <img
-                            src={college.banner_url}
-                            alt={college.name}
-                            width={64}
-                            height={64}
-                            className="w-full h-full object-cover"
-                            onError={(e) => {
-                              e.currentTarget.style.display = 'none';
-                              e.currentTarget.nextElementSibling?.classList.remove('hidden');
-                            }}
-                          />
-                        ) : null}
-                        <GraduationCap className="w-8 h-8 text-[#0066F5] hidden" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-slate-900 truncate">{college.name}</h3>
-                        <p className="text-sm text-slate-600 flex items-center gap-1">
-                          <MapPin className="w-3 h-3" />
-                          {college.city}{college.country_ref?.name ? `, ${college.country_ref.name}` : ''}
-                        </p>
-                        {college.establishment_year && (
-                          <p className="text-xs text-slate-500">Est. {college.establishment_year}</p>
-                        )}
-                      </div>
-                    </div>
-                    <button className="ml-2 p-1 hover:bg-[#E8F1FF] rounded">
-                      <Plus className="w-4 h-4 text-[#0066F5]" />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
+            <p className="mt-3 text-xs text-slate-500">
+              Tip: try “AIIMS”, “Delhi”, “Russia”, “MD” or a college name
+            </p>
           </div>
         )}
 
-        {/* Comparison Table */}
-        {selectedColleges.length > 0 && (
-          <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        {selected.length > 0 ? (
+          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="w-full min-w-[720px]">
                 <thead>
-                  <tr className="bg-slate-50 border-b border-slate-200">
-                    <th className="text-left p-4 font-semibold text-slate-900">Metric</th>
-                    {selectedColleges.map((college) => (
-                      <th key={college._id} className="p-4 min-w-[280px]">
-                        <div className="space-y-3">
+                  <tr className="border-b border-slate-200 bg-slate-50">
+                    <th className="p-4 text-left text-sm font-semibold text-slate-900">
+                      Metric
+                    </th>
+                    {selected.map((college) => (
+                      <th key={college.id} className="min-w-[240px] p-4">
+                        <div className="relative text-center">
                           <button
-                            onClick={() => removeCollege(college._id)}
-                            className="float-right p-1 hover:bg-red-50 rounded-full group"
+                            type="button"
+                            onClick={() => removeCollege(college.id)}
+                            className="absolute top-0 right-0 rounded-full p-1 hover:bg-red-50"
+                            aria-label={`Remove ${college.name}`}
                           >
-                            <X className="w-4 h-4 text-slate-400 group-hover:text-red-600" />
+                            <X className="h-4 w-4 text-slate-400 hover:text-red-600" />
                           </button>
-                          <div className="text-center">
-                            <div className="w-20 h-20 mx-auto bg-slate-100 rounded-lg flex items-center justify-center mb-3 overflow-hidden">
-                              {college.banner_url ? (
-                                <img
-                                  src={college.banner_url}
-                                  alt={college.name}
-                                  width={80}
-                                  height={80}
-                                  className="w-full h-full object-cover"
-                                  onError={(e) => {
-                                    e.currentTarget.style.display = 'none';
-                                    e.currentTarget.nextElementSibling?.classList.remove('hidden');
-                                  }}
-                                />
-                              ) : null}
-                              <GraduationCap className="w-10 h-10 text-[#0066F5] hidden" />
-                            </div>
-                            <h3 className="font-semibold text-slate-900 text-sm">{college.name}</h3>
-                            <p className="text-xs text-slate-600">{college.city}{college.country_ref?.name ? `, ${college.country_ref.name}` : ''}</p>
-                            {college.establishment_year && (
-                              <p className="text-xs text-slate-500">Est. {college.establishment_year}</p>
+                          <div className="mx-auto mb-3 h-20 w-20 overflow-hidden rounded-xl bg-slate-100">
+                            {college.image ? (
+                              // eslint-disable-next-line @next/next/no-img-element
+                              <img
+                                src={college.image}
+                                alt={college.name}
+                                className="h-full w-full object-cover"
+                              />
+                            ) : (
+                              <div className="flex h-full w-full items-center justify-center">
+                                <GraduationCap className="h-8 w-8 text-[#0066F5]" />
+                              </div>
                             )}
                           </div>
+                          <p className="text-sm font-semibold text-slate-900">
+                            {college.name}
+                          </p>
+                          <p className="mt-1 text-xs text-slate-500">
+                            {college.locationLabel}
+                          </p>
+                          <span className="mt-2 inline-block rounded-full bg-[#E8F1FF] px-2 py-0.5 text-[10px] font-bold text-[#0066F5] uppercase">
+                            {college.sourceLabel}
+                          </span>
                         </div>
                       </th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
-                  {/* College Images */}
-                 
-
-                  {/* Description */}
                   <tr className="border-b border-slate-100">
-                    <td className="p-4 font-medium text-slate-700">About</td>
-                    {selectedColleges.map((college) => (
-                      <td key={college._id} className="p-4">
-                        <p className="text-sm text-slate-600 leading-relaxed">{college.overview?.description || college.about_content || 'No description available'}</p>
+                    <td className="p-4 text-sm font-medium text-slate-700">About</td>
+                    {selected.map((college) => (
+                      <td key={college.id} className="p-4">
+                        <p className="line-clamp-4 text-sm leading-relaxed text-slate-600">
+                          {college.about || "No description available"}
+                        </p>
                       </td>
                     ))}
                   </tr>
-
-                  {/* Comparison Metrics */}
-                  {comparisonMetrics.map((metric) => (
-                    <tr key={metric.key} className="border-b border-slate-100 hover:bg-slate-50">
-                      <td className="p-4 font-medium text-slate-700">
-                        <div className="flex items-center gap-2">
-                          {React.createElement(metric.icon, { className: "w-4 h-4 text-[#0066F5]" })}
+                  {METRICS.map((metric) => (
+                    <tr
+                      key={metric.key}
+                      className="border-b border-slate-100 hover:bg-slate-50/80"
+                    >
+                      <td className="p-4 text-sm font-medium text-slate-700">
+                        <span className="inline-flex items-center gap-2">
+                          <metric.icon className="h-4 w-4 text-[#0066F5]" />
                           {metric.label}
-                        </div>
+                        </span>
                       </td>
-                      {selectedColleges.map((college) => (
-                        <td key={college._id} className="p-4">
-                          <div className="text-center">
-                            <div className="text-lg font-bold text-slate-900">
-                              {metric.format(college)}
-                            </div>
-                            {metric.key === 'ranking' && typeof college.ranking === 'object' && college.ranking?.country_ranking && (
-                              <div className="flex justify-center mt-1">
-                                <span className="text-xs bg-[#0066F5]/20 text-[#0066F5] px-2 py-1 rounded-full">
-                                  #{college.ranking.country_ranking}
-                                </span>
-                              </div>
-                            )}
-                          </div>
+                      {selected.map((college) => (
+                        <td key={college.id} className="p-4 text-center">
+                          <span className="text-sm font-bold text-slate-900">
+                            {metric.get(college)}
+                          </span>
                         </td>
                       ))}
                     </tr>
                   ))}
-
-                  {/* Courses */}
-                  <tr className="border-b border-slate-100">
-                    <td className="p-4 font-medium text-slate-700">Popular Courses</td>
-                    {selectedColleges.map((college) => (
-                      <td key={college._id} className="p-4">
-                        <div className="space-y-1">
-                          {college.fees_structure?.courses?.slice(0, 3).map((course, index) => (
-                            <div key={index} className="text-xs bg-[#0066F5]/10 text-[#0066F5] px-2 py-1 rounded-full inline-block">
-                              {course.course_name}
-                            </div>
-                          ))}
-                          {college.fees_structure?.courses && college.fees_structure.courses.length > 3 && (
-                            <div className="text-xs text-slate-500">+{college.fees_structure.courses.length - 3} more</div>
-                          )}
-                        </div>
-                      </td>
-                    ))}
-                  </tr>
                 </tbody>
               </table>
             </div>
-
-            {/* Comparison Summary */}
-            <div className="bg-gradient-to-r from-[#0066F5]/10 to-[#FACC15]/10 p-6 border-t border-slate-200">
-              <h3 className="font-semibold text-slate-900 mb-4">Quick Comparison Summary</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {selectedColleges.map((college, index) => (
-                  <div key={college._id} className="bg-white rounded-lg p-4 border border-slate-200">
-                    <div className="flex items-center justify-between mb-2">
-                      <h4 className="font-semibold text-slate-900">{college.name}</h4>
-                      <span className="text-xs bg-[#0066F5]/20 text-[#0066F5] px-2 py-1 rounded-full">
-                        Option {index + 1}
-                      </span>
-                    </div>
-                    <div className="space-y-1 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-slate-600">Country Rank:</span>
-                        <span className="font-medium text-slate-900">
-                          {(() => {
-                            if (typeof college.ranking === 'object' && college.ranking?.country_ranking) {
-                              return `#${college.ranking.country_ranking}`;
-                            }
-                            return college.ranking ? `#${college.ranking}` : 'N/A';
-                          })()}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-slate-600">Fees:</span>
-                        <span className="font-medium text-slate-900">
-                          {(() => {
-                            if (college.fees_structure?.courses && college.fees_structure.courses.length > 0) {
-                              const course = college.fees_structure.courses[0];
-                              return course.annual_tuition_fee.replace(/^:\s*/, '') || 'N/A';
-                            }
-                            return college.fees ? `₹${college.fees.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "-")}` : 'N/A';
-                          })()}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-slate-600">Established:</span>
-                        <span className="font-medium text-slate-900">{college.establishment_year || 'N/A'}</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
-        )}
-
-        {/* Empty State */}
-        {selectedColleges.length === 0 && !isLoading && !error && (
-          <div className="text-center py-[32px]">
-            <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <ArrowUpDown className="w-10 h-10 text-slate-400" />
+        ) : (
+          <div className="rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-16 text-center">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#E8F1FF]">
+              <ArrowUpDown className="h-8 w-8 text-[#0066F5]" />
             </div>
-            <h2 className="text-xl font-semibold text-slate-900 mb-2">Start Comparing Colleges</h2>
-            <p className="text-slate-600 max-w-md mx-auto">
-              Add up to 3 colleges to compare their features, fees, placements, and more side by side.
+            <h2 className="text-xl font-semibold text-slate-900">
+              Start comparing colleges
+            </h2>
+            <p className="mx-auto mt-2 max-w-md text-sm text-slate-600">
+              Use the search above to add up to 3 colleges from MBBS India, MBBS
+              Abroad, MD/MS or the main college list.
             </p>
           </div>
-        )}
-          </>
         )}
       </div>
     </div>

@@ -7,7 +7,7 @@ type Props = {
   variant?: "primary" | "light";
 };
 
-export default function MdMsEnquireButton({
+export default function CollegeEnquireButton({
   collegeName,
   variant = "primary",
 }: Props) {

@@ -14,30 +14,30 @@ import {
   Filter,
 } from "lucide-react";
 import {
-  getAllMdMsColleges,
-  getMdMsStates,
-  getMdMsStats,
-  type MdMsCollege,
-} from "@/lib/mdMsData";
+  getAllMbbsIndiaColleges,
+  getMbbsIndiaStates,
+  getMbbsIndiaStats,
+  type MbbsIndiaCollege,
+} from "@/lib/mbbsIndiaData";
 
 const ITEMS_PER_PAGE = 12;
 
-function CollegeCard({ college }: { college: MdMsCollege }) {
+function CollegeCard({ college }: { college: MbbsIndiaCollege }) {
   return (
     <Link
-      href={`/md-ms/${college.slug}`}
-      className="group flex flex-col md:flex-row bg-white rounded-xl border border-[#E2E8F0] hover:border-[#0066F5] hover:shadow-lg hover:shadow-[#0066F5]/15 transition-all duration-300 overflow-hidden"
+      href={`/mbbs-india/${college.slug}`}
+      className="group flex flex-col overflow-hidden rounded-xl border border-[#E2E8F0] bg-white transition-all duration-300 hover:border-[#0066F5] hover:shadow-lg hover:shadow-[#0066F5]/15 md:flex-row"
     >
-      <div className="relative w-full md:w-52 h-48 md:h-auto shrink-0 bg-slate-100 overflow-hidden">
+      <div className="relative h-48 w-full shrink-0 overflow-hidden bg-slate-100 md:h-auto md:w-52">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={college.image}
           alt={college.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           loading="lazy"
         />
         <span
-          className={`absolute top-3 left-3 text-xs font-bold px-2.5 py-1 rounded-md text-white ${
+          className={`absolute top-3 left-3 rounded-md px-2.5 py-1 text-xs font-bold text-white ${
             college.type.toLowerCase().includes("government")
               ? "bg-emerald-600"
               : "bg-violet-600"
@@ -47,46 +47,46 @@ function CollegeCard({ college }: { college: MdMsCollege }) {
         </span>
       </div>
 
-      <div className="flex-1 p-5 flex flex-col gap-3">
+      <div className="flex flex-1 flex-col gap-3 p-5">
         <div>
-          <h3 className="text-lg md:text-xl font-bold text-slate-900 group-hover:text-[#0066F5] transition-colors line-clamp-2">
+          <h3 className="line-clamp-2 text-lg font-bold text-slate-900 transition-colors group-hover:text-[#0066F5] md:text-xl">
             {college.name}
           </h3>
           <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-slate-600">
             <span className="inline-flex items-center gap-1">
-              <MapPin className="w-4 h-4 text-[#0066F5]" />
+              <MapPin className="h-4 w-4 text-[#0066F5]" />
               {college.city}, {college.stateName}
             </span>
             <span className="inline-flex items-center gap-1">
-              <Award className="w-4 h-4 text-amber-500" />
+              <Award className="h-4 w-4 text-amber-500" />
               {college.recognition}
             </span>
           </div>
         </div>
 
-        <p className="text-xs font-semibold text-[#0066F5] bg-[#E8F1FF] self-start px-2.5 py-1 rounded-md line-clamp-1">
+        <p className="line-clamp-1 self-start rounded-md bg-[#E8F1FF] px-2.5 py-1 text-xs font-semibold text-[#0066F5]">
           {college.ranking}
         </p>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-auto pt-2 border-t border-slate-100">
+        <div className="mt-auto grid grid-cols-2 gap-3 border-t border-slate-100 pt-2 sm:grid-cols-3">
           <div>
-            <p className="text-[11px] uppercase tracking-wide text-slate-400 font-semibold">
+            <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">
               Fees
             </p>
-            <p className="text-sm font-bold text-slate-800 line-clamp-1">
+            <p className="line-clamp-1 text-sm font-bold text-slate-800">
               {college.fees}
             </p>
           </div>
           <div>
-            <p className="text-[11px] uppercase tracking-wide text-slate-400 font-semibold">
-              PG Seats
+            <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">
+              Seats
             </p>
             <p className="text-sm font-bold text-slate-800">{college.seats}</p>
           </div>
-          <div className="col-span-2 sm:col-span-1 flex items-end justify-end sm:justify-start">
-            <span className="inline-flex items-center gap-1.5 rounded-lg bg-[#0066F5] text-white text-xs font-bold px-3 py-2 group-hover:bg-[#0047B3] transition-colors">
+          <div className="col-span-2 flex items-end justify-end sm:col-span-1 sm:justify-start">
+            <span className="inline-flex items-center gap-1.5 rounded-lg bg-[#0066F5] px-3 py-2 text-xs font-bold text-white transition-colors group-hover:bg-[#0047B3]">
               View Details
-              <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+              <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </span>
           </div>
         </div>
@@ -95,11 +95,11 @@ function CollegeCard({ college }: { college: MdMsCollege }) {
   );
 }
 
-export default function MdMsListingClient() {
+export default function MbbsIndiaListingClient() {
   const searchParams = useSearchParams();
-  const states = useMemo(() => getMdMsStates(), []);
-  const stats = useMemo(() => getMdMsStats(), []);
-  const allColleges = useMemo(() => getAllMdMsColleges(), []);
+  const states = useMemo(() => getMbbsIndiaStates(), []);
+  const stats = useMemo(() => getMbbsIndiaStats(), []);
+  const allColleges = useMemo(() => getAllMbbsIndiaColleges(), []);
 
   const [search, setSearch] = useState("");
   const [selectedState, setSelectedState] = useState("all");
@@ -108,13 +108,9 @@ export default function MdMsListingClient() {
 
   useEffect(() => {
     const stateFromUrl = searchParams.get("state");
-    if (!stateFromUrl) return;
-    // Legacy short slug support (e.g. "up" → "uttar-pradesh")
-    const legacy: Record<string, string> = { up: "uttar-pradesh" };
-    const resolved = legacy[stateFromUrl] || stateFromUrl;
-    if (states.some((s) => s.slug === resolved)) {
+    if (stateFromUrl && states.some((s) => s.slug === stateFromUrl)) {
       /* eslint-disable react-hooks/set-state-in-effect */
-      setSelectedState(resolved);
+      setSelectedState(stateFromUrl);
       setPage(1);
       /* eslint-enable react-hooks/set-state-in-effect */
     }
@@ -153,93 +149,63 @@ export default function MdMsListingClient() {
 
   return (
     <div className="min-h-screen bg-[#F4F7FC]">
-      {/* Hero */}
       <section className="relative overflow-hidden text-white">
-        {/* Layered backdrop */}
         <div className="absolute inset-0 bg-[#0B1220]" />
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?auto=format&fit=crop&w=1800&q=80"
+          src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=1800&q=80"
           alt=""
-          className="absolute inset-0 w-full h-full object-cover opacity-40 scale-105"
+          className="absolute inset-0 h-full w-full scale-105 object-cover opacity-40"
         />
         <div className="absolute inset-0 bg-linear-to-b from-[#0B1220]/70 via-[#0B1220]/55 to-[#0B1220]" />
         <div className="absolute inset-0 bg-linear-to-r from-[#0066F5]/35 via-transparent to-[#0047B3]/25" />
 
-        {/* Soft glow orbs */}
-        <div
-          className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 h-72 w-[36rem] rounded-full blur-3xl opacity-40"
-          style={{ background: "radial-gradient(circle, rgba(0,102,245,0.55), transparent 70%)" }}
-        />
-        <div
-          className="pointer-events-none absolute bottom-0 right-0 h-56 w-56 rounded-full blur-3xl opacity-30"
-          style={{ background: "radial-gradient(circle, rgba(0,71,179,0.6), transparent 70%)" }}
-        />
-
-        {/* Grid texture */}
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.07]"
-          style={{
-            backgroundImage:
-              "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)",
-            backgroundSize: "48px 48px",
-          }}
-        />
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pt-12 md:pt-16 pb-16 md:pb-20 text-center">
-          <div className="max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 backdrop-blur-md px-3.5 py-1.5 mb-6">
+        <div className="relative mx-auto max-w-7xl px-4 pt-12 pb-16 text-center sm:px-6 md:pt-16 md:pb-20 lg:px-10">
+          <div className="mx-auto max-w-3xl">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 backdrop-blur-md">
               <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#0066F5]">
                 <Stethoscope size={13} className="text-white" />
               </span>
-              <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.14em] sm:tracking-[0.18em] text-white/90 text-center max-w-[16rem] sm:max-w-none leading-snug">
-                NEET PG · Postgraduate Medicine
+              <span className="text-[10px] font-bold tracking-[0.14em] text-white/90 uppercase sm:text-[11px]">
+                NEET UG · MBBS India
               </span>
             </div>
 
-            <div className="inline-flex items-stretch justify-center gap-3 mb-4">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-[1.08]">
-                Find your{" "}
-                <span className="relative inline-block">
-                  <span className="relative z-10 text-white">MD / MS</span>
-                  <span className="absolute inset-x-0 bottom-1 h-2.5 bg-[#0066F5]/45 -z-0 rounded-sm" />
-                </span>{" "}
-                seat
-              </h1>
-              <span
-                className="hidden sm:block w-1.5 rounded-full bg-[#0066F5] shrink-0 self-stretch"
-                aria-hidden
-              />
-            </div>
+            <h1 className="mb-4 text-3xl leading-[1.08] font-bold tracking-tight sm:text-4xl md:text-5xl">
+              Find your{" "}
+              <span className="relative inline-block">
+                <span className="relative z-10 text-white">MBBS</span>
+                <span className="absolute inset-x-0 bottom-1 -z-0 h-2.5 rounded-sm bg-[#0066F5]/45" />
+              </span>{" "}
+              seat in India
+            </h1>
 
-            <p className="text-sm sm:text-base text-white/75 leading-relaxed max-w-xl mx-auto mb-8">
-              Compare fees, seats & counselling paths across India&apos;s top
-              postgraduate medical colleges — built for NEET PG aspirants.
+            <p className="mx-auto mb-8 max-w-xl text-sm leading-relaxed text-white/75 sm:text-base">
+              Compare fees, seats &amp; NEET counselling across top government
+              and private medical colleges in India.
             </p>
 
-            {/* Stats strip */}
-            <div className="mb-8 inline-flex flex-wrap items-center justify-center gap-x-5 gap-y-2 rounded-2xl border border-white/15 bg-white/10 backdrop-blur-md px-5 py-3 text-sm font-semibold">
+            <div className="mb-8 inline-flex flex-wrap items-center justify-center gap-x-5 gap-y-2 rounded-2xl border border-white/15 bg-white/10 px-5 py-3 text-sm font-semibold backdrop-blur-md">
               <span className="inline-flex items-center gap-2 text-white">
                 <GraduationCap size={16} className="text-[#0066F5]" />
                 {stats.colleges} Colleges
               </span>
-              <span className="hidden sm:inline w-px h-4 bg-white/25" />
+              <span className="hidden h-4 w-px bg-white/25 sm:inline" />
               <span className="inline-flex items-center gap-2 text-white">
                 <MapPin size={16} className="text-[#0066F5]" />
                 {stats.states} States
               </span>
-              <span className="hidden sm:inline w-px h-4 bg-white/25" />
+              <span className="hidden h-4 w-px bg-white/25 sm:inline" />
               <span className="inline-flex items-center gap-2 text-white">
                 <Award size={16} className="text-[#0066F5]" />
                 {stats.government}+ Government
               </span>
             </div>
 
-            {/* Search */}
-            <div className="max-w-xl mx-auto">
-              <div className="flex items-center gap-2 rounded-2xl bg-white p-1.5 sm:p-2 shadow-2xl shadow-black/25 border border-white/40">
-                <div className="flex flex-1 items-center gap-2 pl-3 min-w-0">
-                  <Search className="w-5 h-5 text-[#0066F5] shrink-0" />
+            <div className="mx-auto max-w-xl">
+              <div className="flex items-center gap-2 rounded-2xl border border-white/40 bg-white p-1.5 shadow-2xl shadow-black/25 sm:p-2">
+                <div className="flex min-w-0 flex-1 items-center gap-2 pl-3">
+                  <Search className="h-5 w-5 shrink-0 text-[#0066F5]" />
                   <input
                     type="search"
                     value={search}
@@ -248,46 +214,41 @@ export default function MdMsListingClient() {
                       resetPage();
                     }}
                     placeholder="Search college, city or state..."
-                    className="w-full min-w-0 bg-transparent text-[#0F172A] placeholder:text-slate-400 outline-none text-sm sm:text-base font-medium py-2.5"
+                    className="w-full min-w-0 bg-transparent py-2.5 text-sm font-medium text-[#0F172A] outline-none placeholder:text-slate-400 sm:text-base"
                   />
                 </div>
-                <span className="hidden sm:inline-flex shrink-0 items-center rounded-xl bg-[#0066F5] text-white text-sm font-bold px-5 py-2.5">
+                <span className="hidden shrink-0 items-center rounded-xl bg-[#0066F5] px-5 py-2.5 text-sm font-bold text-white sm:inline-flex">
                   Search
                 </span>
               </div>
-              <p className="mt-3 text-[11px] text-white/50 font-medium tracking-wide">
+              <p className="mt-3 text-[11px] font-medium tracking-wide text-white/50">
                 Tip: try “Delhi”, “AIIMS” or a state name
               </p>
             </div>
           </div>
         </div>
 
-        {/* Bottom wave into page */}
-        <div className="absolute bottom-0 inset-x-0 h-8 bg-[#F4F7FC] rounded-t-[2rem]" />
+        <div className="absolute inset-x-0 bottom-0 h-8 rounded-t-[2rem] bg-[#F4F7FC]" />
       </section>
 
-      {/* Main — same shell as category */}
       <section className="py-8 sm:py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
-          <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
-            <aside className="w-full lg:w-80 shrink-0">
-              <div className="bg-white rounded-2xl shadow-sm border border-[#E2E8F0] p-4 sm:p-6 lg:sticky lg:top-28 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto lg:overscroll-contain space-y-4">
-                {/* States */}
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
+          <div className="flex flex-col gap-6 lg:flex-row lg:gap-8">
+            <aside className="w-full shrink-0 lg:w-80">
+              <div className="space-y-4 rounded-2xl border border-[#E2E8F0] bg-white p-4 shadow-sm sm:p-6 lg:sticky lg:top-28 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto lg:overscroll-contain">
                 <div className="overflow-hidden rounded-xl border border-[#E2E8F0]">
-                  <div className="flex items-center justify-between gap-2 px-4 py-3 border-b border-[#E2E8F0] bg-[#F8FAFC]">
-                    <div className="flex items-center gap-2">
-                      <Filter className="w-4 h-4 text-[#0066F5]" />
-                      <h2 className="font-bold text-[#0F172A] text-sm">States</h2>
-                    </div>
+                  <div className="flex items-center gap-2 border-b border-[#E2E8F0] bg-[#F8FAFC] px-4 py-3">
+                    <Filter className="h-4 w-4 text-[#0066F5]" />
+                    <h2 className="text-sm font-bold text-[#0F172A]">States</h2>
                   </div>
-                  <div className="flex flex-col max-h-[min(360px,45vh)] overflow-y-auto overscroll-contain [scrollbar-width:thin] [scrollbar-color:#0066F5_#F1F5F9]">
+                  <div className="flex max-h-[min(360px,45vh)] flex-col overflow-y-auto overscroll-contain [scrollbar-width:thin] [scrollbar-color:#0066F5_#F1F5F9]">
                     <button
                       type="button"
                       onClick={() => {
                         setSelectedState("all");
                         resetPage();
                       }}
-                      className={`w-full text-left px-4 py-2.5 text-sm font-medium border-b border-[#E2E8F0] transition-colors ${
+                      className={`w-full border-b border-[#E2E8F0] px-4 py-2.5 text-left text-sm font-medium transition-colors ${
                         selectedState === "all"
                           ? "bg-[#0066F5] text-white"
                           : "text-slate-700 hover:bg-[#E8F1FF] hover:text-[#0066F5]"
@@ -297,7 +258,9 @@ export default function MdMsListingClient() {
                         <span>All States</span>
                         <span
                           className={`text-xs font-bold tabular-nums ${
-                            selectedState === "all" ? "text-white/80" : "text-slate-400"
+                            selectedState === "all"
+                              ? "text-white/80"
+                              : "text-slate-400"
                           }`}
                         >
                           {allColleges.length}
@@ -312,7 +275,7 @@ export default function MdMsListingClient() {
                           setSelectedState(state.slug);
                           resetPage();
                         }}
-                        className={`w-full text-left px-4 py-2.5 text-sm font-medium border-b border-[#E2E8F0] last:border-b-0 transition-colors ${
+                        className={`w-full border-b border-[#E2E8F0] px-4 py-2.5 text-left text-sm font-medium transition-colors last:border-b-0 ${
                           selectedState === state.slug
                             ? "bg-[#0066F5] text-white"
                             : "text-slate-700 hover:bg-[#E8F1FF] hover:text-[#0066F5]"
@@ -321,7 +284,7 @@ export default function MdMsListingClient() {
                         <span className="flex items-center justify-between gap-2">
                           <span className="truncate">{state.name}</span>
                           <span
-                            className={`text-xs font-bold tabular-nums shrink-0 ${
+                            className={`shrink-0 text-xs font-bold tabular-nums ${
                               selectedState === state.slug
                                 ? "text-white/80"
                                 : "text-slate-400"
@@ -335,10 +298,11 @@ export default function MdMsListingClient() {
                   </div>
                 </div>
 
-                {/* Type */}
                 <div className="overflow-hidden rounded-xl border border-[#E2E8F0]">
-                  <div className="px-4 py-3 border-b border-[#E2E8F0] bg-[#F8FAFC]">
-                    <h2 className="font-bold text-[#0F172A] text-sm">College Type</h2>
+                  <div className="border-b border-[#E2E8F0] bg-[#F8FAFC] px-4 py-3">
+                    <h2 className="text-sm font-bold text-[#0F172A]">
+                      College Type
+                    </h2>
                   </div>
                   <div className="flex flex-col">
                     {[
@@ -353,7 +317,7 @@ export default function MdMsListingClient() {
                           setSelectedType(t.id);
                           resetPage();
                         }}
-                        className={`w-full text-left px-4 py-2.5 text-sm font-medium border-b border-[#E2E8F0] last:border-b-0 transition-colors ${
+                        className={`w-full border-b border-[#E2E8F0] px-4 py-2.5 text-left text-sm font-medium transition-colors last:border-b-0 ${
                           selectedType === t.id
                             ? "bg-[#0066F5] text-white"
                             : "text-slate-700 hover:bg-[#E8F1FF] hover:text-[#0066F5]"
@@ -365,41 +329,43 @@ export default function MdMsListingClient() {
                   </div>
                 </div>
 
-                {/* Overview card — like category */}
-                <div className="rounded-xl bg-[#E8F1FF] border border-[#0066F5]/15 p-4">
-                  <h4 className="font-semibold text-[#0F172A] mb-3 flex items-center gap-2 text-sm">
-                    <Award className="w-4 h-4 text-[#0066F5]" />
+                <div className="rounded-xl border border-[#0066F5]/15 bg-[#E8F1FF] p-4">
+                  <h4 className="mb-3 flex items-center gap-2 text-sm font-semibold text-[#0F172A]">
+                    <Award className="h-4 w-4 text-[#0066F5]" />
                     Category Overview
                   </h4>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between gap-3">
                       <span className="text-[#64748B]">Total Colleges</span>
-                      <span className="font-semibold text-[#0066F5]">{stats.colleges}</span>
+                      <span className="font-semibold text-[#0066F5]">
+                        {stats.colleges}
+                      </span>
                     </div>
                     <div className="flex justify-between gap-3">
                       <span className="text-[#64748B]">States</span>
-                      <span className="font-semibold text-[#0066F5]">{stats.states}</span>
-                    </div>
-                    <div className="flex justify-between gap-3">
-                      <span className="text-[#64748B]">PG Seats</span>
                       <span className="font-semibold text-[#0066F5]">
-                        {Math.round(stats.seats / 100) * 100}+
+                        {stats.states}
                       </span>
                     </div>
                     <div className="flex justify-between gap-3">
                       <span className="text-[#64748B]">Govt Colleges</span>
-                      <span className="font-semibold text-[#0066F5]">{stats.government}</span>
+                      <span className="font-semibold text-[#0066F5]">
+                        {stats.government}
+                      </span>
                     </div>
                   </div>
                 </div>
               </div>
             </aside>
 
-            <div className="flex-1 min-w-0">
+            <div className="min-w-0 flex-1">
               <div className="mb-4">
-                <h2 className="text-xl font-bold text-[#0F172A]">MD / MS Colleges</h2>
-                <p className="text-sm text-[#64748B] mt-1">
-                  Showing {filtered.length} institution{filtered.length === 1 ? "" : "s"}
+                <h2 className="text-xl font-bold text-[#0F172A]">
+                  MBBS Colleges in India
+                </h2>
+                <p className="mt-1 text-sm text-[#64748B]">
+                  Showing {filtered.length} institution
+                  {filtered.length === 1 ? "" : "s"}
                   {selectedState !== "all" && (
                     <>
                       {" "}
@@ -412,12 +378,14 @@ export default function MdMsListingClient() {
                 </p>
               </div>
 
-              <div className="bg-white rounded-2xl shadow-sm border border-[#E2E8F0] p-4 sm:p-6">
+              <div className="rounded-2xl border border-[#E2E8F0] bg-white p-4 shadow-sm sm:p-6">
                 {pageItems.length === 0 ? (
                   <div className="py-12 text-center">
-                    <GraduationCap className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-                    <p className="text-slate-700 font-semibold">No colleges found</p>
-                    <p className="text-sm text-slate-500 mt-1">
+                    <GraduationCap className="mx-auto mb-3 h-12 w-12 text-slate-300" />
+                    <p className="font-semibold text-slate-700">
+                      No colleges found
+                    </p>
+                    <p className="mt-1 text-sm text-slate-500">
                       Try another state or clear your search.
                     </p>
                   </div>
@@ -430,14 +398,14 @@ export default function MdMsListingClient() {
                 )}
 
                 {totalPages > 1 && (
-                  <div className="mt-8 flex items-center justify-center gap-2 flex-wrap">
+                  <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
                     <button
                       type="button"
                       disabled={currentPage <= 1}
                       onClick={() => setPage((p) => Math.max(1, p - 1))}
-                      className="inline-flex items-center gap-1 px-3 py-2 rounded-lg border border-[#E2E8F0] bg-white text-sm font-medium disabled:opacity-40 hover:border-[#0066F5]"
+                      className="inline-flex items-center gap-1 rounded-lg border border-[#E2E8F0] bg-white px-3 py-2 text-sm font-medium hover:border-[#0066F5] disabled:opacity-40"
                     >
-                      <ChevronLeft className="w-4 h-4" /> Prev
+                      <ChevronLeft className="h-4 w-4" /> Prev
                     </button>
                     {Array.from({ length: totalPages }, (_, i) => i + 1)
                       .filter((n) => {
@@ -457,7 +425,10 @@ export default function MdMsListingClient() {
                       }, [])
                       .map((n, idx) =>
                         n === "…" ? (
-                          <span key={`e-${idx}`} className="px-2 text-slate-400">
+                          <span
+                            key={`e-${idx}`}
+                            className="px-2 text-slate-400"
+                          >
                             …
                           </span>
                         ) : (
@@ -465,10 +436,10 @@ export default function MdMsListingClient() {
                             key={n}
                             type="button"
                             onClick={() => setPage(n)}
-                            className={`w-10 h-10 rounded-lg text-sm font-bold ${
+                            className={`h-10 w-10 rounded-lg text-sm font-bold ${
                               currentPage === n
                                 ? "bg-[#0066F5] text-white"
-                                : "bg-white border border-[#E2E8F0] text-slate-700 hover:border-[#0066F5]"
+                                : "border border-[#E2E8F0] bg-white text-slate-700 hover:border-[#0066F5]"
                             }`}
                           >
                             {n}
@@ -478,10 +449,12 @@ export default function MdMsListingClient() {
                     <button
                       type="button"
                       disabled={currentPage >= totalPages}
-                      onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                      className="inline-flex items-center gap-1 px-3 py-2 rounded-lg border border-[#E2E8F0] bg-white text-sm font-medium disabled:opacity-40 hover:border-[#0066F5]"
+                      onClick={() =>
+                        setPage((p) => Math.min(totalPages, p + 1))
+                      }
+                      className="inline-flex items-center gap-1 rounded-lg border border-[#E2E8F0] bg-white px-3 py-2 text-sm font-medium hover:border-[#0066F5] disabled:opacity-40"
                     >
-                      Next <ChevronRight className="w-4 h-4" />
+                      Next <ChevronRight className="h-4 w-4" />
                     </button>
                   </div>
                 )}

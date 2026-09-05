@@ -10,23 +10,23 @@ import {
   Phone,
   Mail,
   MapPin,
-  GraduationCap,
-  Stethoscope,
-  BookOpen,
-  Newspaper,
   Wrench,
   Search,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useFormModal } from "@/context/FormModalContext";
 import Image from "next/image";
-import { useCategories } from "@/hooks/useCategories";
 import {
   useContactInfo,
   createMailtoLink,
   createTelLink,
 } from "@/hooks/useContactInfo";
 import SearchOverlay from "@/app/Components/SearchOverlay";
+import NavMegaMenuTrigger, {
+  ApiMegaPanel,
+  StaticMegaPanel,
+} from "@/app/Components/NavMegaMenu";
+import { NAV_STATIC_MENUS } from "@/lib/navMenuData";
 
 const navLinkBase =
   "relative px-3.5 py-2 text-[13px] font-semibold tracking-wide text-slate-600 transition-colors duration-200 rounded-lg hover:text-[#0066F5] hover:bg-[#E8F1FF]/70";
@@ -34,19 +34,46 @@ const navLinkBase =
 const navLinkActive =
   "text-[#0066F5] bg-[#E8F1FF] after:absolute after:left-3 after:right-3 after:-bottom-0.5 after:h-0.5 after:rounded-full after:bg-[#0066F5]";
 
+type OpenMenu =
+  | "md-ms"
+  | "mbbs-india"
+  | "mbbs-abroad"
+  | "engineering"
+  | "management"
+  | "tools"
+  | null;
+
+const API_MENUS = [
+  {
+    key: "engineering" as const,
+    label: "Engineering",
+    title: "Engineering Colleges",
+    description:
+      "B.Tech & M.Tech programs across top institutes in India.",
+    categorySlug: "engineering",
+    allHref: "/colleges/category/engineering",
+  },
+  {
+    key: "management" as const,
+    label: "Management",
+    title: "Management Colleges",
+    description:
+      "MBA & business schools with fees, rankings and admission help.",
+    categorySlug: "management",
+    allHref: "/colleges/category/management",
+  },
+];
+
 export default function SimpleNavbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [collegeTypeOpen, setCollegeTypeOpen] = useState(false);
-  const [mobileCollegesOpen, setMobileCollegesOpen] = useState(false);
-  const [mobileCitiesOpen, setMobileCitiesOpen] = useState(false);
-  const [toolsOpen, setToolsOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState<OpenMenu>(null);
+  const [mobileOpen, setMobileOpen] = useState<string | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const pathname = usePathname();
   const { openModal } = useFormModal();
   const { emails, phones, address } = useContactInfo();
-  const { data: categories } = useCategories();
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 12);
@@ -55,11 +82,10 @@ export default function SimpleNavbar() {
   }, []);
 
   useEffect(() => {
-    // Close menus when navigating to a new route
     /* eslint-disable react-hooks/set-state-in-effect */
     setIsOpen(false);
-    setCollegeTypeOpen(false);
-    setToolsOpen(false);
+    setOpenMenu(null);
+    setMobileOpen(null);
     /* eslint-enable react-hooks/set-state-in-effect */
   }, [pathname]);
 
@@ -76,43 +102,15 @@ export default function SimpleNavbar() {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
   };
 
-  const handleCollegeTypeMouseEnter = () => {
+  const handleEnter = (key: OpenMenu) => {
     clearHoverTimeout();
-    timeoutRef.current = setTimeout(() => setCollegeTypeOpen(true), 80);
+    timeoutRef.current = setTimeout(() => setOpenMenu(key), 80);
   };
 
-  const handleCollegeTypeMouseLeave = () => {
+  const handleLeave = () => {
     clearHoverTimeout();
-    timeoutRef.current = setTimeout(() => setCollegeTypeOpen(false), 120);
+    timeoutRef.current = setTimeout(() => setOpenMenu(null), 140);
   };
-
-  const handleToolsMouseEnter = () => {
-    clearHoverTimeout();
-    timeoutRef.current = setTimeout(() => setToolsOpen(true), 80);
-  };
-
-  const handleToolsMouseLeave = () => {
-    clearHoverTimeout();
-    timeoutRef.current = setTimeout(() => setToolsOpen(false), 120);
-  };
-
-  const collegeTypes = [
-    ...(categories?.map((category) => ({
-      name: `${category.name} Colleges`,
-      href: `/colleges/category/${category.slug}`,
-    })) || []),
-    { name: "MD / MS Colleges", href: "/md-ms" },
-    { name: "All Colleges", href: "/colleges" },
-  ];
-
-  const collegeLocations = [
-    { name: "Mumbai", href: "/colleges/city/mumbai" },
-    { name: "Delhi", href: "/colleges/city/delhi" },
-    { name: "Bangalore", href: "/colleges/city/bangalore" },
-    { name: "Hyderabad", href: "/colleges/city/hyderabad" },
-    { name: "Chennai", href: "/colleges/city/chennai" },
-    { name: "Pune", href: "/colleges/city/pune" },
-  ];
 
   const toolsOptions = [
     {
@@ -133,9 +131,15 @@ export default function SimpleNavbar() {
     pathname?.includes("/compare") ||
     pathname === "/about";
 
+  const toggleMobile = (key: string) =>
+    setMobileOpen((prev) => (prev === key ? null : key));
+
+  const activeStaticMenu = NAV_STATIC_MENUS.find((m) => m.key === openMenu);
+  const activeApiMenu = API_MENUS.find((m) => m.key === openMenu);
+  const isMegaOpen = Boolean(activeStaticMenu || activeApiMenu);
+
   return (
     <>
-      {/* Top utility strip */}
       <div className="relative hidden overflow-hidden sm:block bg-gradient-to-r from-[#0047B3] via-[#0066F5] to-[#0047B3] text-white">
         <div
           className="pointer-events-none absolute inset-0 opacity-30"
@@ -169,20 +173,19 @@ export default function SimpleNavbar() {
         </div>
       </div>
 
-      {/* Main navigation */}
       <nav
-        className={`sticky top-0 z-50 w-full transition-all duration-300 ${
+        className={`relative sticky top-0 z-50 w-full transition-all duration-300 ${
           isScrolled
             ? "border-b border-[#E2E8F0]/80 bg-white/85 shadow-[0_8px_30px_rgba(15,23,42,0.06)] backdrop-blur-xl"
             : "border-b border-transparent bg-white"
         }`}
+        onMouseLeave={handleLeave}
       >
         <div
           className={`mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8 transition-[height] duration-300 ${
             isScrolled ? "h-[68px]" : "h-[76px]"
           }`}
         >
-          {/* Logo */}
           <Link href="/" className="flex shrink-0 items-center">
             <Image
               src="/logo.jpg"
@@ -195,8 +198,10 @@ export default function SimpleNavbar() {
             />
           </Link>
 
-          {/* Desktop links */}
-          <div className="hidden items-center gap-0.5 lg:flex">
+          <div
+            className="hidden items-center gap-0.5 lg:flex"
+            onMouseEnter={clearHoverTimeout}
+          >
             <Link
               href="/"
               className={`${navLinkBase} ${pathname === "/" ? navLinkActive : ""}`}
@@ -204,109 +209,34 @@ export default function SimpleNavbar() {
               Home
             </Link>
 
-            {/* Colleges */}
+            {NAV_STATIC_MENUS.map((menu) => (
+              <NavMegaMenuTrigger
+                key={menu.key}
+                label={menu.label}
+                open={openMenu === menu.key}
+                active={pathname?.startsWith(menu.allHref) ?? false}
+                onEnter={() => handleEnter(menu.key)}
+              />
+            ))}
+
+            {API_MENUS.map((menu) => (
+              <NavMegaMenuTrigger
+                key={menu.key}
+                label={menu.label}
+                open={openMenu === menu.key}
+                active={pathname?.includes(menu.categorySlug) ?? false}
+                onEnter={() => handleEnter(menu.key)}
+              />
+            ))}
+
             <div
               className="relative"
-              onMouseEnter={handleCollegeTypeMouseEnter}
-              onMouseLeave={handleCollegeTypeMouseLeave}
+              onMouseEnter={() => handleEnter("tools")}
             >
               <button
                 type="button"
                 className={`${navLinkBase} inline-flex items-center gap-1.5 ${
-                  pathname?.startsWith("/colleges") ? navLinkActive : ""
-                }`}
-              >
-                <GraduationCap size={14} className="opacity-70" />
-                Colleges
-                <ChevronDown
-                  size={13}
-                  className={`transition-transform duration-200 ${
-                    collegeTypeOpen ? "rotate-180" : ""
-                  }`}
-                />
-              </button>
-
-              {collegeTypeOpen && (
-                <div className="absolute left-0 top-full z-50 mt-3 w-[280px] overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-[0_20px_50px_rgba(15,23,42,0.12)]">
-                  <div className="border-b border-[#E8F1FF] bg-gradient-to-r from-[#E8F1FF] to-white px-4 py-3">
-                    <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#0066F5]">
-                      Browse by type
-                    </p>
-                    <p className="mt-0.5 text-xs text-slate-500">
-                      Find the right campus path
-                    </p>
-                  </div>
-                  <div className="max-h-[360px] overflow-y-auto py-1.5">
-                    {collegeTypes.map((item) => (
-                      <Link
-                        key={item.name}
-                        href={item.href}
-                        className={`mx-1.5 flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors ${
-                          pathname === item.href
-                            ? "bg-[#E8F1FF] font-semibold text-[#0066F5]"
-                            : "text-slate-700 hover:bg-[#F4F7FC] hover:text-[#0066F5]"
-                        }`}
-                      >
-                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#E8F1FF] text-[#0066F5]">
-                          <GraduationCap size={14} />
-                        </span>
-                        <span className="leading-snug">{item.name}</span>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <Link
-              href="/md-ms"
-              className={`${navLinkBase} inline-flex items-center gap-1.5 ${
-                pathname?.startsWith("/md-ms") ? navLinkActive : ""
-              }`}
-            >
-              <Stethoscope size={14} className="opacity-70" />
-              MD / MS
-            </Link>
-
-            <Link
-              href="/exams"
-              className={`${navLinkBase} inline-flex items-center gap-1.5 ${
-                pathname?.startsWith("/exams") ? navLinkActive : ""
-              }`}
-            >
-              <BookOpen size={14} className="opacity-70" />
-              Exams
-            </Link>
-
-            <Link
-              href="/blogs"
-              className={`${navLinkBase} inline-flex items-center gap-1.5 ${
-                pathname?.startsWith("/blogs") ? navLinkActive : ""
-              }`}
-            >
-              <Newspaper size={14} className="opacity-70" />
-              Blogs
-            </Link>
-
-            <Link
-              href="/contact"
-              className={`${navLinkBase} ${
-                pathname?.startsWith("/contact") ? navLinkActive : ""
-              }`}
-            >
-              Contact
-            </Link>
-
-            {/* Tools */}
-            <div
-              className="relative"
-              onMouseEnter={handleToolsMouseEnter}
-              onMouseLeave={handleToolsMouseLeave}
-            >
-              <button
-                type="button"
-                className={`${navLinkBase} inline-flex items-center gap-1.5 ${
-                  isToolsActive ? navLinkActive : ""
+                  isToolsActive || openMenu === "tools" ? navLinkActive : ""
                 }`}
               >
                 <Wrench size={14} className="opacity-70" />
@@ -314,12 +244,12 @@ export default function SimpleNavbar() {
                 <ChevronDown
                   size={13}
                   className={`transition-transform duration-200 ${
-                    toolsOpen ? "rotate-180" : ""
+                    openMenu === "tools" ? "rotate-180" : ""
                   }`}
                 />
               </button>
 
-              {toolsOpen && (
+              {openMenu === "tools" && (
                 <div className="absolute right-0 top-full z-50 mt-3 w-[300px] overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-[0_20px_50px_rgba(15,23,42,0.12)]">
                   <div className="border-b border-[#E8F1FF] bg-gradient-to-r from-[#E8F1FF] to-white px-4 py-3">
                     <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#0066F5]">
@@ -357,7 +287,6 @@ export default function SimpleNavbar() {
             </div>
           </div>
 
-          {/* Actions */}
           <div className="flex items-center gap-2 sm:gap-3">
             <button
               type="button"
@@ -395,7 +324,37 @@ export default function SimpleNavbar() {
           </div>
         </div>
 
-        {/* Mobile menu */}
+        {/* Full-width mega menu — aligned to nav container, not the trigger */}
+        {isMegaOpen && (
+          <div
+            className="absolute inset-x-0 top-full z-50 hidden lg:block"
+            onMouseEnter={clearHoverTimeout}
+          >
+            {/* Overlap bridge so hover doesn't drop between bar and panel */}
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <div className="-mt-1 border-t border-transparent pt-3">
+                {activeStaticMenu ? (
+                  <StaticMegaPanel
+                    key={activeStaticMenu.key}
+                    menu={activeStaticMenu}
+                  />
+                ) : null}
+                {activeApiMenu ? (
+                  <ApiMegaPanel
+                    key={activeApiMenu.key}
+                    title={activeApiMenu.title}
+                    description={activeApiMenu.description}
+                    categorySlug={activeApiMenu.categorySlug}
+                    allHref={activeApiMenu.allHref}
+                    enabled
+                  />
+                ) : null}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Mobile */}
         <div
           className={`overflow-hidden border-t border-[#E2E8F0] bg-white transition-all duration-300 lg:hidden ${
             isOpen
@@ -421,139 +380,73 @@ export default function SimpleNavbar() {
               </button>
             </div>
 
-            <div className="flex flex-col gap-0.5">
-              {[
-                { href: "/", label: "Home", match: pathname === "/" },
-                {
-                  href: "/md-ms",
-                  label: "MD / MS",
-                  match: pathname?.startsWith("/md-ms"),
-                },
-                {
-                  href: "/exams",
-                  label: "Exams",
-                  match: pathname?.startsWith("/exams"),
-                },
-                {
-                  href: "/blogs",
-                  label: "Blogs",
-                  match: pathname?.startsWith("/blogs"),
-                },
-                {
-                  href: "/contact",
-                  label: "Contact",
-                  match: pathname?.startsWith("/contact"),
-                },
-              ].map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setIsOpen(false)}
-                  className={`rounded-xl px-4 py-3 text-[15px] font-semibold transition ${
-                    item.match
-                      ? "bg-[#E8F1FF] text-[#0066F5]"
-                      : "text-slate-700 hover:bg-[#F4F7FC]"
-                  }`}
+            <Link
+              href="/"
+              onClick={() => setIsOpen(false)}
+              className={`block rounded-xl px-4 py-3 text-[15px] font-semibold transition ${
+                pathname === "/"
+                  ? "bg-[#E8F1FF] text-[#0066F5]"
+                  : "text-slate-700 hover:bg-[#F4F7FC]"
+              }`}
+            >
+              Home
+            </Link>
+
+            {NAV_STATIC_MENUS.map((menu) => (
+              <div key={menu.key} className="border-t border-[#E2E8F0]">
+                <button
+                  type="button"
+                  onClick={() => toggleMobile(menu.key)}
+                  className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-left hover:bg-[#F4F7FC]"
                 >
-                  {item.label}
+                  <span className="text-[15px] font-semibold text-slate-700">
+                    {menu.label}
+                  </span>
+                  <ChevronDown
+                    size={16}
+                    className={`text-slate-400 transition-transform ${
+                      mobileOpen === menu.key ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+                {mobileOpen === menu.key && (
+                  <div className="flex flex-col gap-0.5 pb-2 pl-2">
+                    <Link
+                      href={menu.allHref}
+                      onClick={() => setIsOpen(false)}
+                      className="rounded-lg px-4 py-2.5 text-sm font-semibold text-[#0066F5]"
+                    >
+                      {menu.allLabel}
+                    </Link>
+                    {menu.regions.slice(0, 8).map((region) => (
+                      <Link
+                        key={region.slug}
+                        href={`${menu.allHref}?${menu.key === "mbbs-abroad" ? "country" : "state"}=${region.slug}`}
+                        onClick={() => setIsOpen(false)}
+                        className="rounded-lg px-4 py-2.5 text-sm text-slate-600 hover:bg-[#F4F7FC]"
+                      >
+                        {region.name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+
+            {API_MENUS.map((menu) => (
+              <div key={menu.key} className="border-t border-[#E2E8F0]">
+                <Link
+                  href={menu.allHref}
+                  onClick={() => setIsOpen(false)}
+                  className="flex items-center justify-between rounded-xl px-4 py-3 text-[15px] font-semibold text-slate-700 hover:bg-[#F4F7FC]"
+                >
+                  {menu.label}
+                  <ChevronDown size={16} className="-rotate-90 text-slate-400" />
                 </Link>
-              ))}
-            </div>
-
-            {/* Colleges accordion */}
-            <div className="mt-3 border-t border-[#E2E8F0] pt-3">
-              <button
-                type="button"
-                onClick={() => setMobileCollegesOpen(!mobileCollegesOpen)}
-                className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-left hover:bg-[#F4F7FC]"
-              >
-                <span className="text-sm font-bold uppercase tracking-wider text-slate-500">
-                  Colleges
-                </span>
-                <ChevronDown
-                  size={16}
-                  className={`text-slate-400 transition-transform ${
-                    mobileCollegesOpen ? "rotate-180" : ""
-                  }`}
-                />
-              </button>
-              <div
-                className={`overflow-hidden transition-all duration-300 ${
-                  mobileCollegesOpen
-                    ? "max-h-96 opacity-100"
-                    : "max-h-0 opacity-0"
-                }`}
-              >
-                <div className="flex flex-col gap-0.5 pb-2 pl-2">
-                  {collegeTypes.map((item) => (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      onClick={() => {
-                        setIsOpen(false);
-                        setMobileCollegesOpen(false);
-                      }}
-                      className={`rounded-lg px-4 py-2.5 text-sm ${
-                        pathname === item.href
-                          ? "bg-[#E8F1FF] font-semibold text-[#0066F5]"
-                          : "text-slate-600 hover:bg-[#F4F7FC]"
-                      }`}
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
-                </div>
               </div>
-            </div>
+            ))}
 
-            {/* Cities */}
-            <div className="border-t border-[#E2E8F0] pt-3">
-              <button
-                type="button"
-                onClick={() => setMobileCitiesOpen(!mobileCitiesOpen)}
-                className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-left hover:bg-[#F4F7FC]"
-              >
-                <span className="text-sm font-bold uppercase tracking-wider text-slate-500">
-                  Top Cities
-                </span>
-                <ChevronDown
-                  size={16}
-                  className={`text-slate-400 transition-transform ${
-                    mobileCitiesOpen ? "rotate-180" : ""
-                  }`}
-                />
-              </button>
-              <div
-                className={`overflow-hidden transition-all duration-300 ${
-                  mobileCitiesOpen
-                    ? "max-h-96 opacity-100"
-                    : "max-h-0 opacity-0"
-                }`}
-              >
-                <div className="grid grid-cols-2 gap-2 px-3 pb-3">
-                  {collegeLocations.map((item) => (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      onClick={() => {
-                        setIsOpen(false);
-                        setMobileCitiesOpen(false);
-                      }}
-                      className={`rounded-xl px-3 py-2.5 text-center text-sm font-medium ${
-                        pathname === item.href
-                          ? "bg-[#E8F1FF] text-[#0066F5]"
-                          : "bg-[#F4F7FC] text-slate-600 hover:bg-[#E8F1FF] hover:text-[#0066F5]"
-                      }`}
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Tools */}
-            <div className="border-t border-[#E2E8F0] pt-3">
+            <div className="mt-1 border-t border-[#E2E8F0] pt-3">
               <p className="mb-1 px-4 text-sm font-bold uppercase tracking-wider text-slate-500">
                 Tools
               </p>

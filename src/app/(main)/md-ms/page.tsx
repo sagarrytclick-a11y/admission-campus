@@ -1,38 +1,52 @@
-import type { Metadata } from "next";
 import { Suspense } from "react";
 import MdMsListingClient from "./MdMsListingClient";
-import { getMdMsStats } from "@/lib/mdMsData";
+import { getAllMdMsColleges, getMdMsStats } from "@/lib/mdMsData";
+import { pageSeo } from "@/lib/seo";
+import { BreadcrumbJsonLd, ItemListJsonLd } from "@/components/SeoJsonLd";
 
 const stats = getMdMsStats();
+const colleges = getAllMdMsColleges();
 
-export const metadata: Metadata = {
+export const metadata = pageSeo({
   title: "MD / MS Colleges in India | NEET PG Guide",
-  description: `Browse ${stats.colleges}+ MD and MS colleges across ${stats.states} Indian states with fees, seats, recognition, counselling process and placements. NEET PG college guide.`,
-  alternates: { canonical: "/md-ms" },
-  openGraph: {
-    title: "MD / MS Colleges in India | NEET PG Guide",
-    description: `Compare ${stats.colleges}+ postgraduate medical colleges — fees, seats, NRI quota and counselling info.`,
-    url: "/md-ms",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "MD / MS Colleges in India",
-    description: `Explore ${stats.colleges}+ MD/MS colleges with fees, seats and counselling guidance.`,
-  },
-  robots: { index: true, follow: true },
-};
+  description: `Browse ${stats.colleges}+ MD and MS colleges across ${stats.states} Indian states with fees, seats, recognition, counselling process and placements.`,
+  path: "/md-ms",
+  keywords: [
+    "MD MS colleges India",
+    "NEET PG counselling",
+    "postgraduate medical colleges",
+    "MD MS fees seats",
+    "Admission Campus",
+  ],
+});
 
 export default function Page() {
   return (
-    <Suspense
-      fallback={
-        <div className="min-h-[50vh] flex items-center justify-center text-slate-500">
-          Loading MD/MS colleges…
-        </div>
-      }
-    >
-      <MdMsListingClient />
-    </Suspense>
+    <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", url: "/" },
+          { name: "MD/MS Colleges", url: "/md-ms" },
+        ]}
+      />
+      <ItemListJsonLd
+        name="MD / MS Colleges in India"
+        description={`Explore ${stats.colleges}+ postgraduate medical colleges with fees and counselling guidance.`}
+        url="/md-ms"
+        items={colleges.map((c) => ({
+          name: c.name,
+          url: `/md-ms/${c.slug}`,
+        }))}
+      />
+      <Suspense
+        fallback={
+          <div className="flex min-h-[50vh] items-center justify-center text-slate-500">
+            Loading MD/MS colleges…
+          </div>
+        }
+      >
+        <MdMsListingClient />
+      </Suspense>
+    </>
   );
 }
