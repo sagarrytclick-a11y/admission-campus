@@ -1,10 +1,8 @@
 "use client";
 
-import React, { useState, useEffect, useEffectEvent } from "react";
+import React, { useState, useEffect, useEffectEvent, useRef } from "react";
 import {
   Search,
-  ChevronLeft,
-  ChevronRight,
   GraduationCap,
   FileText,
   Monitor,
@@ -17,7 +15,6 @@ type Slide = {
   id: string;
   title: string;
   caption: string;
-  image: string;
   searchPlaceholder: string;
 };
 
@@ -25,22 +22,19 @@ const SLIDES: Slide[] = [
   {
     id: "md-ms",
     title: "MD / MS Admissions",
-    caption: "AIIMS Delhi & Top Medical Colleges",
-    image: "https://i.pinimg.com/1200x/43/d9/25/43d925ce787ec1b4d17c307254e88770.jpg",
+    caption: "PG medical seats with expert counselling",
     searchPlaceholder: "Search Colleges, Courses, Exams...",
   },
   {
     id: "management",
     title: "Management Excellence",
-    caption: "IIMs & Leading Business Schools",
-    image: "https://i.pinimg.com/1200x/fa/bf/e3/fabfe396cfff23de88157d017ce43867.jpg",
+    caption: "MBA admissions made simple",
     searchPlaceholder: "Search Colleges, Courses, Exams...",
   },
   {
     id: "engineering",
     title: "Engineering Excellence",
-    caption: "IIT Delhi (Indian Institute of Technology)",
-    image: "https://i.pinimg.com/736x/2f/fd/d6/2ffdd6cbce2d30f433f03db90d6f353b.jpg",
+    caption: "Find the right B.Tech college for you",
     searchPlaceholder: "Search Colleges, Courses, Exams...",
   },
 ];
@@ -53,15 +47,16 @@ const STATS = [
 ];
 
 const TYPING_SPEED_MS = 55;
+const HERO_VIDEO = "/Hero/hero.mp4";
 
 export default function Hero() {
   const [slideIndex, setSlideIndex] = useState(0);
   const [searchOpen, setSearchOpen] = useState(false);
   const [typing, setTyping] = useState({ slide: 0, count: 0 });
+  const videoRef = useRef<HTMLVideoElement>(null);
   const { openModal } = useFormModal();
 
   const slide = SLIDES[slideIndex];
-  // Reset per slide without touching state during the effect body.
   const typedCount = typing.slide === slideIndex ? typing.count : 0;
   const typedTitle = slide.title.slice(0, typedCount);
 
@@ -86,37 +81,61 @@ export default function Hero() {
     return () => clearInterval(interval);
   }, [slideIndex]);
 
-  const goPrev = () =>
-    setSlideIndex((prev) => (prev - 1 + SLIDES.length) % SLIDES.length);
-  const goNext = () => setSlideIndex((prev) => (prev + 1) % SLIDES.length);
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    if (searchOpen || prefersReducedMotion) {
+      video.pause();
+      return;
+    }
+
+    const play = () => {
+      void video.play().catch(() => {
+        // Autoplay can be blocked; muted + playsInline usually succeeds.
+      });
+    };
+
+    play();
+
+    const onVisibility = () => {
+      if (document.hidden) video.pause();
+      else play();
+    };
+
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => document.removeEventListener("visibilitychange", onVisibility);
+  }, [searchOpen]);
 
   return (
-    <section className="relative min-h-[48vh] sm:min-h-[52vh] md:min-h-[58vh] overflow-hidden flex items-center justify-center pb-12 sm:pb-14">
-      {/* Background slides */}
-      {SLIDES.map((s, i) => (
-        <div
-          key={s.id}
-          className={`absolute inset-0 transition-opacity duration-700 ${
-            i === slideIndex ? "opacity-100" : "opacity-0"
-          }`}
+    <section className="relative min-h-[56vh] sm:min-h-[62vh] md:min-h-[70vh] overflow-hidden flex items-center justify-center pb-12 sm:pb-14">
+      <div className="absolute inset-0 bg-[#07111F]">
+        <video
+          ref={videoRef}
+          className="absolute inset-0 h-full w-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-hidden
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={s.image}
-            alt=""
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-        </div>
-      ))}
+          <source src={HERO_VIDEO} type="video/mp4" />
+        </video>
+      </div>
 
-      <div className="absolute inset-0 bg-black/45" />
-      <div className="absolute inset-0 bg-linear-to-b from-black/30 via-transparent to-black/50" />
+      <div className="absolute inset-0 bg-black/50" />
+      <div className="absolute inset-0 bg-linear-to-b from-[#07111F]/70 via-[#07111F]/25 to-[#07111F]/80" />
+      <div className="absolute inset-0 bg-linear-to-r from-[#0066F5]/15 via-transparent to-[#0047B3]/20" />
 
-      <div className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-10 md:py-12 text-center">
+      <div className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12 md:py-14 text-center">
         <div className="inline-flex items-stretch gap-3 mb-4 sm:mb-8 md:mb-10">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.5rem] font-bold text-white tracking-tight leading-tight">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.5rem] font-bold text-white tracking-tight leading-tight drop-shadow-md">
             <span className="relative inline-block">
-              {/* Reserves the final width so the accent bar doesn't jump while typing */}
               <span className="invisible" aria-hidden>
                 {slide.title}
               </span>
@@ -147,7 +166,6 @@ export default function Hero() {
           ))}
         </div>
 
-        {/* Opens full search overlay */}
         <div className="relative mx-auto max-w-2xl mb-6 md:mb-8">
           <button
             type="button"
@@ -171,24 +189,25 @@ export default function Hero() {
         >
           Need Counselling
         </button>
-      </div>
 
-      <button
-        type="button"
-        aria-label="Previous slide"
-        onClick={goPrev}
-        className="hidden md:flex absolute left-4 lg:left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 items-center justify-center rounded-full bg-black/55 hover:bg-black/75 text-white transition-colors"
-      >
-        <ChevronLeft className="w-5 h-5" />
-      </button>
-      <button
-        type="button"
-        aria-label="Next slide"
-        onClick={goNext}
-        className="hidden md:flex absolute right-4 lg:right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 items-center justify-center rounded-full bg-black/55 hover:bg-black/75 text-white transition-colors"
-      >
-        <ChevronRight className="w-5 h-5" />
-      </button>
+        <div className="mt-6 flex items-center justify-center gap-2" role="tablist" aria-label="Hero headlines">
+          {SLIDES.map((s, i) => (
+            <button
+              key={s.id}
+              type="button"
+              role="tab"
+              aria-selected={i === slideIndex}
+              aria-label={s.title}
+              onClick={() => setSlideIndex(i)}
+              className={`h-2 rounded-full transition-all ${
+                i === slideIndex
+                  ? "w-7 bg-[#0066F5]"
+                  : "w-2 bg-white/45 hover:bg-white/80"
+              }`}
+            />
+          ))}
+        </div>
+      </div>
 
       <div className="absolute bottom-3 left-3 right-16 sm:right-auto z-20 rounded-full bg-white/85 backdrop-blur-sm px-3 py-1.5 text-[11px] sm:text-sm font-medium text-slate-700 shadow-sm max-w-[min(78vw,28rem)] truncate">
         {slide.caption}
